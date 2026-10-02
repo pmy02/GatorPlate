@@ -69,7 +69,7 @@ Main sources, with the dates we read them: CDSS ACIN I-40-26 (September 10, 2026
 
 ## How the phone line works
 
-The phone line runs on a hosted voice gateway from 1Lane AI, a student startup project, which let us use it. Everything that decides what to ask and what the answers mean, we built for SF State, and it's open source.
+The phone line runs on a voice gateway we built earlier in a class project. Everything that decides what to ask and what the answers mean, we built for SF State, and it's open source.
 
 The gateway is not part of this repository and is not open source. It does only the audio work: it answers the call, turns what the caller says into text, and speaks GatorPlate's replies. Everything else (which question to ask next, the CalFresh rules and numbers, the review flags in the coordinator console, and the student card) is decided by the GatorPlate service in this repository, through the small Brain API described in [`docs/BRAIN_API.md`](docs/BRAIN_API.md) (`POST /v1/calls/{call_id}/start`, `/turn` and `/end`). Even the gateway's few fixed lines, such as "One moment.", are GatorPlate's wording, served by `GET /v1/lines`. GatorPlate never receives audio or the caller's phone number, only text. The browser voice page runs the same brain with no gateway at all, so every part of the demo can be checked from this code.
 
@@ -186,7 +186,7 @@ $68 lower, with a yellow line that asks the coordinator to check.
 
 ## License
 
-MIT; see [`LICENSE`](LICENSE). The license covers the code in this repository only. It does not cover the hosted voice gateway or the 1Lane AI name. Third-party material keeps its own license; see [`NOTICE.md`](NOTICE.md) (the Archivo font is under the SIL Open Font License 1.1).
+MIT; see [`LICENSE`](LICENSE). The license covers the code in this repository only. It does not cover the hosted voice gateway. Third-party material keeps its own license; see [`NOTICE.md`](NOTICE.md) (the Archivo font is under the SIL Open Font License 1.1).
 
 ## Notices
 
