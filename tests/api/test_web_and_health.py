@@ -171,5 +171,6 @@ def test_static_cache_headers(h) -> None:
         assert r.headers["cache-control"] == "no-cache", path
     font = h.client.get("/shared/fonts/Archivo-Variable.woff2")
     assert font.status_code == 200 and font.headers["cache-control"] == "public, max-age=86400"
+    assert font.headers["content-type"] == "font/woff2"
     assert h.client.get("/healthz").headers["cache-control"] == "no-store"
     assert h.client.get("/api/public/info").headers["cache-control"] == "no-store"

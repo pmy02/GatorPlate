@@ -8,6 +8,7 @@ card page loads them).
 
 from __future__ import annotations
 
+import mimetypes
 from pathlib import Path
 
 from fastapi import APIRouter, FastAPI, Request
@@ -15,6 +16,9 @@ from fastapi.responses import FileResponse
 
 from gatorplate.api.context import AppContext
 from gatorplate.api.errors import ApiProblem
+
+# Slim images ship without a system MIME table, so the font type is registered here (else application/octet-stream).
+mimetypes.add_type("font/woff2", ".woff2")
 
 PAGES: dict[str, str] = {
     "/talk": "talk/index.html",
