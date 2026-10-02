@@ -320,7 +320,11 @@ class Brain:
 
     def _render(self, ctx: Ctx, steps: list[Step], lang: Lang) -> Rendered:
         self._ctx = ctx
-        return self.renderer.render(steps, lang, ctx.channel, call_id=ctx.call_id, turn=ctx.turn)
+        rendered = self.renderer.render(steps, lang, ctx.channel, call_id=ctx.call_id, turn=ctx.turn)
+        if ctx.channel == Channel.phone:  # the phone says the name as verbalize.PHONE_SPOKEN_NAME, before word budgets
+            rendered.say = verbalize.name_spoken(rendered.say)
+            rendered.ask = verbalize.name_spoken(rendered.ask) if rendered.ask is not None else None
+        return rendered
 
     def _fit(self, ctx: Ctx, steps: list[Step], lang: Lang, rendered: Rendered) -> tuple[list[Step], Rendered]:
         """Phone budgets: drop flip.intro when it does not fit (docs/SPEC.md §3.2 phase 6), then split at a key
@@ -605,6 +609,8 @@ class Brain:
             lines.append(LiveTurn(case_id=case_id, turn=ctx.turn, who="student", text=student,
                                   lang=ctx.session.lang, at=ctx.now))
         text = reply.display if reply.display else " ".join(p for p in (reply.say, reply.ask or "") if p)
+        if text and ctx.channel == Channel.phone:  # the screen keeps the display name, not the spoken form
+            text = verbalize.name_display(text)
         if text:
             lines.append(LiveTurn(case_id=case_id, turn=ctx.turn, who="assistant", text=text, lang=reply.lang,
                                   at=ctx.now))

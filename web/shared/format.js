@@ -1,4 +1,4 @@
-// GatorPlate display formatting (docs/UI_SPEC.md A4.7, A6.3). Pacific Time everywhere; locales en-US and es-US.
+// refriGator display formatting (docs/UI_SPEC.md A4.7, A6.3). Pacific Time everywhere; locales en-US and es-US.
 // Amounts arrive as whole dollars (numbers) or money strings ("1169.10"); the UI never computes an amount.
 
 export const TZ = "America/Los_Angeles";

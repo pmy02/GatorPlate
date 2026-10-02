@@ -43,7 +43,7 @@
       ],
       "web": [
         {
-          "say": "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio.",
+          "say": "Hola, soy refriGator, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). refriGator solo recibe el texto y nunca guarda audio.",
           "ask": "¿Te parece bien?"
         }
       ],
@@ -150,7 +150,7 @@
         "web"
       ],
       "web": [
-        "GatorPlate nunca recibe tu voz, solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación.",
+        "refriGator nunca recibe tu voz, solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación.",
         "Tu voz no nos llega: solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación."
       ],
       "vars": []
@@ -161,7 +161,7 @@
         "phone"
       ],
       "phone": [
-        "Esta línea es solo en inglés. Para hablar en español, usa GatorPlate en la web: {talk_url}."
+        "Esta línea es solo en inglés. Para hablar en español, usa refriGator en la web: {talk_url}."
       ],
       "vars": [
         "talk_url:url"
@@ -2127,7 +2127,7 @@
         "web"
       ],
       "web": [
-        "GatorPlate está hecho para estudiantes de SF State. Para ayuda con CalFresh, puedes llamar a CalFresh de San Francisco al {county_phone}, o a la oficina de CalFresh de tu propio condado."
+        "refriGator está hecho para estudiantes de SF State. Para ayuda con CalFresh, puedes llamar a CalFresh de San Francisco al {county_phone}, o a la oficina de CalFresh de tu propio condado."
       ],
       "vars": [
         "county_phone:phone"
@@ -2207,7 +2207,7 @@
         "phone"
       ],
       "phone": [
-        "Tu tarjeta de GatorPlate está lista: escanea el código QR en la pantalla."
+        "Tu tarjeta de refriGator está lista: escanea el código QR en la pantalla."
       ],
       "vars": []
     },
@@ -2230,7 +2230,7 @@
         "web"
       ],
       "web": [
-        "Tu tarjeta de GatorPlate está lista. Ábrela para ver tus próximos pasos."
+        "Tu tarjeta de refriGator está lista. Ábrela para ver tus próximos pasos."
       ],
       "vars": []
     },
@@ -2299,8 +2299,8 @@
         "web"
       ],
       "web": [
-        "¡Gracias por usar GatorPlate! Mucha suerte.",
-        "¡Gracias por usar GatorPlate! Cuídate."
+        "¡Gracias por usar refriGator! Mucha suerte.",
+        "¡Gracias por usar refriGator! Cuídate."
       ],
       "vars": []
     },
@@ -2380,11 +2380,11 @@
       ],
       "all": [
         {
-          "say": "Por favor, no compartas tu número de Seguro Social. GatorPlate no lo necesita.",
+          "say": "Por favor, no compartas tu número de Seguro Social. refriGator no lo necesita.",
           "ask": "{question}"
         },
         {
-          "say": "Por favor, no compartas tu Seguro Social ni otros números de identificación. GatorPlate no los necesita.",
+          "say": "Por favor, no compartas tu Seguro Social ni otros números de identificación. refriGator no los necesita.",
           "ask": "{question}"
         }
       ],
@@ -2400,7 +2400,7 @@
       ],
       "all": [
         {
-          "say": "Por favor, no compartas números de tarjeta ni de cuenta bancaria. GatorPlate no los necesita.",
+          "say": "Por favor, no compartas números de tarjeta ni de cuenta bancaria. refriGator no los necesita.",
           "ask": "{question}"
         }
       ],

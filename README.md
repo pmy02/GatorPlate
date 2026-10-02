@@ -1,12 +1,12 @@
-# GatorPlate
+# refriGator
 
-GatorPlate is a student-built prototype that helps SF State students check whether they may get CalFresh, California's
+refriGator is a student-built prototype that helps SF State students check whether they may get CalFresh, California's
 food benefit. A student talks to it on the phone or on the web (English and Spanish on the web). It asks only the
 questions that can change the answer, gives an estimate that the county decides, and hands the student a card with
 the next steps. It is designed for a campus CalFresh coordinator, who would see each conversation's answers in a
 console; in this demo the console holds sample data and only our team sees it.
 
-It is not an official SF State, county or CalFresh service. GatorPlate never decides eligibility: every amount is an
+It is not an official SF State, county or CalFresh service. refriGator never decides eligibility: every amount is an
 estimate, and the county makes the final decision.
 
 In 2023–24, 14.3% of SF State undergraduates received CalFresh at some point in the school year — below the CSU
@@ -52,12 +52,12 @@ Product truth: [`docs/SPEC.md`](docs/SPEC.md). Brain API: [`docs/BRAIN_API.md`](
 
 ## Responsible AI
 
-- **Disclosure and consent.** Every conversation starts by saying that GatorPlate is a student-built AI assistant,
+- **Disclosure and consent.** Every conversation starts by saying that refriGator is a student-built AI assistant,
   not an official SF State service, and how the student's words become text, then asks for consent. Without it,
   nothing from the conversation is kept except that it was declined.
 - **Humans decide.** The county decides CalFresh; each agency decides its own program. The coordinator reviews every
   case, and uncertain answers are flagged, not guessed.
-- **No rejection.** GatorPlate never says a student is not eligible. Every outcome is an estimate, a referral to the
+- **No rejection.** refriGator never says a student is not eligible. Every outcome is an estimate, a referral to the
   coordinator, or other help.
 - **Data minimization.** We don't collect Social Security numbers, and we never ask about immigration status.
   Number runs that look like a Social Security or card number are removed before anything else sees the text. A case
@@ -124,7 +124,7 @@ recognition. Silent errors are counted as k/n with the Wilson 95 % upper bound, 
 | Live model-played students (web, one earlier build) | 24 calls, 24 personas (13 English, 11 Spanish) | tier 18/24 (English 10/13, Spanish 8/11); amount exact 9/13 |
 | — silent errors, adjudicated by what the student actually said | 24 | 3/24 (upper bound 31.0 %); English 1/13, Spanish 2/11 |
 | — brain processing per turn (live model, local machine) | 269 turns | p50 1,277 ms, p95 2,198 ms (targets: 800 ms and 1,500 ms — not met yet) |
-| — measured language-model cost per call | 24 calls | about $0.05 (GatorPlate's own model calls only) |
+| — measured language-model cost per call | 24 calls | about $0.05 (refriGator's own model calls only) |
 | Rewordings of earlier misreadings (adversarial probes; the last fixes were made against them; fake model and parser only) | 146 runs (73 probes × 2 modes) | 143 pass; the 3 left ask one extra question and end with the right result |
 | End-to-end scripts / adversarial scripts / contract examples (local, fake model) | 28 / 38 / 8 | all pass; 9 more scripts need a live model and are run only with a key |
 | Replies checked against the output guard, word budgets and phone text rules (adversarial run, earlier build) | 4,042 | 0 problems |
@@ -145,5 +145,5 @@ MIT — see [`LICENSE`](LICENSE).
 
 ## Notices
 
-Third-party material (the Atkinson Hyperlegible Next font, SIL Open Font License 1.1) is listed in
+Third-party material (the Archivo font, SIL Open Font License 1.1) is listed in
 [`NOTICE.md`](NOTICE.md). Icons and the logo are original work.

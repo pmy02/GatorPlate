@@ -168,8 +168,8 @@ export function replayFrames(detail, { reduced = false } = {}) {
 
 // ---------------------------------------------------------------- reducer
 
-// Transcript order: by turn; within a turn the student speaks first and GatorPlate answers, then by time (a silence
-// re-prompt keeps the turn number of the question it repeats, so one turn can hold two GatorPlate lines).
+// Transcript order: by turn; within a turn the student speaks first and refriGator answers, then by time (a silence
+// re-prompt keeps the turn number of the question it repeats, so one turn can hold two refriGator lines).
 const lineOrder = (a, b) => a.turn - b.turn || (a.who === "student" ? 0 : 1) - (b.who === "student" ? 0 : 1)
   || (Date.parse(a.at) || 0) - (Date.parse(b.at) || 0);
 // One transcript line's identity: the same line from a live.turn event and from GET /api/cases/{id}/live.

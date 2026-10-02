@@ -692,7 +692,7 @@
     },
     "GP-PROJECT": {
       "date": "2026-10-01",
-      "name": "Reglas de cálculo de GatorPlate (redondeo, facturas supuestas)",
+      "name": "Reglas de cálculo de refriGator (redondeo, facturas supuestas)",
       "date_text": "1 oct 2026"
     }
   }

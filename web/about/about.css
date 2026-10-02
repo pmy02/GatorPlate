@@ -1,103 +1,139 @@
-/* About page (docs/UI_SPEC.md A7.3). Links after /landing.css (shared top bar and footer). Light only; tokens only.
-   Desktop: an editorial two-column page, section titles on the left; phones: one column. */
+/* About page (docs/UI_SPEC.md A7.3). Links after /landing.css (shared top bar and footer). Paper page, tokens only;
+   two dark areas (.dark, base.css): the title panel and the Why SF State figure. Desktop: an editorial two-column
+   page, section titles on the left; phones: one column. */
 
-.about__talk { min-height: var(--gp-tap); padding-inline: var(--gp-s4); font-size: var(--gp-fs-body); }
+.about__talk { padding-inline: var(--gp-s5); font-size: var(--gp-fs-body); }
 
 .about {
   flex: 1 0 auto;
-  width: min(100%, calc(var(--gp-page-max) + 2 * var(--gp-s9)));
-  margin-inline: auto;
-  padding: var(--gp-s10) var(--gp-s9) var(--gp-s12);
+  padding: var(--gp-s6) var(--about-edge) var(--gp-s12);
 }
+/* One edge for the bar, the page and the footer: the gutter, or centered at page-max on wide screens. */
+.about-page { --about-edge: max(var(--gp-gutter), calc((100% - var(--gp-page-max)) / 2)); }
+.about-page .topbar__inner, .about-page .page-footer { padding-inline: var(--about-edge); }
 .about:focus { outline: none; }
 .about p + p { margin-top: var(--gp-s4); }
 
-.about__head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s5); max-width: 50rem; padding-bottom: var(--gp-s11); }
-.about__head h1 { font-size: var(--gp-fs-title); line-height: var(--gp-lh-display); letter-spacing: var(--gp-tracking-display);
-  text-wrap: balance; }
-.about__lead { max-width: 40em; color: var(--gp-text-2); font-size: var(--gp-fs-lead); line-height: 1.5; }
+/* Title panel: dark, the title wide and heavy, the lead under it. */
+.about__head {
+  display: grid;
+  gap: var(--gp-s6);
+  margin-bottom: var(--gp-s10);
+  padding: var(--gp-s12) var(--gp-s10) var(--gp-s10);
+  border-radius: var(--gp-r-xl);
+  overflow: hidden;
+}
+.about__head h1 {
+  max-width: 12em;
+  font-size: var(--gp-fs-display);
+  font-weight: var(--gp-fw-heavy);
+  font-stretch: var(--gp-wide);
+  line-height: var(--gp-lh-display);
+  letter-spacing: var(--gp-tracking-display);
+  text-wrap: balance;
+}
+.about__head h1 .wordmark { display: inline; font-size: inherit; letter-spacing: inherit; line-height: inherit; }
+.about__lead { max-width: 38em; color: var(--gp-text-2); font-size: var(--gp-fs-lead); line-height: 1.5; }
 
 /* minmax(0, 1fr): a long word at 200 % text wraps inside its column instead of widening the page. */
-.about__section { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s4); padding-block: var(--gp-s9);
+.about__section { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s4); padding-block: var(--gp-s9) var(--gp-s10);
   border-top: 1px solid var(--gp-border); }
-.about__section h2 { font-size: var(--gp-fs-card-h2); text-wrap: balance; scroll-margin-top: var(--gp-s6); }
+.about__section h2 {
+  font-size: var(--gp-fs-h1);
+  font-weight: var(--gp-fw-heavy);
+  font-stretch: var(--gp-wide);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  scroll-margin-top: var(--gp-s6);
+}
 .about__section > p, .limits { max-width: var(--gp-text-max); }
+.about__head + .about__section { border-top: 0; padding-top: var(--gp-s4); }
 @media (min-width: 64em) {
-  .about__section { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 0 var(--gp-s12); }
+  .about__section { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 var(--gp-s12); }
   .about__section > :not(h2) + :not(h2) { margin-top: var(--gp-s4); }
   .about__section > h2 { grid-column: 1; grid-row: 1 / span 20; align-self: start; position: sticky; top: var(--gp-s6);
-    max-width: 14em; }
+    max-width: 12em; }
   .about__section > :not(h2) { grid-column: 2; }
 }
 
-/* The model listens, rules decide, a person confirms: three steps on one sunken panel. */
-.about .steps { display: grid; gap: var(--gp-s2); margin: var(--gp-s2) 0; padding: var(--gp-s2); list-style: none;
-  border-radius: var(--gp-r-xl); background: var(--gp-sunken); counter-reset: step; }
+/* The model listens, rules decide, a person confirms: numbered rows, the number thin and large. */
+.about .steps { display: grid; margin: 0; padding: 0; list-style: none; counter-reset: step; }
 .steps__item {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: var(--gp-s11) minmax(0, 1fr);
   gap: var(--gp-s4);
   align-items: start;
-  padding: var(--gp-s5) var(--gp-s6);
-  border-radius: var(--gp-r-lg);
-  background: var(--gp-surface);
+  padding-block: var(--gp-s6);
+  border-top: 1px solid var(--gp-border);
+  counter-increment: step;
 }
-.steps__item h3 { margin-bottom: var(--gp-s1); font-size: var(--gp-fs-body-l); font-weight: var(--gp-fw-medium); }
+.steps__item:last-child { border-bottom: 1px solid var(--gp-border); }
+.steps__item::before {
+  content: counter(step, decimal-leading-zero);
+  font-size: var(--gp-fs-title);
+  font-weight: var(--gp-fw-light);
+  letter-spacing: var(--gp-tracking-num);
+  line-height: 0.9;
+}
+.steps__item h3 { margin-bottom: var(--gp-s2); font-size: var(--gp-fs-body-l); font-weight: var(--gp-fw-bold); }
 .steps__item p { color: var(--gp-text-2); font-size: var(--gp-fs-body); }
-.steps__icon {
-  box-sizing: content-box;
-  padding: var(--gp-s2);
-  border-radius: 50%;
-  background: var(--gp-primary-tint);
-  color: var(--gp-primary);
-}
 
-.kept { display: flex; flex-wrap: wrap; gap: var(--gp-s2); margin: 0; padding: 0; list-style: none; }
+/* What is not kept: square tags (not pressable, so not pills). */
+.kept { display: flex; flex-wrap: wrap; gap: var(--gp-s2); margin: var(--gp-s2) 0; padding: 0; list-style: none; }
 .kept li {
   display: inline-flex;
   align-items: center;
   gap: var(--gp-s2);
   min-height: var(--gp-s9);
   padding: 0 var(--gp-s4) 0 var(--gp-s3);
-  border-radius: var(--gp-r-pill);
-  background: var(--gp-surface);
-  box-shadow: var(--gp-sh-1);
+  border: 1px solid var(--gp-border-strong);
+  border-radius: var(--gp-r-xs);
   font-size: var(--gp-fs-body);
   font-weight: var(--gp-fw-medium);
 }
-.kept .icon { width: var(--gp-icon); height: var(--gp-icon); color: var(--gp-primary); }
+.kept .icon { width: var(--gp-icon); height: var(--gp-icon); }
 
-/* Facts with their source and date: a quiet quote, a hairline, then the source. */
+/* Facts with their source and date: the fact, then the source; a hairline between facts. */
 .fact {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--gp-s3);
   margin: 0;
-  padding: var(--gp-s5) 0 var(--gp-s2);
+  padding: var(--gp-s5) 0 var(--gp-s3);
 }
 .fact + .fact { border-top: 1px solid var(--gp-border); }
 .fact__text { font-size: var(--gp-fs-body-l); }
-.fact--lead { padding: var(--gp-s7); border-radius: var(--gp-r-xl); background: var(--gp-brand-wash); }
-.fact--lead .fact__text { font-size: var(--gp-fs-card-h2); font-weight: var(--gp-fw-medium); line-height: 1.4;
-  letter-spacing: -0.01em; }
-.fact--lead + .fact { border-top: 0; }
 .fact__source { color: var(--gp-text-2); font-size: var(--gp-fs-small); }
+
+/* Why SF State: a dark panel, the share as a big thin figure (a picture of the fact's own number). */
+.fact--lead { gap: var(--gp-s5); margin-block: var(--gp-s2); padding: var(--gp-s8); border-radius: var(--gp-r-xl); overflow: hidden; }
+.fact--lead + .fact { border-top: 0; }
+.fact__fig {
+  font-size: var(--gp-fs-hero);
+  font-weight: var(--gp-fw-thin);
+  letter-spacing: var(--gp-tracking-num);
+  line-height: 0.85;
+}
+.fact__fig span { margin-left: 0.04em; color: var(--gp-accent); font-size: 0.42em; letter-spacing: 0; vertical-align: 0.95em; }
+.fact--lead .fact__text { font-size: var(--gp-fs-lead); line-height: 1.45; }
 
 .limits { display: grid; gap: var(--gp-s3); margin: 0; padding-left: var(--gp-s5); }
 .limits li::marker { color: var(--gp-text-3); }
 
 @media (max-width: 47.99em) {
-  /* One top row on phones: the mark and the button fit side by side once the button drops its icon. */
-  .about-page .topbar__inner { flex-wrap: nowrap; }
   .about__talk .icon { display: none; }
-  .about { padding: var(--gp-s7) var(--gp-s5) var(--gp-s10); }
-  .about__head { padding-bottom: var(--gp-s8); }
+  .about__talk { padding-inline: var(--gp-s4); }
+  .about { padding-top: var(--gp-s4); }
+  .about__head { margin-bottom: var(--gp-s8); padding: var(--gp-s10) var(--gp-s5) var(--gp-s7); border-radius: var(--gp-r-lg); }
+  .about__head h1 { font-size: var(--gp-fs-title); letter-spacing: -0.035em; line-height: 1; }
+  .about__lead { font-size: var(--gp-fs-body-l); }
   .about__section { padding-block: var(--gp-s8); }
-  .steps__item { padding: var(--gp-s4); }
-  .fact--lead { padding: var(--gp-s5); }
+  .about__section h2 { font-size: var(--gp-fs-h2); }
+  .steps__item { grid-template-columns: var(--gp-s10) minmax(0, 1fr); padding-block: var(--gp-s5); }
+  .fact--lead { padding: var(--gp-s6) var(--gp-s5); border-radius: var(--gp-r-lg); }
 }
 
 @media print {
   .about__talk { display: none !important; }
-  .fact, .steps__item { box-shadow: none; break-inside: avoid; }
+  .fact, .steps__item { break-inside: avoid; }
 }

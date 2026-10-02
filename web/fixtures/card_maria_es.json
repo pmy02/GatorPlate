@@ -55,7 +55,7 @@
     {
      "screen": "Your Information",
      "question": "¿Estudias en la universidad?",
-     "answer": "Sí. Tu número de Seguro Social y tu información de ciudadanía los escribes tú. GatorPlate nunca los pide."
+     "answer": "Sí. Tu número de Seguro Social y tu información de ciudadanía los escribes tú. refriGator nunca los pide."
     },
     {
      "screen": "People",
@@ -193,7 +193,7 @@
   }
  ],
  "footer": [
-  "GatorPlate nunca guarda audio. Guardamos tus respuestas, no la conversación.",
+  "refriGator nunca guarda audio. Guardamos tus respuestas, no la conversación.",
   "No recolectamos números de Seguro Social y nunca preguntamos por tu estatus migratorio.",
   "Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh.",
   "Tú haces tu solicitud en BenefitsCal. El condado decide.",

@@ -506,13 +506,14 @@ async def test_start_reply_shape(rig, channel: str) -> None:
     assert keys(reply) == ["consent.ask"] and not reply.interruptible and reply.expect == "yes_no"
     if channel == "phone":
         assert reply.say + " " + reply.ask == (
-            "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns "
-            "what you say into text to check CalFresh for you; the call audio isn't recorded. Okay to start? Say "
+            "Hi, this is Refri Gator, a student-built AI assistant, not an official SF State service. An AI turns "
+            "what you say into text to check CalFresh; the call audio isn't recorded. Okay to start? Say "
             "yes, or press one.")
-        assert len((reply.say + " " + reply.ask).split()) == 40
+        assert len((reply.say + " " + reply.ask).split()) == 39
     else:
         web_opening = rig.brain.bank.variants("consent.ask", Lang.en, Channel.web)[0]
         assert reply.choices == ["Yes", "No"] and reply.say == web_opening["say"] and reply.display
+        assert "refriGator" in reply.say and "Refri Gator" not in reply.say + reply.display
 
 
 async def test_phone_start_ignores_a_spanish_lang(settings_test) -> None:
@@ -581,6 +582,17 @@ async def test_golden_maria_with_the_live_transcript(rig_factory) -> None:
     await rig.brain.end(rig.call_id, EndRequest(v=1, reason="completed", turns=9, duration_ms=118000))
     assert rig.live.get(case_id) is None and not rig.case().live
     assert not rig.case().ended_early
+
+
+async def test_live_transcript_shows_the_display_name_on_phone_calls(rig_factory) -> None:
+    """The phone says the name as two words; the console's live transcript keeps the display name."""
+    rig = rig_factory(card_delivery="screen", live=True)
+    opening = await rig.start()
+    assert "Refri Gator" in opening.say
+    await rig.say("Yes, that's fine.")
+    assistant = [line.text for line in rig.live.get(rig.session().case_id).lines if line.who == "assistant"]
+    assert assistant and "refriGator" in assistant[0]
+    assert not any("Refri Gator" in text for text in assistant)
 
 
 def _obs(slot: str, value: str, state: str, quote: str, period: str | None = None) -> dict:

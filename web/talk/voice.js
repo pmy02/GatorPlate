@@ -1,4 +1,4 @@
-// Web voice for the talk page (docs/UI_SPEC.md A5.2–A5.5): the browser's own Web Speech API only. GatorPlate never
+// Web voice for the talk page (docs/UI_SPEC.md A5.2–A5.5): the browser's own Web Speech API only. refriGator never
 // receives audio; recognition gives the page text, synthesis speaks the reply. Every function takes `env` (the
 // window) so tests can pass stubs.
 

@@ -65,7 +65,7 @@ test("a mic tap that stops the voice before listening (first-time probe) marks t
 });
 
 test("interruptible:false — no listening, no interrupt; the question part can be cut off", () => {
-  const opening = reply({ interruptible: false, say: "Hi, I'm GatorPlate. GatorPlate only gets the text.",
+  const opening = reply({ interruptible: false, say: "Hi, I'm refriGator. refriGator only gets the text.",
     ask: "Is that okay?", choices: ["Yes", "No"] });
   let s = reduce(voiceReady(), { type: "reply", reply: opening, speak: true });
   assert.equal(s.interruptible, false);

@@ -4,7 +4,7 @@
     "summary": "Input guard (redaction and keyword intents) and output guard (forbidden wording) for every reply and every card string.",
     "regex": "All patterns are Python regular expressions, matched with re.search and re.IGNORECASE on text normalized as: curly quotes made straight, whitespace collapsed.",
     "redact": "Run before anything else sees the utterance (model, logs, case). Order: card (card_patterns: 13-19 written digits), then ssn (any 9+ digit run; up to three spaces, dots, dashes or parentheses may sit between digits, so '(415) 338-1203' and '123 - 45 - 6789' count), then spoken digit runs (spoken_digit_patterns: 7+ digit words or digits; the match is leftmost and greedy, so it covers the whole run). Then grouped spoken numbers (spoken_group_patterns: three or more number words such as 'one twenty three, forty five, sixty seven eighty nine'): a teen or tens word counts two digits (with its following unit word, 'sixty seven'; Spanish 'sesenta y siete'), any other digit word one; a run of 7 or more digits is redacted with the same kinds, a shorter one stays ('nineteen fifty', 'twenty, twelve units'). Replace each hit with the replacement text and record only the kind: card_number for a written card run or a spoken run of 13-19 digits (spoken_card_digits); ssn for every other hit. A phone utterance with masked true is a hit too: the gateway already replaced a run of 9+ digits with '#', and the number of '#' characters means nothing (docs/BRAIN_API.md, docs/SPEC.md redaction), so it is card_number when the utterance mentions a card or a bank account (masked_card_words) and ssn otherwise. Privacy events: card_number -> card_number_blocked, ssn -> ssn_blocked.",
-    "keywords": "High-recall backstop for the model's intents. A hit adds that intent. Patterns that can end a call (stop, abuse) stay narrow: negations ('don't hang up', 'no quiero colgar') and frustration that is not aimed at GatorPlate do not count (see tests.keywords). spanish_request tells a request for Spanish apart from other languages. Crisis lists include indirect phrases in both languages ('ending it all', 'better off without me', 'no tiene sentido seguir viviendo', 'quisiera desaparecer'); they are the backstop when no model answers.",
+    "keywords": "High-recall backstop for the model's intents. A hit adds that intent. Patterns that can end a call (stop, abuse) stay narrow: negations ('don't hang up', 'no quiero colgar') and frustration that is not aimed at refriGator do not count (see tests.keywords). spanish_request tells a request for Spanish apart from other languages. Crisis lists include indirect phrases in both languages ('ending it all', 'better off without me', 'no tiene sentido seguir viviendo', 'quisiera desaparecer'); they are the backstop when no model answers.",
     "output": "Every final reply string (both banks, every channel) and every rendered card string must have zero hits in output.forbidden (regex) and output.forbidden_phrases (plain lower-case substrings, the same list as contracts/check_examples.py). A hit replaces the whole reply with error.generic. The same holds for every string of programs.en.json and programs.es.json (the card's 'money you may be missing' part), as written and filled with example values; the programs patterns block promises of savings, refunds, credits, discounts or coverage ('you'll save $', 'you will get a refund', 'you're covered', 'free money').",
     "tests": "Vectors that data/content/check_content.py runs: redaction kinds, keyword intents, routing (the reply key one utterance gets), blocked and allowed outputs. check_content.py also runs the redaction and keyword rules over data/tests/utterances.jsonl.",
     "routing": "routing.precedence is the order in which the intents of one turn win the reply (docs/SPEC.md, global intents), with delete_data ahead of stop so that 'erase my info and hang up' deletes first. 'redaction' stands for a redacted or masked number. The first entry present gives the reply key in routing.reply. close_phase: while the pending question is close.anything_else, a stop intent or a done phrase ('no, that's all', 'no, thanks', 'eso es todo', and a 'no' with thanks or a plan to apply: 'No, that's everything, thanks for your help!', 'No, gracias. Voy a hacer la solicitud hoy.') ends the call with close.goodbye, not stop.goodbye; a question, 'but' / 'pero' or 'one more' keeps the call open; 'that's all' is never a stop keyword. close_phase.closing_words: the words of a plain closing (\"No, that's all, thanks!\"). A done phrase made only of them ends the call at once, with no model call; a done phrase that says more (\"No thanks, my roommate wants to know if she can apply too\") is answered first and the close question comes again."
@@ -892,7 +892,7 @@
         "\\b(?:any|every|all|many) languages?\\b",
         "\\brelay\\b",
         "\\bnothing is recorded\\b",
-        "\\b(?:we|gatorplate) (?:don'?t|do not) (?:keep|store|save) anything\\b",
+        "\\b(?:we|gatorplate|refri ?gator) (?:don'?t|do not) (?:keep|store|save) anything\\b",
         "(?<!not )\\b(?:an|the) official (?:sf state|county|state|calfresh|government) (?:service|app|program|website|site)\\b",
         "\\bferpa (?:doesn'?t|does not) apply\\b",
         "\\b(?:reduce[sd]?|reducing|cut(?:s|ting)?|lower(?:s|ed|ing)?)\\b[^.?!]{0,30}\\berrors?\\b",
@@ -2417,7 +2417,7 @@
       },
       {
         "lang": "en",
-        "text": "GatorPlate works in any language."
+        "text": "refriGator works in any language."
       },
       {
         "lang": "en",
@@ -2429,7 +2429,7 @@
       },
       {
         "lang": "en",
-        "text": "GatorPlate is an official SF State service."
+        "text": "refriGator is an official SF State service."
       },
       {
         "lang": "en",
@@ -2465,15 +2465,15 @@
       },
       {
         "lang": "es",
-        "text": "GatorPlate es un servicio oficial de SF State."
+        "text": "refriGator es un servicio oficial de SF State."
       },
       {
         "lang": "en",
-        "text": "GatorPlate reduces application errors by half."
+        "text": "refriGator reduces application errors by half."
       },
       {
         "lang": "es",
-        "text": "GatorPlate reduce los errores en las solicitudes."
+        "text": "refriGator reduce los errores en las solicitudes."
       },
       {
         "lang": "en",
@@ -2567,7 +2567,7 @@
       },
       {
         "lang": "en",
-        "text": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service."
+        "text": "Hi, this is refriGator, a student-built AI assistant, not an official SF State service."
       },
       {
         "lang": "en",

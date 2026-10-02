@@ -1,6 +1,6 @@
 [
  {
-  "say": "Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio.",
+  "say": "Hi, I'm refriGator, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). refriGator only gets the text and never stores audio.",
   "ask": "Is that okay?",
   "end": false,
   "end_reason": null,
@@ -9,7 +9,7 @@
   "expect": "yes_no",
   "interruptible": false,
   "hold_s": 0,
-  "display": "Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio. Is that okay?",
+  "display": "Hi, I'm refriGator, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). refriGator only gets the text and never stores audio. Is that okay?",
   "choices": [
    "Yes",
    "No"
@@ -155,7 +155,7 @@
   "debug": null
  },
  {
-  "say": "Thanks for using GatorPlate. Take care!",
+  "say": "Thanks for using refriGator. Take care!",
   "ask": null,
   "end": true,
   "end_reason": "completed",
@@ -164,7 +164,7 @@
   "expect": "open",
   "interruptible": false,
   "hold_s": 0,
-  "display": "Thanks for using GatorPlate. Take care!",
+  "display": "Thanks for using refriGator. Take care!",
   "choices": null,
   "card_url": "/c/fixtureMariaCard000001",
   "debug": null

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check GatorPlate's content files. Standard library only.
+"""Check refriGator's content files. Standard library only.
 
     python3 data/content/check_content.py        # exit 0 = all checks pass, 1 = problems
     python3 data/content/check_content.py -v     # also print word counts and reading levels
@@ -169,10 +169,23 @@ RESULT_KEY_PREFIXES = ("result.", "expedited.yes", "expedited.maybe", "first_mon
                        "close.silence", "consent.declined", "crisis.resources", "human.request", "stop.goodbye",
                        "abuse.end", "error.generic")
 CONTACT_WORDS = re.compile(r"\b(four one five|eight five five|eight seven seven|nine eight eight|nine one one)\b", re.I)
-OPENING_SAY = [r"\bGatorPlate\b", r"\bAI\b", r"\bstudent-built\b", r"\bnot an official SF State service\b",
+OPENING_SAY = [r"\brefriGator\b", r"\bAI\b", r"\bstudent-built\b", r"\bnot an official SF State service\b",
                r"\binto text\b", r"\bCalFresh\b", r"\baudio isn't recorded\b"]
 OPENING_ASK = [r"\byes\b", r"\bpress one\b"]
-OPENING_ASK_EXACT = "Okay to start? Say yes, or press one."   # 40 words with the disclosure (docs/BRAIN_API.md)
+OPENING_ASK_EXACT = "Okay to start? Say yes, or press one."   # within 40 words with the disclosure (docs/BRAIN_API.md)
+# The phone says the display name as two words (gatorplate/dialogue/verbalize.py PHONE_SPOKEN_NAME), so phone word
+# budgets count that spoken form.
+_VERBALIZE = HERE.parent.parent / "gatorplate" / "dialogue" / "verbalize.py"
+_SPOKEN_NAME = re.search(r'^PHONE_SPOKEN_NAME = "([^"]+)"$', _VERBALIZE.read_text(encoding="utf-8"), re.M) \
+    if _VERBALIZE.is_file() else None
+PHONE_SPOKEN_NAME = _SPOKEN_NAME.group(1) if _SPOKEN_NAME else "refriGator"
+if _SPOKEN_NAME is None:
+    fail("gatorplate/dialogue/verbalize.py", "PHONE_SPOKEN_NAME not found")
+
+
+def phone_name(text):
+    return re.sub(r"\brefriGator\b", PHONE_SPOKEN_NAME, text)
+
 
 # ------------------------------------------------------------------ keypad, money questions, confirm policy
 # The gateway sends one key per dtmf event and never collects digits (docs/BRAIN_API.md, TurnRequest keypad note):
@@ -206,8 +219,8 @@ EXACT_EN = {
     ("card.phone_code", "phone"): ["Go to {short_url} and enter code {code}."],
     ("flip.rent_paid_by_others", "all"): ["Does anyone, like a parent, pay part of your rent straight to your landlord?"],
 }
-WEB_OPENING_EN = ("Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. Your browser turns "
-                  "your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets "
+WEB_OPENING_EN = ("Hi, I'm refriGator, a student-built AI assistant, not an official SF State service. Your browser turns "
+                  "your voice into text (Chrome uses Google's speech service; Safari uses Apple's). refriGator only gets "
                   "the text and never stores audio.")
 COUNTY_DECIDES = {"en": "The county makes the final decision.", "es": "El condado toma la decisión final."}
 
@@ -623,7 +636,7 @@ for v in _open:
             fail("sentences.en.json consent.ask", f"opening ask lacks {pat}")
     if v["ask"] != OPENING_ASK_EXACT:
         fail("sentences.en.json consent.ask", f"phone opening ask must be exactly {OPENING_ASK_EXACT!r}")
-    _n = count_words(f"{v['say']} {v['ask']}")
+    _n = count_words(phone_name(f"{v['say']} {v['ask']}"))
     if _n > WORD_BUDGETS["opening"]:
         fail("sentences.en.json consent.ask", f"phone opening is {_n} words > 40")
     if re.search(r"\d", v["say"] + v["ask"]):
@@ -778,9 +791,9 @@ def check_composition(label, parts, values=None, budget=None):
             if qspec:
                 for qv in phone_variants(*qspec["question"]):
                     qtext = qv.get("ask", "") if isinstance(qv, dict) else qv
-                    expanded.append(render(text.replace("{question}", qtext), values))
+                    expanded.append(phone_name(render(text.replace("{question}", qtext), values)))
             else:
-                expanded.append(render(text, values))
+                expanded.append(phone_name(render(text, values)))
         choices.append(expanded)
     worst = 0
     worst_text = ""
@@ -1579,7 +1592,7 @@ for _reason in REASON_CODES + [None]:
                          f"reason {_reason} (tier {_tier}, expedited {_exp}): shows {_shown}, expected {_want}")
 
 # reading level (English): Flesch-Kincaid grade per block, 7 or lower
-TERMS_2 = {"calfresh", "benefitscal", "gatorplate", "sf", "ebt", "sar", "as", "ta", "ra", "id", "qr", "pdf", "fy2027",
+TERMS_2 = {"calfresh", "benefitscal", "gatorplate", "refrigator", "sf", "ebt", "sar", "as", "ta", "ra", "id", "qr", "pdf", "fy2027",
            "cesar", "chavez", "groceries"}
 
 

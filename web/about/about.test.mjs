@@ -31,7 +31,7 @@ test("every fact shows its source and date", () => {
 });
 
 test("sections, the hosted voice gateway, the team line and the prototype line", () => {
-  for (const heading of ["What GatorPlate is", "The model listens, rules decide, a person confirms", "What is kept",
+  for (const heading of ["What refriGator is", "The model listens, rules decide, a person confirms", "What is kept",
     "Rules and sources", "Why SF State", "Limits", "Team"]) {
     assert.ok(new RegExp(`<h2[^>]*>${heading}</h2>`).test(html), heading);
   }

@@ -1,8 +1,8 @@
-# GatorPlate — Product Specification
+# refriGator — Product Specification
 
 **Status:** product truth for the build, 2026-10-01. English. Rules year FY2027 (2026-10-01 to 2027-09-30).
 
-GatorPlate helps SF State students check CalFresh in one short conversation: by phone (English) or on the web talk
+refriGator helps SF State students check CalFresh in one short conversation: by phone (English) or on the web talk
 page (English or Spanish, by voice or by typing). A language model only turns the student's words into facts, a dated
 rules table computes the result, and anything uncertain becomes a yellow line that the SF State CalFresh coordinator
 must confirm. The student leaves with a card: an estimate, BenefitsCal answers, documents and interview prep. When
@@ -59,7 +59,7 @@ that must be checked against a current primary source before any real-student pi
 
 What follows for the product: since June most low-income SF State undergraduates can meet the student rule, but
 many may not know it; the application is long; the county's interview call can come from a number the student
-does not know; and a missed interview is a common reason college applicants are denied. GatorPlate's job is to
+does not know; and a missed interview is a common reason college applicants are denied. refriGator's job is to
 take a student from "do I qualify?" to "I can apply today and I know what the interview will ask", and to hand the
 coordinator a checked case instead of an empty appointment. One more gap: no SF State page we found (searched
 2026-10-01) ties CalFresh to the help it opens — Medi-Cal on the same application, Clipper START, PG&E CARE,
@@ -67,13 +67,13 @@ California LifeLine and free tax help at SF State VITA — so the card shows the
 
 ### 1.2 Users
 
-| User | What they need | What GatorPlate gives them |
+| User | What they need | What refriGator gives them |
 |---|---|---|
 | SF State students (undergraduate and graduate), any phone or browser | A fast, private answer in plain words; what to do today; no app, no login | Phone line (English), web talk page (English or Spanish, voice or typing), student card (English or Spanish) |
 | SF State CalFresh coordinator (CalFresh Help Clinic, Basic Needs) | Cases that arrive checked, with what the student said, what was assumed and why; deadlines | Coordinator console with yellow lines, a review lock, sources and tracking |
 | Campus food programs (Gator Groceries, AS Food Pantry) | A front door for students already in line | QR codes to the talk page and the phone number (pilot) |
 
-Not users: county eligibility workers make every decision; GatorPlate does not connect to county or school systems.
+Not users: county eligibility workers make every decision; refriGator does not connect to county or school systems.
 
 ### 1.3 Contacts used in product text
 
@@ -91,13 +91,13 @@ from a fact review without a saved page and are re-checked before any pilot, §1
 
 ---
 
-## 2. What GatorPlate does
+## 2. What refriGator does
 
 ### 2.1 Channels
 
 | Channel | Who uses it | What happens |
 |---|---|---|
-| **Phone** (English) | Students | A hosted voice gateway turns speech into text and calls GatorPlate's Brain API. GatorPlate decides every word; the gateway speaks it. The demo path is designed to take about 2 minutes. |
+| **Phone** (English) | Students | A hosted voice gateway turns speech into text and calls refriGator's Brain API. refriGator decides every word; the gateway speaks it. The demo path is designed to take about 2 minutes. |
 | **Web talk page** `/talk` (English and Spanish) | Students; the demo fallback; the Spanish channel | The browser's built-in speech recognition and synthesis (Web Speech API), push-to-talk, typing always available, quick-reply buttons. Same Brain API with a short-lived bearer token. |
 | **Student card** `/c/{token}` (English and Spanish) | Students, on their phone | The estimate, one thing to do today, BenefitsCal answers, documents, interview prep, after-approval steps, food today, contacts (which blocks show depends on the result, §6.2). With a likely estimate, the "money you may be missing" bar: CalFresh as the key plus the other help it may unlock this year, three tap questions, a plan and a share button (§6.6). Opened by QR (event table), by a short URL and a 6-digit code read out on the phone, or by the talk page's "Open my card" button. |
 | **Coordinator console** `/console` (English) | The SF State CalFresh coordinator | Cases fill in live; yellow lines with a server-enforced review lock; why each question was asked or skipped; the rule trace with sources; deadlines. |
@@ -108,7 +108,7 @@ from a fact review without a saved page and are re-checked before any pilot, §1
 
 1. The client (gateway or browser) handles audio and timing. It sends text, events and counters only: never audio,
    never a phone number or anything derived from it.
-2. GatorPlate redacts digit runs, finds global intents, parses yes/no and numbers, and makes at most **one**
+2. refriGator redacts digit runs, finds global intents, parses yes/no and numbers, and makes at most **one**
    structured language-model call per turn (none on the fast path, §3.6) that may only return slot observations and
    intents (no prose).
 3. Code normalizes every amount, applies the rules table, picks the next question (§5.6) and builds the reply from
@@ -132,10 +132,10 @@ student ─▶ phone gateway or browser ─▶ Brain API (/v1/calls/{id}/start|t
 | `coordinator` | One plain reason, the coordinator's contact, no amount | "One detail needs a person to check", the reason, today's step and the answer sheet (except the parent-household case: talk to the coordinator first), food today, contacts; other programs to check with the coordinator, without amounts (§6.6) |
 | `other_help` | A respectful explanation without a verdict, food today, contacts | "CalFresh rules for your situation are complicated, so we won't guess", the reason, food today, contacts |
 
-GatorPlate never says or shows "not eligible", "ineligible", "don't qualify", "denied", "no califica",
+refriGator never says or shows "not eligible", "ineligible", "don't qualify", "denied", "no califica",
 "no eres elegible", or any eligibility decision ("you qualify", "you are eligible", "approved").
 
-### 2.4 What GatorPlate never does
+### 2.4 What refriGator never does
 
 Decide eligibility · apply, sign or submit anything · act as an authorized representative · collect Social Security
 numbers · ask about immigration status or citizenship · store audio or full transcripts · receive the caller's
@@ -149,18 +149,22 @@ dates are an `.ics` download only) · claim support for "any language" or for re
 ### 3.1 Opening and consent
 
 **Phone** (`/start` reply, never calls the language model, `interruptible: false` for `say`). The reply must contain,
-in at most 40 words for `say` and `ask` together: GatorPlate is an AI; it is student-built and not an official
+in at most 40 words for `say` and `ask` together: refriGator is an AI; it is student-built and not an official
 SF State service; an AI turns what the student says into text to check CalFresh; the call audio isn't recorded; and
-a consent question with a keypad option. Reference text (the contract examples use this 40-word form):
+a consent question with a keypad option. Reference text as the caller hears it (the contract examples still show
+the earlier 40-word form with the old name):
 
-> say: "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you
-> say into text to check CalFresh for you; the call audio isn't recorded."
+> say: "Hi, this is Refri Gator, a student-built AI assistant, not an official SF State service. An AI turns what you
+> say into text to check CalFresh; the call audio isn't recorded."
 > ask: "Okay to start? Say yes, or press one."
 
-This is exactly 40 words. Phone text never contains digits ("press one", not "press 1"); the sentence bank holds this
-wording as the canonical phone `consent.ask`.
+This is 39 words (budget 40). The phone says the name as two words, *Refri Gator*
+(`gatorplate/dialogue/verbalize.py` `PHONE_SPOKEN_NAME`, applied to every phone reply before the word budgets), so a
+voice says the name rather than the appliance (the web talk page's voice does the same); screens, the web talk text and
+the card keep *refriGator*. Phone text never contains digits ("press one", not "press 1"); the sentence bank holds this wording
+(with the display name) as the canonical phone `consent.ask`.
 
-| Student | GatorPlate |
+| Student | refriGator |
 |---|---|
 | Yes, or key 1 | Consent stored (time and disclosure key). `ack.short` + `ask.level_units`. Facts said in the consenting utterance are kept. |
 | No, or key 2 | `consent.declined` (coordinator number), `end: true`, `end_reason: "declined"`. Nothing from the call is stored except that it was declined (time, channel). |
@@ -168,9 +172,9 @@ wording as the canonical phone `consent.ask`.
 | "Are you a robot?" / "Is this recorded?" | `answer.is_ai` / `answer.is_recorded`, then `consent.reask`. |
 | Silence | The silence ladder (§3.7); the third silence ends the call (`no_input`). |
 
-**Web** (`consent.ask`, web variant, with Yes/No quick replies): GatorPlate is a student-built AI assistant, not an
+**Web** (`consent.ask`, web variant, with Yes/No quick replies): refriGator is a student-built AI assistant, not an
 official SF State service; the student's browser turns their voice into text using the browser maker's speech
-service (the sentence names the service for each supported browser); GatorPlate only gets the text and never stores
+service (the sentence names the service for each supported browser); refriGator only gets the text and never stores
 audio; then "Is that okay?". The exact English and Spanish sentences live in the sentence bank. Naming the browsers
 and their makers ("Chrome uses Google's speech service; Safari uses Apple's") is the **only** place where product text
 names companies: it is a privacy fact, telling the student where their voice is turned into text. (The card's
@@ -333,7 +337,7 @@ model matches them exactly); the Sofia and Jamal summaries paraphrase the other 
 
 **`maria_g1` — phone, English, the demo path** (fictional persona; contract example `maria_phone.json`):
 
-| # | Student says | GatorPlate (keys) |
+| # | Student says | refriGator (keys) |
 |---|---|---|
 | — | (call starts) | `consent.ask` |
 | 1 | "Yes, that's fine." | `ack.short`, `ask.level_units` |
@@ -363,7 +367,7 @@ there (`ask.homeless_cost`) → `result.likely` $306 + `expedited.intro_cash` �
 read-back, no confirm, §3.4) → `expedited.yes` + `first_month.apply_today` + `card.phone_code` (short URL and 6-digit
 code read digit by digit; `ask: null`) → "Okay, got it." → `close.anything_else` → `close.goodbye`.
 
-### 3.10 Slots (what GatorPlate listens for)
+### 3.10 Slots (what refriGator listens for)
 
 Each slot holds a canonical value (`"true"`/`"false"`, integers, monthly money with 2 decimals after normalization,
 enum values), a state (clear, assumed, unclear, missing), the student's words (at most 80 characters, an exact
@@ -547,7 +551,7 @@ Fourteen groups. Each situation has its handling and one tag:
 | ID | Situation | Handling | Tag |
 |---|---|---|---|
 | 8.1 | Apply today | `first_month.apply_today` for `likely` and every `coordinator.*` route except `coordinator.parent_household` (no number on the phone); the card's `today_action` block follows the same rule (§6.2) and shows the filing-date estimate labeled "estimate" (§5.7) | [demo] |
-| 8.2 | "Can you apply for me?" | `apply_for_me`: GatorPlate cannot apply or sign; the student applies on BenefitsCal; the card has the answers | [handled] |
+| 8.2 | "Can you apply for me?" | `apply_for_me`: refriGator cannot apply or sign; the student applies on BenefitsCal; the card has the answers | [handled] |
 | 8.3 | Card at the event table | `card.phone_screen` ("scan the QR code on the screen") with `GP_CARD_DELIVERY=screen` | [demo] |
 | 8.4 | Card on any other phone call | `card.phone_code`: short URL and a 6-digit code read digit by digit (valid 24 h; 5 tries per minute per IP) | [handled] |
 | 8.5 | Card on the web | `card.web` + `card_url`: the talk page shows an "Open my card" button (no QR on the talk page) | [handled] |
@@ -581,11 +585,11 @@ Fourteen groups. Each situation has its handling and one tag:
 | 10.4 | Phone number or other long digit run | Redacted (9+ written digits, 7+ spoken digits); SSN guidance | [handled] |
 | 10.5 | "Delete my data" by voice | `delete.confirm_ask` → `delete.done` (case deleted, end) or `delete.cancelled` | [handled] |
 | 10.6 | "Delete my info" on the card | Confirm, then `DELETE /api/card/{token}` deletes the case; "Your information was deleted." | [handled] |
-| 10.7 | "Where does my information go?" / "Is this recorded?" | `answer.is_recorded`: the audio isn't recorded; GatorPlate keeps the answers, not the conversation. Deletion is offered by "delete my data" (10.5) and the card's *Delete my info* (10.6), not in this short reply (word budget) | [handled] |
+| 10.7 | "Where does my information go?" / "Is this recorded?" | `answer.is_recorded`: the audio isn't recorded; refriGator keeps the answers, not the conversation. Deletion is offered by "delete my data" (10.5) and the card's *Delete my info* (10.6), not in this short reply (word budget) | [handled] |
 | 10.8 | Student says their name | Names are not collected (no name slot); quotes are limited to the words that carry a slot value | [basic] |
 | 10.9 | Volunteered immigration status | Route only; value, quote and utterance are never kept (6.1, 6.2) | [handled] |
 | 10.10 | A judge or student shares real personal details at the event | Demo reset between judge groups; event data deleted the same day | [demo] |
-| 10.11 | Caller's phone number | Never received by GatorPlate | [handled] |
+| 10.11 | Caller's phone number | Never received by refriGator | [handled] |
 
 ### 4.11 Conversation conditions
 
@@ -1011,7 +1015,7 @@ comparisons, `between` inclusive, `lte_row` against a row by household size, and
 | PG&E CARE | cash · after approval | campus dorm, homeless or living with a parent → `hidden` · electricity in the rent → `note` · bill in a roommate's name → `likely` (the roommate applies; the card says they can't be someone's tax dependent) · bill in the student's name and not claimed → `likely` · bill in the student's name otherwise → `maybe` · unanswered or not sure → `check` | the student's share of the home's discount |
 | Tax credits (CalEITC, federal EITC, Young Child Tax Credit) | tax credit · tax time | no earnings or under 18 → `hidden` · no children and claimed → `hidden` · no children, living with a parent and under 24 → `hidden` · children, 24 or older, not living with a parent, not claimed → `likely` (parent) · children otherwise → `maybe` (parent) · 24 or older and not claimed → `likely` (no child) · otherwise `maybe` (no child) | credit amounts, not refunds (a refund also depends on withholding) |
 
-**Tax counting rule** (a GatorPlate convention, not a source rule): tax credits are counted only at age 24 or older
+**Tax counting rule** (a refriGator convention, not a source rule): tax credits are counted only at age 24 or older
 with the card answer "no" (student parents too). Under 24, a full-time student whose parent's home is still home (time
 away at school counts as living with the parent, IRS Pub 596) is the parent's qualifying child and cannot claim the
 EITC or CalEITC, even as a parent; "lives with parents now" cannot decide this, so under 24 is always `maybe`. CalEITC's
@@ -1056,7 +1060,7 @@ sum of the display values of counted lines marked "I applied".
 
 - spread(q) = the largest minus the smallest `found_yearly` over q's choices, with every other unanswered question
   held at "unanswered". A question is asked only when its spread is **more than $50** (strictly greater; the table's
-  `ask_rule.threshold_usd`, a GatorPlate convention for the card only).
+  `ask_rule.threshold_usd`, a refriGator convention for the card only).
 - This is not the CalFresh question picker (§5.6): there, $50 measures the **monthly** CalFresh amount (about $600 a
   year), and none of Maria's card questions would clear it (yearly spreads $440, $228 and $170 are about $37, $19 and
   $14 a month). A tap costs no call time, so the card uses the lower yearly bar.
@@ -1107,7 +1111,7 @@ sum of the display values of counted lines marked "I applied".
 | CalEITC, no child (2025 table as a proxy) | yearly earnings → credit: $6,000 → $248 · $8,400 → $226 · $10,800 → $204 · $14,400 → $171 · $18,000 → $138 · $24,000 → $82; maximum $302; earned-income limit $32,900; minimum age 18 | FTB 3514 (2025); FTB CalEITC |
 | Federal EITC, tax year 2026 (0 · 1 · 2 · 3 or more children) | rate 7.65 % · 34 % · 40 % · 45 %; maximum $664 · $4,427 · $7,316 · $8,231; phase-out from $10,860 · $23,890 · $23,890 · $23,890 at 7.65 % · 15.98 % · 21.06 % · 21.06 %; no-child ages 25–64 | IRS Rev. Proc. 2025-32; IRS EITC; IRS Pub 596 |
 | Young Child Tax Credit (2025 amount) | $1,189 up to $27,425 of earnings, down to $0 at $32,901; youngest child under 6 | FTB YCTC; FTB 3514 (2025) |
-| Card ask rule | more than $50 a year (strictly), at most 3 questions | GatorPlate convention |
+| Card ask rule | more than $50 a year (strictly), at most 3 questions | refriGator convention |
 
 **Golden cases** (`data/golden/programs_golden.json`, **14 cases**: PG1, PG1-b, PG2–PG13; hand-calculated and
 re-derived with Decimal on 2026-10-01; `today` 2026-10-02 unless stated). Tests compare every key of each case's
@@ -1198,7 +1202,7 @@ Content columns below summarizes each part; the exact strings are the card files
 | Hero | always | likely: "You may get about {amount} a month for groceries." + "This is an estimate. The county decides." (floor wording when the estimate is a floor) · coordinator: "One detail needs a person to check." + where the answers are saved · other help: "Food help is still here for you." + "CalFresh rules for your situation are complicated, so we won't guess." · info routes: a hero that matches the route (already receiving; waiting for the interview) · incomplete (no result yet): "We didn't finish your check." + how to start again or reach the coordinator (wording: card.*.json `headline` and `subhead`) | rules engine |
 | Unlocked | per the route table below | full: "Money you may be missing this year", the bar ("About $4,220 a year · You've started $0 of $4,220"), the next card question, chips, the "Your plan" disclosure (collapsed), share, footnote · list_only: "More help to check with the coordinator", program names and one line each; no dollars, no questions, no share (§6.6; wording: `programs.*.json`) | programs engine (§5.10) |
 | Blocks | per the table below | — | — |
-| Footer | always | Summary (wording: card.*.json `footer`): GatorPlate never stores audio and keeps the answers, not the conversation · no Social Security numbers collected, never asks about immigration status · the prototype line ("Student-built prototype — not an official SF State, county, or CalFresh service.") · the student applies on BenefitsCal and the county decides · the rules label CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027) with the sources and their dates · [Delete my info] · [Print or save PDF] | — |
+| Footer | always | Summary (wording: card.*.json `footer`): refriGator never stores audio and keeps the answers, not the conversation · no Social Security numbers collected, never asks about immigration status · the prototype line ("Student-built prototype — not an official SF State, county, or CalFresh service.") · the student applies on BenefitsCal and the county decides · the rules label CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027) with the sources and their dates · [Delete my info] · [Print or save PDF] | — |
 
 Fixed parts, in this order: Header · Status banner · Hero · Unlocked · Blocks · Footer. `unlocked` is a fixed part
 (like the hero), not a `CardBlock`: it is rendered by its own widget at a mount directly under the hero, and the
@@ -1233,7 +1237,7 @@ of `default`, `accent`, `warning`, `muted` (there is no `plain`); `collapsed` is
 | 1 | `today_action` "Do this today" | accent | open | Apply on BenefitsCal today; the first month counts from the day the county gets the application; likely only, labeled as our estimate: if sent now it counts from {filed_on}, and the first month may be about {first_month} for {month_label}; [Open BenefitsCal]; submitting with only name, address and signature, and the "Skip and submit now" step [verify] | 7 CFR 273.10(a)(1)(ii); filing-date rule (LA County DPSS, B) |
 | 2 | `expedited` "Help within 3 days" | accent | open | yes: "You may get CalFresh within 3 days. The county checks this when you apply." · maybe: "You might get CalFresh within 3 days. The county checks this when you apply." · answer the emergency questions honestly; have your ID ready | MPP 63-301.5 |
 | 3 | `why`, title by tier: "Why you may qualify" (likely) · "Why a person needs to check" (coordinator) · "Why we won't guess" (other help); info routes: "What to keep up with" (already receiving) · "What comes next" (waiting for the interview) | default | open | likely: 2–3 lines from the rule trace, for example: SF State bachelor's students enrolled at least half-time meet the student rule since June 2026, and your own word is enough · financial aid, scholarships and student loans don't count as income · your rent is high for your income, so your estimate is the most for one person. Coordinator: the plain reason in one or two lines. **Parent household:** CalFresh counts the student together with the parents' household, so the student talks to the SF State CalFresh coordinator first and then applies together with that household (no "apply today" for this route). Other help: the reason without a verdict. Info routes: what the route means for the student | CDSS ACL 26-25, ACL 26-16; trace |
-| 4 | `answer_sheet` "Your answers for BenefitsCal" | default | open | Screen · question · your answer, from the slots (household, school and half-time, job and income, rent and bills, savings); BenefitsCal screen names stay in English in both languages with a Spanish explanation; the student types their Social Security number and citizenship information into BenefitsCal themself, and GatorPlate never collects them. Screen names and order [verify] | slots |
+| 4 | `answer_sheet` "Your answers for BenefitsCal" | default | open | Screen · question · your answer, from the slots (household, school and half-time, job and income, rent and bills, savings); BenefitsCal screen names stay in English in both languages with a Spanish explanation; the student types their Social Security number and citizenship information into BenefitsCal themself, and refriGator never collects them. Screen names and order [verify] | slots |
 | 5 | `documents` "What to have ready" | default | collapsed | Photo ID; proof of address (not if homeless); pay stubs from the last 30 days or an employer letter [verify list]; usually not needed but kept handy in case the county asks: class schedule and financial-aid papers; upload in BenefitsCal | ACL 26-25 (a student's statement is sufficient for the exemption); ACL 26-16 |
 | 6 | `interview` "Your phone interview" | default | collapsed | The county calls after you apply; answer unknown numbers [verify timing]; what they ask (who you live and eat with, job and other money, rent and bills, classes and aid, changes); your numbers from today; papers requested → at least 10 days to send them; missed the call → call the county number on your notice right away [verify notice name and last day]; your rights [verify]; outside San Francisco the student's own county handles the case (the numbers shown are San Francisco's); [Add 3 dates to my calendar] (the `.ics` file, §6.3); [Call the county (855) 355-5757] | CDSS ACL 26-29 (10 days) |
 | 7 | `after_approval` "After approval" | default | collapsed | EBT card by mail, activated before use [verify timing]; lost card (877) 328-9677; SAR 7 in the middle of the certification period, dates as on the county's notice [verify]; renewal at the end [verify]; reporting line from §5.2 step 12 | CDSS ACL 15-42 |
@@ -1250,7 +1254,7 @@ Sofia's the list_only one.
 `card.{en,es}.json` `ui.calendar` (English, with `{county_phone}` = (855) 355-5757): day 3 "CalFresh: check BenefitsCal
 and answer calls from unknown numbers" · day 10 "CalFresh: no interview call yet? Call {county_phone}" · day 28
 "CalFresh: last days to finish your interview. No call yet? Call {county_phone}" [verify the day-30 deadline]. The
-student downloads it with *Add 3 dates to my calendar*; GatorPlate sends no reminder messages, and student-facing text
+student downloads it with *Add 3 dates to my calendar*; refriGator sends no reminder messages, and student-facing text
 never calls these dates "reminders".
 
 ### 6.4 Content rules
@@ -1377,7 +1381,7 @@ in the call.
 
 ## 8. Data and privacy
 
-### 8.1 What GatorPlate receives
+### 8.1 What refriGator receives
 
 Text, events and counters (`utterance`, `dtmf`, `silence`) from the gateway or the talk page. Never audio, never a
 phone number or any hash of it. On the phone, a run of 9 or more digits may already arrive masked. From the card: the
@@ -1439,8 +1443,8 @@ card or a bank account and an `ssn` hit otherwise. A redacted turn stores nothin
 
 Per turn: the pending question (key, slots, kind), the slot values already known, the last two redacted utterances,
 the last prompt text and the current redacted utterance. Redacted digits never reach it; the caller's phone number is
-never known to GatorPlate; an utterance with a volunteered immigration status is not kept as context for later turns;
-GatorPlate never asks for names. The model returns structured slot observations and intents only. Before any pilot
+never known to refriGator; an utterance with a volunteered immigration status is not kept as context for later turns;
+refriGator never asks for names. The model returns structured slot observations and intents only. Before any pilot
 the provider's data terms (no training on inputs, retention period) are confirmed in writing.
 
 ### 8.9 Logs and security
@@ -1453,8 +1457,8 @@ the provider's data terms (no training on inputs, retention period) are confirme
 - Pages load only from the app itself (CSP `'self'`, self-hosted fonts, no third-party scripts at runtime).
 - Secrets live only in deployment settings (`GP_*` names); the repository holds names, never values. The gateway
   secret `GP_GATEWAY_SECRET` is one value shared by both sides: it is generated once on the gateway side and set in
-  GatorPlate's deployment settings with a command that never prints it (a different value makes every phone call fail
-  at `/start` with 401). GatorPlate's own build never generates it.
+  refriGator's deployment settings with a command that never prints it (a different value makes every phone call fail
+  at `/start` with 401). refriGator's own build never generates it.
 
 ---
 
@@ -1464,13 +1468,13 @@ the provider's data terms (no training on inputs, retention period) are confirme
 
 The phone opening says, before anything is asked: an AI; student-built, not an official SF State service; an AI turns
 speech into text; the call audio isn't recorded; then it asks for consent (voice or keypad). The web opening names the
-browser's speech service and says GatorPlate only gets text. "Are you a robot?", "Is this recorded?" and "Is this
+browser's speech service and says refriGator only gets text. "Are you a robot?", "Is this recorded?" and "Is this
 official?" are answered truthfully at any time. The card footer repeats the prototype disclaimer and what is kept.
 Before any real-student pilot, the disclosure and consent wording gets a separate privacy and legal review.
 
 ### 9.2 Humans decide
 
-- The county makes every eligibility decision; GatorPlate gives an estimate and says so every time.
+- The county makes every eligibility decision; refriGator gives an estimate and says so every time.
 - The coordinator confirms or edits every yellow line; the server refuses "reviewed" while any is open. Yellow lines
   exist only for things that can change the tier, the amount or the expedited outlook (plus policy notes, side
   questions and incomplete calls), so the lock is meaningful and not busywork; each line is its own decision.
@@ -1481,7 +1485,7 @@ Before any real-student pilot, the disclosure and consent wording gets a separat
 
 ### 9.3 No signing, no representation
 
-GatorPlate never applies, signs, submits or acts as an authorized representative. The student applies on BenefitsCal
+refriGator never applies, signs, submits or acts as an authorized representative. The student applies on BenefitsCal
 themself; the card gives them their answers. "Apply for me" gets a clear explanation.
 
 ### 9.4 Data minimization
@@ -1505,13 +1509,13 @@ evaluation is text-level and does not measure speech-recognition accuracy across
 The phone path needs no screen, app or login (blind and low-vision students can finish it; the card code and the key
 results are spoken). The talk page always allows typing (deaf, hard-of-hearing and speech-impaired students, noisy
 places). The card meets WCAG 2.2 AA: large text, plain language, 200 % zoom, reflow at 320 px, screen-reader order,
-keyboard use, print. The font is one family, Atkinson Hyperlegible Next (open font license), self-hosted; there is no
+keyboard use, print. The font is one family, Archivo (open font license), self-hosted; there is no
 monospace font, and amounts, times and case codes use its tabular figures. Light theme only.
 Relay-service calls are not specially handled and support for them is not claimed.
 
-### 9.7 Risks and what GatorPlate does
+### 9.7 Risks and what refriGator does
 
-| Risk | What could go wrong | What GatorPlate does |
+| Risk | What could go wrong | What refriGator does |
 |---|---|---|
 | Privacy | Income and household details are sensitive | Consent first; no audio; no SSN collected; immigration status never asked or stored; slots and short quotes only; same-day deletion of event data; 30-day retention in a pilot |
 | Security | Someone talks the AI into a bigger number; data leaks | Numbers only from the table; schema-checked, grounded model output; output guard; signed gateway API; console passcode; unguessable expiring card links; rate limits; content-free logs |
@@ -1553,7 +1557,7 @@ before it is measured.
 | Closed-question fallbacks | turns answered in closed form after a model timeout or failure | report |
 | Forbidden phrases | output-guard hits in replies and cards | 0 |
 | Phone word budgets | replies over 40 / 25 / 45 words | 0 |
-| Model cost | measured tokens per call × the provider's published price at run time = GatorPlate's own LLM cost per call | report |
+| Model cost | measured tokens per call × the provider's published price at run time = refriGator's own LLM cost per call | report |
 
 Engine golden cases must pass 100 % before the evaluation runs.
 
@@ -1568,9 +1572,9 @@ Engine golden cases must pass 100 % before the evaluation runs.
 | Front door | QR codes in the Gator Groceries and AS Food Pantry line and on Basic Needs pages; the phone number |
 | Before week 1 | SF State's data, security and accessibility review; privacy and legal review of the disclosure and consent wording; the LLM provider's data terms confirmed in writing; the §6.5 verification list closed; Spanish native review; contacts and hours re-checked |
 | Week 1 | Baseline: coordinator minutes per case with today's process; soft launch |
-| Weeks 2–4 | GatorPlate live; a weekly 30-minute review with the coordinator |
+| Weeks 2–4 | refriGator live; a weekly 30-minute review with the coordinator |
 | Metrics (no county data needed) | completed checks · share of "likely" cases with an application date within 7 days (coordinator tracking or the student's own report) · coordinator minutes per case · missed interviews (tracking or self-report) · **silent errors**: fields the coordinator corrected that had no yellow line (target 0, reported with n and the Wilson bound) · English/Spanish parity of completion and correction rates · channel mix (phone, web voice, typing) · one satisfaction question (pilot addition) |
-| Cost | Only GatorPlate's own **measured** LLM cost per call (from §10) × the number of calls; the phone part is gateway cost, separate; hosting is one small always-on app. No other cost figure is claimed. |
+| Cost | Only refriGator's own **measured** LLM cost per call (from §10) × the number of calls; the phone part is gateway cost, separate; hosting is one small always-on app. No other cost figure is claimed. |
 | Privacy | No student records; "The pilot uses no student records, so it needs no student-records integration; a real pilot follows SF State's data and accessibility review."; case notes follow SF State's data rules; cases auto-deleted after 30 days |
 | Yearly update | Every October 1: the new USDA cost-of-living values and the CDSS notice (for FY2027: the USDA memo of 2026-08-21 and CDSS ACIN I-40-26 of 2026-09-10) go into one table file; the golden cases are re-run; the console and card show the new table label. Mid-year CDSS letters (2026 brought several, for example AB 42 and the student-rule change) update only the affected rows; each row keeps its source and effective date. The other-programs table (§5.10) is re-checked on the same day; its rows carry their own end dates and turn to "check" when they lapse (the Medi-Cal limits and the California LifeLine amount first, after 2026-12-31). |
 | No lock-in | Open-source code (license in `LICENSE`); an open, versioned, text-only Brain API that any phone gateway or a browser can use (the talk page already does); campus-specific content (contacts, hours, county) in data files; a case export is a pilot addition |
@@ -1580,12 +1584,12 @@ Engine golden cases must pass 100 % before the evaluation runs.
 
 ## 12. Non-claims and limits
 
-- **Not an eligibility decision.** An estimate only; the county decides. GatorPlate never says "not eligible".
-- **Not a decision on any other program.** GatorPlate does not decide any program; every amount on the card's "money
+- **Not an eligibility decision.** An estimate only; the county decides. refriGator never says "not eligible".
+- **Not a decision on any other program.** refriGator does not decide any program; every amount on the card's "money
   you may be missing" part is an estimate from a dated table (§5.10), and each agency, the utility or the tax authority
   decides. The yearly total is not a promise and not a refund amount.
 - **Not an official service.** Not SF State, county, state or CalFresh software; no official logos or colors.
-- **No error-rate claim.** GatorPlate does not claim to reduce errors or denials; its claim is access and speed.
+- **No error-rate claim.** refriGator does not claim to reduce errors or denials; its claim is access and speed.
 - **Languages:** phone = English only; web and card = English and Spanish only. Not "any language".
 - **Availability:** the phone line was set up for the hackathon demo; it is turned off after the event and can be
   turned back on for an SF State pilot. The hosted web demo keeps sample data only; anything else entered there is
@@ -1623,7 +1627,7 @@ All checked on 2026-10-01 unless stated.
 | CDSS ACL 25-93, H.R. 1 work rules | 2025-12-31 (CA effective 2026-06-01) | A | Work rule ages 18–64, child under 14 |
 | CDSS ACL 25-79, work-rule waivers | 2025-11-07 | A | No waiver for San Francisco |
 | CDSS ACL 26-29, ABAWD handbook | 2026-04-15 | A | $941.78 earnings test, 80 hours, unemployment exemption, 10 days for verification |
-| CDSS ACL 25-92 and CDSS noncitizen FAQ | 2025-12-31; 2026 | A | Why a volunteered status only routes (GatorPlate never determines status) |
+| CDSS ACL 25-92 and CDSS noncitizen FAQ | 2025-12-31; 2026 | A | Why a volunteered status only routes (refriGator never determines status) |
 | CDSS ACL 15-42 | 2015-04-15 (the letter's own date; ACIN I-40-26 cites it as 2016) | A | Broad-based eligibility (no net test, 1–2-person minimum), IRT and SAR 7 reporting |
 | CDSS ACL 13-35 | 2013-04-24 | A | Homeless shelter deduction requires some shelter cost |
 | 7 CFR 271.2; 273.1(b)(1)(ii); 273.10(a)(1)(ii) | current | A | Homeless definition; under 22 with a parent; first-month proration |
@@ -1642,7 +1646,7 @@ All checked on 2026-10-01 unless stated.
 
 **Other programs** (§5.10; the web addresses are in `data/rules/programs_2026.json` `sources`). Grades as above, except
 that here **B** also marks an official page seen only in a search preview or not re-read on 2026-10-01, and **C**
-marks GatorPlate's own conventions (not a source rule).
+marks refriGator's own conventions (not a source rule).
 
 | Source | Date | Grade | Used for |
 |---|---|---|---|

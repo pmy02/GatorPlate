@@ -1,221 +1,58 @@
-/* GatorPlate design tokens (docs/UI_SPEC.md A6). Light theme only. The first :root mirrors data/design/tokens.json
-   exactly; tools/check_contrast.py checks that, every allowed text/background pair, and that no other file under
-   web/ hard-codes a color. Fonts are self-hosted (CSP default-src 'self'): one family, Atkinson Hyperlegible Next
-   (SIL OFL 1.1, fonts/OFL.txt). The italic face also has its own family name, listed first by --gp-font-italic. */
-@font-face {
-  font-family: "Atkinson Hyperlegible Next Italic";
-  src: url("fonts/AtkinsonHyperlegibleNext-Italic-Variable.woff2") format("woff2");
-  font-style: italic;
-  font-weight: 200 800;
-  font-display: swap;
+/* refriGator design tokens (docs/UI_SPEC.md A6). Light theme only. The first :root mirrors data/design/tokens.json exactly (tools/check_contrast.py checks it, every allowed color pair, and that no other file under web/ hard-codes a color). One self-hosted family, Archivo (SIL OFL 1.1, fonts/OFL.txt; weight 100-900, width 62-125%); the italic face also has its own family name, listed first by --gp-font-italic. */
+@font-face{font-family:"Archivo Italic";src:url("fonts/Archivo-Italic-Variable.woff2") format("woff2");font-style:italic;font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"Archivo";src:url("fonts/Archivo-Variable.woff2") format("woff2");font-style:normal;font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"Archivo";src:url("fonts/Archivo-Italic-Variable.woff2") format("woff2");font-style:italic;font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+:root{
+  color-scheme:only light;
+  --gp-bg:#EFEFEC;--gp-surface:#FAFAF8;--gp-sunken:#E6E6E2;--gp-sunken-2:#DCDCD7;--gp-border:#D6D6D1;
+  --gp-border-strong:#77777E;--gp-text:#0B0B0C;--gp-text-2:#46464C;--gp-text-3:#5C5C63;--gp-primary:#0B0B0C;
+  --gp-primary-hover:#2A2A2E;--gp-primary-tint:#E7E8F8;--gp-on-primary:#F3F3F0;--gp-focus:#0B0B0C;--gp-live:#0B0B0C;
+  --gp-brand:#0B0B0C;--gp-brand-ink:#0B0B0C;--gp-brand-wash:#DCDEF9;--gp-accent:#C3C6F4;--gp-accent-2:#DCDEF9;
+  --gp-ink:#0B0B0C;--gp-ink-2:#151517;--gp-ink-3:#222225;--gp-on-ink:#F3F3F0;--gp-on-ink-2:#ABABB2;
+  --gp-on-ink-3:#8E8E95;--gp-ink-line:#707078;--gp-ink-hair:#2E2E32;--gp-likely-ink:#0B0B0C;--gp-likely-bg:#C3C6F4;
+  --gp-likely-line:#0B0B0C;--gp-coord-ink:#0B0B0C;--gp-coord-bg:#E2E2DD;--gp-coord-line:#5C5C63;
+  --gp-other-ink:#46464C;--gp-other-bg:#EAEAE6;--gp-other-line:#77777E;--gp-yl-ink:#0B0B0C;--gp-yl-bg:#DCDEF9;
+  --gp-yl-line:#0B0B0C;--gp-err-ink:#A3261B;--gp-err-bg:#F6E1DE;--gp-err-line:#C2402F;
+  --gp-font:"Archivo", system-ui, sans-serif;--gp-font-italic:"Archivo Italic", "Archivo", system-ui, sans-serif;
+  --gp-num:tabular-nums lining-nums;
+  --gp-fs-mega:clamp(5rem, 2rem + 12vw, 14.5rem);--gp-fs-display:clamp(2.5rem, 1rem + 4.6vw, 5.5rem);
+  --gp-fs-hero:clamp(5rem, 3.6rem + 5vw, 8.5rem);--gp-fs-hero-title:clamp(2.5rem, 1rem + 4.6vw, 5.5rem);
+  --gp-fs-title:clamp(2rem, 1.3rem + 2vw, 3rem);--gp-fs-h1:1.75rem;--gp-fs-talk:1.75rem;--gp-fs-card-h2:1.375rem;
+  --gp-fs-lead:1.25rem;--gp-fs-h2:1.375rem;--gp-fs-transcript:1.25rem;--gp-fs-body-l:1.125rem;--gp-fs-h3:1.0625rem;
+  --gp-fs-body:1.0625rem;--gp-fs-small:0.875rem;--gp-fs-label:0.8125rem;--gp-lh-display:0.98;--gp-lh-heading:1.15;
+  --gp-lh-tight:1.1;--gp-lh:1.5;--gp-fw-thin:160;--gp-fw-light:300;--gp-fw-regular:400;--gp-fw-medium:520;
+  --gp-fw-semibold:600;--gp-fw-bold:700;--gp-fw-heavy:780;--gp-wide:116%;--gp-semi:92%;--gp-tracking-display:-0.04em;
+  --gp-tracking-tight:-0.015em;--gp-tracking-num:-0.06em;--gp-tracking-label:0;--gp-tracking-code:0.06em;
+  --gp-s1:4px;--gp-s2:8px;--gp-s3:12px;--gp-s4:16px;--gp-s5:20px;--gp-s6:24px;--gp-s7:32px;--gp-s8:40px;--gp-s9:48px;
+  --gp-s10:64px;--gp-s11:80px;--gp-s12:96px;--gp-s13:128px;
+  --gp-r-xs:6px;--gp-r-sm:10px;--gp-r-md:14px;--gp-r-lg:18px;--gp-r-xl:24px;--gp-r-pill:999px;
+  --gp-sh-1:0 0 0 1px rgba(11, 11, 12, 0.07);
+  --gp-sh-2:0 0 0 1px rgba(11, 11, 12, 0.06), 0 12px 32px -16px rgba(11, 11, 12, 0.22);
+  --gp-sh-3:0 0 0 1px rgba(11, 11, 12, 0.06), 0 24px 48px -16px rgba(11, 11, 12, 0.28);
+  --gp-ease:cubic-bezier(0.2, 0.8, 0.2, 1);--gp-ease-io:cubic-bezier(0.65, 0, 0.35, 1);--gp-d1:120ms;
+  --gp-d-chip:160ms;--gp-d2:200ms;--gp-d-row:240ms;--gp-d-draw:280ms;--gp-d3:320ms;--gp-d-count:450ms;--gp-d4:500ms;
+  --gp-d-clear:600ms;--gp-d-fill:1200ms;--gp-d-pulse:1600ms;--gp-d-toast:4000ms;
+  --gp-live-ring:color-mix(in srgb, var(--gp-live) 45%, transparent);
+  --gp-live-ring-0:color-mix(in srgb, var(--gp-live) 0%, transparent);
+  --gp-scrim:color-mix(in srgb, var(--gp-text) 32%, transparent);
+  --gp-tap:48px;--gp-tap-l:56px;--gp-tap-xl:60px;--gp-btn-o:44px;--gp-tap-console:40px;--gp-topbar:56px;--gp-bar:72px;
+  --gp-page-max:75rem;--gp-gutter:clamp(16px, 3.4vw, 48px);--gp-row:72px;--gp-slot-row:44px;--gp-chip:28px;
+  --gp-list-w-sm:280px;--gp-list-w:320px;--gp-list-w-lg:360px;--gp-detail-max:1040px;--gp-text-max:34em;
+  --gp-bubble-max:85%;--gp-icon:20px;--gp-icon-card:24px;--gp-mic:96px;--gp-qr:260px;--gp-range-h:12px;
+  --gp-live-dot:10px;--gp-yl-edge:4px;--gp-focus-w:3px;--gp-focus-offset:2px;
+  --gp-print-ink:#000000;--gp-print-paper:#FFFFFF;
 }
-@font-face {
-  font-family: "Atkinson Hyperlegible Next";
-  src: url("fonts/AtkinsonHyperlegibleNext-Variable.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 200 800;
-  font-display: swap;
+/* Print: black on white, no tints, no shadows, dark areas print as paper (UI_SPEC A4.5). */
+@media print{
+:root{--gp-bg:var(--gp-print-paper);--gp-surface:var(--gp-print-paper);--gp-sunken:var(--gp-print-paper);--gp-sunken-2:var(--gp-print-paper);--gp-brand-wash:var(--gp-print-paper);--gp-primary-tint:var(--gp-print-paper);--gp-likely-bg:var(--gp-print-paper);--gp-coord-bg:var(--gp-print-paper);--gp-other-bg:var(--gp-print-paper);--gp-yl-bg:var(--gp-print-paper);--gp-err-bg:var(--gp-print-paper);--gp-accent:var(--gp-print-paper);--gp-accent-2:var(--gp-print-paper);--gp-ink:var(--gp-print-paper);--gp-ink-2:var(--gp-print-paper);--gp-ink-3:var(--gp-print-paper);--gp-on-ink:var(--gp-print-ink);--gp-on-ink-2:var(--gp-print-ink);--gp-on-ink-3:var(--gp-print-ink);--gp-text:var(--gp-print-ink);--gp-text-2:var(--gp-print-ink);--gp-text-3:var(--gp-print-ink);--gp-primary:var(--gp-print-ink);--gp-brand-ink:var(--gp-print-ink);--gp-likely-ink:var(--gp-print-ink);--gp-coord-ink:var(--gp-print-ink);--gp-other-ink:var(--gp-print-ink);--gp-yl-ink:var(--gp-print-ink);--gp-err-ink:var(--gp-print-ink);--gp-sh-1:none;--gp-sh-2:none;--gp-sh-3:none}
 }
-@font-face {
-  font-family: "Atkinson Hyperlegible Next";
-  src: url("fonts/AtkinsonHyperlegibleNext-Italic-Variable.woff2") format("woff2");
-  font-style: italic;
-  font-weight: 200 800;
-  font-display: swap;
-}
-
-/* Paper, ink and persimmon: hierarchy by size and surface, not by weight; one action color. */
-:root {
-  color-scheme: only light;
-
-  --gp-bg: #FAF9F6;
-  --gp-surface: #FFFFFF;
-  --gp-sunken: #F2F0EA;
-  --gp-sunken-2: #E9E6DE;
-  --gp-border: #E6E2D9;
-  --gp-border-strong: #8C8A84;
-  --gp-text: #16181D;
-  --gp-text-2: #454850;
-  --gp-text-3: #5E626B;
-  --gp-primary: #2142A8;
-  --gp-primary-hover: #1A3586;
-  --gp-primary-tint: #EDF1FA;
-  --gp-on-primary: #FFFFFF;
-  --gp-focus: #2142A8;
-  --gp-live: #2142A8;
-  --gp-brand: #E2551B;
-  --gp-brand-ink: #B13F0E;
-  --gp-brand-wash: #FFF3EC;
-  --gp-likely-ink: #17663A;
-  --gp-likely-bg: #E3F5EA;
-  --gp-likely-line: #2E8F55;
-  --gp-coord-ink: #8A4B00;
-  --gp-coord-bg: #FDF0D9;
-  --gp-coord-line: #C27A00;
-  --gp-other-ink: #1F5F7A;
-  --gp-other-bg: #E2F1F7;
-  --gp-other-line: #3A86A8;
-  --gp-yl-ink: #5E4A00;
-  --gp-yl-bg: #FFF6CC;
-  --gp-yl-line: #A87F00;
-  --gp-err-ink: #A3261B;
-  --gp-err-bg: #FDE8E6;
-  --gp-err-line: #D0402F;
-
-  --gp-font: "Atkinson Hyperlegible Next", system-ui, sans-serif;
-  --gp-font-italic: "Atkinson Hyperlegible Next Italic", "Atkinson Hyperlegible Next", system-ui, sans-serif;
-  --gp-num: tabular-nums lining-nums;
-  --gp-fs-display: 3.5rem;
-  --gp-fs-hero: clamp(3rem, 2.4rem + 1.6vw, 3.5rem);
-  --gp-fs-hero-title: clamp(2.25rem, 1.5rem + 2.6vw, 3.5rem);
-  --gp-fs-title: clamp(2rem, 1.6rem + 1.4vw, 2.75rem);
-  --gp-fs-h1: 1.75rem;
-  --gp-fs-talk: 1.75rem;
-  --gp-fs-card-h2: 1.375rem;
-  --gp-fs-lead: 1.25rem;
-  --gp-fs-h2: 1.25rem;
-  --gp-fs-transcript: 1.25rem;
-  --gp-fs-body-l: 1.125rem;
-  --gp-fs-h3: 1.0625rem;
-  --gp-fs-body: 1rem;
-  --gp-fs-small: 0.875rem;
-  --gp-fs-label: 0.8125rem;
-  --gp-lh-display: 1.06;
-  --gp-lh-heading: 1.2;
-  --gp-lh-tight: 1.15;
-  --gp-lh: 1.5;
-  --gp-fw-regular: 400;
-  --gp-fw-medium: 500;
-  --gp-fw-semibold: 600;
-  --gp-fw-bold: 700;
-  --gp-fw-heavy: 800;
-  --gp-tracking-display: -0.025em;
-  --gp-tracking-tight: -0.015em;
-  --gp-tracking-label: 0.06em;
-  --gp-tracking-code: 0.06em;
-
-  --gp-s1: 4px;
-  --gp-s2: 8px;
-  --gp-s3: 12px;
-  --gp-s4: 16px;
-  --gp-s5: 20px;
-  --gp-s6: 24px;
-  --gp-s7: 32px;
-  --gp-s8: 40px;
-  --gp-s9: 48px;
-  --gp-s10: 64px;
-  --gp-s11: 80px;
-  --gp-s12: 96px;
-  --gp-s13: 128px;
-
-  --gp-r-sm: 8px;
-  --gp-r-md: 12px;
-  --gp-r-lg: 20px;
-  --gp-r-xl: 28px;
-  --gp-r-pill: 999px;
-
-  --gp-sh-1: 0 0 0 1px rgba(22, 24, 29, 0.06), 0 1px 2px rgba(22, 24, 29, 0.04);
-  --gp-sh-2: 0 0 0 1px rgba(22, 24, 29, 0.05), 0 2px 4px rgba(22, 24, 29, 0.04), 0 12px 32px -12px rgba(22, 24, 29, 0.16);
-  --gp-sh-3: 0 0 0 1px rgba(22, 24, 29, 0.05), 0 4px 8px rgba(22, 24, 29, 0.05), 0 24px 48px -16px rgba(22, 24, 29, 0.2);
-
-  --gp-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --gp-ease-io: cubic-bezier(0.65, 0, 0.35, 1);
-  --gp-d1: 120ms;
-  --gp-d-chip: 160ms;
-  --gp-d2: 200ms;
-  --gp-d-row: 240ms;
-  --gp-d-draw: 280ms;
-  --gp-d3: 320ms;
-  --gp-d-count: 450ms;
-  --gp-d4: 500ms;
-  --gp-d-clear: 600ms;
-  --gp-d-fill: 1200ms;
-  --gp-d-pulse: 1600ms;
-  --gp-d-toast: 4000ms;
-
-  --gp-live-ring: color-mix(in srgb, var(--gp-live) 45%, transparent);
-  --gp-live-ring-0: color-mix(in srgb, var(--gp-live) 0%, transparent);
-  --gp-scrim: color-mix(in srgb, var(--gp-text) 32%, transparent);
-
-  --gp-tap: 48px;
-  --gp-tap-l: 56px;
-  --gp-tap-console: 40px;
-  --gp-topbar: 56px;
-  --gp-bar: 72px;
-  --gp-page-max: 75rem;
-  --gp-row: 72px;
-  --gp-slot-row: 44px;
-  --gp-chip: 28px;
-  --gp-list-w-sm: 280px;
-  --gp-list-w: 320px;
-  --gp-list-w-lg: 360px;
-  --gp-detail-max: 1040px;
-  --gp-text-max: 34em;
-  --gp-bubble-max: 85%;
-  --gp-icon: 20px;
-  --gp-icon-card: 24px;
-  --gp-mic: 96px;
-  --gp-qr: 260px;
-  --gp-range-h: 12px;
-  --gp-live-dot: 10px;
-  --gp-yl-edge: 4px;
-  --gp-focus-w: 3px;
-  --gp-focus-offset: 2px;
-
-  --gp-print-ink: #000000;
-  --gp-print-paper: #FFFFFF;
-}
-
-/* Print: black on white, no tints, no shadows (UI_SPEC A4.5). */
-@media print {
-  :root {
-    --gp-bg: var(--gp-print-paper);
-    --gp-surface: var(--gp-print-paper);
-    --gp-sunken: var(--gp-print-paper);
-    --gp-sunken-2: var(--gp-print-paper);
-    --gp-brand-wash: var(--gp-print-paper);
-    --gp-primary-tint: var(--gp-print-paper);
-    --gp-likely-bg: var(--gp-print-paper);
-    --gp-coord-bg: var(--gp-print-paper);
-    --gp-other-bg: var(--gp-print-paper);
-    --gp-yl-bg: var(--gp-print-paper);
-    --gp-err-bg: var(--gp-print-paper);
-    --gp-text: var(--gp-print-ink);
-    --gp-text-2: var(--gp-print-ink);
-    --gp-text-3: var(--gp-print-ink);
-    --gp-primary: var(--gp-print-ink);
-    --gp-brand-ink: var(--gp-print-ink);
-    --gp-likely-ink: var(--gp-print-ink);
-    --gp-coord-ink: var(--gp-print-ink);
-    --gp-other-ink: var(--gp-print-ink);
-    --gp-yl-ink: var(--gp-print-ink);
-    --gp-err-ink: var(--gp-print-ink);
-    --gp-sh-1: none;
-    --gp-sh-2: none;
-    --gp-sh-3: none;
-  }
-}
-
-html {
-  font-size: 100%;
-  font-family: var(--gp-font);
-  background: var(--gp-bg);
-  color: var(--gp-text);
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-}
-html.presenter { font-size: 112.5%; }
-body { margin: 0; background: var(--gp-bg); line-height: var(--gp-lh); }
-em, i, cite, q, .quote { font-family: var(--gp-font-italic); font-style: italic; }
-.num, .code { font-variant-numeric: var(--gp-num); }
-.code { font-family: var(--gp-font); font-style: normal; letter-spacing: var(--gp-tracking-code); }
-:focus-visible { outline: var(--gp-focus-w) solid var(--gp-focus); outline-offset: var(--gp-focus-offset); }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 1ms !important;
-    scroll-behavior: auto !important;
-  }
+html{font-size:100%;font-family:var(--gp-font);font-variant-numeric:var(--gp-num);background:var(--gp-bg);color:var(--gp-text);-webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-font-smoothing:antialiased}
+html.presenter{font-size:112.5%}
+body{margin:0;background:var(--gp-bg);line-height:var(--gp-lh)}
+em,i,cite,q,.quote{font-family:var(--gp-font-italic);font-style:italic}
+.num,.code{font-variant-numeric:var(--gp-num)}
+.code{font-family:var(--gp-font);font-style:normal;letter-spacing:var(--gp-tracking-code)}
+:focus-visible{outline:var(--gp-focus-w) solid var(--gp-focus);outline-offset:var(--gp-focus-offset)}
+@media (prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:1ms !important;animation-iteration-count:1 !important;transition-duration:1ms !important;scroll-behavior:auto !important}
 }

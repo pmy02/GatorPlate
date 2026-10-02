@@ -7,11 +7,11 @@ repository is the font listed below.
 
 | File | What it is | License | Copyright |
 |---|---|---|---|
-| `web/shared/fonts/AtkinsonHyperlegibleNext-Variable.woff2` | Atkinson Hyperlegible Next, variable weight 200–800, version 2.001, Latin subset, WOFF2 | SIL Open Font License 1.1; full text with the copyright notice in `web/shared/fonts/OFL.txt` | Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors (https://github.com/googlefonts/atkinson-hyperlegible-next) |
-| `web/shared/fonts/AtkinsonHyperlegibleNext-Italic-Variable.woff2` | Atkinson Hyperlegible Next Italic, variable weight 200–800, version 2.001, Latin subset, WOFF2 | SIL Open Font License 1.1; full text with the copyright notice in `web/shared/fonts/OFL.txt` | Copyright 2020-2024 The Atkinson Hyperlegible Next Project Authors (https://github.com/googlefonts/atkinson-hyperlegible-next) |
+| `web/shared/fonts/Archivo-Variable.woff2` | Archivo, variable weight 100–900 and width 62–125%, version 2.001, Latin subset, WOFF2 | SIL Open Font License 1.1; full text with the copyright notice in `web/shared/fonts/OFL.txt` | Copyright 2020 The Archivo Project Authors (https://github.com/Omnibus-Type/Archivo) |
+| `web/shared/fonts/Archivo-Italic-Variable.woff2` | Archivo Italic, variable weight 100–900 and width 62–125%, version 2.001, Latin subset, WOFF2 | SIL Open Font License 1.1; full text with the copyright notice in `web/shared/fonts/OFL.txt` | Copyright 2020 The Archivo Project Authors (https://github.com/Omnibus-Type/Archivo) |
 
-- Atkinson Hyperlegible Next is the only font. The font files are distributed unchanged and are not sold. They are
-  served from this site only (no font service or CDN).
+- Archivo is the only font. The files are a Latin subset of the upstream release (no glyph or name changes) and are
+  not sold. They are served from this site only (no font service or CDN).
 
 ## Icons and logo
 

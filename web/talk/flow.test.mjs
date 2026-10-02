@@ -124,7 +124,7 @@ test("Maria (English, typing, fixtures): consent to card, every request valid", 
   assert.ok(phases.includes("thinking"));
   assert.equal(phases[0], "connecting");
   // The first thing on screen is the bank's web disclosure, which names the browsers' speech services.
-  assert.match(shown[0], /^Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service\./);
+  assert.match(shown[0], /^Hi, I'm refriGator, a student-built AI assistant, not an official SF State service\./);
   assert.ok(shown[0].includes(disclosure("en")), shown[0]);
   assert.match(shown.join(" "), /about \$306 a month\. The county makes the final decision\./);
 

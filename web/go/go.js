@@ -5,20 +5,20 @@ import { cardPath, normalizeCode } from "/go/go-lib.mjs";
 
 const S = {
   en: {
-    title: "Enter your card code · GatorPlate", lang: "Language", "go.title": "Enter your card code",
+    title: "Enter your card code · refriGator", lang: "Language", "go.title": "Enter your card code",
     "go.hint": "6 digits — we said it at the end of your call.", "go.submit": "Open my card",
     "go.notfound": "That code doesn't work. Codes last 24 hours — check the digits or start again.",
     "go.limited": "Too many tries. Wait a minute and try again.",
-    "go.error": "We couldn't reach GatorPlate. Check your connection and try again.",
+    "go.error": "We couldn't reach refriGator. Check your connection and try again.",
     prototype: "Student-built prototype — not an official SF State, county, or CalFresh service.",
   },
   es: {
-    title: "Escribe el código de tu tarjeta · GatorPlate", lang: "Idioma",
+    title: "Escribe el código de tu tarjeta · refriGator", lang: "Idioma",
     "go.title": "Escribe el código de tu tarjeta", "go.hint": "6 dígitos: te lo dijimos al final de la llamada.",
     "go.submit": "Abrir mi tarjeta",
     "go.notfound": "Ese código no funciona. Los códigos duran 24 horas: revisa los dígitos o empieza otra vez.",
     "go.limited": "Demasiados intentos. Espera un minuto e intenta otra vez.",
-    "go.error": "No pudimos conectar con GatorPlate. Revisa tu conexión e intenta otra vez.",
+    "go.error": "No pudimos conectar con refriGator. Revisa tu conexión e intenta otra vez.",
     prototype: "Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh.",
   },
 };

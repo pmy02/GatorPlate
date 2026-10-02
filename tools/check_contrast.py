@@ -19,7 +19,7 @@ Checks
                 functions (rgb, hsl, hwb, lab, lch, oklab, oklch, color) and color names in color properties;
                 JS quoted 6/8-digit #hex strings and color functions; SVG color attributes. Colors come from
                 var(--gp-*) only.
-  6. family     one font family (Atkinson Hyperlegible Next), no monospace font: no "mono" token in tokens.json; no
+  6. family     one font family (Archivo), no monospace font: no "mono" token in tokens.json; no
                 monospace family (the generic monospace or ui-monospace, a family named "... Mono", or a common
                 system monospace face) in the font tokens, in a font, font-family or custom property declaration of
                 any CSS under web/ (tokens.css included), in HTML/SVG font attributes or styles, or in a JS string;

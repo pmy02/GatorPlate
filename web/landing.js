@@ -7,7 +7,7 @@ import { telHref } from "./shared/format.js";
 
 export const LANDING_STRINGS = {
   en: {
-    title: "GatorPlate",
+    title: "refriGator",
     headline_phone: "Check the money you may be missing — by phone or in your browser.",
     headline_web: "Check the money you may be missing — in your browser.",
     sub: "SF State students: CalFresh pays one person up to $306 a month for groceries, and it can open more help. A few minutes. Free. Estimates only — each agency decides.",
@@ -20,13 +20,13 @@ export const LANDING_STRINGS = {
     "trust.recorded": "Not recorded",
     "trust.ssn": "Never asks for your Social Security number or immigration status",
     "trust.estimate": "Estimates only — each agency decides",
-    "more.label": "More about GatorPlate",
+    "more.label": "More about refriGator",
     prototype: "Student-built prototype — not an official SF State, county, or CalFresh service.",
     skip: "Skip to main content",
     "lang.label": "Language",
   },
   es: {
-    title: "GatorPlate",
+    title: "refriGator",
     headline_phone: "Revisa el dinero que quizá te falta reclamar, por teléfono o en tu navegador.",
     headline_web: "Revisa el dinero que quizá te falta reclamar en tu navegador.",
     sub: "Estudiantes de SF State: CalFresh da hasta $306 al mes a una persona para comida, y puede abrir más ayudas. Unos minutos. Gratis. Solo son estimados: cada agencia decide.",
@@ -39,7 +39,7 @@ export const LANDING_STRINGS = {
     "trust.recorded": "No se graba",
     "trust.ssn": "Nunca te pide tu número de Seguro Social ni tu estatus migratorio",
     "trust.estimate": "Solo son estimados: cada agencia decide",
-    "more.label": "Más sobre GatorPlate",
+    "more.label": "Más sobre refriGator",
     prototype: "Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh.",
     skip: "Ir al contenido",
     "lang.label": "Idioma",

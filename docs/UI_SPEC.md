@@ -1,6 +1,6 @@
-# GatorPlate UI Spec
+# refriGator UI Spec
 
-**Version 2026-10-01.** Layout and behavior truth for every GatorPlate screen: the coordinator console, the student
+**Version 2026-10-01.** Layout and behavior truth for every refriGator screen: the coordinator console, the student
 card, the talk page and the small public pages. Related files:
 
 | What | Where |
@@ -22,7 +22,8 @@ name, the contract wins and this spec is corrected.
 
 1. **Light only.** Every page has `<meta name="color-scheme" content="only light">`; `tokens.css` sets
    `:root { color-scheme: only light; }` (this also opts out of automatic dark rendering). No
-   `prefers-color-scheme` rules, no dark panels or dark sections.
+   `prefers-color-scheme` rules and no dark mode. Dark areas exist only where the design puts them (A6.1: the landing
+   and talk page bodies, the card top band, the `/go` band and the console frame); every other surface is paper.
 2. **No official marks.** No SF State logo, seal, mascot art, purple/gold palette or campus fonts; no CalFresh,
    BenefitsCal or county logos, and no logo of any program, agency or utility on the card's unlocked part (Medi-Cal,
    Clipper, Muni, BART, PG&E, California LifeLine, FTB, IRS). Names appear as plain text. Every student-facing screen
@@ -143,15 +144,15 @@ directly under it, the unlocked part. Answers are accepted only after the call h
 
 ### A2.3 The opening (what the student hears and sees first)
 
-- **Phone** (the `/start` reply; never interruptible): say *"Hi, this is GatorPlate, a student-built AI assistant,
-  not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio
-  isn't recorded."* ask *"Okay to start? Say yes, or press one."* Together that is exactly 40 words, the opening
-  budget; phone text never contains digits. This is the bank's canonical phone `consent.ask`. Yes or key 1 continues;
+- **Phone** (the `/start` reply; never interruptible): say *"Hi, this is Refri Gator, a student-built AI assistant,
+  not an official SF State service. An AI turns what you say into text to check CalFresh; the call audio
+  isn't recorded."* ask *"Okay to start? Say yes, or press one."* Together that is 39 words, within the 40-word opening
+  budget (the phone says the name as two words, `verbalize.PHONE_SPOKEN_NAME`; A6.7); phone text never contains digits. This is the bank's canonical phone `consent.ask`. Yes or key 1 continues;
   no or key 2 gives the coordinator contact and ends; an unclear answer gets one re-ask, then counts as no. The console
-  transcript shows it as the first GatorPlate bubble.
-- **Web** (talk page, first reply, shown and spoken): *"Hi, I'm GatorPlate, a student-built AI assistant, not an
+  transcript shows it as the first refriGator bubble.
+- **Web** (talk page, first reply, shown and spoken): *"Hi, I'm refriGator, a student-built AI assistant, not an
   official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari
-  uses Apple's). GatorPlate only gets the text and never stores audio."* + *"Is that okay?"* — Spanish in the
+  uses Apple's). refriGator only gets the text and never stores audio."* + *"Is that okay?"* — Spanish in the
   sentence bank (see `contracts/examples/sofia_web_es.json`). Quick replies come from `choices`. Naming the browsers
   and their makers here is the only company naming allowed in product text, apart from the public programs and the
   regulated utility on the card's unlocked part (A0.9).
@@ -261,7 +262,7 @@ Never test crisis words on purpose. If they come up, stop the demo and be human.
 Work view, 1366×768:
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ [logo] GatorPlate  Coordinator · Prototype coordinator view                                                        │
+│ [logo] refriGator  Coordinator · Prototype coordinator view                                                        │
 │ [Rules FY2027 · in effect Oct 1, 2026]  [Live]  [Sample data]  [Presenter]  [Demo]                                 │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ AI listens  >  Rules decide  >  A person confirms                                                                  │
@@ -281,7 +282,7 @@ Live view, 1366×768 (Presenter):
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ (o) Live call · Phone · EN · 01:12 · Not recorded · Consent 0:09                             [Exit live view · L]  │
 ├─────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────────┤
-│ GATORPLATE                                          │ ESTIMATE SO FAR                                              │
+│ refriGator                                          │ ESTIMATE SO FAR                                              │
 │ Does anyone, like a parent, pay part of your        │ $155 [==============================] $306                   │
 │ rent straight to your landlord?                     │ Between $155 and $306 a month · Not settled yet              │
 │                                                     │ NOW ASKING — WHY                                             │
@@ -299,7 +300,7 @@ Live view, 1366×768 (Presenter):
 
 ### A3.3 Top bar and how-it-works strip
 
-- Logo (`gp-logo`, brand color) + wordmark *GatorPlate* + *Coordinator* · *Prototype coordinator view* label · rules
+- Logo (`gp-logo`, brand color) + wordmark *refriGator* + *Coordinator* · *Prototype coordinator view* label · rules
   pill *Rules FY2027 · in effect Oct 1, 2026* (opens a drawer with the table label, the effective dates and every
   source with its date, from `ConsoleMeta.rules`) · connection pill *Live* / *Polling* · neutral *Sample data* badge
   when `demo_mode` · Presenter toggle (`P`) · demo menu (`Shift+D`, only when `demo_mode`): *Seed samples · Reset
@@ -457,7 +458,7 @@ not an entry of `flags[]`) · *Sample* (`seeded`). The review time is `reviewed_
   (*Consent*, `i-check` and the time).
 - **Transcript** (demo setting `GP_LIVE_TRANSCRIPT=1`, which the console reads as `ConsoleMeta.live_transcript`;
   lines arrive as `live.turn` events, and a console that opens mid-call first loads `GET /api/cases/{id}/live`;
-  process memory only, never stored): GatorPlate bubbles on the left (`--gp-sunken`, label *GatorPlate*), student
+  process memory only, never stored): refriGator bubbles on the left (`--gp-sunken`, label *refriGator*), student
   bubbles on the right (`--gp-primary-tint`, label *Student*).
   18 px (20 px in Presenter). Sticks to the bottom unless the user scrolled up; older bubbles fade to 60%. Redacted
   digits arrive as the replacement text `[REDACTED]` (`data/content/guards.json`, `input.redact.replacement`) and show
@@ -697,7 +698,7 @@ that button with its new label. Re-rendering on a language switch keeps *Your pl
   text 16 px; legal footer 14 px minimum.
 - Buttons at least 48 px high, full width on phones, icon + label. Primary *Open BenefitsCal*. Secondary: *Add 3
   dates to my calendar* (the CardView's `reminders_url`, which is `GET /api/card/{token}/reminders.ics?lang=…`:
-  three all-day calendar events relative to the filing day — `tracking.filed_on` when the coordinator recorded it, else `first_month.filed_on` — downloaded by the student as `gatorplate-dates.ics`; the button shows only when the case has a filing day; GatorPlate sends
+  three all-day calendar events relative to the filing day — `tracking.filed_on` when the coordinator recorded it, else `first_month.filed_on` — downloaded by the student as `gatorplate-dates.ics`; the button shows only when the case has a filing day; refriGator sends
   nothing, and no student-facing string calls them "reminders", a word the output guard blocks), *Call the clinic*, *Email the clinic*, *Call the county (855) 355-5757* inside the
   interview section, *Print or save PDF*, *Delete my info*.
 - *Delete my info* opens a confirm screen, then `DELETE /api/card/{token}`, then *Your information was deleted.*
@@ -754,12 +755,12 @@ including the control labels in `UnlockedView.labels` (`ui.claimed`, `ui.calfres
 | `delete.yes` / `delete.no` | Delete · Keep it | Borrar · No borrar |
 | `deleted` | Your information was deleted. | Tu información fue borrada. |
 | `badlink` | This card link doesn't work. It may have expired or been deleted. | Este enlace no funciona. Puede que haya vencido o que se haya borrado. |
-| `badlink.talk` | Talk to GatorPlate | Hablar con GatorPlate |
+| `badlink.talk` | Talk to refriGator | Hablar con refriGator |
 | `loading` | Loading your card… | Cargando tu tarjeta… |
 | `error` | We couldn't load your card. Check your connection and try again. | No pudimos cargar tu tarjeta. Revisa tu conexión e intenta otra vez. |
 | `retry` | Try again | Intentar otra vez |
 | `code` | Your case code: {code} | Tu código: {code} |
-| `print.header` | GatorPlate card · {code} · printed {date} | Tarjeta de GatorPlate · {code} · impresa el {date} |
+| `print.header` | refriGator card · {code} · printed {date} | Tarjeta de refriGator · {code} · impresa el {date} |
 | `noscript` | This card needs JavaScript. To talk to a person: SF State CalFresh Help Clinic, (415) 338-1203, calfresh@sfsu.edu. | Esta tarjeta necesita JavaScript. Para hablar con una persona: CalFresh Help Clinic de SF State, (415) 338-1203, calfresh@sfsu.edu. |
 | `prototype` | Student-built prototype — not an official SF State, county, or CalFresh service. | Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh. |
 
@@ -782,7 +783,7 @@ demo fallback and the Spanish channel. It uses `POST /api/web/sessions` and then
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ [logo] GatorPlate            [English | Español]                Not recorded       │
+│ [logo] refriGator            [English | Español]                Not recorded       │
 │                                                                                    │
 │   Does anyone, like a parent, pay part of your rent     <- current reply, 26 px    │
 │   straight to your landlord?                                                       │
@@ -806,7 +807,7 @@ demo fallback and the Spanish channel. It uses `POST /api/web/sessions` and then
 | Permission prompt | — | The browser's prompt. |
 | Listening | pulsing ring · *Listening…* | Interim words gray, final words ink. Push to talk, one utterance per tap. |
 | Thinking | three dots · *Thinking…* | Calm; no spinner. The brain itself switches to a closed question if it is slow. |
-| Speaking | sound bars · *GatorPlate is speaking — tap to interrupt* | The mic is closed while GatorPlate speaks (no echo). When `interruptible` is false (opening, amounts, codes, phone numbers, crisis resources) there is no tap-to-interrupt and the label is just *GatorPlate is speaking*. Tap or `Space` stops the voice and listens. |
+| Speaking | sound bars · *refriGator is speaking — tap to interrupt* | The mic is closed while refriGator speaks (no echo). When `interruptible` is false (opening, amounts, codes, phone numbers, crisis resources) there is no tap-to-interrupt and the label is just *refriGator is speaking*. Tap or `Space` stops the voice and listens. |
 | Done | *Your card is ready* + *Open my card* (`card_url`) | After `end: true` the page sends `/end` with the same reason. The page shows the button and the card link; it has no QR of its own (the contract has no QR endpoint the talk page may call, and no client QR library is used). At the demo table the judge scans the card QR in the console's Live view, which works the same for a web call. A declined consent shows *Conversation ended* + *Start again*. |
 | Typing mode | text field focused | Same API turns (`typed: true`); quick replies stay. |
 
@@ -858,13 +859,14 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
 
 | Key | English | Español |
 |---|---|---|
-| `title` | Talk to GatorPlate | Habla con GatorPlate |
+| `title` | Talk to refriGator | Habla con refriGator |
+| `title.lead` | Talk to | Habla con |
 | `intro.time` | A few minutes. We'll ask about school, home and money — never your Social Security number or immigration status. | Unos minutos. Te preguntaremos sobre tus estudios, tu casa y tu dinero; nunca tu número de Seguro Social ni tu estatus migratorio. |
 | `intro.mic` | Your browser will ask to use your microphone. You can also type. | Tu navegador te pedirá usar el micrófono. También puedes escribir. |
-| `privacy` | Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio. We keep your answers and short quotes, not the conversation. | Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio. Guardamos tus respuestas y citas cortas, no la conversación. |
+| `privacy` | Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). refriGator only gets the text and never stores audio. We keep your answers and short quotes, not the conversation. | Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). refriGator solo recibe el texto y nunca guarda audio. Guardamos tus respuestas y citas cortas, no la conversación. |
 | `start` / `type` / `send` | Start talking · Type instead · Send | Empezar a hablar · Escribir · Enviar |
 | `listening` / `thinking` | Listening… · Thinking… | Escuchando… · Pensando… |
-| `speaking` / `speaking.tap` | GatorPlate is speaking · GatorPlate is speaking — tap to interrupt | GatorPlate está hablando · GatorPlate está hablando; toca para interrumpir |
+| `speaking` / `speaking.tap` | refriGator is speaking · refriGator is speaking — tap to interrupt | refriGator está hablando · refriGator está hablando; toca para interrumpir |
 | `tap_to_talk` | Tap to talk | Toca para hablar |
 | `done` / `open_card` | Your card is ready · Open my card | Tu tarjeta está lista · Abrir mi tarjeta |
 | `ended` / `again` | Conversation ended · Start again | Conversación terminada · Empezar otra vez |
@@ -883,11 +885,18 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
 - Groups: `color` (surfaces, text, action, brand, tiers, yellow line, system errors) · `font` · `type` · `space`
   (4 px grid) · `radius` · `shadow` · `motion` · `effect` (colors derived with `color-mix`: the live-dot ring and the
   dialog scrim) · `size` · `print`.
-- Color roles (2026-10-02 *paper, ink and persimmon*): warm paper surfaces (bg #FAF9F6, sunken #F2F0EA, sunken-2
-  #E9E6DE for a hovered sunken control); ink-blue primary (#2142A8, the ballpoint that fills a paper form) for actions
-  and live state; persimmon brand for the logo and large accents only, with `brand-wash` (#FFF3EC) as the only brand
-  fill (the landing panel, the *Why SF State* fact, the console role pill); green, amber and teal for the three result tiers; yellow for lines a person must check; red only for
-  system errors (never for a student's result, never for a deadline).
+- Color roles (2026-10-02 *ink, paper and one periwinkle*, the approved monochrome design): ink #0B0B0C with
+  graphite dark areas (`.dark`: a radial falloff ink-3 #222225 → ink-2 #151517 → ink, plus a self-hosted grain at 6 %;
+  text on-ink #F3F3F0, on-ink-2 #ABABB2, on-ink-3 #8E8E95, lines ink-line #707078); paper bg #EFEFEC, surface
+  #FAFAF8, sunken #E6E6E2; the action color is ink (`primary` = ink, `on-primary` = on-ink); **one accent**, periwinkle
+  `accent` #C3C6F4 (with `accent-2` #DCDEF9), used only as a fill (Do this today, Likely, the circle in the primary
+  button) or on ink (the `$` sign, focus ring and selected state in dark areas) — never as a line on paper and never
+  with text-3 on it. Tiers are fills of periwinkle and grey with ink text (Likely = accent, yellow line = accent-2,
+  Coordinator check = grey, Other help = light grey); red only for system errors (never for a student's result,
+  never for a deadline). Inside `.dark` (base.css) the role tokens re-point to their dark pairs (`--gp-text` →
+  on-ink, `--gp-text-2` → on-ink-2, `--gp-text-3` → on-ink-3, `--gp-primary` → on-ink, `--gp-on-primary` → ink,
+  `--gp-surface` → ink-2, `--gp-sunken` → ink-3, `--gp-border-strong` → ink-line, `--gp-focus` → accent), so shared
+  components work in both; a light panel never sits inside `.dark`.
 - `python3 tools/check_contrast.py` must pass. It checks: every allowed text/background pair; token coverage; CSS
   equal to JSON; light theme only (`color-scheme: only light`, no `prefers-color-scheme` anywhere under `web/`, the
   color-scheme `<meta>` on every HTML page); no color literals or font families outside the tokens; every active
@@ -895,98 +904,99 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
   the icon sprite parses and every `icons.svg#id` reference exists; and CSP-safe HTML and CSS (no inline styles,
   scripts or handlers, no `@import`, nothing loaded from another site).
 
-### A6.2 Contrast (WCAG 2.2 formula, computed 2026-10-02, truncated to 2 decimals; the full list of 74 pairs is in `tokens.json`)
+### A6.2 Contrast (WCAG 2.2 formula, computed 2026-10-02, truncated to 2 decimals; the full list of 114 pairs is in `tokens.json`)
 
 | Pair | Ratio | Needs |
 |---|---|---|
-| text on surface · text on page · text on sunken-2 | 17.75 · 16.86 · 14.23 | 4.5 |
-| text-2 on surface · text-3 on surface · text-3 on page · text-3 on sunken | 9.14 · 6.11 · 5.80 · 5.36 | 4.5 |
-| white on primary · primary on surface · primary on primary-tint | 8.71 · 8.71 · 7.70 | 4.5 |
-| likely · coordinator · other · yellow · error ink on their backgrounds | 6.17 · 6.03 · 6.10 · 7.86 · 6.26 | 4.5 |
-| brand-ink on surface · brand on surface (large text and logo only) | 5.85 · 3.78 | 4.5 · 3 |
-| inside brand-wash: text · text-2 · brand-ink · primary · brand (large) | 16.30 · 8.39 · 5.37 · 8.00 · 3.47 | 4.5 · 3 |
-| err-ink on sunken · on sunken-2 (Delete pill) | 6.46 · 5.90 | 4.5 |
-| line colors on surface (likely · coordinator · other · yellow · error) | 4.05 · 3.45 · 4.07 · 3.68 · 4.71 | 3 |
-| border-strong on surface · on page · on sunken | 3.45 · 3.27 · 3.02 | 3 |
-| inside tinted panels: primary on yl-bg · border-strong on yl-bg · focus on yl-bg · focus on primary-tint · coord-line on coord-bg | 8.01 · 3.17 · 8.01 · 7.70 · 3.06 | 4.5 · 3 · 3 · 3 · 3 |
+| text on surface · text on page · text on sunken-2 | 18.82 · 17.07 · 14.29 | 4.5 |
+| text-2 on surface · text-3 on surface · text-3 on page · text-3 on sunken-2 | 8.96 · 6.34 · 5.75 · 4.82 | 4.5 |
+| on-primary on primary (ink) · on hover · text on on-ink (light primary in a dark area) | 17.69 · 12.85 · 17.69 | 4.5 |
+| on accent: text · text-2 (text-3 is not allowed, 4.01) | 11.90 · 5.66 | 4.5 |
+| on accent-2 (yellow line, wash): text · text-2 · text-3 | 14.85 · 7.07 · 5.00 | 4.5 |
+| dark areas on ink-3 (the lightest stop): on-ink · on-ink-2 · on-ink-3 · accent | 14.27 · 6.95 · 4.87 · 9.59 | 4.5 |
+| err-ink on err-bg · on surface · on sunken-2 | 5.87 · 7.04 · 5.35 | 4.5 |
+| border-strong on surface · page · sunken · sunken-2 · accent-2 | 4.25 · 3.85 · 3.55 · 3.23 · 3.35 | 3 |
+| ink-line on ink · ink-2 · ink-3 (outline buttons in dark areas) | 4.00 · 3.71 · 3.23 | 3 |
+| focus ring: ink on paper and tints · accent on ink | 11.90–18.82 · 9.59–11.90 | 3 |
 
 ### A6.3 Typeface
 
-- **One family: Atkinson Hyperlegible Next**, an upright and an italic variable WOFF2 (weights 200–800, Latin subset
-  including Spanish accents), self-hosted from `web/shared/fonts/` under the SIL Open Font License 1.1 (no font
-  service, no `@import`). It is used for all text, on every screen; it is part of the accessibility story. There is
-  **no monospace font**: no `--gp-font-mono`, no second family.
-- **Files:** both faces are in the repository, from the same official release (version 2.001):
-  `AtkinsonHyperlegibleNext-Variable.woff2` (upright) and `AtkinsonHyperlegibleNext-Italic-Variable.woff2` (italic).
-  `web/shared/tokens.css` registers them with three active `@font-face` rules: the italic file under its own family
-  name *Atkinson Hyperlegible Next Italic* (listed first by `--gp-font-italic`, used for student quotes and `em`); the
-  upright file under *Atkinson Hyperlegible Next* (`font-style: normal`, used by `--gp-font` for all other text); and
-  the italic file under that upright family name too (`font-style: italic`), so italic text in that family gets the
-  real italic instead of a slanted upright. `system-ui, sans-serif` after the family name in `--gp-font` is only the
-  usual CSS fallback (while the font loads with `font-display: swap`, or if a file fails to load).
+- **One family: Archivo** (version 2.001), an upright and an italic variable WOFF2 with two axes —
+  weight 100–900 and width 62–125 % — Latin subset including Spanish accents, self-hosted from `web/shared/fonts/`
+  under the SIL Open Font License 1.1 (no font service, no `@import`). It is used for all text, on every screen. There
+  is **no monospace font**: no `--gp-font-mono`, no second family. The design comes from contrast inside this one
+  family: huge thin numerals (`--gp-fw-thin` 160) against wide heavy headlines (`--gp-fw-heavy` 780 at
+  `font-stretch: var(--gp-wide)` 116 %).
+- **Files:** `Archivo-Variable.woff2` (upright) and `Archivo-Italic-Variable.woff2` (italic), from one release (the
+  copyright line in `web/shared/fonts/OFL.txt` is the font's own name-table line).
+  `web/shared/tokens.css` registers them with three active `@font-face` rules (each `font-weight: 100 900;
+  font-stretch: 62% 125%`): the italic file under its own family name *Archivo Italic* (listed first by
+  `--gp-font-italic`, used for student quotes and `em`); the upright file under *Archivo* (`font-style: normal`, used by
+  `--gp-font` for all other text); and the italic file under *Archivo* too (`font-style: italic`), so italic text gets
+  the real italic instead of a slanted upright. `system-ui, sans-serif` after the family name is only the usual CSS
+  fallback (while the font loads with `font-display: swap`, or for a glyph outside the subset such as an arrow).
 - Never register the italic file as `font-style: normal`: browsers would then render upright text in italics.
-- Optionally preload the upright face on the card and talk pages
-  (`<link rel="preload" as="font" type="font/woff2" crossorigin href="/shared/fonts/AtkinsonHyperlegibleNext-Variable.woff2">`).
+- Thin weights (below 300) only for numerals and display text of at least 48 px; body text 400, labels 700.
+- Optionally preload the upright face on the landing, talk and console pages
+  (`<link rel="preload" as="font" type="font/woff2" crossorigin href="/shared/fonts/Archivo-Variable.woff2">`).
 - A future font update must keep `web/shared/tokens.css`, `tokens.json` `meta.fonts.files`, `NOTICE.md` and
   `web/shared/fonts/OFL.txt` in agreement (both faces from one release, one version); `tools/check_contrast.py`
   checks this.
-- **Numbers and codes:** amounts, times, countdowns **and case codes** use the text font's tabular figures (`.num`
-  and `.code` apply `font-variant-numeric: var(--gp-num)`; the font has the `tnum` feature). Case codes (`.code`) stay
-  in `--gp-font` (upright) with `letter-spacing: var(--gp-tracking-code)` (0.06em). The font has no unslashed zero
-  (features: ccmp, frac, locl, pnum, tnum only), so large amounts are set at 600, never 800, to keep the slash clean. The code generator avoids the
+- **Numbers and codes:** amounts, times, countdowns **and case codes** use tabular figures (`html`, `.num` and `.code`
+  apply `font-variant-numeric: var(--gp-num)`; the font has the `tnum` feature). Case codes (`.code`) stay in
+  `--gp-font` (upright) with `letter-spacing: var(--gp-tracking-code)` (0.06em). The code generator avoids the
   look-alike characters `0`, `O`, `1` and `I` (codes keep matching `^[A-Z0-9]{3}-[A-Z0-9]{3}$`).
 
 ### A6.4 Type usage
 
-Hierarchy comes from size and space, not weight (2026-10-02): headings 500 with negative tracking, card and section
-titles 600, body 400, nothing at 800.
+Hierarchy comes from contrast inside one family (2026-10-02 monochrome): display headlines 780 wide (116 %) with
+−0.04em tracking, huge amounts 160 with −0.06em, headings 700, body 400, labels 700 in sentence case.
 
 | Token | Size / weight | Use |
 |---|---|---|
-| `fs-hero-title` | clamp 36–56 / 500, `lh-display` 1.06, `tracking-display` −0.025em | landing headline |
-| `fs-title` | clamp 32–44 / 500, −0.025em | page titles (talk intro, about), Live view replay turn |
-| `fs-display` | 56 / 600, −0.035em, tabular | console estimate (summary band, Live view) |
-| `fs-hero` | clamp 48–56 / 600, −0.035em, tabular | card amount, on its own line inside the hero sentence |
-| `fs-h1` | 28 / 500, `tracking-tight` −0.015em | card hero sentence without an amount, console case title, /go title |
-| `fs-talk` | 28 / 500, line height 1.3 | talk page current line |
-| `fs-card-h2` | 22 / 600 (card sections) · 22 / 500 (hero sentence around the amount) | card section titles |
+| `fs-mega` | clamp 80–232 / 160 (`fw-thin`), `tracking-num` −0.06em, tabular | the landing's huge amount |
+| `fs-hero-title` · `fs-display` | clamp 40–88 / 780 (`fw-heavy`) at `font-stretch: var(--gp-wide)` 116 %, `lh-display` 0.98, `tracking-display` −0.04em | landing and talk headlines (`.display`); console estimate |
+| `fs-title` | clamp 32–48 / 700, −0.015em | page titles (talk intro, about), Live view replay turn |
+| `fs-hero` | clamp 80–136 / 160, −0.06em, tabular (`.amount`) | card amount, on its own line inside the hero sentence |
+| `fs-h1` | 28 / 700, `tracking-tight` −0.015em | card hero sentence without an amount, console case title, /go title |
+| `fs-talk` | 28 / 400, line height 1.3 | talk page current line |
+| `fs-card-h2` · `fs-h2` | 22 / 700 | card and console section titles |
 | `fs-lead` | 20 / 400, text-2 | landing, about and talk intro lead |
-| `fs-h2` | 20 / 600 | console section titles |
 | `fs-transcript` | 20 / 400 | live transcript in Presenter mode |
 | `fs-body-l` | 18 / 400 | card and talk body; live transcript |
-| `fs-h3` | 17 / 600 | yellow line reasons |
-| `fs-body` | 16 / 400 | console body |
-| `fs-small` | 14 / 400–500 | console meta and chips; card legal footer only |
-| `fs-label` | 13 / 600, upper case, +0.06em | panel labels (*ESTIMATE SO FAR*) only |
+| `fs-h3` | 17 / 700 | yellow line reasons |
+| `fs-body` | 17 / 400 | body text |
+| `fs-small` | 14 / 400–520 | console meta and chips; card legal footer only |
+| `fs-label` | 13 / 700 (`.label`), sentence case, no tracking | panel labels (*Estimate so far*) only |
 
 Never below 13 px anywhere; card text at least 16 px except the legal footer (14 px); Presenter mode at least 15 px.
-Line height 1.5 for text, 1.2 for headings, 1.0–1.06 for display numbers and the landing headline.
+Line height 1.5 for text, 1.15 for headings, 0.9–0.98 for display numbers and headlines.
 
 ### A6.5 Components
 
 | Component | Spec |
 |---|---|
-| Button | Pill (`--gp-r-pill`). Min height 48 px (`--gp-tap`; big 56 `--gp-tap-l`; console 40 `--gp-tap-console`), 20 px horizontal padding (console 16, big 32), weight 500, icon + label; pressed scales to 0.98. Primary: `--gp-primary` with `--gp-on-primary` text, hover `--gp-primary-hover`. Secondary: a `--gp-sunken` fill and no line, hover `--gp-sunken-2`. Quiet: text only in `--gp-primary`, hover primary-tint. Locked: no fill, 1 px dashed `--gp-border-strong`, `--gp-text-2`, `i-lock`, visible reason, `aria-disabled`. Danger (*Delete*): secondary style with `--gp-err-ink` text, never a red fill. |
-| Tier chip | Pill, 28 px, icon + text: *Likely* (`i-check-circle`, likely colors) · *Coordinator check* (`i-person`, coordinator colors) · *Other help* (`i-heart-hand`, other colors). |
-| Reason chip | Pill, 28 px. Outcome-changing: `--gp-primary-tint` with `--gp-primary` text and a `$` badge (`--gp-primary` circle, `--gp-on-primary` text). Routine: sunken with `--gp-text-2`. Not asked: surface with a 1 px dashed `--gp-border-strong` border and `--gp-text-2`. Never asked: sunken, `--gp-text-2`, `i-lock`. |
+| Button | Pill (`--gp-r-pill`), the only pill shape besides pressable controls. Min height 48 px (`--gp-tap`; big 56 `--gp-tap-l`; console 40 `--gp-tap-console`), 24 px horizontal padding (console 16), weight 520, label + icon; pressed scales to 0.98. Default (secondary): no fill, 1.5 px `--gp-border-strong` ring, `--gp-text`, hover `--gp-sunken`. Primary (**one per screen**): `--gp-primary` (ink) fill with `--gp-on-primary`, hover `--gp-primary-hover`; with an icon it ends in a 44 px circle (`.btn__o`, `--gp-btn-o`) of `--gp-accent` holding the icon in ink, height 60 (`--gp-tap-xl`); in a dark area the primary is the light pill (`--gp-on-ink`) with an ink circle. Quiet: text only in `--gp-primary`. Pressed choice (`aria-pressed=true`): `--gp-primary-tint` with a 2 px `--gp-primary` ring. Locked: no fill, dashed ring, `--gp-text-2`, `i-lock`, visible reason, `aria-disabled`. Danger (*Delete*): default style with `--gp-err-ink` text, never a red fill |
+| Tier chip | Square tag (`--gp-r-xs` 6), 28 px, icon + text, never a pill: *Likely* (`i-check-circle`, accent fill, ink text) · *Coordinator check* (`i-person`, grey fill, `--gp-coord-line` ring) · *Other help* (`i-heart-hand`, light grey) |
+| Reason chip | Square tag, 28 px. Outcome-changing: ink fill (`--gp-primary`) with `--gp-on-primary` text and a `$` badge. Routine: 1 px ring in `--gp-text-2`. Not asked: dashed ring, `--gp-text-2`. Never asked: `--gp-text-2`, `i-lock` |
 | Count badge | *1 to check*: `--gp-yl-bg`, `--gp-yl-ink`, `i-alert-circle`. None open: `i-check` in `--gp-likely-ink`. |
 | Yellow line card | `--gp-yl-bg`, 4 px left edge `--gp-yl-line`, radius `--gp-r-lg`, padding 16; actions right-aligned (stacked below 1280 px). |
 | Answer row | Min 44 px; label (`--gp-text-2`) · value (`--gp-text`, 600, tabular) · state icon · quote (`--gp-text-2`, italic, one line, full text on hover and focus) · source icon. |
-| Transcript bubble | Max 85% wide; radius 14 with the speaker's corner 4; GatorPlate = sunken, student = primary-tint; padding 12/16; 13 px upper-case label. |
+| Transcript bubble | Max 85% wide; radius 14 with the speaker's corner 4; refriGator = sunken, student = primary-tint; padding 12/16; 13 px sentence-case label (700) |
 | Range bar | Track 12 px, sunken, pill; band `--gp-primary`; end labels 14 px tabular; settled = 4 px tick + count-up. |
 | Unlocked bar (card) | Track 10 px, sunken, pill, full width. One segment per `segments[]` entry in the order sent, width = its value ÷ `found_display` (set from JS with `style.setProperty('--w', …)`), 2 px gaps. A segment not yet marked *I applied* is the neutral `--gp-border` (at 0 % the bar reads as an empty track, never as a warning); marked *I applied* it turns solid: the CalFresh segment `--gp-brand` (a large accent), the others `--gp-likely-line`; so the colored part always equals `claimed_display`. `aria-hidden="true"`: the total and the claimed line next to it carry the values. Printed as text only (A4.5). |
 | Live dot | 10 px `--gp-live`, pulse ring every 1.6 s (`--gp-live-ring`). |
-| Toast | Console bottom-left, phones top; surface + `--gp-sh-3`; 4 s; `role="status"`. |
-| Card section | Surface, radius `--gp-r-lg` (20), `--gp-sh-1` (a hairline ring, no visible drop), padding 24 (phones 20), 12 px gap. Tones are fills, not edges: default = surface; accent = `--gp-primary-tint`; warning = `--gp-coord-bg`; muted = sunken. *Do this today* shows its first sentence, then its button, then the details (CSS order only). |
+| Toast | Console bottom-left, phones top; ink (`--gp-ink`) with `--gp-on-ink` text, radius `--gp-r-sm` (not a pill: it is not pressable), `--gp-sh-3`; 4 s; `role="status"` |
+| Card section | Surface, radius `--gp-r-md` (14), `--gp-sh-1` (a hairline ring), padding 24 (phones 20), 12 px gap. Tones are fills, not edges: default = surface; accent = `--gp-accent` (periwinkle; text and text-2 only, never text-3); muted = sunken. *Do this today* shows its first sentence, then its button, then the details (CSS order only) |
 | Banner | Full width. System error: `--gp-err-bg`, `--gp-err-ink`, `i-alert-triangle`. Card review banner: `--gp-likely-bg`, `--gp-likely-ink`, `i-check-circle`. |
-| Dialog | Surface, radius `--gp-r-xl`, `--gp-sh-3`, backdrop `--gp-scrim`; focus trapped; `Esc` closes. |
+| Dialog | Surface, radius `--gp-r-lg` (18), `--gp-sh-3`, backdrop `--gp-scrim`; focus trapped; `Esc` closes |
 | Segmented control | Language switch and list segments: a sunken pill track (4 px inset) holding pill buttons with `aria-pressed`; selected = a surface pill with `--gp-sh-1` and `--gp-text`, the others `--gp-text-2`. |
-| Input | 48 px (console 40), 1 px `--gp-border-strong`, radius `--gp-r-md` (12), 16 px padding, label above (500), error text `--gp-err-ink` with an icon. The talk composer is one pill holding the field and the send button; its ring turns 2 px `--gp-focus` on focus (one ring, not two). The /go code field is 80 px, centered, 28 px, +0.2em tracking. |
+| Input | 48 px (console 40), 1.5 px `--gp-border-strong`, radius `--gp-r-sm` (10), 16 px padding, label above (520), error text `--gp-err-ink` with an icon. The talk composer is one pill holding the field and the send button; its ring turns 2 px `--gp-focus` on focus (one ring, not two). The /go code field is 80 px, centered, 28 px, +0.2em tracking |
 | QR panel | White panel, QR at 260 px with at least 24 px white margin (quiet zone at least 4 modules), caption *Student card — scan with your phone camera*, case code below. |
 
 ### A6.6 Icons (`web/shared/icons.svg`)
 
-Original line icons drawn for GatorPlate: 24 px grid, stroke 2, round caps and joins, `currentColor`. No icon set was
+Original line icons drawn for refriGator: 24 px grid, stroke 2, round caps and joins, `currentColor`. No icon set was
 copied. Size 20 px in the console (`--gp-icon`), 24 px on the card and talk page (`--gp-icon-card`).
 
 ```html
@@ -1018,9 +1028,14 @@ button (and a tooltip).
 
 ### A6.7 Logo and wordmark
 
-`gp-logo` (in the sprite, on its own 32 px grid): a plate with a voice wave, drawn in `currentColor`. Color it with a
-class (`.logo { color: var(--gp-brand); }`), never an inline style (CSP). Wordmark: *GatorPlate* in the UI font at
-700, −0.01em, `--gp-text`. The logo is never combined with SF State, CalFresh or county marks.
+Wordmark (every page header): `<span class="wordmark" translate="no">refri<b>Gator</b></span>` — *refri* in the UI
+font at 780, 116 % wide, −0.03em; *Gator* at 300 inside a pill ring of `currentColor` (base.css `.wordmark`). The name
+is always spelled *refriGator*, also at the start of a sentence. The `gp-logo` mark (in the sprite, a plate with a
+voice wave in `currentColor`) is hidden when it stands right before the wordmark (`.logo:has(+ .wordmark)`) and may be
+used elsewhere in ink (`.logo { color: var(--gp-brand); }`), never with an inline style (CSP). The logo is never
+combined with SF State, CalFresh or county marks. On the phone channel only, the name is said as two words, *Refri Gator*
+(`gatorplate/dialogue/verbalize.py` `PHONE_SPOKEN_NAME`), so a voice says the name rather than the appliance; the web
+talk page's own voice does the same, while every screen, the web talk text and the card keep *refriGator*.
 
 ### A6.8 Motion
 
@@ -1062,9 +1077,10 @@ mark.heard { background: linear-gradient(transparent 58%, var(--gp-primary-tint)
 
 ### A6.9 Don'ts
 
-Dark panels or sections · gradients on text · glassmorphism · stock illustrations · purple/gold · emoji · gray text
-below 4.5:1 · spinners longer than 300 ms · sound effects · auto-playing video · red for anything a student did ·
-color literals outside `tokens.css` · inline styles.
+Dark areas other than `.dark` and the ink bands of A0.1 · gradients on text · glassmorphism · stock illustrations · a second accent hue · emoji ·
+gray text below 4.5:1 · text-3 on accent · upper-case or letter-spaced labels · pills for things that are not pressable ·
+more than one filled primary button per screen · spinners longer than 300 ms · sound effects · auto-playing video ·
+red for anything a student did · color literals outside `tokens.css` · inline styles.
 
 ---
 
@@ -1098,7 +1114,7 @@ phones (under 48em) it uses `fs-title`.
 
 ### A7.3 `/about` (how it works; facts to use exactly)
 
-Sections: what GatorPlate is · how it works (*The model listens, rules decide, a person confirms*) · what is kept
+Sections: what refriGator is · how it works (*The model listens, rules decide, a person confirms*) · what is kept
 (answers and short quotes; no audio, no Social Security numbers, no immigration status, no phone numbers) · rules and
 sources · why SF State · limits (an estimate only; English on the phone, English and Spanish on the web) · team
 (*Built by an SF State student team*; say *SF State students* only if it is true for every team member) · the
@@ -1111,8 +1127,8 @@ exists). Facts, with source and date on the page:
 | For applications since March 1, 2026, grants, scholarships, fellowships and loans for college don't count as income for CalFresh (AB 42). Cash that family or friends give still counts. | CDSS ACL 26-16 (2026-03-19) |
 | Since June 1, 2026, students attending a community college, CSU or UC at least half-time in an associate or bachelor's degree program meet an exemption from CalFresh's student rule. | CDSS ACL 26-25 (2026-04-13) |
 | New FY2027 amounts took effect on October 1, 2026 — for example, up to $306 a month for one person. | CDSS ACIN I-40-26 (2026-09-10) |
-| We don't collect Social Security numbers. | GatorPlate's design (no statute is cited) |
-| The pilot uses no student records, so it needs no student-records integration; a real pilot follows SF State's data and accessibility review. | GatorPlate's design |
+| We don't collect Social Security numbers. | refriGator's design (no statute is cited) |
+| The pilot uses no student records, so it needs no student-records integration; a real pilot follows SF State's data and accessibility review. | refriGator's design |
 
 Not on screens: *"Only about a quarter of eligible students participate"* (a UC and community-college figure only) and
 the missed-interview statistic used in the pitch (its wording contains a word the forbidden-phrase check blocks).
@@ -1198,7 +1214,7 @@ takes the screenshots and runs the page-console snippets.
 |---|---|---|
 | 1 | Design-system check | `python3 tools/check_contrast.py` exits 0 (contrast, token sync, light theme, color literals, fonts, icons, CSP-safe HTML and CSS; see A6.1). |
 | 2 | Viewports, no horizontal scroll | Browser pane screenshots: console at 1366×768 and 1920×1080 (also 1280×800); card and talk at 390×844, 360×800 and 320×640. In the page console `document.documentElement.scrollWidth <= innerWidth` is `true`. |
-| 3 | Light only | `tools/check_contrast.py` passes (no `prefers-color-scheme` under `web/`, the color-scheme `<meta>` on every page); in the Browser pane the computed `body` background has a relative luminance of at least 0.85. |
+| 3 | Light only | `tools/check_contrast.py` passes (no `prefers-color-scheme` under `web/`, the color-scheme `<meta>` on every page); in the Browser pane every surface outside the dark areas of A6.1 (landing and talk bodies, card top band, `/go` band, console frame) has a relative luminance of at least 0.85. |
 | 4 | Keyboard | Tab from the top of each page. Console: skip link, top bar, list, detail, yellow actions, lock. Card: language switch, sections, buttons in visual order. Talk: Start, mic, text field, quick replies. `Enter`/`Space` activate; `Esc` closes dialogs and returns focus; the focus ring is always visible; `↑`/`↓` move in the list; the shortcuts switch turns single keys off. |
 | 5 | Interface guidelines review | Run the build session's `web-design-guidelines` review on each page's HTML, CSS and JS; fix every finding or write down why not. |
 | 6 | Forbidden phrases | `grep -rniwE --exclude=guards.json -e "not eligible" -e "ineligible" -e "don'?t qualify" -e "denied" -e "no califica" -e "no eres elegible" web/ data/content/` prints nothing and exits 1 (whole words, so identifiers such as `previously_denied` don't match; code comments count too; `guards.json` holds the patterns themselves). Use one `-e` per phrase: inside `-E`, an escaped pipe is a literal character and would make the check pass on anything. |
@@ -1238,6 +1254,6 @@ takes the screenshots and runs the page-console snippets.
   checked 2026-10-01), whose sources are listed with their dates in `docs/SPEC.md` §13 (for example SFMTA fares, the
   SF State Gator Pass and academic calendar pages, CPUC California LifeLine and CARE pages, PG&E form 01-9077, DHCS
   ACWDL 26-01, FTB 3514 (2025) and IRS Rev. Proc. 2025-32).
-- Atkinson Hyperlegible Next: the name tables of both font files, upright and italic (version 2.001, copyright line,
-  license URL openfontlicense.org; `tnum` feature present), and the SIL Open Font License 1.1 text in
-  `web/shared/fonts/OFL.txt`.
+- Archivo (checked 2026-10-02): the name tables of both font files, upright
+  and italic (version 2.001, copyright line "Copyright 2020 The Archivo Project Authors"; axes wght 100–900 and wdth
+  62–125; `tnum` feature present), and the SIL Open Font License 1.1 text in `web/shared/fonts/OFL.txt`.

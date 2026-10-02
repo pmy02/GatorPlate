@@ -341,7 +341,7 @@ export function createLiveView(root, on) {
       if (have) { prevLi = have.li; continue; }
       const text = h("p", { class: "bubble__text" });
       const li = h("li", { class: ["bubble", `bubble--${line.who === "student" ? "student" : "assistant"}`] },
-        h("span", { class: "bubble__who", text: line.who === "student" ? "Student" : "GatorPlate" }), text);
+        h("span", { class: "bubble__who", text: line.who === "student" ? "Student" : "refriGator" }), text);
       paintText(text, line.text, []);
       st.lines.set(k, { li, text, line });
       if (prevLi) prevLi.after(li); else box.prepend(li);

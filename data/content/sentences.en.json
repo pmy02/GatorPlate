@@ -56,13 +56,13 @@
       ],
       "phone": [
         {
-          "say": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.",
+          "say": "Hi, this is refriGator, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh; the call audio isn't recorded.",
           "ask": "Okay to start? Say yes, or press one."
         }
       ],
       "web": [
         {
-          "say": "Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio.",
+          "say": "Hi, I'm refriGator, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). refriGator only gets the text and never stores audio.",
           "ask": "Is that okay?"
         }
       ],
@@ -186,7 +186,7 @@
         "The call audio isn't recorded, and we keep only your answers."
       ],
       "web": [
-        "GatorPlate never gets your voice, only the text that your browser makes. We keep your answers, not the conversation."
+        "refriGator never gets your voice, only the text that your browser makes. We keep your answers, not the conversation."
       ],
       "vars": [],
       "notes": "Same facts as the opening disclosure and the card footer."
@@ -197,7 +197,7 @@
         "phone"
       ],
       "phone": [
-        "This phone line is in English only. For Spanish, use GatorPlate on the web: {talk_url}."
+        "This phone line is in English only. For Spanish, use refriGator on the web: {talk_url}."
       ],
       "vars": [
         "talk_url:url"
@@ -2326,10 +2326,10 @@
         "web"
       ],
       "phone": [
-        "GatorPlate is built for SF State students. For CalFresh help, you can call San Francisco CalFresh at {county_phone}, or your own county."
+        "refriGator is built for SF State students. For CalFresh help, you can call San Francisco CalFresh at {county_phone}, or your own county."
       ],
       "web": [
-        "GatorPlate is built for SF State students. For CalFresh help, you can call San Francisco CalFresh at {county_phone}, or your own county's CalFresh office."
+        "refriGator is built for SF State students. For CalFresh help, you can call San Francisco CalFresh at {county_phone}, or your own county's CalFresh office."
       ],
       "vars": [
         "county_phone:phone"
@@ -2527,12 +2527,12 @@
         "web"
       ],
       "phone": [
-        "Thanks for calling GatorPlate. Good luck. Goodbye.",
-        "Thanks for calling GatorPlate. Take care. Goodbye."
+        "Thanks for calling refriGator. Good luck. Goodbye.",
+        "Thanks for calling refriGator. Take care. Goodbye."
       ],
       "web": [
-        "Thanks for using GatorPlate. Good luck!",
-        "Thanks for using GatorPlate. Take care!"
+        "Thanks for using refriGator. Good luck!",
+        "Thanks for using refriGator. Take care!"
       ],
       "vars": [],
       "notes": "end true, end_reason completed. No phone number here."
@@ -2622,11 +2622,11 @@
       ],
       "all": [
         {
-          "say": "Please don't share your Social Security number. GatorPlate doesn't need it.",
+          "say": "Please don't share your Social Security number. refriGator doesn't need it.",
           "ask": "{question}"
         },
         {
-          "say": "Please don't share Social Security or other ID numbers. GatorPlate doesn't need them.",
+          "say": "Please don't share Social Security or other ID numbers. refriGator doesn't need them.",
           "ask": "{question}"
         }
       ],
@@ -2643,7 +2643,7 @@
       ],
       "all": [
         {
-          "say": "Please don't share card or bank account numbers. GatorPlate doesn't need them.",
+          "say": "Please don't share card or bank account numbers. refriGator doesn't need them.",
           "ask": "{question}"
         }
       ],

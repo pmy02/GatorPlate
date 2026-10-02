@@ -1,39 +1,60 @@
-/* /go card code page (docs/UI_SPEC.md A7.1). Light only, tokens only. */
-body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; font-size: var(--gp-fs-body-l); }
-.wrap { width: 100%; max-width: calc(var(--gp-page-max) + 2 * var(--gp-s9)); margin-inline: auto; padding-inline: var(--gp-s9); }
-.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: var(--gp-s2) var(--gp-s3); min-height: var(--gp-bar); padding-block: var(--gp-s3); }
-.brand { display: inline-flex; align-items: center; gap: var(--gp-s2); min-height: var(--gp-tap); color: var(--gp-text);
-  text-decoration: none; font-size: var(--gp-fs-h2); border-radius: var(--gp-r-sm); }
+/* /go card code page (docs/UI_SPEC.md A7.1). Tokens only. Like the card page: the bar and the top of the page are an
+   ink band (graphite falloff + grain, the .dark re-pointing written on the bar), and the light card with the code
+   field overlaps it; a wide heavy title, the code in big light digits, one filled button. */
+body { position: relative; isolation: isolate; display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh;
+  font-size: var(--gp-fs-body-l); }
+body::before, body::after { content: ""; position: absolute; inset: 0 0 auto; z-index: -1; height: clamp(18rem, 42vh, 26rem);
+  pointer-events: none; }
+body::before { background: radial-gradient(120% 140% at 85% 0%, var(--gp-ink-3), var(--gp-ink-2) 38%, var(--gp-ink) 72%); }
+body::after { background: url("/shared/grain.svg"); opacity: 0.06; }
+.wrap { width: 100%; padding-inline: var(--gp-gutter); }
+.top { --gp-text: var(--gp-on-ink); --gp-text-2: var(--gp-on-ink-2); --gp-text-3: var(--gp-on-ink-3);
+  --gp-border: var(--gp-ink-hair); --gp-border-strong: var(--gp-ink-line); --gp-focus: var(--gp-accent);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--gp-s2) var(--gp-s3); min-height: var(--gp-bar); padding-block: var(--gp-s3); border-bottom: 1px solid var(--gp-border);
+  color: var(--gp-text); }
+.brand { display: inline-flex; align-items: center; min-height: var(--gp-tap); color: var(--gp-text);
+  text-decoration: none; border-radius: var(--gp-r-sm); }
 .brand:hover { color: var(--gp-text); }
-.brand .logo { width: 28px; height: 28px; flex: none; }
-.seg { display: inline-flex; padding: 2px; border-radius: var(--gp-r-pill); background: var(--gp-sunken); }
-.seg button { min-height: var(--gp-tap); padding: 0 var(--gp-s4); border: 0; border-radius: var(--gp-r-pill);
-  background: transparent; color: var(--gp-text-2); font-size: var(--gp-fs-body); font-weight: var(--gp-fw-medium);
-  transition: background-color var(--gp-d2) var(--gp-ease), color var(--gp-d2) var(--gp-ease); }
-.seg button:hover { color: var(--gp-text); }
-.seg button[aria-pressed="true"] { background: var(--gp-surface); color: var(--gp-text); box-shadow: var(--gp-sh-1); }
+.brand .wordmark { font-size: var(--gp-fs-h2); }
 
-/* One centered card: title, hint, a large code field, one button. */
-main.wrap { flex: 1 0 auto; display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center;
-  padding-block: var(--gp-s9) var(--gp-s6); }
-.go { display: grid; gap: var(--gp-s4); width: min(100%, 30rem); padding: var(--gp-s8);
+/* Language: two text buttons with a 1px rule between; the current one is underlined. */
+.seg { display: inline-flex; align-items: center; }
+.seg button { min-height: var(--gp-tap); padding: 0 var(--gp-s2); border: 0; border-radius: var(--gp-r-xs); background: none;
+  color: var(--gp-text-2); font-size: var(--gp-fs-small); transition: color var(--gp-d2) var(--gp-ease); }
+.seg button:last-child { padding-right: 0; }
+.seg button + button { background: linear-gradient(var(--gp-text-3), var(--gp-text-3)) left center / 1px 1em no-repeat; }
+.seg button:hover { color: var(--gp-text); }
+.seg button[aria-pressed="true"] { color: var(--gp-text); text-decoration: underline; text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em; }
+
+/* One card over the band: title, hint, a large code field, one button. */
+main.wrap { flex: 1 0 auto; display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: start;
+  padding-block: var(--gp-s10) var(--gp-s7); }
+.go { display: grid; gap: var(--gp-s3); width: min(100%, 32rem); padding: var(--gp-s9) var(--gp-s8) var(--gp-s8);
   border-radius: var(--gp-r-xl); background: var(--gp-surface); box-shadow: var(--gp-sh-2); }
-.go h1 { font-size: var(--gp-fs-h1); text-wrap: balance; }
+.go h1 { font-size: var(--gp-fs-title); font-weight: var(--gp-fw-heavy); font-stretch: var(--gp-wide);
+  line-height: var(--gp-lh-display); letter-spacing: -0.035em; text-wrap: balance; }
 .go label { cursor: pointer; }
-.hint { margin-top: calc(-1 * var(--gp-s2)); color: var(--gp-text-2); font-size: var(--gp-fs-body); }
-.go .input { min-height: var(--gp-s11); margin-top: var(--gp-s3); padding-inline: var(--gp-s5); border-radius: var(--gp-r-lg);
-  background: var(--gp-bg); font-size: var(--gp-fs-h1); font-weight: var(--gp-fw-medium); letter-spacing: 0.2em;
-  text-align: center; }
+.hint { color: var(--gp-text-2); font-size: var(--gp-fs-body); }
+.go .input { min-height: var(--gp-s11); margin-top: var(--gp-s5); padding-inline: var(--gp-s4); border-radius: var(--gp-r-md);
+  background: var(--gp-bg); font-size: var(--gp-fs-title); font-weight: var(--gp-fw-light);
+  letter-spacing: 0.24em; text-align: center; }
 .go .input:focus-visible { outline-offset: 0; border-color: var(--gp-focus); }
 .go .input[aria-invalid="true"] { border-color: var(--gp-err-line); }
-.go .field__error { font-size: var(--gp-fs-body); }
-.go .btn { width: 100%; min-height: var(--gp-tap-l); margin-top: var(--gp-s2); font-size: var(--gp-fs-body-l); }
-.proto { max-width: 40rem; padding-top: var(--gp-s9); font-size: var(--gp-fs-small); color: var(--gp-text-2); text-align: center; }
+.go .field__error { align-items: flex-start; font-size: var(--gp-fs-body); }
+.go .field__error .icon { margin-top: 0.15em; }
+/* The button: label left, the arrow in an accent circle right (the shared .btn__o look, from the page's own icon). */
+.go .btn { flex-direction: row-reverse; justify-content: space-between; width: 100%; min-height: var(--gp-tap-xl);
+  margin-top: var(--gp-s3); padding: 0 var(--gp-s2) 0 var(--gp-s7); font-size: var(--gp-fs-body-l); }
+.go .btn .icon { width: var(--gp-btn-o); height: var(--gp-btn-o); padding: 10px; border-radius: 50%;
+  background: var(--gp-accent); color: var(--gp-ink); }
+.go .btn[aria-disabled="true"] .icon { background: none; color: var(--gp-text-2); }
+.proto { justify-self: start; max-width: 40rem; padding-top: var(--gp-s9); font-size: var(--gp-fs-label); color: var(--gp-text-3); }
 @media (max-width: 47.99em) {
-  .wrap { padding-inline: var(--gp-s4); }
-  .top { min-height: var(--gp-s10); }
-  main.wrap { align-items: start; padding-top: var(--gp-s7); }
-  .go { padding: var(--gp-s6); }
+  .top { min-height: var(--gp-s10); padding-block: var(--gp-s2); }
+  .brand .wordmark { font-size: var(--gp-fs-body-l); }
+  main.wrap { padding-top: var(--gp-s7); }
+  .proto { font-size: var(--gp-fs-small); }
+  .go { padding: var(--gp-s8) var(--gp-s5) var(--gp-s6); border-radius: var(--gp-r-lg); }
 }
-@media (max-width: 359.98px) { .wordmark { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); } }

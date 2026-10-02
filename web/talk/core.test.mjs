@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { STRINGS } from "./strings.js";
 import {
   CARD_URL, MAX_TEXT, TalkSession, canListen, canSend, cardHref, chunkSentences, cleanText, displayText, failureKind,
-  initialState, micAction, micLabelKey, normalizeConfidence, reduce, resolveLang, speechPlan, voiceOutcome,
+  initialState, micAction, micLabelKey, normalizeConfidence, reduce, resolveLang, speechPlan, spokenName, voiceOutcome,
 } from "./core.js";
 
 const reply = (over = {}) => ({
@@ -41,7 +41,7 @@ test("confidence is the browser's value when it has one, else null", () => {
 
 test("speech is chunked sentence by sentence, amounts and Spanish hours stay whole", () => {
   // The web opening: a disclosure sentence, then the page's privacy line without its last sentence.
-  const opening = "Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. "
+  const opening = "Hi, I'm refriGator, a student-built AI assistant, not an official SF State service. "
     + STRINGS.en.privacy.split(" We keep")[0];
   const chunks = chunkSentences(opening);
   assert.equal(chunks.length, 3);
@@ -69,6 +69,15 @@ test("speech plan: say follows the reply's interruptible flag, ask can always be
     interruptible: false }));
   assert.deepEqual(end.map((c) => c.text), ["Thanks.", "Good luck!"]);
   assert.deepEqual(speechPlan(reply({ say: "", ask: null })), []);
+});
+
+test("speech plan: the voice says the display name as two words; the text keeps it", () => {
+  const r = reply({ say: "Hi, I'm refriGator, a student-built AI assistant.", ask: "Thanks for using refriGator?" });
+  const plan = speechPlan(r);
+  assert.ok(plan.every((c) => !c.text.includes("refriGator")));
+  assert.ok(plan.some((c) => c.text.includes("Refri Gator")));
+  assert.equal(r.say, "Hi, I'm refriGator, a student-built AI assistant.");
+  assert.equal(spokenName("a refrigerator"), "a refrigerator");
 });
 
 test("display text: the reply's display, else say and ask", () => {
@@ -205,7 +214,7 @@ test("the end: card ready (completed with a card), else conversation ended", () 
   assert.equal(s.phase, "ready");
   s = reduce(s, { type: "send" });
   s = reduce(s, { type: "reply", speak: true, reply: reply({ end: true, end_reason: "completed", ask: null,
-    interruptible: false, say: "Thanks for using GatorPlate. Good luck!", card_url: card }) });
+    interruptible: false, say: "Thanks for using refriGator. Good luck!", card_url: card }) });
   assert.equal(s.phase, "speaking");
   s = reduce(s, { type: "spoken" });
   assert.equal(s.phase, "done");

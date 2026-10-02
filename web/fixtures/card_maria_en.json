@@ -55,7 +55,7 @@
     {
      "screen": "Your Information",
      "question": "Are you a college student?",
-     "answer": "Yes. Type your Social Security number and citizenship information yourself. GatorPlate never collects them."
+     "answer": "Yes. Type your Social Security number and citizenship information yourself. refriGator never collects them."
     },
     {
      "screen": "People",
@@ -193,7 +193,7 @@
   }
  ],
  "footer": [
-  "GatorPlate never stores audio. We keep your answers, not the conversation.",
+  "refriGator never stores audio. We keep your answers, not the conversation.",
   "We don't collect Social Security numbers, and we never ask about immigration status.",
   "Student-built prototype — not an official SF State, county, or CalFresh service.",
   "You apply yourself on BenefitsCal. The county decides.",

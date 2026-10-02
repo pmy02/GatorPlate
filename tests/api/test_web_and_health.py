@@ -107,7 +107,7 @@ def test_pages(h) -> None:
         assert h.client.get(path).headers["x-robots-tag"] == "noindex"
     css = h.client.get("/shared/tokens.css")
     assert css.status_code == 200 and css.headers["content-type"].startswith("text/css")
-    font = h.client.get("/shared/fonts/AtkinsonHyperlegibleNext-Variable.woff2")
+    font = h.client.get("/shared/fonts/Archivo-Variable.woff2")
     assert font.status_code == 200 and font.headers["content-type"] == "font/woff2"
     assert h.client.get("/shared/api.js").headers["content-type"].startswith("text/javascript")
     assert h.client.post("/").json()["error"]["code"] == "not_found"  # no other status codes exist
