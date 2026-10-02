@@ -22,7 +22,7 @@
         <span class="wordmark" translate="no"><b>Gator</b>Plate</span>
       </p>
       <nav class="more" data-t-label="more.label" aria-label="More about GatorPlate">
-        <a id="about-link" class="more__link" href="/about">
+        <a id="about-link" class="more__link" href="#how">
           <span class="more__text" data-t="about">How it works and responsible AI</span>
         </a>
         <a id="console-link" class="more__link" href="/console">
@@ -40,14 +40,18 @@
     <section class="hero dark stage" aria-labelledby="headline">
       <h1 id="headline" class="hero__title"><span class="hero__line">Check the money you may be missing&nbsp;—</span> <span class="hero__line">in your browser.</span></h1>
 
-      <p class="numeral" aria-hidden="true">
-        <span class="numeral__upto"><span lang="en">up to</span><span lang="es">hasta</span></span>
-        <span class="numeral__fig"><span class="numeral__cur">$</span>306</span>
-        <span class="numeral__per"><span lang="en">a month</span><span lang="es">al mes</span></span>
-      </p>
+      <div class="numeral">
+        <p class="numeral__big" aria-hidden="true">
+          <span class="numeral__upto" data-t="hero.upto">SF State students together: up to</span>
+          <span class="numeral__fig"><span class="numeral__cur">$</span>12.7M</span>
+          <span class="numeral__per" data-t="hero.year">a year</span>
+        </p>
+        <p class="numeral__cap"><span class="sr-only" data-t="hero.fig">Up to $12.7 million a year</span> <span data-t="hero.cap">in CalFresh that about 3,450 SF State students may be missing, at the one-person maximum.</span> <a class="numeral__link" href="#gap" data-t="hero.link">How we estimate it</a></p>
+      </div>
 
       <div class="hero__copy">
         <p class="hero__sub" data-t="sub">SF State students: CalFresh pays one person up to $306 a month for groceries, and it can open more help. A few minutes. Free. Estimates only — each agency decides.</p>
+        <p class="hero__ai"><span class="hero__ai-tag" data-t="hero.ai.tag">AI</span> <span data-t="hero.ai">The AI understands and plans; rules do the math; a person confirms.</span> <a class="hero__ai-link" href="#how" data-t="hero.ai.link">How it works</a></p>
         <div class="hero__actions">
           <a id="phone-link" class="btn btn--big" hidden>
             <span id="phone-text" class="num"></span>
@@ -120,162 +124,483 @@
 
     <section id="how" class="pitch pitch--how" aria-labelledby="how-title">
       <p class="pitch__kicker" data-reveal><span class="pitch__no num">02</span> <span data-t="how.kicker">How it works</span></p>
-      <h2 id="how-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="how.title">The AI listens. A dated rules table decides. A person confirms.</h2>
-      <p class="pitch__lead" data-reveal data-t="how.lede">A short conversation instead of a screening form. Here is what happens to every sentence a student says.</p>
-      <p class="flow__legend" data-reveal><span class="flow__swatch" aria-hidden="true"></span> <span data-t="how.legend">Highlighted: the steps where AI does the work</span></p>
-      <ol class="strip" aria-hidden="true" data-reveal>
-        <li class="strip__step"><span class="strip__no num">1</span><span class="strip__chip" data-t="how.chip.student"></span><span class="strip__h" data-t="how.1.h"></span></li>
-        <li class="strip__step strip__step--ai"><span class="strip__no num">2</span><span class="strip__chip" data-t="how.chip.lm"></span><span class="strip__h" data-t="how.2.h"></span></li>
-        <li class="strip__step"><span class="strip__no num">3</span><span class="strip__chip" data-t="how.chip.code"></span><span class="strip__h" data-t="how.3.h"></span></li>
-        <li class="strip__step"><span class="strip__no num">4</span><span class="strip__chip" data-t="how.chip.code"></span><span class="strip__h" data-t="how.4.h"></span></li>
-        <li class="strip__step strip__step--ai"><span class="strip__no num">5</span><span class="strip__chip" data-t="how.chip.planner"></span><span class="strip__h" data-t="how.5.h"></span></li>
-        <li class="strip__step"><span class="strip__no num">6</span><span class="strip__chip" data-t="how.chip.person"></span><span class="strip__h" data-t="how.6.h"></span></li>
-        <li class="strip__step"><span class="strip__no num">7</span><span class="strip__chip" data-t="how.chip.student"></span><span class="strip__h" data-t="how.7.h"></span></li>
-      </ol>
-      <ol class="flow" role="list" data-reveal>
-        <li class="flow__step">
-          <span class="flow__no num" aria-hidden="true">1</span>
-          <div class="flow__head"><p class="flow__chip" data-t="how.chip.student">Student</p><h3 data-t="how.1.h">You talk</h3></div>
-          <div class="flow__body"><p data-t="how.1.p">Call from any phone (English), or talk or type in your browser (English or Spanish). Your words become text — GatorPlate never receives audio.</p></div>
-        </li>
-        <li class="flow__step flow__step--ai">
-          <span class="flow__no num" aria-hidden="true">2</span>
-          <div class="flow__head"><p class="flow__chip" data-t="how.chip.lm">AI · Language model</p><h3 data-t="how.2.h">The AI understands</h3></div>
-          <div class="flow__body">
-            <p data-t="how.2.p">A language model turns free speech — any wording, corrections, several answers at once, English or Spanish — into the exact facts the rules need, and flags what it isn't sure of.</p>
-            <p class="flow__more" data-t="how.2.noise">Background noise and half-finished words are asked again, not saved.</p>
-          </div>
-        </li>
-        <li class="flow__step">
-          <span class="flow__no num" aria-hidden="true">3</span>
-          <div class="flow__head"><p class="flow__chip" data-t="how.chip.code">Code</p><h3 data-t="how.3.h">Checked against your words</h3></div>
-          <div class="flow__body"><p data-t="how.3.p">Every fact must quote the student's exact words; a number the student never said is dropped. A rule parser reads every sentence too — if it disagrees on an amount, GatorPlate asks.</p></div>
-        </li>
-        <li class="flow__step">
-          <span class="flow__no num" aria-hidden="true">4</span>
-          <div class="flow__head"><p class="flow__chip" data-t="how.chip.code">Code</p><h3 data-t="how.4.h">Rules decide</h3></div>
-          <div class="flow__body"><p data-t="how.4.p">A dated table of this year's CalFresh rules (Oct 2026 – Sep 2027) computes every dollar, with a source for each step. The AI never does the math.</p></div>
-        </li>
-        <li class="flow__step flow__step--ai">
-          <span class="flow__no num" aria-hidden="true">5</span>
-          <div class="flow__head"><p class="flow__chip" data-t="how.chip.planner">AI · Decision planner (code)</p><h3 data-t="how.5.h">Asks only what matters</h3></div>
-          <div class="flow__body"><p data-t="how.5.p">Before each optional question, GatorPlate re-runs the rules for every possible answer. It asks only if the answer could change the result or move the estimate by more than $50 a month.</p></div>
-        </li>
-        <li class="flow__step">
-          <span class="flow__no num" aria-hidden="true">6</span>
-          <div class="flow__head"><p class="flow__chip" data-t="how.chip.person">Person</p><h3 data-t="how.6.h">A person confirms</h3></div>
-          <div class="flow__body">
-            <p data-t="how.6.p">Anything uncertain becomes a highlighted line in the coordinator's console, and a case can't be marked reviewed until every line is checked. The county decides eligibility.</p>
-            <p class="yl-line"><span class="yl-line__tag" data-t="care.yl.tag">To check</span> <span data-t="care.yl.text">Monthly rent — "around 800, I think"</span></p>
-          </div>
-        </li>
-        <li class="flow__step">
-          <span class="flow__no num" aria-hidden="true">7</span>
-          <div class="flow__head"><p class="flow__chip" data-t="how.chip.student">Student</p><h3 data-t="how.7.h">Your card</h3></div>
-          <div class="flow__body"><p data-t="how.7.p">The estimate, your answers for the application, documents to bring, interview prep — and the other help CalFresh may open.</p></div>
-        </li>
-      </ol>
-    </section>
-
-    <section id="why" class="pitch pitch--why dark" aria-labelledby="why-title">
-      <p class="pitch__kicker" data-reveal><span class="pitch__no num">03</span> <span data-t="why.kicker">Why the AI is essential</span></p>
-      <h2 id="why-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="why.title">Not a chatbot add-on. Without the AI, the call is a phone tree.</h2>
-      <p class="heard__label" data-reveal aria-hidden="true" data-t="why.demo.label">Example</p>
-      <figure class="heard" data-reveal aria-hidden="true">
-        <p class="heard__quote" data-t="why.demo.quote">“I make like eighteen an hour, maybe fifteen hours a week”</p>
-        <p class="heard__arrow"><svg class="icon" focusable="false"><use href="/shared/icons.svg#i-arrow-right"></use></svg></p>
-        <p class="heard__facts">
-          <span class="heard__fact"><span data-t="why.demo.pay">Hourly pay</span> <b class="num">$18</b></span>
-          <span class="heard__fact heard__fact--check"><span data-t="why.demo.hours">Hours a week</span> <b class="num">15</b> <span class="heard__flag" data-t="why.demo.check">to confirm</span></span>
-        </p>
+      <h2 id="how-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="how.title">The AI understands and plans. Rules do the math. A person confirms.</h2>
+      <p class="pitch__lead" data-reveal data-t="how.lede">A short conversation instead of a screening form. Two AI steps sit at the center: a language model that understands free speech, and a planner that decides what to ask next.</p>
+      <div class="pipe" data-reveal>
+        <p class="pipe__legend"><span class="pipe__swatch" aria-hidden="true"></span> <span data-t="how.legend">Highlighted: the two AI steps</span></p>
+        <ol class="flow" role="list" data-t-label="how.list" aria-label="The pipeline, step by step">
+          <li class="flow__step">
+            <div class="flow__top"><span class="flow__no num" aria-hidden="true">1</span> <p class="flow__chip" data-t="how.chip.student">Student</p></div>
+            <h3 class="flow__h" data-t="how.1.h">You talk</h3>
+            <div class="flow__body">
+              <p class="flow__p" data-t="how.1.p">By phone (English) or in your browser (English or Spanish). GatorPlate gets text, never audio. Code sets noise and line checks (“hello?”) aside before the AI sees them.</p>
+            </div>
+            <p class="flow__ai"><span class="flow__ai-tag" data-t="how.ai.tag">AI's part</span> <span data-t="how.1.ai">Speech recognition (AI) turns your voice into text; GatorPlate gets text only.</span></p>
+          </li>
+          <li class="flow__step flow__step--ai">
+            <div class="flow__top"><span class="flow__no num" aria-hidden="true">2</span> <p class="flow__chip" data-t="how.chip.lm">AI · Language model</p></div>
+            <h3 class="flow__h" data-t="how.2.h">Understands</h3>
+            <div class="flow__body">
+              <p class="flow__p" data-t="how.2.p">Turns free speech — any wording, corrections, several answers at once — into the exact facts the rules need.</p>
+            </div>
+            <p class="flow__ai"><span class="flow__ai-tag" data-t="how.ai.tag">AI's part</span> <span data-t="how.2.ai">Fills each fact with the student's own quote and flags what it isn't sure of.</span></p>
+          </li>
+          <li class="flow__step">
+            <div class="flow__top"><span class="flow__no num" aria-hidden="true">3</span> <p class="flow__chip" data-t="how.chip.code">Code</p></div>
+            <h3 class="flow__h" data-t="how.3.h">Checked against your words</h3>
+            <div class="flow__body">
+              <p class="flow__p" data-t="how.3.p">A rule parser reads every sentence too. If it disagrees with the AI on an amount, the answer is marked unsure for a person to check, and a key amount can be confirmed on the call.</p>
+            </div>
+            <p class="flow__ai"><span class="flow__ai-tag" data-t="how.ai.tag">AI's part</span> <span data-t="how.3.ai">Its output is checked: a number the student never said is dropped.</span></p>
+          </li>
+          <li class="flow__step">
+            <div class="flow__top"><span class="flow__no num" aria-hidden="true">4</span> <p class="flow__chip" data-t="how.chip.code">Code</p></div>
+            <h3 class="flow__h" data-t="how.4.h">Rules do the math</h3>
+            <div class="flow__body">
+              <p class="flow__p" data-t="how.4.p">A dated CalFresh table (Oct 2026 – Sep 2027) computes every dollar, with a source for each step.</p>
+            </div>
+            <p class="flow__ai"><span class="flow__ai-tag" data-t="how.ai.tag">AI's part</span> <span data-t="how.4.ai">None, by design: the AI never does the math.</span></p>
+          </li>
+          <li class="flow__step flow__step--ai">
+            <div class="flow__top"><span class="flow__no num" aria-hidden="true">5</span> <p class="flow__chip" data-t="how.chip.planner">AI · Planner</p></div>
+            <h3 class="flow__h" data-t="how.5.h">Picks the next question</h3>
+            <div class="flow__body">
+              <p class="flow__p" data-t="how.5.p">Before each optional question, it re-runs the rules for every candidate answer — a value-of-information search. Core questions follow a fixed order.</p>
+            </div>
+            <p class="flow__ai"><span class="flow__ai-tag" data-t="how.ai.tag">AI's part</span> <span data-t="how.5.ai">Asks only if an answer could change the result or move the estimate by more than $50 a month — at most two, starting with the most decisive.</span></p>
+          </li>
+          <li class="flow__step">
+            <div class="flow__top"><span class="flow__no num" aria-hidden="true">6</span> <p class="flow__chip" data-t="how.chip.person">Person</p></div>
+            <h3 class="flow__h" data-t="how.6.h">A person confirms</h3>
+            <div class="flow__body">
+              <p class="flow__p" data-t="how.6.p">Uncertain answers become yellow lines; a case can't be marked reviewed until each is checked. The county decides.</p>
+              <p class="yl-line"><span class="yl-line__tag" data-t="care.yl.tag">To check</span> <span data-t="care.yl.text">Monthly rent — “around 800, I think”</span></p>
+            </div>
+            <p class="flow__ai"><span class="flow__ai-tag" data-t="how.ai.tag">AI's part</span> <span data-t="how.6.ai">Its “unsure” flags are what the person checks.</span></p>
+          </li>
+          <li class="flow__step">
+            <div class="flow__top"><span class="flow__no num" aria-hidden="true">7</span> <p class="flow__chip" data-t="how.chip.student">Student</p></div>
+            <h3 class="flow__h" data-t="how.7.h">Your card</h3>
+            <div class="flow__body">
+              <p class="flow__p" data-t="how.7.p">The estimate, answers for the application, documents, interview prep — and other help CalFresh may open.</p>
+            </div>
+            <p class="flow__ai"><span class="flow__ai-tag" data-t="how.ai.tag">AI's part</span> <span data-t="how.7.ai">None, by design: code builds the card from the rules result.</span></p>
+          </li>
+        </ol>
+        <p class="pipe__loop"><span class="pipe__loop-line" aria-hidden="true"></span> <span class="pipe__loop-text" data-t="how.loop">Steps 1–5 repeat every turn. After every answer, the planner re-plans — until it moves on to the result.</span></p>
+      </div>
+      <figure class="trace" data-reveal aria-labelledby="ex-title">
+        <figcaption class="trace__head">
+          <h3 id="ex-title" class="trace__title" data-t="ex.title">Two turns, traced</h3>
+          <p class="trace__sub" data-t="ex.sub">From Maria's demo call: a simulated student, text-level.</p>
+        </figcaption>
+        <ol class="trace__steps" role="list">
+          <li class="trace__step">
+            <p class="trace__h" data-t="ex.1.h">She says</p>
+            <p class="trace__say" lang="en">“I work at the campus library, about 900 a month. Nobody gives me cash.”</p>
+          </li>
+          <li class="trace__step trace__step--ai">
+            <p class="trace__h" data-t="ex.2.h">AI · Language model fills</p>
+            <p class="trace__fact"><span data-t="ex.2.a">Work income: $900 a month</span> <q class="trace__quote" lang="en">about 900 a month</q></p>
+            <p class="trace__fact"><span data-t="ex.2.b">Cash from family: $0</span> <q class="trace__quote" lang="en">Nobody gives me cash</q></p>
+          </li>
+          <li class="trace__step">
+            <p class="trace__h" data-t="ex.3.h">Code checks</p>
+            <p class="trace__p" data-t="ex.3.p">Each quote is in her words, and $900 was said: both kept. A number she never said would be dropped.</p>
+          </li>
+          <li class="trace__step trace__step--ai">
+            <p class="trace__h" data-t="ex.4.h">AI · Planner asks</p>
+            <p class="trace__p" data-t="ex.4.p">Next, her rent: “Eleven hundred.” One open answer could make her estimate $155 or $306 — $151 apart — so it asks:</p>
+            <p class="trace__ask" data-t="ex.4.q">“Does anyone, like a parent, pay part of your rent straight to your landlord?”</p>
+            <p class="trace__p trace__p--quiet" data-t="ex.4.skip">Heating or cooling and other utility bills couldn't change her result: not asked.</p>
+          </li>
+          <li class="trace__step">
+            <p class="trace__h" data-t="ex.5.h">Rules result</p>
+            <p class="trace__p trace__p--result" data-t="ex.5.p">“No.” → likely $306 a month. An estimate; the county decides.</p>
+          </li>
+        </ol>
       </figure>
-      <ul class="whys" role="list">
-        <li class="why" data-reveal>
-          <h3 data-t="why.1.h">A conversation instead of a form</h3>
-          <p data-t="why.1.p">Students don't talk in form fields. "I make like eighteen an hour, maybe fifteen hours a week" becomes hourly pay, hours and a flag to confirm. Without the model, the call falls back to closed yes-or-no questions — a phone tree.</p>
-        </li>
-        <li class="why" data-reveal>
-          <h3 data-t="why.2.h">Every fact is tied to the student's words</h3>
-          <p data-t="why.2.p">The AI must quote what the student said for every value. A quote that isn't in the student's words turns the value yellow; a number the student never said is dropped. The coordinator sees the quote next to the field.</p>
-        </li>
-        <li class="why" data-reveal>
-          <h3 data-t="why.3.h">It knows when to ask a person</h3>
-          <p data-t="why.3.p">It marks hedges, ranges and contradictions as unsure instead of guessing. It also hears what isn't an answer: a request for a person, a prompt-injection trick, or a crisis — which gets 988 and 911 at once.</p>
-        </li>
-      </ul>
-      <h3 class="edges__title" data-reveal data-t="edge.title">Built to be checked</h3>
-      <ul class="edges" role="list" data-reveal>
-        <li class="edge"><h4 data-t="edge.2.h">Two readers on every sentence.</h4><p data-t="edge.2.p">A language model and a rule parser read each turn. If they disagree on an amount, or "fifteen" could be "fifty," the student is asked. If the model is slow or down, the call keeps going on the parser with closed questions.</p></li>
-        <li class="edge"><h4 data-t="edge.3.h">Grounded, not generated.</h4><p data-t="edge.3.p">The model returns facts only — never a sentence and never a number of its own. Every reply comes from a reviewed sentence bank and passes an output guard.</p></li>
-        <li class="edge"><h4 data-t="edge.4.h">Value-of-information questions.</h4><p data-t="edge.4.p">The planner measures what each unknown could change and skips the rest — about 6 questions per call in our simulated-student tests.</p></li>
-        <li class="edge"><h4 data-t="edge.6.h">Attacked on purpose.</h4><p data-t="edge.6.p">3,000+ automated tests, 28 end-to-end scripts and 38 adversarial scripts — including prompt injection, a spoken Social Security number and a crisis in Spanish.</p></li>
-      </ul>
-      <p class="edges__note" data-reveal data-t="edge.note">Tests are text-level with simulated students, not real students or real speech recognition.</p>
+      <div class="perf" data-reveal>
+        <div class="perf__head">
+          <h3 class="perf__title" data-t="perf.title">Performance</h3>
+          <p class="perf__date" data-t="perf.date">Measured Oct 2, 2026 · simulated students, text-level</p>
+        </div>
+        <ul class="perf__grid" role="list">
+          <li class="perf__cell perf__cell--lead">
+            <p class="perf__num num">24<span class="perf__unit">/24</span></p>
+            <p class="perf__label" data-t="perf.robust.l">off-script and noisy calls with the real language model reached the right amount</p>
+            <p class="perf__how" data-t="perf.robust.how">24 runs: 15 variations of 3 simulated students (one in Spanish) plus the Maria demo script — noise on every turn, a TV in the room, cut-off words, corrections, several answers at once. 3 of 113 model calls timed out; the rule parser carried on and the amount was still right.</p>
+          </li>
+          <li class="perf__cell">
+            <p class="perf__num num">0</p>
+            <p class="perf__label" data-t="perf.wrong.l">wrong values reached a result</p>
+            <p class="perf__how" data-t="perf.wrong.how">Same 24 runs. One noisy word (“nine”) was saved as $9 but marked unsure, and the confirm question fixed it. No call was ended by noise.</p>
+          </li>
+          <li class="perf__cell">
+            <p class="perf__num num">100<span class="perf__unit">%</span></p>
+            <p class="perf__label" data-t="perf.ground.l">of saved quotes are the student's own words</p>
+            <p class="perf__how" data-t="perf.ground.how">Enforced in code and tested: a quote not found in what was said turns the answer “unsure”; a number the student never said is dropped.</p>
+          </li>
+          <li class="perf__cell">
+            <p class="perf__num num">3,200+</p>
+            <p class="perf__label" data-t="perf.tests.l">automated tests pass</p>
+            <p class="perf__how" data-t="perf.tests.how">3,054 Python and 176 JavaScript tests, with a stand-in for the language model. Plus 28/28 end-to-end and 38/38 adversarial scripts (prompt injection, a spoken Social Security number, a crisis in Spanish).</p>
+          </li>
+          <li class="perf__cell">
+            <p class="perf__num num">78<span class="perf__unit">/78</span></p>
+            <p class="perf__label" data-t="perf.rules.l">hand-computed CalFresh cases match the rules engine exactly</p>
+            <p class="perf__how" data-t="perf.rules.how">Every result field compared. The other programs: 14/14 hand-computed cases.</p>
+          </li>
+          <li class="perf__cell">
+            <p class="perf__num num">7</p>
+            <p class="perf__label" data-t="perf.q.l">questions in Maria's demo call, out of 37 answer fields</p>
+            <p class="perf__how" data-t="perf.q.how">They filled 12 answers. The planner skipped 2 that couldn't change her result and asked 1 that could move it by $151 a month. Average across 59 simulated calls: 5.9.</p>
+          </li>
+          <li class="perf__cell">
+            <p class="perf__num num">≈1.5<span class="perf__unit"> s</span></p>
+            <p class="perf__label" data-t="perf.speed.l">median for the AI to understand an answer (language-model step)</p>
+            <p class="perf__how" data-t="perf.speed.how">Local runs of the current code, n = 32 model calls. Rules, planner, sentences and checks add a median of about 5 ms per answer (n = 72). Phone and network time not included.</p>
+          </li>
+        </ul>
+      </div>
     </section>
 
     <section id="care" class="pitch pitch--care" aria-labelledby="care-title">
-      <p class="pitch__kicker" data-reveal><span class="pitch__no num">04</span> <span data-t="care.kicker">Responsible by design</span></p>
-      <h2 id="care-title" class="pitch__title pitch__title--big" data-reveal data-t="care.title">Eight risks we planned for, and what we do about each.</h2>
-      <p class="pitch__lead" data-reveal data-t="care.sub">GatorPlate gives estimates, never decisions. The AI only listens; numbers come from a dated rules table, and a person checks anything uncertain.</p>
-      <div class="risks-wrap" data-reveal>
-        <table class="risks" role="table">
-          <caption class="sr-only" data-t="care.caption">Risks, what GatorPlate does today, and what comes before real students</caption>
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">03</span> <span data-t="care.kicker">Responsible by design</span></p>
+      <h2 id="care-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="care.title">The rules we designed around, and the risks we handle.</h2>
+      <p class="pitch__lead" data-reveal data-t="care.sub">A free student prototype that no lawyer has reviewed yet. These tables show how we read each rule, what GatorPlate does today, and what a real SF State pilot would still need. Not legal advice.</p>
+      <div class="tblock" data-reveal>
+        <h3 id="law-title" class="tblock__title"><span class="tblock__no num" aria-hidden="true">A</span> <span data-t="law.title">Laws &amp; standards</span></h3>
+        <p class="tblock__note" data-t="law.checked">Sources read Oct 2, 2026. Each citation links to the law's text. Our reading, not legal advice.</p>
+        <table class="tbl tbl--law" role="table" aria-labelledby="law-title">
+          <caption class="sr-only" data-t="law.caption">Laws and standards: what each requires, what GatorPlate does today, and its status</caption>
           <thead role="rowgroup">
             <tr role="row">
-              <th scope="col" role="columnheader" data-t="care.col.risk">Risk</th>
-              <th scope="col" role="columnheader" data-t="care.col.today">What GatorPlate does today</th>
-              <th scope="col" role="columnheader" data-t="care.col.next">Before real students</th>
+              <th scope="col" role="columnheader" data-t="law.col.law">Law or standard</th>
+              <th scope="col" role="columnheader" data-t="law.col.req">What it requires</th>
+              <th scope="col" role="columnheader" data-t="law.col.do">What GatorPlate does today</th>
+              <th scope="col" role="columnheader" data-t="law.col.status">Status</th>
             </tr>
           </thead>
           <tbody role="rowgroup">
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-eye-off"></use></svg><span class="risk__name" data-t="care.r1.h">Privacy</span> <span class="risk__what" data-t="care.r1.w">Income, rent and household details are sensitive.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r1.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r1.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r1.next">Cases auto-delete after 30 days.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.1.h">California Invasion of Privacy Act</span> <a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=632.&amp;lawCode=PEN" rel="noopener" data-t="law.1.cite">Penal Code §631, §632</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.1.req">Listening in on or recording a confidential call needs the consent of all parties.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.1.do">Before any question, the call says it is a student-built AI, not an official SF State service, that an AI turns speech into text, and that the call audio isn't recorded. Then it asks: say yes or press one. A no, or two unclear answers, ends the call; only the fact that it was declined is kept.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--design" data-t="law.badge.design">Designed for it</span> <span class="tbl__st" data-t="law.1.status">Built for all-party consent. Pilot: legal review of the consent wording.</span></td>
             </tr>
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-lock"></use></svg><span class="risk__name" data-t="care.r2.h">Security</span> <span class="risk__what" data-t="care.r2.w">Someone talks the AI into a bigger number, or data leaks.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r2.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r2.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r2.next">SF State's data and security review.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.2.h">California bot disclosure</span> <a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=17941.&amp;lawCode=BPC" rel="noopener" data-t="law.2.cite">Bus. &amp; Prof. Code §17940–17941 (SB 1001)</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.2.req">An online bot may not hide that it is a bot to push a sale or sway a vote.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.2.do">Says “AI” in its opening sentence, on the phone and on the web. “Are you a robot?”, “Is this recorded?” and “Is this official?” get a true answer at any point.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span> <span class="tbl__st" data-t="law.2.status">Nothing is sold and there is no vote. We disclose anyway.</span></td>
             </tr>
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-person"></use></svg><span class="risk__name" data-t="care.r3.h">Accessibility</span> <span class="risk__what" data-t="care.r3.w">Students who can't use an app, can't see, can't hear or can't speak are left out.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r3.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r3.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r3.next">SF State's accessibility review; TTY and captioned-phone calls aren't supported yet.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.3.h">CCPA / CPRA</span> <a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=1798.100.&amp;lawCode=CIV" rel="noopener" data-t="law.3.cite">Civil Code §1798.100 ff.</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.3.req">Duties fall on for-profit businesses above a revenue or data-volume threshold.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.3.do">No revenue, no ads, no data sales. Keeps answers with short quotes, not the conversation; never receives the caller's phone number; never asks for a name. Delete by voice (“delete my data”) or on the card.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span> <span class="tbl__st" data-t="law.3.status">Not a for-profit business. We follow its collect-less-and-delete ideas anyway.</span></td>
             </tr>
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-table"></use></svg><span class="risk__name" data-t="care.r4.h">Data accuracy</span> <span class="risk__what" data-t="care.r4.w">CalFresh rules changed three times in 2026; old numbers mislead.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r4.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r4.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r4.next">Re-check every October 1 and after each state letter.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.4.h">CalFresh confidentiality</span> <a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=10850.&amp;lawCode=WIC" rel="noopener" data-t="law.4.cite">Welf. &amp; Inst. Code §10850; 7 CFR 272.1(c)</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.4.req">Agencies running CalFresh must keep applicant and recipient records confidential and use them only for the program.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.4.do">Receives no county or state records and sends nothing to the county. Keeps no list of recipients. Students apply on BenefitsCal themselves.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span> <span class="tbl__st" data-t="law.4.status">An agency rule; we hold no agency records. Sharing data with the county would need its own review.</span></td>
             </tr>
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-language"></use></svg><span class="risk__name" data-t="care.r5.h">Bias &amp; fairness</span> <span class="risk__what" data-t="care.r5.w">Spanish speakers or accents get worse results.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r5.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r5.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r5.next">Testing real accents on real phone lines.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.5.h">FERPA</span> <a class="tbl__cite" href="https://www.law.cornell.edu/uscode/text/20/1232g" rel="noopener" data-t="law.5.cite">20 U.S.C. §1232g; 34 CFR Part 99</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.5.req">Protects education records kept by a school or someone acting for it.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.5.do">The pilot uses no student records, so it needs no student-records integration.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--pilot" data-t="law.badge.pilot">Pilot: review needed</span> <span class="tbl__st" data-t="law.5.status">SF State's data and accessibility review comes before a pilot.</span></td>
             </tr>
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-person-check"></use></svg><span class="risk__name" data-t="care.r6.h">Consent &amp; law</span> <span class="risk__what" data-t="care.r6.w">California requires every party's consent to record or listen in on a confidential call.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r6.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r6.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r6.next">Legal review of the consent wording; providers' data terms in writing.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.6.h">TCPA</span> <a class="tbl__cite" href="https://www.law.cornell.edu/uscode/text/47/227" rel="noopener" data-t="law.6.cite">47 U.S.C. §227(b); FCC ruling, Feb. 8, 2024</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.6.req">Calls made with an artificial or prerecorded voice — AI voices included — need prior consent.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.6.do">Only answers calls a student places. No outbound calls, texts or return calls: none are built, and the reply guard blocks promising them.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--design" data-t="law.badge.design">Designed for it</span> <span class="tbl__st" data-t="law.6.status">Inbound calls only.</span></td>
             </tr>
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-check-circle"></use></svg><span class="risk__name" data-t="care.r7.h">Over-reliance</span> <span class="risk__what" data-t="care.r7.w">A student or coordinator treats an AI guess as a decision.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r7.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r7.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r7.next">Weekly review with the CalFresh coordinator.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.7.h">CSU name use</span> <a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=89005.5.&amp;lawCode=EDC" rel="noopener" data-t="law.7.cite">Education Code §89005.5</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.7.req">No one may use the CSU or a campus name to suggest affiliation or endorsement without the Trustees' permission.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.7.do">Every call and web chat opens with “a student-built AI assistant, not an official SF State service.” This site says it is not an official SF State, county or CalFresh service. No SF State logos, seals or colors.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--design" data-t="law.badge.design">Designed for it</span> <span class="tbl__st" data-t="law.7.status">A factual description only. Any adoption starts with SF State's own review.</span></td>
             </tr>
-            <tr class="risk" role="row">
-              <th scope="row" role="rowheader" class="risk__head"><svg class="icon icon--card risk__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg><span class="risk__name" data-t="care.r8.h">Immigration safety</span> <span class="risk__what" data-t="care.r8.w">Students in mixed-status families fear sharing anything.</span></th>
-              <td class="risk__today" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.today">What GatorPlate does today</span><strong class="risk__key" data-t="care.r8.key"></strong><details class="risk__more" data-more><summary class="risk__sum" data-t="care.more">More</summary><p class="risk__do" data-t="care.r8.do"></p></details></td>
-              <td class="risk__next" role="cell"><span class="risk__lab" aria-hidden="true" data-t="care.col.next">Before real students</span> <span data-t="care.r8.next">Wording checked with campus and legal-aid partners.</span></td>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.8.h">Accessibility</span> <a class="tbl__cite" href="https://www.law.cornell.edu/cfr/text/28/part-35/subpart-H" rel="noopener" data-t="law.8.cite">ADA Title II web rule (DOJ 2024; WCAG 2.1 AA; larger public entities by Apr. 26, 2027) · WCAG 2.2 AA</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.8.req">A campus must offer web content and apps that people with disabilities can use.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.8.do">The phone path needs no screen, app or login, and speaks the card code. Typing always works on the web. The card targets WCAG 2.2 AA: 117 color pairs checked (4.5:1 text, 3:1 interface), keyboard use, screen-reader labels, 200% zoom, reflow at 320 px.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--design" data-t="law.badge.design">Designed for it</span> <span class="tbl__st" data-t="law.8.status">WCAG 2.2 AA targeted, not audited. Pilot: SF State accessibility review. Calls from TTY users aren't specially handled yet.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.9.h">HIPAA</span> <a class="tbl__cite" href="https://www.law.cornell.edu/cfr/text/45/160.103" rel="noopener" data-t="law.9.cite">45 CFR Parts 160, 164</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.9.req">Covers health plans, health-care clearinghouses and providers that bill electronically.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.9.do">None of these. Medi-Cal appears only as a box on the same application. No health or disability details are stored.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span> <span class="tbl__st" data-t="law.9.status">Not a covered entity.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="law.10.h">Truthful claims</span> <a class="tbl__cite" href="https://www.law.cornell.edu/uscode/text/15/45" rel="noopener" data-t="law.10.cite">FTC Act §5; Bus. &amp; Prof. Code §17500</a></th>
+              <td class="tbl__cell" role="cell"><span data-t="law.10.req">Claims must not mislead; “up to” must not read as what everyone gets.</span></td>
+              <td class="tbl__cell" role="cell"><span data-t="law.10.do">Every amount says it is an estimate and the agency decides. Ceilings say “up to.” The $12.7M is an upper bound for CalFresh alone, with its method and sources on this page. A reply guard blocks promises of savings or payouts.</span></td>
+              <td class="tbl__cell tbl__cell--status" role="cell"><span class="badge badge--design" data-t="law.badge.design">Designed for it</span> <span class="tbl__st" data-t="law.10.status">Wording rules are tested in code.</span></td>
             </tr>
           </tbody>
         </table>
+        <ul class="tcards" role="list" aria-labelledby="law-title">
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.1.h">California Invasion of Privacy Act</span> <span class="badge badge--design" data-t="law.badge.design">Designed for it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=632.&amp;lawCode=PEN" rel="noopener" data-t="law.1.cite">Penal Code §631, §632</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.1.req">Listening in on or recording a confidential call needs the consent of all parties.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.1.do">Before any question, the call says it is a student-built AI, not an official SF State service, that an AI turns speech into text, and that the call audio isn't recorded. Then it asks: say yes or press one. A no, or two unclear answers, ends the call; only the fact that it was declined is kept.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.1.status">Built for all-party consent. Pilot: legal review of the consent wording.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.2.h">California bot disclosure</span> <span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=17941.&amp;lawCode=BPC" rel="noopener" data-t="law.2.cite">Bus. &amp; Prof. Code §17940–17941 (SB 1001)</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.2.req">An online bot may not hide that it is a bot to push a sale or sway a vote.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.2.do">Says “AI” in its opening sentence, on the phone and on the web. “Are you a robot?”, “Is this recorded?” and “Is this official?” get a true answer at any point.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.2.status">Nothing is sold and there is no vote. We disclose anyway.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.3.h">CCPA / CPRA</span> <span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=1798.100.&amp;lawCode=CIV" rel="noopener" data-t="law.3.cite">Civil Code §1798.100 ff.</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.3.req">Duties fall on for-profit businesses above a revenue or data-volume threshold.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.3.do">No revenue, no ads, no data sales. Keeps answers with short quotes, not the conversation; never receives the caller's phone number; never asks for a name. Delete by voice (“delete my data”) or on the card.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.3.status">Not a for-profit business. We follow its collect-less-and-delete ideas anyway.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.4.h">CalFresh confidentiality</span> <span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=10850.&amp;lawCode=WIC" rel="noopener" data-t="law.4.cite">Welf. &amp; Inst. Code §10850; 7 CFR 272.1(c)</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.4.req">Agencies running CalFresh must keep applicant and recipient records confidential and use them only for the program.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.4.do">Receives no county or state records and sends nothing to the county. Keeps no list of recipients. Students apply on BenefitsCal themselves.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.4.status">An agency rule; we hold no agency records. Sharing data with the county would need its own review.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.5.h">FERPA</span> <span class="badge badge--pilot" data-t="law.badge.pilot">Pilot: review needed</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://www.law.cornell.edu/uscode/text/20/1232g" rel="noopener" data-t="law.5.cite">20 U.S.C. §1232g; 34 CFR Part 99</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.5.req">Protects education records kept by a school or someone acting for it.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.5.do">The pilot uses no student records, so it needs no student-records integration.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.5.status">SF State's data and accessibility review comes before a pilot.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.6.h">TCPA</span> <span class="badge badge--design" data-t="law.badge.design">Designed for it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://www.law.cornell.edu/uscode/text/47/227" rel="noopener" data-t="law.6.cite">47 U.S.C. §227(b); FCC ruling, Feb. 8, 2024</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.6.req">Calls made with an artificial or prerecorded voice — AI voices included — need prior consent.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.6.do">Only answers calls a student places. No outbound calls, texts or return calls: none are built, and the reply guard blocks promising them.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.6.status">Inbound calls only.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.7.h">CSU name use</span> <span class="badge badge--design" data-t="law.badge.design">Designed for it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=89005.5.&amp;lawCode=EDC" rel="noopener" data-t="law.7.cite">Education Code §89005.5</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.7.req">No one may use the CSU or a campus name to suggest affiliation or endorsement without the Trustees' permission.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.7.do">Every call and web chat opens with “a student-built AI assistant, not an official SF State service.” This site says it is not an official SF State, county or CalFresh service. No SF State logos, seals or colors.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.7.status">A factual description only. Any adoption starts with SF State's own review.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.8.h">Accessibility</span> <span class="badge badge--design" data-t="law.badge.design">Designed for it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://www.law.cornell.edu/cfr/text/28/part-35/subpart-H" rel="noopener" data-t="law.8.cite">ADA Title II web rule (DOJ 2024; WCAG 2.1 AA; larger public entities by Apr. 26, 2027) · WCAG 2.2 AA</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.8.req">A campus must offer web content and apps that people with disabilities can use.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.8.do">The phone path needs no screen, app or login, and speaks the card code. Typing always works on the web. The card targets WCAG 2.2 AA: 117 color pairs checked (4.5:1 text, 3:1 interface), keyboard use, screen-reader labels, 200% zoom, reflow at 320 px.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.8.status">WCAG 2.2 AA targeted, not audited. Pilot: SF State accessibility review. Calls from TTY users aren't specially handled yet.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.9.h">HIPAA</span> <span class="badge badge--scope" data-t="law.badge.scope">Outside scope, as we read it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://www.law.cornell.edu/cfr/text/45/160.103" rel="noopener" data-t="law.9.cite">45 CFR Parts 160, 164</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.9.req">Covers health plans, health-care clearinghouses and providers that bill electronically.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.9.do">None of these. Medi-Cal appears only as a box on the same application. No health or disability details are stored.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.9.status">Not a covered entity.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="law.10.h">Truthful claims</span> <span class="badge badge--design" data-t="law.badge.design">Designed for it</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="law.col.law">Law or standard</dt><dd><a class="tbl__cite" href="https://www.law.cornell.edu/uscode/text/15/45" rel="noopener" data-t="law.10.cite">FTC Act §5; Bus. &amp; Prof. Code §17500</a></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.req">What it requires</dt><dd><span data-t="law.10.req">Claims must not mislead; “up to” must not read as what everyone gets.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.do">What GatorPlate does today</dt><dd><span data-t="law.10.do">Every amount says it is an estimate and the agency decides. Ceilings say “up to.” The $12.7M is an upper bound for CalFresh alone, with its method and sources on this page. A reply guard blocks promises of savings or payouts.</span></dd></div>
+                <div class="tcard__row"><dt data-t="law.col.status">Status</dt><dd><span data-t="law.10.status">Wording rules are tested in code.</span></dd></div>
+              </dl>
+            </details></li>
+        </ul>
       </div>
-      <p class="risks__note" data-reveal data-t="care.note">Tested with simulated students and scripts, not real students or real speech recognition. Not an official SF State, county or CalFresh service.</p>
+      <div class="tblock" data-reveal>
+        <h3 id="risk-title" class="tblock__title"><span class="tblock__no num" aria-hidden="true">B</span> <span data-t="risk.title">Risks &amp; how we handle them</span></h3>
+        <table class="tbl tbl--risk" role="table" aria-labelledby="risk-title">
+          <caption class="sr-only" data-t="risk.caption">Risks: how GatorPlate handles each, the evidence, and what is still open</caption>
+          <thead role="rowgroup">
+            <tr role="row">
+              <th scope="col" role="columnheader" data-t="risk.col.risk">Risk</th>
+              <th scope="col" role="columnheader" data-t="risk.col.how">How we handle it</th>
+              <th scope="col" role="columnheader" data-t="risk.col.ev">Evidence</th>
+              <th scope="col" role="columnheader" data-t="risk.col.open">Still open</th>
+            </tr>
+          </thead>
+          <tbody role="rowgroup">
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.1.h">Privacy</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.1.how">Consent before questions. No audio stored, no full transcript, no caller number received. A case keeps answers with short quotes (80 characters at most). The language model sees only the current question and the last two sentences, with ID-like digits removed. Students can delete their case by voice or on the card.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.1.ev">Tests: a declined call keeps no answers — only that it was declined; “delete my data” removes the case.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.1.open">The consent wording has not been reviewed by a lawyer yet.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.2.h">Security</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.2.how">The AI can't set a number. Phone requests are signed; the coordinator console needs a passcode; card links are unguessable and expire (7 days; spoken code 24 hours); requests are rate-limited; logs hold no conversation content; pages load nothing from third parties.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.2.ev">Tests: routes, logs, request signatures. Scripts: prompt injection.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.2.open">SF State's data review comes before a pilot.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.3.h">Accessibility</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.3.how">Any phone, no app or login. The card code is spoken. Typing on the web. WCAG 2.2 AA targets on the card.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.3.ev">Tests: 117 color pairs pass the contrast check (Oct 2, 2026). Scripts: a question about TTY services is noted, never promised.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.3.open">No WCAG audit yet. Calls from TTY users aren't specially handled yet.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.4.h">Data accuracy</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.4.how">One dated rules table (Oct 1, 2026 – Sep 30, 2027), each value with its source. No estimate outside those dates.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.4.ev">Tests: 78/78 hand-computed CalFresh cases and 14/14 other-program cases (Oct 2, 2026).</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.4.open">A new table is needed from Oct 1, 2027.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.5.h">Bias &amp; language</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.5.how">One rules engine for English and Spanish; results reported per language. Spanish works on the web and on the card; the phone line is English.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.5.ev">Runs: simulated calls with a stand-in model, English 48/48 and Spanish 11/11 (Oct 2, 2026); 1 real-model Spanish run, right amount.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.5.open">Real accents and real speech recognition not tested yet. The phone line is English only.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.6.h">Over-reliance</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.6.how">Every result is an estimate; GatorPlate never gives a “no” on eligibility. Uncertain answers become yellow lines, and the server won't mark a case reviewed until a person checks each one. It never applies or signs for anyone.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.6.ev">Tests: the review stays locked until every yellow line is checked. Scripts: asking for a “no”; asking it to apply.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.6.open">Not yet tried with real students or coordinators.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.7.h">Crisis</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.7.how">A mention of self-harm, in English or Spanish, gets 988 and 911 at once, before anything else. The AI and word lists both listen, so it works even if the language model is down. Nothing from that sentence is quoted.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.7.ev">Tests: crisis words in both languages. Scripts: a crisis in English; a crisis in Spanish.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.7.open">With the model down, only the word lists listen; indirect wording can be missed.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.8.h">Immigration safety</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.8.how">Never asks for a Social Security number or immigration status. A volunteered status isn't stored or kept as context; the student is pointed to the coordinator or legal aid. SSN- or card-like digits are removed before the AI sees the text.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.8.ev">Tests: digit redaction. Scripts: a spoken Social Security number; an immigration question.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.8.open">Tested with text scripts, not real speech.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.9.h">AI errors &amp; invented numbers</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.9.how">The model only fills answers. Each quote must appear in what the student said and each number must have been said — otherwise the answer is marked unsure or dropped. Amounts come from the rules table. Risky numbers (“fifteen or fifty?”) are read back. If the model is slow or down, a rule parser and closed questions carry on.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.9.ev">Tests: merge, model faults. Scripts: “fifteen hundred” read back. Runs: 24/24 real-model noisy runs (above).</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.9.open">In those runs, 3 of 113 model calls timed out; the rule parser carried on.</span></td>
+            </tr>
+            <tr class="tbl__row" role="row">
+              <th scope="row" role="rowheader" class="tbl__head"><span class="tbl__name" data-t="risk.10.h">Noise &amp; off-script speech</span></th>
+              <td class="tbl__cell" role="cell"><span data-t="risk.10.how">Noise, a TV in the room or “hello?” is never saved or counted as an answer and makes no model call; the question is asked again. Side questions are noted for the coordinator. Long silence gets a closed question.</span></td>
+              <td class="tbl__cell tbl__cell--ev" role="cell"><span data-t="risk.10.ev">Tests: noise turns. Scripts: three silences; a side question; mixed English and Spanish.</span></td>
+              <td class="tbl__cell tbl__cell--open" role="cell"><span data-t="risk.10.open">Real phone lines and speech recognition not tested yet.</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <ul class="tcards" role="list" aria-labelledby="risk-title">
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.1.h">Privacy</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.1.how">Consent before questions. No audio stored, no full transcript, no caller number received. A case keeps answers with short quotes (80 characters at most). The language model sees only the current question and the last two sentences, with ID-like digits removed. Students can delete their case by voice or on the card.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.1.ev">Tests: a declined call keeps no answers — only that it was declined; “delete my data” removes the case.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.1.open">The consent wording has not been reviewed by a lawyer yet.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.2.h">Security</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.2.how">The AI can't set a number. Phone requests are signed; the coordinator console needs a passcode; card links are unguessable and expire (7 days; spoken code 24 hours); requests are rate-limited; logs hold no conversation content; pages load nothing from third parties.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.2.ev">Tests: routes, logs, request signatures. Scripts: prompt injection.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.2.open">SF State's data review comes before a pilot.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.3.h">Accessibility</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.3.how">Any phone, no app or login. The card code is spoken. Typing on the web. WCAG 2.2 AA targets on the card.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.3.ev">Tests: 117 color pairs pass the contrast check (Oct 2, 2026). Scripts: a question about TTY services is noted, never promised.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.3.open">No WCAG audit yet. Calls from TTY users aren't specially handled yet.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.4.h">Data accuracy</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.4.how">One dated rules table (Oct 1, 2026 – Sep 30, 2027), each value with its source. No estimate outside those dates.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.4.ev">Tests: 78/78 hand-computed CalFresh cases and 14/14 other-program cases (Oct 2, 2026).</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.4.open">A new table is needed from Oct 1, 2027.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.5.h">Bias &amp; language</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.5.how">One rules engine for English and Spanish; results reported per language. Spanish works on the web and on the card; the phone line is English.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.5.ev">Runs: simulated calls with a stand-in model, English 48/48 and Spanish 11/11 (Oct 2, 2026); 1 real-model Spanish run, right amount.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.5.open">Real accents and real speech recognition not tested yet. The phone line is English only.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.6.h">Over-reliance</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.6.how">Every result is an estimate; GatorPlate never gives a “no” on eligibility. Uncertain answers become yellow lines, and the server won't mark a case reviewed until a person checks each one. It never applies or signs for anyone.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.6.ev">Tests: the review stays locked until every yellow line is checked. Scripts: asking for a “no”; asking it to apply.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.6.open">Not yet tried with real students or coordinators.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.7.h">Crisis</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.7.how">A mention of self-harm, in English or Spanish, gets 988 and 911 at once, before anything else. The AI and word lists both listen, so it works even if the language model is down. Nothing from that sentence is quoted.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.7.ev">Tests: crisis words in both languages. Scripts: a crisis in English; a crisis in Spanish.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.7.open">With the model down, only the word lists listen; indirect wording can be missed.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.8.h">Immigration safety</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.8.how">Never asks for a Social Security number or immigration status. A volunteered status isn't stored or kept as context; the student is pointed to the coordinator or legal aid. SSN- or card-like digits are removed before the AI sees the text.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.8.ev">Tests: digit redaction. Scripts: a spoken Social Security number; an immigration question.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.8.open">Tested with text scripts, not real speech.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.9.h">AI errors &amp; invented numbers</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.9.how">The model only fills answers. Each quote must appear in what the student said and each number must have been said — otherwise the answer is marked unsure or dropped. Amounts come from the rules table. Risky numbers (“fifteen or fifty?”) are read back. If the model is slow or down, a rule parser and closed questions carry on.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.9.ev">Tests: merge, model faults. Scripts: “fifteen hundred” read back. Runs: 24/24 real-model noisy runs (above).</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.9.open">In those runs, 3 of 113 model calls timed out; the rule parser carried on.</span></dd></div>
+              </dl>
+            </details></li>
+            <li><details class="tcard">
+              <summary class="tcard__sum"><span class="tcard__name" data-t="risk.10.h">Noise &amp; off-script speech</span><svg class="icon tcard__chev" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg></summary>
+              <dl class="tcard__body">
+                <div class="tcard__row"><dt data-t="risk.col.how">How we handle it</dt><dd><span data-t="risk.10.how">Noise, a TV in the room or “hello?” is never saved or counted as an answer and makes no model call; the question is asked again. Side questions are noted for the coordinator. Long silence gets a closed question.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.ev">Evidence</dt><dd><span data-t="risk.10.ev">Tests: noise turns. Scripts: three silences; a side question; mixed English and Spanish.</span></dd></div>
+                <div class="tcard__row"><dt data-t="risk.col.open">Still open</dt><dd><span data-t="risk.10.open">Real phone lines and speech recognition not tested yet.</span></dd></div>
+              </dl>
+            </details></li>
+        </ul>
+      </div>
+      <p class="risks__note" data-reveal data-t="care.note">Tested with simulated students and scripts, not real students or real speech recognition. Not an official SF State, county or CalFresh service. Not legal advice.</p>
     </section>
 
     <section id="programs" class="pitch pitch--programs" aria-labelledby="programs-title">
-      <p class="pitch__kicker" data-reveal><span class="pitch__no num">05</span> <span data-t="prog.kicker">Six programs</span></p>
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">04</span> <span data-t="prog.kicker">Six programs</span></p>
       <div class="build">
         <div class="build__side">
           <p class="pitch__sofar" data-reveal data-t="prog.sofar">The numbers above count CalFresh alone.</p>
@@ -315,6 +640,27 @@
       <p class="fine__method" data-reveal data-t="prog.note">Estimates from dated tables, computed by code, not by the AI. Each agency decides.</p>
     </section>
 
+    <section id="spanish" class="pitch pitch--bi" aria-labelledby="bi-title">
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">05</span> <span data-t="bi.kicker">English and Spanish</span></p>
+      <h2 id="bi-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="bi.title">Why Spanish, too.</h2>
+      <ul class="bi" role="list" data-reveal>
+        <li class="bi__fig"><p class="bi__num num">5.7%</p> <p class="bi__text" data-t="bi.1">of people in the U.S. age 5 and up — 18.4 million — speak Spanish at home and English less than “very well.”</p></li>
+        <li class="bi__fig"><p class="bi__num num">63.7%</p> <p class="bi__text" data-t="bi.2">of people in the U.S. who speak English less than “very well” speak Spanish at home.</p></li>
+        <li class="bi__fig"><p class="bi__num num">38.7%</p> <p class="bi__text" data-t="bi.3">of SF State students are Latinx (Fall 2025). SF State is a Hispanic-Serving Institution.</p></li>
+      </ul>
+      <p class="bi__ca" data-reveal data-t="bi.ca">In California, 4.2 million people (11.3%) speak Spanish at home and English less than “very well.”</p>
+      <p class="pitch__lead bi__close" data-reveal data-t="bi.close">So you can talk or type in Spanish in your browser, and your card comes in Spanish. The phone line is in English.</p>
+      <p class="bi__parity" data-reveal data-t="bi.parity">Same rules engine in both languages: 48/48 English and 11/11 Spanish simulated calls got the expected result (stand-in model, text-level).</p>
+      <div class="fine" data-reveal>
+        <p class="fine__method" data-t="bi.snap">Federal SNAP rules require materials — and, in larger offices, bilingual staff or interpreters — in a language spoken by enough local households (7 CFR 272.4(b)).</p>
+        <ol class="fine__src" data-t-label="bi.sources" aria-label="Sources">
+          <li data-t="bi.src1">U.S. Census Bureau, American Community Survey 2024 (1-year), table DP02: 18,432,221 of 321,745,943 people age 5+ (5.7%); 63.7% of the 28,918,748 who speak English less than “very well”; California 4,234,066 (11.3%).</li>
+          <li data-t="bi.src2">SF State Facts, Fall 2025 enrollment: 8,015 of 20,721 students. SF State News, Oct. 11, 2022 (Hispanic-Serving Institution).</li>
+          <li data-t="bi.src3">7 CFR 272.4(b)(2)–(3). All retrieved Oct. 2, 2026.</li>
+        </ol>
+      </div>
+    </section>
+
     <section id="try" class="pitch pitch--try dark" aria-labelledby="try-title">
       <p class="pitch__kicker" data-reveal><span class="pitch__no num">06</span> <span data-t="try.kicker">Try it</span></p>
       <h2 id="try-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="try.title">Check the money you may be missing.</h2>
@@ -331,7 +677,7 @@
       </div>
       <p id="cta-phone-note" class="hero__note" hidden></p>
       <p class="try__more" data-reveal>
-        <a id="cta-about-link" href="/about"><span data-t="about">How it works and responsible AI</span></a>
+        <a id="cta-about-link" href="#how"><span data-t="about">How it works and responsible AI</span></a>
         <a id="cta-console-link" href="/console"><span data-t="console">For coordinators</span></a>
       </p>
     </section>
