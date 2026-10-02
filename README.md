@@ -50,6 +50,29 @@ Product truth: [`docs/SPEC.md`](docs/SPEC.md). Brain API: [`docs/BRAIN_API.md`](
 - **A person checks.** Answers the system is unsure about become yellow lines that the coordinator confirms before a
   case can be marked reviewed.
 
+## Other money on the card (estimates)
+
+When the CalFresh result is "likely", the student card also shows money the student may be missing this year, with CalFresh as the key: Clipper START, PG&E CARE and California LifeLine accept CalFresh as proof, and Medi-Cal is part of the same BenefitsCal application. Up to three optional questions appear on the card, one at a time, and only when the answer could change the yearly total by more than $50: riding transit over breaks, whether anyone claims the student as a tax dependent, and whose name is on the PG&E bill. The call never asks them, and "Not sure" is an answer. For Maria, the made-up student in our demo, three taps take the card from about $3,670 a year of CalFresh ($306 a month × 12) to about $4,220 a year:
+
+| Program | How the card counts it | Maria |
+|---|---|---|
+| CalFresh | 12 × the monthly estimate, if her situation stays the same (the first month is prorated) | about $3,670 |
+| Clipper START | about half-price Muni and BART fares in the 17 break weeks; Gator Pass already covers fall and spring | about $160 |
+| California LifeLine | up to $19 a month off a phone bill, for people no one claims as a tax dependent; a cheaper plan saves less | up to $220 |
+| PG&E CARE | the student's share of the discount, on an assumed $140 monthly bill split 3 ways; the person on the bill applies | about $170 |
+| Medi-Cal | a checkbox on the same application; shown as health coverage, never as dollars | coverage |
+| Tax credits (CalEITC, federal EITC, Young Child Tax Credit) | counted only at age 24 or older when no one claims the student as a dependent; otherwise "maybe", with free help at SF State VITA | maybe about $200, not counted |
+
+Code computes every value from `data/rules/programs_2026.json` (checked October 1, 2026). Each row there carries its official source, its date and the dates it is valid for; when a row expires, its program turns into "check", with no dollars. The language model never produces, estimates or ranks an amount, and the order of the plan (today, when the CalFresh approval letter comes, at tax time) is code too. Each line is rounded down to $10, the card says "about", "up to" or "maybe", and each agency decides. Card answers are stored with the case and deleted with it. The Share button sends only a total rounded down to $100 and the site address, never the card link, a name or any answer. `GP_PROGRAMS=0` turns this part off.
+
+Main sources, with the dates we read them: CDSS ACIN I-40-26 (September 10, 2026); the Clipper START FAQ, SFMTA fares, and SF State's Gator Pass page and academic calendar (October 1, 2026); CPUC, "California LifeLine vs federal Lifeline" (February 18, 2026); the CPUC CARE/FERA page (October 1, 2026) and PG&E's CARE application, form 01-9077 (Rev 6.26, effective June 1, 2026); SAWS 1, the single application for CalFresh, cash aid and Medi-Cal; FTB CalEITC (April 16, 2026) and IRS Rev. Proc. 2025-32 (October 9, 2025). The $140 bill and the 3-way split are our assumptions, and the card shows them.
+
+## How the phone line works
+
+The phone line runs on a hosted voice gateway from 1Lane AI, a student startup project, which let us use it. Everything that decides what to ask and what the answers mean, we built for SF State, and it's open source.
+
+The gateway is not part of this repository and is not open source. It does only the audio work: it answers the call, turns what the caller says into text, and speaks GatorPlate's replies. Everything else (which question to ask next, the CalFresh rules and numbers, the review flags in the coordinator console, and the student card) is decided by the GatorPlate service in this repository, through the small Brain API described in [`docs/BRAIN_API.md`](docs/BRAIN_API.md) (`POST /v1/calls/{call_id}/start`, `/turn` and `/end`). Even the gateway's few fixed lines, such as "One moment.", are GatorPlate's wording, served by `GET /v1/lines`. GatorPlate never receives audio or the caller's phone number, only text. The browser voice page runs the same brain with no gateway at all, so every part of the demo can be checked from this code.
+
 ## Responsible AI
 
 - **Disclosure and consent.** Every conversation starts by saying that GatorPlate is a student-built AI assistant,
@@ -66,10 +89,26 @@ Product truth: [`docs/SPEC.md`](docs/SPEC.md). Brain API: [`docs/BRAIN_API.md`](
   model or from keyword lists that work without it.
 - **Sources and dates.** Every rule and every program amount comes from a dated table with its sources; the console
   shows "Computed by the rules table — not by AI".
-- **Fairness.** English and Spanish are tested with the same cases and reported separately below. Spanish text is
-  marked for native review.
+- **Fairness.** English and Spanish are tested with the same cases and reported separately below. A native speaker
+  reviewed about 106 Spanish app strings on October 2, 2026; landing-page text written that afternoon is not
+  reviewed yet.
 
 Details: [`docs/SPEC.md`](docs/SPEC.md) §9.
+
+## Privacy
+
+- The call audio isn't recorded. GatorPlate never receives audio or the caller's phone number, only text.
+- On the web, your browser's own speech service turns speech into text (the talk page says which one before you start). GatorPlate only gets the text and never stores audio. Typing works too.
+- A case keeps just the answers a coordinator needs, each with a short quote of what the student said, not the conversation.
+- We don't collect Social Security numbers. Digit runs that look like one, or like a card number, are removed before anything else sees the text.
+- GatorPlate never asks about immigration status. If a student mentions it, it is not stored; it only routes the case to the right kind of help.
+- GatorPlate uses no student records.
+- A student can delete their card and answers from the card page.
+- All demo data is deleted the same day.
+
+## Demo phone line
+
+The demo phone number was set up for judging at the SF Hacks × GDG AI Hackathon on October 2, 2026. The phone line is turned off after the event; it can be turned back on for an SF State pilot. The hosted demo at https://gatorplate.fly.dev keeps sample data only and is reset daily, which deletes anything entered there. You can also run GatorPlate, including the browser voice page, locally from this repository.
 
 ## Run it locally
 
@@ -114,7 +153,6 @@ recognition. Silent errors are counted as k/n with the Wilson 95 % upper bound, 
 | What was measured | n | Result |
 |---|---|---|
 | CalFresh rules: golden cases (hand-computed) | 78 | all pass; 12 random cases re-derived by hand: 0 mismatches |
-| CalFresh rules: random fact sets, engine vs an independent hand model | 4,000 | 0 mismatches |
 | Other programs: golden cases (hand-computed) | 14 | all pass; 4 re-derived by hand: 0 mismatches |
 | Scripted simulated students (fake model), tier agreement | 59 calls, 35 personas (24 English on web and phone, 11 Spanish on web) | 59/59 (English 48/48, Spanish 11/11) |
 | — amount exact on likely cases | 44 | 42/44 (English 36/38, Spanish 6/6); mean absolute error $3.09 |
@@ -129,19 +167,26 @@ recognition. Silent errors are counted as k/n with the Wilson 95 % upper bound, 
 | End-to-end scripts / adversarial scripts / contract examples (local, fake model) | 28 / 38 / 8 | all pass; 9 more scripts need a live model and are run only with a key |
 | Replies checked against the output guard, word budgets and phone text rules (adversarial run, earlier build) | 4,042 | 0 problems |
 
+An earlier run of 4,000 random fact sets against an independent hand model found no differences; a larger re-run
+on October 2 found 48 differences in 12,000, all in one situation (a homeless student who pays no shelter cost but has
+a utility bill), which we are reviewing.
+
 The live numbers were measured once, on an earlier build, before the last rounds of fixes; they have not been measured
 again since. The two amounts that differ in the scripted run come from one persona (on both channels): its call ends
 $68 lower, with a yellow line that asks the coordinator to check.
 
 ## How and when we built it
 
-- When: _[to be written by the team]_
-- Who: _[to be written by the team]_
-- How: _[to be written by the team]_
+- **Designed:** September 30 – October 1, 2026: the product spec, a line-by-line check of the rules against the CDSS letters, the test cases and the Brain API contract.
+- **Built:** October 1, 2026, before the event. The organizers told us that is fine: "we do not require the projects to be built from scratch during the event. So as long as your project matches one of the event tracks you will be able to continue working and presenting it to the judges."
+- **At the hackathon, October 2, 2026:** testing and hardening on real phone calls, review, polish and submission.
+- **Not built here:** the hosted voice gateway that answers the phone. It existed before the event and is not part of this submission.
+- **AI tools:** Claude Code (Anthropic) for coding assistance. The app itself makes at most one language-model call per turn (`claude-haiku-4-5`), only to pull answers out of what the student said; every number comes from the rules table.
+- **Team:** Built by two current SF State students for the SF Hacks × GDG AI Hackathon, Build For SFSU track.
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE).
+MIT; see [`LICENSE`](LICENSE). The license covers the code in this repository only. It does not cover the hosted voice gateway or the 1Lane AI name. Third-party material keeps its own license; see [`NOTICE.md`](NOTICE.md) (the Archivo font is under the SIL Open Font License 1.1).
 
 ## Notices
 
