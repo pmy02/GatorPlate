@@ -2,6 +2,7 @@
   "id": "maria_g1",
   "version": "2026-10-01",
   "title": "Maria, phone, English: likely $306, one flip question, not expedited (demo path)",
+  "appendix": "S01",
   "golden_case": "G1",
   "demo_case": "maria_g1",
   "contract_example": "contracts/examples/maria_phone.json",

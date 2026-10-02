@@ -2,7 +2,7 @@
  {
   "delay_ms": 600,
   "event": {
-   "seq": 101,
+   "seq": 3,
    "type": "case.created",
    "case_id": "c_maria2demo",
    "summary": {
@@ -77,7 +77,7 @@
     "rule_trace": [],
     "privacy_events": [],
     "language_request": null,
-    "table_id": "CA-CalFresh-FFY2027",
+    "table_id": null,
     "card": null,
     "tracking": {
      "applied_at": null,
@@ -294,7 +294,7 @@
  {
   "delay_ms": 400,
   "event": {
-   "seq": 102,
+   "seq": 4,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -317,7 +317,7 @@
  {
   "delay_ms": 2200,
   "event": {
-   "seq": 103,
+   "seq": 5,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -331,16 +331,39 @@
     "who": "student",
     "text": "Yes, that's fine.",
     "lang": "en",
-    "at": "2026-10-02T16:57:12Z"
+    "at": "2026-10-02T16:57:14Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:57:12Z"
+   "at": "2026-10-02T16:57:14Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 6,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 1,
+    "who": "assistant",
+    "text": "Great. Are you an undergrad or a grad student at SF State, and how many units are you taking this term?",
+    "lang": "en",
+    "at": "2026-10-02T16:57:14Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:57:14Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 104,
+   "seq": 7,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -375,7 +398,7 @@
     "consent"
    ],
    "now_asking": "ask.level_units",
-   "now_asking_text": "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+   "now_asking_text": "Are you an undergrad or a grad student at SF State, and how many units are you taking this term?",
    "asked_reason": null,
    "line": null,
    "changed_programs": false,
@@ -407,13 +430,13 @@
     "estimate_range": null,
     "expedited_possible": null,
     "first_month": null,
-    "summary": "",
+    "summary": "1 person",
     "slots": {
      "consent": {
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
@@ -451,7 +474,56 @@
       "hi": null
      }
     ],
-    "rule_trace": [],
+    "rule_trace": [
+     {
+      "step": "student_rule",
+      "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
+      "source": "ACL-24-31",
+      "value": null
+     },
+     {
+      "step": "household",
+      "result": "Buys and cooks food alone → 1 person",
+      "source": "GP-PROJECT",
+      "value": "1"
+     },
+     {
+      "step": "income",
+      "result": "Monthly income: work $0 = gross $0",
+      "source": "ACL-26-16",
+      "value": "0.00"
+     },
+     {
+      "step": "gross_income_test",
+      "result": "Gross $0 ≤ $2,660 (gross income limit, 1 person)",
+      "source": "ACIN-I-40-26",
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$0 · standard deduction −$217 → $0",
+      "source": "CDSS-SHD-270",
+      "value": "0"
+     },
+     {
+      "step": "shelter",
+      "result": "Shelter: $0 − 50% of $0 ($0) → $0",
+      "source": "ACIN-I-40-26",
+      "value": "0"
+     },
+     {
+      "step": "net_income",
+      "result": "Net income: $0 − $0 → $0",
+      "source": "GP-PROJECT",
+      "value": "0"
+     },
+     {
+      "step": "benefit",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
+      "value": "306"
+     }
+    ],
     "privacy_events": [],
     "language_request": null,
     "table_id": "CA-CalFresh-FFY2027",
@@ -669,32 +741,9 @@
   }
  },
  {
-  "delay_ms": 400,
-  "event": {
-   "seq": 105,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 1,
-    "who": "assistant",
-    "text": "Great. Are you an SF State undergrad or grad student, and how many units are you taking this term?",
-    "lang": "en",
-    "at": "2026-10-02T16:57:14Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:57:14Z"
-  }
- },
- {
   "delay_ms": 2200,
   "event": {
-   "seq": 106,
+   "seq": 8,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -708,16 +757,39 @@
     "who": "student",
     "text": "I'm an SF State undergrad, a junior, and I'm taking 12 units.",
     "lang": "en",
-    "at": "2026-10-02T16:57:26Z"
+    "at": "2026-10-02T16:57:28Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:57:26Z"
+   "at": "2026-10-02T16:57:28Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 9,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 2,
+    "who": "assistant",
+    "text": "Got it. How old are you, and who do you live with?",
+    "lang": "en",
+    "at": "2026-10-02T16:57:28Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:57:28Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 107,
+   "seq": 10,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -791,14 +863,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:28Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -877,7 +949,56 @@
       "hi": null
      }
     ],
-    "rule_trace": [],
+    "rule_trace": [
+     {
+      "step": "student_rule",
+      "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
+      "source": "ACL-24-31",
+      "value": null
+     },
+     {
+      "step": "household",
+      "result": "Buys and cooks food alone → 1 person",
+      "source": "GP-PROJECT",
+      "value": "1"
+     },
+     {
+      "step": "income",
+      "result": "Monthly income: work $0 = gross $0",
+      "source": "ACL-26-16",
+      "value": "0.00"
+     },
+     {
+      "step": "gross_income_test",
+      "result": "Gross $0 ≤ $2,660 (gross income limit, 1 person)",
+      "source": "ACIN-I-40-26",
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$0 · standard deduction −$217 → $0",
+      "source": "CDSS-SHD-270",
+      "value": "0"
+     },
+     {
+      "step": "shelter",
+      "result": "Shelter: $0 − 50% of $0 ($0) → $0",
+      "source": "ACIN-I-40-26",
+      "value": "0"
+     },
+     {
+      "step": "net_income",
+      "result": "Net income: $0 − $0 → $0",
+      "source": "GP-PROJECT",
+      "value": "0"
+     },
+     {
+      "step": "benefit",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
+      "value": "306"
+     }
+    ],
     "privacy_events": [],
     "language_request": null,
     "table_id": "CA-CalFresh-FFY2027",
@@ -1095,32 +1216,9 @@
   }
  },
  {
-  "delay_ms": 400,
-  "event": {
-   "seq": 108,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 2,
-    "who": "assistant",
-    "text": "Thanks. How old are you, and who do you live with?",
-    "lang": "en",
-    "at": "2026-10-02T16:57:28Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:57:28Z"
-  }
- },
- {
   "delay_ms": 2200,
   "event": {
-   "seq": 109,
+   "seq": 11,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -1134,16 +1232,39 @@
     "who": "student",
     "text": "I'm 20, and I live with two roommates.",
     "lang": "en",
-    "at": "2026-10-02T16:57:40Z"
+    "at": "2026-10-02T16:57:42Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:57:40Z"
+   "at": "2026-10-02T16:57:42Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 12,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 3,
+    "who": "assistant",
+    "text": "Thanks. Do you buy and cook food with your roommates, or separately?",
+    "lang": "en",
+    "at": "2026-10-02T16:57:42Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:57:42Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 110,
+   "seq": 13,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -1219,14 +1340,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:42Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -1239,7 +1360,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:42Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -1252,7 +1373,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:42Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -1380,7 +1501,56 @@
       "hi": null
      }
     ],
-    "rule_trace": [],
+    "rule_trace": [
+     {
+      "step": "student_rule",
+      "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
+      "source": "ACL-24-31",
+      "value": null
+     },
+     {
+      "step": "household",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
+      "value": "1"
+     },
+     {
+      "step": "income",
+      "result": "Monthly income: work $0 = gross $0",
+      "source": "ACL-26-16",
+      "value": "0.00"
+     },
+     {
+      "step": "gross_income_test",
+      "result": "Gross $0 ≤ $2,660 (gross income limit, 1 person)",
+      "source": "ACIN-I-40-26",
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$0 · standard deduction −$217 → $0",
+      "source": "CDSS-SHD-270",
+      "value": "0"
+     },
+     {
+      "step": "shelter",
+      "result": "Shelter: $0 − 50% of $0 ($0) → $0",
+      "source": "ACIN-I-40-26",
+      "value": "0"
+     },
+     {
+      "step": "net_income",
+      "result": "Net income: $0 − $0 → $0",
+      "source": "GP-PROJECT",
+      "value": "0"
+     },
+     {
+      "step": "benefit",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
+      "value": "306"
+     }
+    ],
     "privacy_events": [],
     "language_request": null,
     "table_id": "CA-CalFresh-FFY2027",
@@ -1598,32 +1768,9 @@
   }
  },
  {
-  "delay_ms": 400,
-  "event": {
-   "seq": 111,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 3,
-    "who": "assistant",
-    "text": "Got it. Do you buy and cook food with your roommates, or separately?",
-    "lang": "en",
-    "at": "2026-10-02T16:57:42Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:57:42Z"
-  }
- },
- {
   "delay_ms": 2200,
   "event": {
-   "seq": 112,
+   "seq": 14,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -1637,16 +1784,39 @@
     "who": "student",
     "text": "Separately.",
     "lang": "en",
-    "at": "2026-10-02T16:57:54Z"
+    "at": "2026-10-02T16:57:56Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:57:54Z"
+   "at": "2026-10-02T16:57:56Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 15,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 4,
+    "who": "assistant",
+    "text": "Thanks. About how much do you earn a month from work before taxes, not counting financial aid, and does anyone give you cash?",
+    "lang": "en",
+    "at": "2026-10-02T16:57:56Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:57:56Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 113,
+   "seq": 16,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -1719,14 +1889,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:56Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -1739,7 +1909,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:56Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -1752,7 +1922,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:56Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -1765,7 +1935,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:56Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "lives_with_parent": {
       "value": "false",
@@ -1778,7 +1948,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:56Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates": {
       "value": "true",
@@ -1791,7 +1961,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:56Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates_count": {
       "value": "2",
@@ -1804,7 +1974,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:57:56Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "household_food": {
       "value": "separate",
@@ -1815,7 +1985,7 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 4,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
       "updated_at": "2026-10-02T16:57:56Z"
      }
@@ -1914,7 +2084,56 @@
       "hi": null
      }
     ],
-    "rule_trace": [],
+    "rule_trace": [
+     {
+      "step": "student_rule",
+      "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
+      "source": "ACL-24-31",
+      "value": null
+     },
+     {
+      "step": "household",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
+      "value": "1"
+     },
+     {
+      "step": "income",
+      "result": "Monthly income: work $0 = gross $0",
+      "source": "ACL-26-16",
+      "value": "0.00"
+     },
+     {
+      "step": "gross_income_test",
+      "result": "Gross $0 ≤ $2,660 (gross income limit, 1 person)",
+      "source": "ACIN-I-40-26",
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$0 · standard deduction −$217 → $0",
+      "source": "CDSS-SHD-270",
+      "value": "0"
+     },
+     {
+      "step": "shelter",
+      "result": "Shelter: $0 − 50% of $0 ($0) → $0",
+      "source": "ACIN-I-40-26",
+      "value": "0"
+     },
+     {
+      "step": "net_income",
+      "result": "Net income: $0 − $0 → $0",
+      "source": "GP-PROJECT",
+      "value": "0"
+     },
+     {
+      "step": "benefit",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
+      "value": "306"
+     }
+    ],
     "privacy_events": [],
     "language_request": null,
     "table_id": "CA-CalFresh-FFY2027",
@@ -2132,32 +2351,9 @@
   }
  },
  {
-  "delay_ms": 400,
-  "event": {
-   "seq": 114,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 4,
-    "who": "assistant",
-    "text": "Okay. About how much do you earn a month from work before taxes, not counting financial aid, and does anyone give you cash?",
-    "lang": "en",
-    "at": "2026-10-02T16:57:56Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:57:56Z"
-  }
- },
- {
   "delay_ms": 2200,
   "event": {
-   "seq": 115,
+   "seq": 17,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -2171,16 +2367,39 @@
     "who": "student",
     "text": "I work at the campus library, about 900 a month. Nobody gives me cash.",
     "lang": "en",
-    "at": "2026-10-02T16:58:08Z"
+    "at": "2026-10-02T16:58:10Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:58:08Z"
+   "at": "2026-10-02T16:58:10Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 18,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 5,
+    "who": "assistant",
+    "text": "Got it — about nine hundred dollars a month from work. What's your share of the rent each month?",
+    "lang": "en",
+    "at": "2026-10-02T16:58:10Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:58:10Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 116,
+   "seq": 19,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -2216,7 +2435,7 @@
     "other_cash_monthly"
    ],
    "now_asking": "ask.rent",
-   "now_asking_text": "How much is your share of the rent each month?",
+   "now_asking_text": "What's your share of the rent each month?",
    "asked_reason": null,
    "line": null,
    "changed_programs": false,
@@ -2254,14 +2473,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -2274,7 +2493,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -2287,7 +2506,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -2300,7 +2519,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "lives_with_parent": {
       "value": "false",
@@ -2313,7 +2532,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates": {
       "value": "true",
@@ -2326,7 +2545,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates_count": {
       "value": "2",
@@ -2339,7 +2558,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "household_food": {
       "value": "separate",
@@ -2350,9 +2569,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 4,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:10Z"
+      "updated_at": "2026-10-02T16:57:56Z"
      },
      "earned_monthly": {
       "value": "900.00",
@@ -2496,7 +2715,56 @@
       "hi": null
      }
     ],
-    "rule_trace": [],
+    "rule_trace": [
+     {
+      "step": "student_rule",
+      "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
+      "source": "ACL-24-31",
+      "value": null
+     },
+     {
+      "step": "household",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
+      "value": "1"
+     },
+     {
+      "step": "income",
+      "result": "Monthly income: work $900 = gross $900",
+      "source": "ACL-26-16",
+      "value": "900.00"
+     },
+     {
+      "step": "gross_income_test",
+      "result": "Gross $900 ≤ $2,660 (gross income limit, 1 person)",
+      "source": "ACIN-I-40-26",
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$180 · standard deduction −$217 → $503",
+      "source": "CDSS-SHD-270",
+      "value": "503.0000"
+     },
+     {
+      "step": "shelter",
+      "result": "Shelter: $0 − 50% of $503 ($251.50) → $0",
+      "source": "ACIN-I-40-26",
+      "value": "0"
+     },
+     {
+      "step": "net_income",
+      "result": "Net income: $503 − $0 → $503",
+      "source": "GP-PROJECT",
+      "value": "503"
+     },
+     {
+      "step": "benefit",
+      "result": "Estimate: $306 − 30% × $503 ($151) = $155",
+      "source": "7-CFR-273",
+      "value": "155"
+     }
+    ],
     "privacy_events": [],
     "language_request": null,
     "table_id": "CA-CalFresh-FFY2027",
@@ -2714,32 +2982,9 @@
   }
  },
  {
-  "delay_ms": 400,
-  "event": {
-   "seq": 117,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 5,
-    "who": "assistant",
-    "text": "Got it — about nine hundred dollars a month from work. How much is your share of the rent each month?",
-    "lang": "en",
-    "at": "2026-10-02T16:58:10Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:58:10Z"
-  }
- },
- {
   "delay_ms": 2200,
   "event": {
-   "seq": 118,
+   "seq": 20,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -2753,16 +2998,39 @@
     "who": "student",
     "text": "Eleven hundred.",
     "lang": "en",
-    "at": "2026-10-02T16:58:22Z"
+    "at": "2026-10-02T16:58:24Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:58:22Z"
+   "at": "2026-10-02T16:58:24Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 21,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 6,
+    "who": "assistant",
+    "text": "Okay — eleven hundred dollars a month. Another quick one. Does anyone, like a parent, pay part of your rent straight to your landlord?",
+    "lang": "en",
+    "at": "2026-10-02T16:58:24Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:58:24Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 119,
+   "seq": 22,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -2781,17 +3049,17 @@
     "phase": "flip",
     "status": "new",
     "ended_early": false,
-    "tier": null,
-    "reason_code": null,
-    "estimate_monthly": null,
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306,
     "estimate_is_floor": false,
     "expedited_possible": null,
     "yellow_open": 0,
     "yellow_total": 0,
     "asked_count": 6,
-    "skipped_count": 2,
+    "skipped_count": 0,
     "next_deadline": null,
-    "found_display": null
+    "found_display": 3670
    },
    "changed_slots": [
     "rent_share"
@@ -2821,10 +3089,10 @@
     "turn_count": 6,
     "ended_reason": null,
     "ended_early": false,
-    "tier": null,
-    "reason_code": null,
+    "tier": "likely",
+    "reason_code": "likely",
     "route_override": null,
-    "estimate_monthly": null,
+    "estimate_monthly": 306,
     "estimate_is_floor": false,
     "estimate_range": {
      "lo": 155,
@@ -2832,21 +3100,28 @@
      "settled": false
     },
     "expedited_possible": null,
-    "first_month": null,
+    "first_month": {
+     "apply_date": "2026-10-02",
+     "filed_on": "2026-10-02",
+     "amount": 296,
+     "days_counted": 30,
+     "month_label": "October",
+     "estimate": true
+    },
     "summary": "Undergrad · 1 person · work $900 · rent $1,100",
     "slots": {
      "consent": {
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -2859,7 +3134,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -2872,7 +3147,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -2885,7 +3160,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "lives_with_parent": {
       "value": "false",
@@ -2898,7 +3173,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates": {
       "value": "true",
@@ -2911,7 +3186,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates_count": {
       "value": "2",
@@ -2924,7 +3199,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "household_food": {
       "value": "separate",
@@ -2935,9 +3210,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 4,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:57:56Z"
      },
      "earned_monthly": {
       "value": "900.00",
@@ -2950,7 +3225,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "other_cash_monthly": {
       "value": "0.00",
@@ -2963,7 +3238,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:24Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "rent_share": {
       "value": "1100.00",
@@ -2974,7 +3249,7 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 6,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
       "updated_at": "2026-10-02T16:58:24Z"
      }
@@ -3055,27 +3330,7 @@
       ]
      }
     ],
-    "skipped": [
-     {
-      "slot": "heat_cool",
-      "reason": "no_effect",
-      "detail": "Not asked — heating or cooling bill, same estimate either way",
-      "values": [
-       306,
-       306
-      ]
-     },
-     {
-      "slot": "other_utils",
-      "reason": "no_effect",
-      "detail": "Not asked — other utility bills, same estimate either way",
-      "values": [
-       306,
-       306,
-       306
-      ]
-     }
-    ],
+    "skipped": [],
     "timeline": [
      {
       "turn": 1,
@@ -3137,7 +3392,56 @@
       "hi": 306
      }
     ],
-    "rule_trace": [],
+    "rule_trace": [
+     {
+      "step": "student_rule",
+      "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
+      "source": "ACL-24-31",
+      "value": null
+     },
+     {
+      "step": "household",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
+      "value": "1"
+     },
+     {
+      "step": "income",
+      "result": "Monthly income: work $900 = gross $900",
+      "source": "ACL-26-16",
+      "value": "900.00"
+     },
+     {
+      "step": "gross_income_test",
+      "result": "Gross $900 ≤ $2,660 (gross income limit, 1 person)",
+      "source": "ACIN-I-40-26",
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$180 · standard deduction −$217 → $503",
+      "source": "CDSS-SHD-270",
+      "value": "503.0000"
+     },
+     {
+      "step": "shelter",
+      "result": "Shelter: $1,100 − 50% of $503 ($251.50) = $848.50 → capped at $769",
+      "source": "ACIN-I-40-26",
+      "value": "769"
+     },
+     {
+      "step": "net_income",
+      "result": "Net income: $503 − $769 → $0",
+      "source": "GP-PROJECT",
+      "value": "0"
+     },
+     {
+      "step": "benefit",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
+      "value": "306"
+     }
+    ],
     "privacy_events": [],
     "language_request": null,
     "table_id": "CA-CalFresh-FFY2027",
@@ -3179,17 +3483,17 @@
     "phase": "flip",
     "status": "new",
     "ended_early": false,
-    "tier": null,
-    "reason_code": null,
-    "estimate_monthly": null,
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306,
     "estimate_is_floor": false,
     "expedited_possible": null,
     "yellow_open": 0,
     "yellow_total": 0,
     "asked_count": 6,
-    "skipped_count": 2,
+    "skipped_count": 0,
     "next_deadline": null,
-    "found_display": null
+    "found_display": 3670
    },
    "card_url": null,
    "qr_svg_url": null,
@@ -3351,36 +3655,220 @@
      }
     ]
    },
-   "programs": null
-  }
- },
- {
-  "delay_ms": 400,
-  "event": {
-   "seq": 120,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 6,
-    "who": "assistant",
-    "text": "Got it — eleven hundred dollars a month. One more question. Does anyone, like a parent, pay part of your rent straight to your landlord?",
-    "lang": "en",
-    "at": "2026-10-02T16:58:24Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:58:24Z"
+   "programs": {
+    "table_id": "GP-Programs-2026",
+    "checked": "2026-10-01",
+    "mode": "full",
+    "calfresh_yearly": 3672,
+    "found_yearly": 3672,
+    "found_display": 3670,
+    "share_display": 3600,
+    "claimed_display": 0,
+    "lines": [
+     {
+      "id": "calfresh",
+      "status": "likely",
+      "value_yearly": 3672,
+      "display_yearly": 3670,
+      "counted": true,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "today",
+      "order": 1,
+      "apply_by": null,
+      "vars": {
+       "value": "3672",
+       "calfresh_month": "306"
+      },
+      "note_keys": [],
+      "basis": [
+       "12 × $306 a month = $3,672",
+       "display $3,670"
+      ],
+      "source_ids": [
+       "CA-FY2027"
+      ],
+      "applied": false
+     },
+     {
+      "id": "medi_cal",
+      "status": "coverage",
+      "value_yearly": 0,
+      "display_yearly": 0,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "today",
+      "order": 2,
+      "apply_by": null,
+      "vars": {},
+      "note_keys": [
+       "medi_cal.if_claimed"
+      ],
+      "basis": [
+       "magi_monthly $900 a month ≤ $1,836 (medi_cal.limit_138, 1 person)",
+       "coverage: health coverage, $0 cash"
+      ],
+      "source_ids": [
+       "HHS-POVERTY-2026",
+       "DHCS-ACWDL-26-01",
+       "ECFR-42-435-603",
+       "SAWS-1",
+       "DHCS-HR1-PLAN",
+       "DHCS-SPA-22-0045",
+       "DHCS-ACWDL-25-33",
+       "SFSU-SHS-INSURANCE"
+      ],
+      "applied": false
+     },
+     {
+      "id": "clipper_start",
+      "status": "check",
+      "value_yearly": null,
+      "display_yearly": null,
+      "counted": false,
+      "range_lo": 98,
+      "range_hi": 440,
+      "stage": "after_approval",
+      "order": 3,
+      "apply_by": "2026-11-19",
+      "vars": {
+       "lo": "98",
+       "hi": "440"
+      },
+      "note_keys": [],
+      "basis": [
+       "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+       "($11.40 − $5.60) × 17 break weeks = $98.60 → $98",
+       "10 rides a week with BART: 10 × $5.18 × 0.50 × 17 break weeks = $440.30 → $440"
+      ],
+      "source_ids": [
+       "CLIPPER-START-FAQ",
+       "CLIPPER-START-APP",
+       "MTC-CALFRESH-VERIFY",
+       "SFMTA-FARES",
+       "SFMTA-LIFELINE",
+       "BART-FARES-2026",
+       "SFSU-GATOR-PASS",
+       "SFSU-ACAD-CAL"
+      ],
+      "applied": false
+     },
+     {
+      "id": "lifeline",
+      "status": "check",
+      "value_yearly": 228,
+      "display_yearly": 220,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "after_approval",
+      "order": 4,
+      "apply_by": null,
+      "vars": {
+       "value": "228",
+       "fed": "111"
+      },
+      "note_keys": [],
+      "basis": [
+       "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+       "shown only, never counted: 12 × $9.25 a month = $111 → $111"
+      ],
+      "source_ids": [
+       "CPUC-LIFELINE-2026",
+       "CPUC-LIFELINE-ELIG",
+       "ECFR-47-54-403"
+      ],
+      "applied": false
+     },
+     {
+      "id": "care",
+      "status": "check",
+      "value_yearly": 170,
+      "display_yearly": 170,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "after_approval",
+      "order": 5,
+      "apply_by": null,
+      "vars": {
+       "value": "170",
+       "household": "512",
+       "bill": "140",
+       "n": "3",
+       "count": "3"
+      },
+      "note_keys": [],
+      "basis": [
+       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home",
+       "$512.40 ÷ 3 people on the bill = $170.80 → $170"
+      ],
+      "source_ids": [
+       "PGE-CARE",
+       "PGE-FORM-01-9077",
+       "PGE-RULE-19-1",
+       "CPUC-CARE-FERA",
+       "PGE-ELEC-ADVISORY-0326",
+       "PGE-GAS-ADVISORY-0326",
+       "SFSU-HOUSING-FEES"
+      ],
+      "applied": false
+     },
+     {
+      "id": "tax_credits",
+      "status": "maybe",
+      "value_yearly": 204,
+      "display_yearly": 200,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "tax_time",
+      "order": 6,
+      "apply_by": null,
+      "vars": {
+       "value": "204"
+      },
+      "note_keys": [
+       "tax.id_note",
+       "tax.unfiled_2025"
+      ],
+      "basis": [
+       "E = 12 × the monthly pay = $10,800 (the same pay all year)",
+       "CalEITC (2025 table) $204 + federal EITC $0 (no-child federal EITC only at ages 25–64) = $204"
+      ],
+      "source_ids": [
+       "FTB-CALEITC",
+       "FTB-3514-2025",
+       "FTB-YCTC",
+       "IRS-RP-2025-32",
+       "IRS-EITC-WHO",
+       "IRS-PUB-596",
+       "SFSU-VITA",
+       "CDSS-ACIN-I-87-22"
+      ],
+      "applied": false
+     }
+    ],
+    "open_questions": [
+     "break_transit",
+     "tax_dependent",
+     "pge_bill"
+    ],
+    "next_question": "break_transit",
+    "question_spreads": {
+     "break_transit": 440,
+     "tax_dependent": 228,
+     "pge_bill": 170
+    },
+    "console_notes": []
+   }
   }
  },
  {
   "delay_ms": 2200,
   "event": {
-   "seq": 121,
+   "seq": 23,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -3394,16 +3882,39 @@
     "who": "student",
     "text": "No.",
     "lang": "en",
-    "at": "2026-10-02T16:58:36Z"
+    "at": "2026-10-02T16:58:38Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:58:36Z"
+   "at": "2026-10-02T16:58:38Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 24,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 7,
+    "who": "assistant",
+    "text": "Based on what you told me, you may get about three hundred six dollars a month. The county makes the final decision. Roughly how much money do you have right now, in cash and in the bank?",
+    "lang": "en",
+    "at": "2026-10-02T16:58:38Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:58:38Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 122,
+   "seq": 25,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -3432,7 +3943,7 @@
     "asked_count": 7,
     "skipped_count": 2,
     "next_deadline": null,
-    "found_display": null
+    "found_display": 3670
    },
    "changed_slots": [
     "rent_paid_by_others_to_landlord"
@@ -3487,14 +3998,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -3507,7 +4018,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -3520,7 +4031,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -3533,7 +4044,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "lives_with_parent": {
       "value": "false",
@@ -3546,7 +4057,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates": {
       "value": "true",
@@ -3559,7 +4070,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates_count": {
       "value": "2",
@@ -3572,7 +4083,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "household_food": {
       "value": "separate",
@@ -3583,9 +4094,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 4,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:57:56Z"
      },
      "earned_monthly": {
       "value": "900.00",
@@ -3598,7 +4109,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "other_cash_monthly": {
       "value": "0.00",
@@ -3611,7 +4122,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "rent_share": {
       "value": "1100.00",
@@ -3622,20 +4133,20 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 6,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:38Z"
+      "updated_at": "2026-10-02T16:58:24Z"
      },
      "rent_paid_by_others_to_landlord": {
       "value": "0.00",
       "display": "$0/mo",
       "state": "clear",
-      "heard": "No",
+      "heard": "No.",
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 7,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
       "updated_at": "2026-10-02T16:58:38Z"
      }
@@ -3822,43 +4333,49 @@
      {
       "step": "student_rule",
       "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
-      "source": "ACL-26-25",
+      "source": "ACL-24-31",
       "value": null
      },
      {
       "step": "household",
-      "result": "Lives with roommates, buys food separately → 1 person",
-      "source": "ACL-24-31",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
       "value": "1"
      },
      {
-      "step": "gross_income_test",
-      "result": "Gross $900 ≤ $2,660 (200% limit, 1 person)",
-      "source": "ACIN-I-40-26",
+      "step": "income",
+      "result": "Monthly income: work $900 = gross $900",
+      "source": "ACL-26-16",
       "value": "900.00"
      },
      {
-      "step": "adjusted_income",
-      "result": "$900 − $180 (20% of earnings) − $217 standard deduction = $503",
+      "step": "gross_income_test",
+      "result": "Gross $900 ≤ $2,660 (gross income limit, 1 person)",
       "source": "ACIN-I-40-26",
-      "value": "503"
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$180 · standard deduction −$217 → $503",
+      "source": "CDSS-SHD-270",
+      "value": "503.0000"
      },
      {
       "step": "shelter",
-      "result": "$1,100 rent + $0 utilities − $251.50 (half of $503) = $848.50 → capped at $769",
+      "result": "Shelter: $1,100 − 50% of $503 ($251.50) = $848.50 → capped at $769",
       "source": "ACIN-I-40-26",
       "value": "769"
      },
      {
       "step": "net_income",
-      "result": "$503 − $769 → $0",
-      "source": "CDSS-SHD-270",
+      "result": "Net income: $503 − $769 → $0",
+      "source": "GP-PROJECT",
       "value": "0"
      },
      {
       "step": "benefit",
-      "result": "$306 − 30% × $0 = $306",
-      "source": "ACIN-I-40-26",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
       "value": "306"
      }
     ],
@@ -3913,7 +4430,7 @@
     "asked_count": 7,
     "skipped_count": 2,
     "next_deadline": null,
-    "found_display": null
+    "found_display": 3670
    },
    "card_url": null,
    "qr_svg_url": null,
@@ -4075,36 +4592,220 @@
      }
     ]
    },
-   "programs": null
-  }
- },
- {
-  "delay_ms": 400,
-  "event": {
-   "seq": 123,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 7,
-    "who": "assistant",
-    "text": "Based on what you told me, you may get about three hundred six dollars a month. The county makes the final decision. Roughly how much money do you have right now, in cash and in the bank?",
-    "lang": "en",
-    "at": "2026-10-02T16:58:38Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:58:38Z"
+   "programs": {
+    "table_id": "GP-Programs-2026",
+    "checked": "2026-10-01",
+    "mode": "full",
+    "calfresh_yearly": 3672,
+    "found_yearly": 3672,
+    "found_display": 3670,
+    "share_display": 3600,
+    "claimed_display": 0,
+    "lines": [
+     {
+      "id": "calfresh",
+      "status": "likely",
+      "value_yearly": 3672,
+      "display_yearly": 3670,
+      "counted": true,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "today",
+      "order": 1,
+      "apply_by": null,
+      "vars": {
+       "value": "3672",
+       "calfresh_month": "306"
+      },
+      "note_keys": [],
+      "basis": [
+       "12 × $306 a month = $3,672",
+       "display $3,670"
+      ],
+      "source_ids": [
+       "CA-FY2027"
+      ],
+      "applied": false
+     },
+     {
+      "id": "medi_cal",
+      "status": "coverage",
+      "value_yearly": 0,
+      "display_yearly": 0,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "today",
+      "order": 2,
+      "apply_by": null,
+      "vars": {},
+      "note_keys": [
+       "medi_cal.if_claimed"
+      ],
+      "basis": [
+       "magi_monthly $900 a month ≤ $1,836 (medi_cal.limit_138, 1 person)",
+       "coverage: health coverage, $0 cash"
+      ],
+      "source_ids": [
+       "HHS-POVERTY-2026",
+       "DHCS-ACWDL-26-01",
+       "ECFR-42-435-603",
+       "SAWS-1",
+       "DHCS-HR1-PLAN",
+       "DHCS-SPA-22-0045",
+       "DHCS-ACWDL-25-33",
+       "SFSU-SHS-INSURANCE"
+      ],
+      "applied": false
+     },
+     {
+      "id": "clipper_start",
+      "status": "check",
+      "value_yearly": null,
+      "display_yearly": null,
+      "counted": false,
+      "range_lo": 98,
+      "range_hi": 440,
+      "stage": "after_approval",
+      "order": 3,
+      "apply_by": "2026-11-19",
+      "vars": {
+       "lo": "98",
+       "hi": "440"
+      },
+      "note_keys": [],
+      "basis": [
+       "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+       "($11.40 − $5.60) × 17 break weeks = $98.60 → $98",
+       "10 rides a week with BART: 10 × $5.18 × 0.50 × 17 break weeks = $440.30 → $440"
+      ],
+      "source_ids": [
+       "CLIPPER-START-FAQ",
+       "CLIPPER-START-APP",
+       "MTC-CALFRESH-VERIFY",
+       "SFMTA-FARES",
+       "SFMTA-LIFELINE",
+       "BART-FARES-2026",
+       "SFSU-GATOR-PASS",
+       "SFSU-ACAD-CAL"
+      ],
+      "applied": false
+     },
+     {
+      "id": "lifeline",
+      "status": "check",
+      "value_yearly": 228,
+      "display_yearly": 220,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "after_approval",
+      "order": 4,
+      "apply_by": null,
+      "vars": {
+       "value": "228",
+       "fed": "111"
+      },
+      "note_keys": [],
+      "basis": [
+       "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+       "shown only, never counted: 12 × $9.25 a month = $111 → $111"
+      ],
+      "source_ids": [
+       "CPUC-LIFELINE-2026",
+       "CPUC-LIFELINE-ELIG",
+       "ECFR-47-54-403"
+      ],
+      "applied": false
+     },
+     {
+      "id": "care",
+      "status": "check",
+      "value_yearly": 170,
+      "display_yearly": 170,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "after_approval",
+      "order": 5,
+      "apply_by": null,
+      "vars": {
+       "value": "170",
+       "household": "512",
+       "bill": "140",
+       "n": "3",
+       "count": "3"
+      },
+      "note_keys": [],
+      "basis": [
+       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home",
+       "$512.40 ÷ 3 people on the bill = $170.80 → $170"
+      ],
+      "source_ids": [
+       "PGE-CARE",
+       "PGE-FORM-01-9077",
+       "PGE-RULE-19-1",
+       "CPUC-CARE-FERA",
+       "PGE-ELEC-ADVISORY-0326",
+       "PGE-GAS-ADVISORY-0326",
+       "SFSU-HOUSING-FEES"
+      ],
+      "applied": false
+     },
+     {
+      "id": "tax_credits",
+      "status": "maybe",
+      "value_yearly": 204,
+      "display_yearly": 200,
+      "counted": false,
+      "range_lo": null,
+      "range_hi": null,
+      "stage": "tax_time",
+      "order": 6,
+      "apply_by": null,
+      "vars": {
+       "value": "204"
+      },
+      "note_keys": [
+       "tax.id_note",
+       "tax.unfiled_2025"
+      ],
+      "basis": [
+       "E = 12 × the monthly pay = $10,800 (the same pay all year)",
+       "CalEITC (2025 table) $204 + federal EITC $0 (no-child federal EITC only at ages 25–64) = $204"
+      ],
+      "source_ids": [
+       "FTB-CALEITC",
+       "FTB-3514-2025",
+       "FTB-YCTC",
+       "IRS-RP-2025-32",
+       "IRS-EITC-WHO",
+       "IRS-PUB-596",
+       "SFSU-VITA",
+       "CDSS-ACIN-I-87-22"
+      ],
+      "applied": false
+     }
+    ],
+    "open_questions": [
+     "break_transit",
+     "tax_dependent",
+     "pge_bill"
+    ],
+    "next_question": "break_transit",
+    "question_spreads": {
+     "break_transit": 440,
+     "tax_dependent": 228,
+     "pge_bill": 170
+    },
+    "console_notes": []
+   }
   }
  },
  {
   "delay_ms": 2200,
   "event": {
-   "seq": 124,
+   "seq": 26,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -4118,16 +4819,39 @@
     "who": "student",
     "text": "About a thousand.",
     "lang": "en",
-    "at": "2026-10-02T16:58:50Z"
+    "at": "2026-10-02T16:58:52Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:58:50Z"
+   "at": "2026-10-02T16:58:52Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 27,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 8,
+    "who": "assistant",
+    "text": "Try to apply today — your first month counts from the day you apply. Your card is ready — scan the QR code on the screen. The SF State CalFresh coordinator is at four one five, three three eight, one two zero three. Anything else?",
+    "lang": "en",
+    "at": "2026-10-02T16:58:52Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:58:52Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 125,
+   "seq": 28,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -4211,14 +4935,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -4231,7 +4955,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -4244,7 +4968,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -4257,7 +4981,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "lives_with_parent": {
       "value": "false",
@@ -4270,7 +4994,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates": {
       "value": "true",
@@ -4283,7 +5007,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates_count": {
       "value": "2",
@@ -4296,7 +5020,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "household_food": {
       "value": "separate",
@@ -4307,9 +5031,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 4,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:57:56Z"
      },
      "earned_monthly": {
       "value": "900.00",
@@ -4322,7 +5046,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "other_cash_monthly": {
       "value": "0.00",
@@ -4335,7 +5059,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "rent_share": {
       "value": "1100.00",
@@ -4346,33 +5070,33 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 6,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:58:24Z"
      },
      "rent_paid_by_others_to_landlord": {
       "value": "0.00",
       "display": "$0/mo",
       "state": "clear",
-      "heard": "No",
+      "heard": "No.",
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 7,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:52Z"
+      "updated_at": "2026-10-02T16:58:38Z"
      },
      "cash_on_hand": {
       "value": "1000.00",
       "display": "$1,000",
       "state": "clear",
-      "heard": "About a thousand",
+      "heard": "a thousand",
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 8,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
       "updated_at": "2026-10-02T16:58:52Z"
      }
@@ -4568,44 +5292,56 @@
      {
       "step": "student_rule",
       "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
-      "source": "ACL-26-25",
+      "source": "ACL-24-31",
       "value": null
      },
      {
       "step": "household",
-      "result": "Lives with roommates, buys food separately → 1 person",
-      "source": "ACL-24-31",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
       "value": "1"
      },
      {
-      "step": "gross_income_test",
-      "result": "Gross $900 ≤ $2,660 (200% limit, 1 person)",
-      "source": "ACIN-I-40-26",
+      "step": "income",
+      "result": "Monthly income: work $900 = gross $900",
+      "source": "ACL-26-16",
       "value": "900.00"
      },
      {
-      "step": "adjusted_income",
-      "result": "$900 − $180 (20% of earnings) − $217 standard deduction = $503",
+      "step": "gross_income_test",
+      "result": "Gross $900 ≤ $2,660 (gross income limit, 1 person)",
       "source": "ACIN-I-40-26",
-      "value": "503"
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$180 · standard deduction −$217 → $503",
+      "source": "CDSS-SHD-270",
+      "value": "503.0000"
      },
      {
       "step": "shelter",
-      "result": "$1,100 rent + $0 utilities − $251.50 (half of $503) = $848.50 → capped at $769",
+      "result": "Shelter: $1,100 − 50% of $503 ($251.50) = $848.50 → capped at $769",
       "source": "ACIN-I-40-26",
       "value": "769"
      },
      {
       "step": "net_income",
-      "result": "$503 − $769 → $0",
-      "source": "CDSS-SHD-270",
+      "result": "Net income: $503 − $769 → $0",
+      "source": "GP-PROJECT",
       "value": "0"
      },
      {
       "step": "benefit",
-      "result": "$306 − 30% × $0 = $306",
-      "source": "ACIN-I-40-26",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
       "value": "306"
+     },
+     {
+      "step": "expedited",
+      "result": "3-day service check: gross $900, cash $1,000, housing $1,100 → no",
+      "source": "MPP-63-301",
+      "value": null
      }
     ],
     "privacy_events": [],
@@ -4613,8 +5349,8 @@
     "table_id": "CA-CalFresh-FFY2027",
     "card": {
      "token": "fixtureMariaCard000001",
-     "short_code": null,
-     "short_code_expires_at": null,
+     "short_code": "000001",
+     "short_code_expires_at": "2026-10-03T16:58:52Z",
      "created_at": "2026-10-02T16:58:52Z",
      "expires_at": "2026-10-09T16:58:52Z"
     },
@@ -4669,7 +5405,7 @@
    },
    "card_url": "/c/fixtureMariaCard000001",
    "qr_svg_url": "/api/cases/c_maria2demo/qr.svg",
-   "short_code": null,
+   "short_code": "000001",
    "can_review": false,
    "allowed_status": [],
    "rules": {
@@ -4854,7 +5590,8 @@
       },
       "note_keys": [],
       "basis": [
-       "12 × $306 a month = $3,672 → display $3,670"
+       "12 × $306 a month = $3,672",
+       "display $3,670"
       ],
       "source_ids": [
        "CA-FY2027"
@@ -4877,12 +5614,18 @@
        "medi_cal.if_claimed"
       ],
       "basis": [
-       "Income $900 a month ≤ $1,836 (138% of the 2026 poverty guideline, 1 person) → coverage, $0 cash"
+       "magi_monthly $900 a month ≤ $1,836 (medi_cal.limit_138, 1 person)",
+       "coverage: health coverage, $0 cash"
       ],
       "source_ids": [
-       "DHCS-ACWDL-26-01",
        "HHS-POVERTY-2026",
-       "SAWS-1"
+       "DHCS-ACWDL-26-01",
+       "ECFR-42-435-603",
+       "SAWS-1",
+       "DHCS-HR1-PLAN",
+       "DHCS-SPA-22-0045",
+       "DHCS-ACWDL-25-33",
+       "SFSU-SHS-INSURANCE"
       ],
       "applied": false
      },
@@ -4903,14 +5646,19 @@
       },
       "note_keys": [],
       "basis": [
-       "1–2 days a week: 4 rides × ($2.85 − $1.40) × 17 weeks = $98.60 → $98",
-       "most weekdays with BART: 10 × $5.18 × 0.50 × 17 weeks = $440.30 → $440"
+       "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+       "($11.40 − $5.60) × 17 break weeks = $98.60 → $98",
+       "10 rides a week with BART: 10 × $5.18 × 0.50 × 17 break weeks = $440.30 → $440"
       ],
       "source_ids": [
        "CLIPPER-START-FAQ",
+       "CLIPPER-START-APP",
+       "MTC-CALFRESH-VERIFY",
        "SFMTA-FARES",
+       "SFMTA-LIFELINE",
        "BART-FARES-2026",
-       "SFSU-GATOR-PASS"
+       "SFSU-GATOR-PASS",
+       "SFSU-ACAD-CAL"
       ],
       "applied": false
      },
@@ -4931,11 +5679,13 @@
       },
       "note_keys": [],
       "basis": [
-       "$19.00 a month × 12 = $228 (a ceiling; a cheaper plan saves less)"
+       "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+       "shown only, never counted: 12 × $9.25 a month = $111 → $111"
       ],
       "source_ids": [
        "CPUC-LIFELINE-2026",
-       "CPUC-LIFELINE-ELIG"
+       "CPUC-LIFELINE-ELIG",
+       "ECFR-47-54-403"
       ],
       "applied": false
      },
@@ -4959,13 +5709,17 @@
       },
       "note_keys": [],
       "basis": [
-       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home; ÷ 3 people = $170.80 → $170"
+       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home",
+       "$512.40 ÷ 3 people on the bill = $170.80 → $170"
       ],
       "source_ids": [
-       "CPUC-CARE-FERA",
-       "PGE-FORM-01-9077",
        "PGE-CARE",
-       "GP-PROJECT"
+       "PGE-FORM-01-9077",
+       "PGE-RULE-19-1",
+       "CPUC-CARE-FERA",
+       "PGE-ELEC-ADVISORY-0326",
+       "PGE-GAS-ADVISORY-0326",
+       "SFSU-HOUSING-FEES"
       ],
       "applied": false
      },
@@ -4988,13 +5742,18 @@
        "tax.unfiled_2025"
       ],
       "basis": [
-       "Earnings 12 × $900 = $10,800 → CalEITC 2025 table $204; age 20: maybe, not counted"
+       "E = 12 × the monthly pay = $10,800 (the same pay all year)",
+       "CalEITC (2025 table) $204 + federal EITC $0 (no-child federal EITC only at ages 25–64) = $204"
       ],
       "source_ids": [
+       "FTB-CALEITC",
        "FTB-3514-2025",
-       "IRS-RP-2025-32",
        "FTB-YCTC",
-       "SFSU-VITA"
+       "IRS-RP-2025-32",
+       "IRS-EITC-WHO",
+       "IRS-PUB-596",
+       "SFSU-VITA",
+       "CDSS-ACIN-I-87-22"
       ],
       "applied": false
      }
@@ -5015,32 +5774,9 @@
   }
  },
  {
-  "delay_ms": 400,
-  "event": {
-   "seq": 126,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 8,
-    "who": "assistant",
-    "text": "Apply today if you can — your first month counts from your application date. Your card is ready — scan the QR code on the screen. The SF State CalFresh coordinator is at four one five, three three eight, one two zero three. Anything else?",
-    "lang": "en",
-    "at": "2026-10-02T16:58:52Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:58:52Z"
-  }
- },
- {
   "delay_ms": 2200,
   "event": {
-   "seq": 127,
+   "seq": 29,
    "type": "live.turn",
    "case_id": "c_maria2demo",
    "summary": null,
@@ -5054,16 +5790,39 @@
     "who": "student",
     "text": "No, thanks.",
     "lang": "en",
-    "at": "2026-10-02T16:59:04Z"
+    "at": "2026-10-02T16:59:06Z"
    },
    "changed_programs": false,
-   "at": "2026-10-02T16:59:04Z"
+   "at": "2026-10-02T16:59:06Z"
+  }
+ },
+ {
+  "delay_ms": 400,
+  "event": {
+   "seq": 30,
+   "type": "live.turn",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": {
+    "case_id": "c_maria2demo",
+    "turn": 9,
+    "who": "assistant",
+    "text": "Thanks for calling GatorPlate. Take care. Goodbye.",
+    "lang": "en",
+    "at": "2026-10-02T16:59:06Z"
+   },
+   "changed_programs": false,
+   "at": "2026-10-02T16:59:06Z"
   }
  },
  {
   "delay_ms": 500,
   "event": {
-   "seq": 128,
+   "seq": 31,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
@@ -5118,7 +5877,7 @@
     "persona": null,
     "phase": "end",
     "turn_count": 9,
-    "ended_reason": null,
+    "ended_reason": "completed",
     "ended_early": false,
     "tier": "likely",
     "reason_code": "likely",
@@ -5145,14 +5904,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -5165,7 +5924,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -5178,7 +5937,7 @@
       "turn": 2,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -5191,7 +5950,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "lives_with_parent": {
       "value": "false",
@@ -5204,7 +5963,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates": {
       "value": "true",
@@ -5217,7 +5976,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates_count": {
       "value": "2",
@@ -5230,7 +5989,7 @@
       "turn": 3,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "household_food": {
       "value": "separate",
@@ -5241,9 +6000,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 4,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:57:56Z"
      },
      "earned_monthly": {
       "value": "900.00",
@@ -5256,7 +6015,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "other_cash_monthly": {
       "value": "0.00",
@@ -5269,7 +6028,7 @@
       "turn": 5,
       "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "rent_share": {
       "value": "1100.00",
@@ -5280,35 +6039,35 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 6,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:58:24Z"
      },
      "rent_paid_by_others_to_landlord": {
       "value": "0.00",
       "display": "$0/mo",
       "state": "clear",
-      "heard": "No",
+      "heard": "No.",
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 7,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:58:38Z"
      },
      "cash_on_hand": {
       "value": "1000.00",
       "display": "$1,000",
       "state": "clear",
-      "heard": "About a thousand",
+      "heard": "a thousand",
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 8,
-      "source": "llm",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:59:06Z"
+      "updated_at": "2026-10-02T16:58:52Z"
      }
     },
     "yellow_lines": [],
@@ -5502,44 +6261,56 @@
      {
       "step": "student_rule",
       "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
-      "source": "ACL-26-25",
+      "source": "ACL-24-31",
       "value": null
      },
      {
       "step": "household",
-      "result": "Lives with roommates, buys food separately → 1 person",
-      "source": "ACL-24-31",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
       "value": "1"
      },
      {
-      "step": "gross_income_test",
-      "result": "Gross $900 ≤ $2,660 (200% limit, 1 person)",
-      "source": "ACIN-I-40-26",
+      "step": "income",
+      "result": "Monthly income: work $900 = gross $900",
+      "source": "ACL-26-16",
       "value": "900.00"
      },
      {
-      "step": "adjusted_income",
-      "result": "$900 − $180 (20% of earnings) − $217 standard deduction = $503",
+      "step": "gross_income_test",
+      "result": "Gross $900 ≤ $2,660 (gross income limit, 1 person)",
       "source": "ACIN-I-40-26",
-      "value": "503"
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$180 · standard deduction −$217 → $503",
+      "source": "CDSS-SHD-270",
+      "value": "503.0000"
      },
      {
       "step": "shelter",
-      "result": "$1,100 rent + $0 utilities − $251.50 (half of $503) = $848.50 → capped at $769",
+      "result": "Shelter: $1,100 − 50% of $503 ($251.50) = $848.50 → capped at $769",
       "source": "ACIN-I-40-26",
       "value": "769"
      },
      {
       "step": "net_income",
-      "result": "$503 − $769 → $0",
-      "source": "CDSS-SHD-270",
+      "result": "Net income: $503 − $769 → $0",
+      "source": "GP-PROJECT",
       "value": "0"
      },
      {
       "step": "benefit",
-      "result": "$306 − 30% × $0 = $306",
-      "source": "ACIN-I-40-26",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
       "value": "306"
+     },
+     {
+      "step": "expedited",
+      "result": "3-day service check: gross $900, cash $1,000, housing $1,100 → no",
+      "source": "MPP-63-301",
+      "value": null
      }
     ],
     "privacy_events": [],
@@ -5547,10 +6318,10 @@
     "table_id": "CA-CalFresh-FFY2027",
     "card": {
      "token": "fixtureMariaCard000001",
-     "short_code": null,
-     "short_code_expires_at": null,
-     "created_at": "2026-10-02T16:59:06Z",
-     "expires_at": "2026-10-09T16:59:06Z"
+     "short_code": "000001",
+     "short_code_expires_at": "2026-10-03T16:58:52Z",
+     "created_at": "2026-10-02T16:58:52Z",
+     "expires_at": "2026-10-09T16:58:52Z"
     },
     "tracking": {
      "applied_at": null,
@@ -5603,7 +6374,7 @@
    },
    "card_url": "/c/fixtureMariaCard000001",
    "qr_svg_url": "/api/cases/c_maria2demo/qr.svg",
-   "short_code": null,
+   "short_code": "000001",
    "can_review": false,
    "allowed_status": [],
    "rules": {
@@ -5788,7 +6559,8 @@
       },
       "note_keys": [],
       "basis": [
-       "12 × $306 a month = $3,672 → display $3,670"
+       "12 × $306 a month = $3,672",
+       "display $3,670"
       ],
       "source_ids": [
        "CA-FY2027"
@@ -5811,12 +6583,18 @@
        "medi_cal.if_claimed"
       ],
       "basis": [
-       "Income $900 a month ≤ $1,836 (138% of the 2026 poverty guideline, 1 person) → coverage, $0 cash"
+       "magi_monthly $900 a month ≤ $1,836 (medi_cal.limit_138, 1 person)",
+       "coverage: health coverage, $0 cash"
       ],
       "source_ids": [
-       "DHCS-ACWDL-26-01",
        "HHS-POVERTY-2026",
-       "SAWS-1"
+       "DHCS-ACWDL-26-01",
+       "ECFR-42-435-603",
+       "SAWS-1",
+       "DHCS-HR1-PLAN",
+       "DHCS-SPA-22-0045",
+       "DHCS-ACWDL-25-33",
+       "SFSU-SHS-INSURANCE"
       ],
       "applied": false
      },
@@ -5837,14 +6615,19 @@
       },
       "note_keys": [],
       "basis": [
-       "1–2 days a week: 4 rides × ($2.85 − $1.40) × 17 weeks = $98.60 → $98",
-       "most weekdays with BART: 10 × $5.18 × 0.50 × 17 weeks = $440.30 → $440"
+       "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+       "($11.40 − $5.60) × 17 break weeks = $98.60 → $98",
+       "10 rides a week with BART: 10 × $5.18 × 0.50 × 17 break weeks = $440.30 → $440"
       ],
       "source_ids": [
        "CLIPPER-START-FAQ",
+       "CLIPPER-START-APP",
+       "MTC-CALFRESH-VERIFY",
        "SFMTA-FARES",
+       "SFMTA-LIFELINE",
        "BART-FARES-2026",
-       "SFSU-GATOR-PASS"
+       "SFSU-GATOR-PASS",
+       "SFSU-ACAD-CAL"
       ],
       "applied": false
      },
@@ -5865,11 +6648,13 @@
       },
       "note_keys": [],
       "basis": [
-       "$19.00 a month × 12 = $228 (a ceiling; a cheaper plan saves less)"
+       "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+       "shown only, never counted: 12 × $9.25 a month = $111 → $111"
       ],
       "source_ids": [
        "CPUC-LIFELINE-2026",
-       "CPUC-LIFELINE-ELIG"
+       "CPUC-LIFELINE-ELIG",
+       "ECFR-47-54-403"
       ],
       "applied": false
      },
@@ -5893,13 +6678,17 @@
       },
       "note_keys": [],
       "basis": [
-       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home; ÷ 3 people = $170.80 → $170"
+       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home",
+       "$512.40 ÷ 3 people on the bill = $170.80 → $170"
       ],
       "source_ids": [
-       "CPUC-CARE-FERA",
-       "PGE-FORM-01-9077",
        "PGE-CARE",
-       "GP-PROJECT"
+       "PGE-FORM-01-9077",
+       "PGE-RULE-19-1",
+       "CPUC-CARE-FERA",
+       "PGE-ELEC-ADVISORY-0326",
+       "PGE-GAS-ADVISORY-0326",
+       "SFSU-HOUSING-FEES"
       ],
       "applied": false
      },
@@ -5922,13 +6711,18 @@
        "tax.unfiled_2025"
       ],
       "basis": [
-       "Earnings 12 × $900 = $10,800 → CalEITC 2025 table $204; age 20: maybe, not counted"
+       "E = 12 × the monthly pay = $10,800 (the same pay all year)",
+       "CalEITC (2025 table) $204 + federal EITC $0 (no-child federal EITC only at ages 25–64) = $204"
       ],
       "source_ids": [
+       "FTB-CALEITC",
        "FTB-3514-2025",
-       "IRS-RP-2025-32",
        "FTB-YCTC",
-       "SFSU-VITA"
+       "IRS-RP-2025-32",
+       "IRS-EITC-WHO",
+       "IRS-PUB-596",
+       "SFSU-VITA",
+       "CDSS-ACIN-I-87-22"
       ],
       "applied": false
      }
@@ -5949,56 +6743,17 @@
   }
  },
  {
-  "delay_ms": 400,
+  "delay_ms": 1200,
   "event": {
-   "seq": 129,
-   "type": "live.turn",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": {
-    "case_id": "c_maria2demo",
-    "turn": 9,
-    "who": "assistant",
-    "text": "Thanks for calling GatorPlate. Good luck. Goodbye.",
-    "lang": "en",
-    "at": "2026-10-02T16:59:06Z"
-   },
-   "changed_programs": false,
-   "at": "2026-10-02T16:59:06Z"
-  }
- },
- {
-  "delay_ms": 1500,
-  "event": {
-   "seq": 130,
-   "type": "live.ended",
-   "case_id": "c_maria2demo",
-   "summary": null,
-   "changed_slots": [],
-   "now_asking": null,
-   "now_asking_text": null,
-   "asked_reason": null,
-   "line": null,
-   "changed_programs": false,
-   "at": "2026-10-02T16:58:58Z"
-  }
- },
- {
-  "delay_ms": 300,
-  "event": {
-   "seq": 131,
+   "seq": 32,
    "type": "case.updated",
    "case_id": "c_maria2demo",
    "summary": {
     "id": "c_maria2demo",
     "code": "K7Q-2FM",
-    "version": 12,
+    "version": 11,
     "created_at": "2026-10-02T16:57:00Z",
-    "updated_at": "2026-10-02T16:58:58Z",
+    "updated_at": "2026-10-02T16:59:10Z",
     "label": "K7Q-2FM",
     "summary": "Undergrad · 1 person · work $900 · rent $1,100",
     "lang": "en",
@@ -6027,22 +6782,22 @@
    "asked_reason": null,
    "line": null,
    "changed_programs": false,
-   "at": "2026-10-02T16:58:58Z"
+   "at": "2026-10-02T16:59:10Z"
   },
   "detail": {
    "case": {
     "id": "c_maria2demo",
     "code": "K7Q-2FM",
-    "version": 12,
+    "version": 11,
     "created_at": "2026-10-02T16:57:00Z",
-    "updated_at": "2026-10-02T16:58:58Z",
+    "updated_at": "2026-10-02T16:59:10Z",
     "lang": "en",
     "channel": "phone",
     "test": false,
     "live": false,
     "status": "new",
     "seeded": false,
-    "persona": "Maria (demo persona)",
+    "persona": null,
     "phase": "end",
     "turn_count": 9,
     "ended_reason": "completed",
@@ -6072,14 +6827,14 @@
       "value": "true",
       "display": "Yes",
       "state": "clear",
-      "heard": "Yes, that's fine",
+      "heard": null,
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 1,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:14Z"
      },
      "level": {
       "value": "undergrad",
@@ -6090,9 +6845,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 2,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "units": {
       "value": "12",
@@ -6103,9 +6858,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 2,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:28Z"
      },
      "age": {
       "value": "20",
@@ -6116,9 +6871,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 3,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "lives_with_parent": {
       "value": "false",
@@ -6129,9 +6884,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 3,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates": {
       "value": "true",
@@ -6142,9 +6897,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 3,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "roommates_count": {
       "value": "2",
@@ -6155,9 +6910,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 3,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:42Z"
      },
      "household_food": {
       "value": "separate",
@@ -6168,9 +6923,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 4,
-      "source": "seed",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:57:56Z"
      },
      "earned_monthly": {
       "value": "900.00",
@@ -6181,9 +6936,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 5,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "other_cash_monthly": {
       "value": "0.00",
@@ -6194,9 +6949,9 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 5,
-      "source": "seed",
+      "source": "llm",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:58:10Z"
      },
      "rent_share": {
       "value": "1100.00",
@@ -6207,35 +6962,35 @@
       "confirmed": false,
       "changed_from": null,
       "turn": 6,
-      "source": "seed",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:58:24Z"
      },
      "rent_paid_by_others_to_landlord": {
       "value": "0.00",
       "display": "$0/mo",
       "state": "clear",
-      "heard": "No",
+      "heard": "No.",
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 7,
-      "source": "seed",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:58:38Z"
      },
      "cash_on_hand": {
       "value": "1000.00",
       "display": "$1,000",
       "state": "clear",
-      "heard": "About a thousand",
+      "heard": "a thousand",
       "heard_en": null,
       "confirmed": false,
       "changed_from": null,
       "turn": 8,
-      "source": "seed",
+      "source": "parser",
       "basis": null,
-      "updated_at": "2026-10-02T16:58:58Z"
+      "updated_at": "2026-10-02T16:58:52Z"
      }
     },
     "yellow_lines": [],
@@ -6429,44 +7184,56 @@
      {
       "step": "student_rule",
       "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
-      "source": "ACL-26-25",
+      "source": "ACL-24-31",
       "value": null
      },
      {
       "step": "household",
-      "result": "Lives with roommates, buys food separately → 1 person",
-      "source": "ACL-24-31",
+      "result": "Buys and cooks food separately from others → 1 person",
+      "source": "GP-PROJECT",
       "value": "1"
      },
      {
-      "step": "gross_income_test",
-      "result": "Gross $900 ≤ $2,660 (200% limit, 1 person)",
-      "source": "ACIN-I-40-26",
+      "step": "income",
+      "result": "Monthly income: work $900 = gross $900",
+      "source": "ACL-26-16",
       "value": "900.00"
      },
      {
-      "step": "adjusted_income",
-      "result": "$900 − $180 (20% of earnings) − $217 standard deduction = $503",
+      "step": "gross_income_test",
+      "result": "Gross $900 ≤ $2,660 (gross income limit, 1 person)",
       "source": "ACIN-I-40-26",
-      "value": "503"
+      "value": null
+     },
+     {
+      "step": "adjusted_income",
+      "result": "Earned-income deduction 20%: −$180 · standard deduction −$217 → $503",
+      "source": "CDSS-SHD-270",
+      "value": "503.0000"
      },
      {
       "step": "shelter",
-      "result": "$1,100 rent + $0 utilities − $251.50 (half of $503) = $848.50 → capped at $769",
+      "result": "Shelter: $1,100 − 50% of $503 ($251.50) = $848.50 → capped at $769",
       "source": "ACIN-I-40-26",
       "value": "769"
      },
      {
       "step": "net_income",
-      "result": "$503 − $769 → $0",
-      "source": "CDSS-SHD-270",
+      "result": "Net income: $503 − $769 → $0",
+      "source": "GP-PROJECT",
       "value": "0"
      },
      {
       "step": "benefit",
-      "result": "$306 − 30% × $0 = $306",
-      "source": "ACIN-I-40-26",
+      "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+      "source": "7-CFR-273",
       "value": "306"
+     },
+     {
+      "step": "expedited",
+      "result": "3-day service check: gross $900, cash $1,000, housing $1,100 → no",
+      "source": "MPP-63-301",
+      "value": null
      }
     ],
     "privacy_events": [],
@@ -6474,10 +7241,10 @@
     "table_id": "CA-CalFresh-FFY2027",
     "card": {
      "token": "fixtureMariaCard000001",
-     "short_code": null,
-     "short_code_expires_at": null,
-     "created_at": "2026-10-02T16:58:58Z",
-     "expires_at": "2026-10-09T16:58:58Z"
+     "short_code": "000001",
+     "short_code_expires_at": "2026-10-03T16:58:52Z",
+     "created_at": "2026-10-02T16:58:52Z",
+     "expires_at": "2026-10-09T16:58:52Z"
     },
     "tracking": {
      "applied_at": null,
@@ -6493,7 +7260,7 @@
     },
     "consent": {
      "given": true,
-     "at": "2026-10-02T16:57:12Z",
+     "at": "2026-10-02T16:57:14Z",
      "disclosure_key": "consent.ask"
     },
     "reviewed_at": null,
@@ -6503,9 +7270,9 @@
    "summary": {
     "id": "c_maria2demo",
     "code": "K7Q-2FM",
-    "version": 12,
+    "version": 11,
     "created_at": "2026-10-02T16:57:00Z",
-    "updated_at": "2026-10-02T16:58:58Z",
+    "updated_at": "2026-10-02T16:59:10Z",
     "label": "K7Q-2FM",
     "summary": "Undergrad · 1 person · work $900 · rent $1,100",
     "lang": "en",
@@ -6530,7 +7297,7 @@
    },
    "card_url": "/c/fixtureMariaCard000001",
    "qr_svg_url": "/api/cases/c_maria2demo/qr.svg",
-   "short_code": null,
+   "short_code": "000001",
    "can_review": true,
    "allowed_status": [
     "reviewed",
@@ -6718,7 +7485,8 @@
       },
       "note_keys": [],
       "basis": [
-       "12 × $306 a month = $3,672 → display $3,670"
+       "12 × $306 a month = $3,672",
+       "display $3,670"
       ],
       "source_ids": [
        "CA-FY2027"
@@ -6741,12 +7509,18 @@
        "medi_cal.if_claimed"
       ],
       "basis": [
-       "Income $900 a month ≤ $1,836 (138% of the 2026 poverty guideline, 1 person) → coverage, $0 cash"
+       "magi_monthly $900 a month ≤ $1,836 (medi_cal.limit_138, 1 person)",
+       "coverage: health coverage, $0 cash"
       ],
       "source_ids": [
-       "DHCS-ACWDL-26-01",
        "HHS-POVERTY-2026",
-       "SAWS-1"
+       "DHCS-ACWDL-26-01",
+       "ECFR-42-435-603",
+       "SAWS-1",
+       "DHCS-HR1-PLAN",
+       "DHCS-SPA-22-0045",
+       "DHCS-ACWDL-25-33",
+       "SFSU-SHS-INSURANCE"
       ],
       "applied": false
      },
@@ -6767,14 +7541,19 @@
       },
       "note_keys": [],
       "basis": [
-       "1–2 days a week: 4 rides × ($2.85 − $1.40) × 17 weeks = $98.60 → $98",
-       "most weekdays with BART: 10 × $5.18 × 0.50 × 17 weeks = $440.30 → $440"
+       "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+       "($11.40 − $5.60) × 17 break weeks = $98.60 → $98",
+       "10 rides a week with BART: 10 × $5.18 × 0.50 × 17 break weeks = $440.30 → $440"
       ],
       "source_ids": [
        "CLIPPER-START-FAQ",
+       "CLIPPER-START-APP",
+       "MTC-CALFRESH-VERIFY",
        "SFMTA-FARES",
+       "SFMTA-LIFELINE",
        "BART-FARES-2026",
-       "SFSU-GATOR-PASS"
+       "SFSU-GATOR-PASS",
+       "SFSU-ACAD-CAL"
       ],
       "applied": false
      },
@@ -6795,11 +7574,13 @@
       },
       "note_keys": [],
       "basis": [
-       "$19.00 a month × 12 = $228 (a ceiling; a cheaper plan saves less)"
+       "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+       "shown only, never counted: 12 × $9.25 a month = $111 → $111"
       ],
       "source_ids": [
        "CPUC-LIFELINE-2026",
-       "CPUC-LIFELINE-ELIG"
+       "CPUC-LIFELINE-ELIG",
+       "ECFR-47-54-403"
       ],
       "applied": false
      },
@@ -6823,13 +7604,17 @@
       },
       "note_keys": [],
       "basis": [
-       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home; ÷ 3 people = $170.80 → $170"
+       "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home",
+       "$512.40 ÷ 3 people on the bill = $170.80 → $170"
       ],
       "source_ids": [
-       "CPUC-CARE-FERA",
-       "PGE-FORM-01-9077",
        "PGE-CARE",
-       "GP-PROJECT"
+       "PGE-FORM-01-9077",
+       "PGE-RULE-19-1",
+       "CPUC-CARE-FERA",
+       "PGE-ELEC-ADVISORY-0326",
+       "PGE-GAS-ADVISORY-0326",
+       "SFSU-HOUSING-FEES"
       ],
       "applied": false
      },
@@ -6852,13 +7637,18 @@
        "tax.unfiled_2025"
       ],
       "basis": [
-       "Earnings 12 × $900 = $10,800 → CalEITC 2025 table $204; age 20: maybe, not counted"
+       "E = 12 × the monthly pay = $10,800 (the same pay all year)",
+       "CalEITC (2025 table) $204 + federal EITC $0 (no-child federal EITC only at ages 25–64) = $204"
       ],
       "source_ids": [
+       "FTB-CALEITC",
        "FTB-3514-2025",
-       "IRS-RP-2025-32",
        "FTB-YCTC",
-       "SFSU-VITA"
+       "IRS-RP-2025-32",
+       "IRS-EITC-WHO",
+       "IRS-PUB-596",
+       "SFSU-VITA",
+       "CDSS-ACIN-I-87-22"
       ],
       "applied": false
      }
@@ -6876,6 +7666,22 @@
     },
     "console_notes": []
    }
+  }
+ },
+ {
+  "delay_ms": 1500,
+  "event": {
+   "seq": 33,
+   "type": "live.ended",
+   "case_id": "c_maria2demo",
+   "summary": null,
+   "changed_slots": [],
+   "now_asking": null,
+   "now_asking_text": null,
+   "asked_reason": null,
+   "line": null,
+   "changed_programs": false,
+   "at": "2026-10-02T16:59:10Z"
   }
  }
 ]

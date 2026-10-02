@@ -10,7 +10,7 @@
     "renamed": "items are the card's paragraphs (each item has its own when). The first-month line is the today_action item that uses {filed_on}, {first_month} and {month_label} (FirstMonth fields). irt_applies may be null when there is no estimate; then neither IRT item shows.",
     "headline": "headline and subhead: one per tier, plus likely_floor (the estimate is a floor), incomplete (the call ended before a result), and one per info route (keys info.already_receiving and info.interview_waiting), used when the case's reason code is an info route, whatever its tier.",
     "verify": "verify names an entry of unverified[]: the line avoids exact dates where its source is not confirmed, and the source is re-checked before a real pilot.",
-    "ui": "Strings for the card page's own controls, the same as docs/UI_SPEC.md (card UI strings). ui.calendar = the 3 .ics events (days after the estimated filing day), as in docs/SPEC.md; they are calendar entries the student downloads, and GatorPlate sends nothing."
+    "ui": "Strings for the card page's own controls, the same as docs/UI_SPEC.md (card UI strings). ui.calendar = the 3 .ics events (days after the estimated filing day), as in docs/SPEC.md; they are calendar entries the student downloads, and GatorPlate sends nothing. ui.rules_label is CardView.rules_label in this language (the English text equals the rules table's label)."
   },
   "when_keys": {
     "tier": "list of tiers: likely, coordinator, other_help",
@@ -1465,6 +1465,7 @@
     "bad_link": "This card link doesn't work. It may have expired or been deleted.",
     "talk_link": "Talk to GatorPlate",
     "case_code_label": "Case code",
+    "rules_label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
     "demo_badge": "Demo — sample data, deleted at the end of the day",
     "calendar": [
       {

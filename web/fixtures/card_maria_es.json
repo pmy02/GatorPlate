@@ -181,9 +181,9 @@
    "title": "Hablar con una persona",
    "paragraphs": [
     "Coordinación de CalFresh de SF State (CalFresh Help Clinic, Basic Needs), Student Services Building, salón 301.",
-    "Escribe a calfresh@sfsu.edu para hacer una cita, o llama al (415) 338-1203. Horario: lun a jue 8:30 a. m.–5 p. m., vie 8:30 a. m.–4 p. m..",
+    "Escribe a calfresh@sfsu.edu para hacer una cita, o llama al (415) 338-1203. Horario: lun a jue 8:30 a. m.–5 p. m., vie 8:30 a. m.–4 p. m.",
     "Tu código: K7Q-2FM. Compártelo para que encuentren tus respuestas.",
-    "CalFresh de San Francisco (condado): (855) 355-5757, lunes a viernes, 8 a. m.–5 p. m..",
+    "CalFresh de San Francisco (condado): (855) 355-5757, lunes a viernes, 8 a. m.–5 p. m.",
     "¿En crisis? Llama al 988 a cualquier hora. En una emergencia, llama al 911."
    ],
    "bullets": [],
@@ -271,13 +271,6 @@
    "url": null
   },
   {
-   "id": "MPP-63-301",
-   "title": "CDSS MPP 63-301.5 (expedited service within 3 days), as summarized by a legal-aid CalFresh guide",
-   "date": "current",
-   "grade": null,
-   "url": null
-  },
-  {
    "id": "CF-386",
    "title": "CDSS form CF 386, Notice of Missed Interview",
    "date": "current",
@@ -296,38 +289,38 @@
    "title": "BenefitsCal live application pages (2021-2022 how-to guides for the rest)",
    "date": "2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://benefitscal.com/StudentCenter/Home?lang=en"
   },
   {
    "id": "SFSU-CLINIC",
    "title": "SF State Basic Needs, CalFresh Help Clinic page",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic"
   },
   {
    "id": "SFSU-BASIC-NEEDS",
    "title": "SF State Basic Needs, About page (contact and office hours)",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/basic-needs"
   },
   {
    "id": "SFSU-PANTRY",
    "title": "SF State Basic Needs, AS Food Pantry & Gator Groceries page",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/associated-students-gator-groceries"
   },
   {
    "id": "SFSU-MEALS",
    "title": "SF State Basic Needs, Emergency Meals page",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/emergency-meals"
   }
  ],
- "rules_label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
+ "rules_label": "CalFresh año fiscal 2027 (1 oct 2026 – 30 sep 2027)",
  "status": {
   "status": "new",
   "reviewed": false,
@@ -335,8 +328,8 @@
   "tier": "likely",
   "estimate_monthly": 306
  },
- "generated_at": "2026-10-02T17:00:00Z",
- "expires_at": "2026-10-09T16:58:58Z",
+ "generated_at": "2026-10-02T16:59:40Z",
+ "expires_at": "2026-10-09T16:58:52Z",
  "reminders_url": "/api/card/fixtureMariaCard000001/reminders.ics?lang=es",
  "delete_url": "/api/card/fixtureMariaCard000001",
  "unlocked": {

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex">
+<title>Enter your card code · GatorPlate</title>
+<link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/shared/tokens.css">
+<link rel="stylesheet" href="/shared/base.css">
+<link rel="stylesheet" href="/go/go.css">
+<script type="module" src="/go/go.js"></script>
+</head>
+<body>
+<header class="top wrap">
+  <a class="brand" href="/"><svg class="logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg><span class="wordmark" translate="no">GatorPlate</span></a>
+  <div class="seg" role="group" aria-label="Language" data-t-label="lang">
+    <button type="button" lang="en" data-lang="en" aria-pressed="true">English</button>
+    <button type="button" lang="es" data-lang="es" aria-pressed="false">Español</button>
+  </div>
+</header>
+<main class="wrap">
+  <form id="go" class="go" novalidate>
+    <h1><label for="code" data-t="go.title">Enter your card code</label></h1>
+    <p class="hint" id="code-hint" data-t="go.hint">6 digits — we said it at the end of your call.</p>
+    <input class="input code" id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code"
+      maxlength="16" spellcheck="false" aria-describedby="code-hint code-err" required>
+    <p class="field__error" id="code-err" role="alert" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-alert-circle"></use></svg><span id="code-err-text"></span></p>
+    <button class="btn btn--primary" type="submit"><svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-arrow-right"></use></svg><span data-t="go.submit">Open my card</span></button>
+  </form>
+  <p class="proto" data-t="prototype">Student-built prototype — not an official SF State, county, or CalFresh service.</p>
+</main>
+</body>
+</html>

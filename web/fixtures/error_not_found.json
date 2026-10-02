@@ -2,7 +2,7 @@
  "__status": 404,
  "error": {
   "code": "not_found",
-  "message": "Not found.",
+  "message": "No such case.",
   "retryable": false
  }
 }

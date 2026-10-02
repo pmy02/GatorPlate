@@ -24,6 +24,8 @@ def test_console_texts() -> None:
     assert ct.assumed("Rent", "$1,100", lo=900) == "Rent: assumed $1,100 (could be as low as $900)"
     assert ct.abawd_possible(8, 80) == ("Fewer than 8 units: the county may apply the 3-month work rule unless the "
                                         "student works 80 hours a month.")
+    assert ct.abawd_possible(8, 80, graduate=True) == ("Less than half-time: the county may apply the 3-month work "
+                                                       "rule unless the student works 80 hours a month.")
     assert ct.student_question("Can I use a relay service?") == 'Student asked: "Can I use a relay service?"'
     assert ct.INCOMPLETE == "Call ended before the result."
     assert ct.flip_reason(1500, 0, 1500) == "could change the estimate by $1,500: $0 or $1,500"

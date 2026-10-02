@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <meta name="robots" content="noindex">
+  <title>GatorPlate · Coordinator</title>
+  <link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/shared/fonts/AtkinsonHyperlegibleNext-Variable.woff2">
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/console/console.css">
+  <script type="module" src="/console/console.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the cases</a>
+  <div class="app" id="app">
+    <header class="topbar" id="topbar"></header>
+    <p class="steps" id="steps" aria-label="How it works">
+      <span><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-quote"></use></svg>AI listens</span>
+      <svg class="icon sep" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-right"></use></svg>
+      <span><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-table"></use></svg>Rules decide</span>
+      <svg class="icon sep" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-right"></use></svg>
+      <span><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-person-check"></use></svg>A person confirms</span>
+    </p>
+    <div class="banners" id="banners" aria-live="polite"></div>
+    <main class="main" id="main" tabindex="-1">
+      <section class="work" id="work" aria-label="Cases">
+        <nav class="list" id="list" aria-label="Case list" data-scroll></nav>
+        <div class="detail" id="detail" data-scroll></div>
+      </section>
+      <section class="live" id="live" aria-label="Live view" hidden></section>
+    </main>
+    <section class="login" id="login" hidden></section>
+  </div>
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <dialog class="dialog" id="dialog" aria-labelledby="dialog-title"></dialog>
+  <noscript><p class="noscript">The coordinator view needs JavaScript.</p></noscript>
+</body>
+</html>

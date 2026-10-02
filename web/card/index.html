@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
+<meta name="robots" content="noindex">
+<title>GatorPlate card</title>
+<link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/shared/tokens.css">
+<link rel="stylesheet" href="/shared/base.css">
+<link rel="stylesheet" href="/unlocked/unlocked.css">
+<link rel="stylesheet" href="/card/card.css">
+<script type="module" src="/unlocked/unlocked.js"></script>
+<script type="module" src="/card/card.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-t="skip">Skip to your card</a>
+<header class="top wrap">
+  <span class="brand"><svg class="logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg><span class="wordmark" translate="no">GatorPlate</span></span>
+  <div class="seg" role="group" aria-label="Language" data-t-label="lang">
+    <button type="button" lang="en" data-lang="en" aria-pressed="true">English</button>
+    <button type="button" lang="es" data-lang="es" aria-pressed="false">Español</button>
+  </div>
+</header>
+<div id="banner" class="banner banner--reviewed" role="status" hidden></div>
+<main id="main" class="wrap" tabindex="-1">
+  <p class="print-head" id="print-head"></p>
+  <div id="state" class="state" role="status">
+    <p class="state__msg" id="state-msg" tabindex="-1"></p>
+    <div class="actions" id="state-actions"></div>
+    <p class="state__proto" data-t="prototype">Student-built prototype — not an official SF State, county, or CalFresh service.</p>
+  </div>
+  <div id="card" hidden>
+    <section id="hero" class="hero" aria-labelledby="hero-title"></section>
+    <section id="unlocked" hidden></section>
+    <div id="blocks" class="blocks"></div>
+    <footer id="foot" class="foot"></footer>
+  </div>
+  <noscript>
+    <p class="state__msg">This card needs JavaScript. To talk to a person: SF State CalFresh Help Clinic, (415) 338-1203, calfresh@sfsu.edu.</p>
+    <p class="state__msg" lang="es">Esta tarjeta necesita JavaScript. Para hablar con una persona: CalFresh Help Clinic de SF State, (415) 338-1203, calfresh@sfsu.edu.</p>
+  </noscript>
+</main>
+<dialog id="del" aria-labelledby="del-title" aria-describedby="del-body">
+  <h2 id="del-title" data-t="delete.title"></h2>
+  <p id="del-body" data-t="delete.body"></p>
+  <p id="del-err" class="field__error" role="alert" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-alert-circle"></use></svg><span id="del-err-t"></span></p>
+  <div class="actions">
+    <button type="button" class="btn btn--danger" id="del-yes" data-t="delete.yes"></button>
+    <button type="button" class="btn btn--primary" id="del-no" data-t="delete.no"></button>
+  </div>
+</dialog>
+</body>
+</html>

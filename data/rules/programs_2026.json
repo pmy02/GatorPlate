@@ -30,6 +30,8 @@
     "A line whose status is likely, maybe or check and whose value row (value.row, fares_row, breaks_row or a tax row) is not valid today becomes 'check' with no dollars; a hidden, zero or note line is unchanged.",
     "Outside 'effective' there is no programs part at all."
   ],
+  "facts_defaults": {"roommates_count_when_unsaid": 2, "source": "GP-PROJECT",
+                     "text": "ProgramFacts for slots the call never set: dorm_on_campus, homeless and roommates false; children_count 0; heat_cool false; other_utils 'none'; work-study and other income 0. A student who lives with roommates but never said how many is assumed to live with 2 (three people split the bill; the CARE line shows the assumption). An income the call never reached stays null. The CalFresh rules never read roommates_count."},
   "calfresh_key": {"model": "calfresh_annual", "months": 12, "counted_when": {"fact": "route", "op": "in", "value": ["likely"]},
                    "source": "CA-FY2027", "text": "12 x the monthly estimate, if your situation stays the same; the first month is prorated from the application day, so the real total can be a little lower"},
 

@@ -697,7 +697,7 @@ that button with its new label. Re-rendering on a language switch keeps *Your pl
   text 16 px; legal footer 14 px minimum.
 - Buttons at least 48 px high, full width on phones, icon + label. Primary *Open BenefitsCal*. Secondary: *Add 3
   dates to my calendar* (the CardView's `reminders_url`, which is `GET /api/card/{token}/reminders.ics?lang=…`:
-  three all-day calendar events relative to `first_month.filed_on`, downloaded by the student; GatorPlate sends
+  three all-day calendar events relative to the filing day — `tracking.filed_on` when the coordinator recorded it, else `first_month.filed_on` — downloaded by the student as `gatorplate-dates.ics`; the button shows only when the case has a filing day; GatorPlate sends
   nothing, and no student-facing string calls them "reminders", a word the output guard blocks), *Call the clinic*, *Email the clinic*, *Call the county (855) 355-5757* inside the
   interview section, *Print or save PDF*, *Delete my info*.
 - *Delete my info* opens a confirm screen, then `DELETE /api/card/{token}`, then *Your information was deleted.*

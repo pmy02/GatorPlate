@@ -45,12 +45,11 @@ def test_programs_from_settings(settings_test) -> None:
     assert off.view(CASE, lang=Lang.es, today=TODAY) is None
 
 
-def test_stubs_import_and_raise() -> None:
+def test_modules_import_with_final_signatures() -> None:
     from gatorplate.rules import Rules
 
     rules = Rules(__import__("pathlib").Path("data/rules/ca_fy2027.json"))
-    with pytest.raises(NotImplementedError):
-        rules.valid_on(TODAY)
+    assert rules.valid_on(TODAY) is True
     for name in ("gatorplate.extract", "gatorplate.dialogue", "gatorplate.store", "gatorplate.api.app",
                  "gatorplate.card", "gatorplate.wiring"):
         importlib.import_module(name)

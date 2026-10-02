@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <meta name="description" content="Talk to GatorPlate, a student-built prototype that helps SF State students check CalFresh by voice or by typing, in English or Spanish.">
+  <title>Talk to GatorPlate</title>
+  <link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/shared/fonts/AtkinsonHyperlegibleNext-Variable.woff2">
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/talk/talk.css">
+  <script type="module" src="/talk/talk.js"></script>
+</head>
+<body class="talk-page">
+  <a class="skip-link" href="#main" data-t="skip">Skip to the conversation</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="/" data-t-label="home" aria-label="GatorPlate home">
+        <svg class="logo brand__logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg>
+        <span class="wordmark" translate="no">GatorPlate</span>
+      </a>
+      <div class="langswitch" role="group" data-t-label="lang.label" aria-label="Language">
+        <button type="button" class="langswitch__btn" lang="en" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" class="langswitch__btn" lang="es" data-lang="es" aria-pressed="false">Español</button>
+      </div>
+      <p class="private-pill">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-eye-off"></use></svg>
+        <span data-t="not_recorded">Not recorded</span>
+      </p>
+    </div>
+  </header>
+
+  <main id="main" class="talk" tabindex="-1">
+    <noscript><p class="notice notice--info" data-t="no_js">This page needs JavaScript to talk with GatorPlate.</p></noscript>
+
+    <section id="intro" class="intro" aria-labelledby="intro-title">
+      <svg class="intro__mark logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg>
+      <h1 id="intro-title" data-t="title">Talk to GatorPlate</h1>
+      <p class="intro__lead" data-t="intro.time">A few minutes. We'll ask about school, home and money — never your Social Security number or immigration status.</p>
+      <ul class="intro__facts" role="list">
+        <li>
+          <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-mic"></use></svg>
+          <span data-t="intro.mic">Your browser will ask to use your microphone. You can also type.</span>
+        </li>
+        <li>
+          <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg>
+          <span data-t="privacy">Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio. We keep your answers and short quotes, not the conversation.</span>
+        </li>
+      </ul>
+      <p id="intro-notice" class="notice notice--error" hidden>
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-alert-triangle"></use></svg>
+        <span id="intro-notice-text"></span>
+      </p>
+      <div class="intro__actions">
+        <button type="button" id="start-voice" class="btn btn--primary btn--big">
+          <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-mic"></use></svg>
+          <span data-t="start">Start talking</span>
+        </button>
+        <button type="button" id="start-type" class="btn btn--big">
+          <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-keyboard"></use></svg>
+          <span data-t="type">Type instead</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="convo" class="convo" aria-labelledby="convo-title" hidden>
+      <h1 id="convo-title" class="sr-only" data-t="title">Talk to GatorPlate</h1>
+
+      <div class="line" id="line-box">
+        <p class="line__who" data-t="gatorplate">GatorPlate</p>
+        <p id="line" class="line__text" aria-live="polite"></p>
+      </div>
+
+      <p id="heard" class="heard" hidden>
+        <span class="heard__who"><span data-t="you">You</span>:</span>
+        <span id="heard-final" class="heard__final"></span><span id="heard-interim" class="heard__interim"></span>
+      </p>
+
+      <div id="notice" class="notice" hidden>
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use id="notice-icon" href="/shared/icons.svg#i-info"></use></svg>
+        <span id="notice-text"></span>
+        <button type="button" id="retry" class="btn btn--quiet notice__retry" hidden>
+          <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-reset"></use></svg>
+          <span data-t="retry">Try again</span>
+        </button>
+      </div>
+
+      <div id="finish" class="finish" hidden>
+        <p id="finish-title" class="finish__title">
+          <svg class="icon icon--card" aria-hidden="true" focusable="false"><use id="finish-icon" href="/shared/icons.svg#i-check-circle"></use></svg>
+          <span id="finish-text"></span>
+        </p>
+        <div class="finish__actions">
+          <a id="card-link" class="btn btn--primary btn--big" href="/" hidden>
+            <span data-t="open_card">Open my card</span>
+            <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-arrow-right"></use></svg>
+          </a>
+          <button type="button" id="again" class="btn btn--big" hidden>
+            <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-reset"></use></svg>
+            <span data-t="again">Start again</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="mic-area" class="mic-area">
+        <button type="button" id="mic" class="mic" data-phase="ready" aria-label="Tap to talk">
+          <svg class="icon mic__icon" aria-hidden="true" focusable="false"><use id="mic-icon" href="/shared/icons.svg#i-mic"></use></svg>
+          <span class="mic__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="mic__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+        <p id="mic-label" class="mic__label" aria-hidden="true"></p>
+      </div>
+
+      <div id="replies" class="replies" role="group" data-t-label="replies.label" aria-label="Quick replies" hidden></div>
+
+      <form id="type-form" class="typebox" autocomplete="off" novalidate>
+        <label for="type-input" class="typebox__label" data-t="type.label">Type your answer</label>
+        <div class="typebox__row">
+          <input id="type-input" name="answer" class="input typebox__input" type="text" maxlength="1000" enterkeyhint="send"
+            autocomplete="off" autocapitalize="sentences" spellcheck="true">
+          <button type="submit" id="send" class="btn btn--primary typebox__send" data-t-label="send" aria-label="Send">
+            <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-send"></use></svg>
+          </button>
+        </div>
+      </form>
+
+      <div class="tools">
+        <button type="button" id="read-aloud" class="btn btn--quiet tools__btn" aria-pressed="true" data-t-label="read_aloud" aria-label="Read aloud">
+          <svg class="icon icon--card" aria-hidden="true" focusable="false"><use id="read-aloud-icon" href="/shared/icons.svg#i-volume"></use></svg>
+          <span><span data-t="read_aloud">Read aloud</span>:</span>
+          <span id="read-aloud-state" aria-hidden="true">On</span>
+        </button>
+      </div>
+
+      <details id="history" class="history">
+        <summary>
+          <svg class="icon icon--card history__chevron" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-chevron-down"></use></svg>
+          <span data-t="show_conv">Show conversation</span>
+        </summary>
+        <ol id="history-list" class="history__list" role="list"></ol>
+      </details>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p data-t="prototype">Student-built prototype — not an official SF State, county, or CalFresh service.</p>
+  </footer>
+
+  <p id="toast" class="toast talk-toast" aria-hidden="true" hidden></p>
+  <p id="announce" class="sr-only" role="status" aria-live="polite"></p>
+</body>
+</html>

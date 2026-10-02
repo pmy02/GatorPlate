@@ -138,8 +138,8 @@
         "web"
       ],
       "all": [
-        "Sí, soy una IA hecha por estudiantes, no un servicio oficial de SF State.",
-        "Sí. Soy una IA creada por estudiantes, no un servicio oficial de SF State."
+        "Soy una IA hecha por estudiantes, no un servicio oficial de SF State.",
+        "Soy una IA creada por estudiantes, no un servicio oficial de SF State."
       ],
       "vars": []
     },
@@ -150,8 +150,8 @@
         "web"
       ],
       "web": [
-        "No. GatorPlate nunca recibe tu voz, solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación.",
-        "No. Tu voz no nos llega: solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación."
+        "GatorPlate nunca recibe tu voz, solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación.",
+        "Tu voz no nos llega: solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación."
       ],
       "vars": []
     },

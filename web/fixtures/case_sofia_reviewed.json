@@ -2,9 +2,9 @@
  "case": {
   "id": "c_sofia2demo",
   "code": "R8W-3ND",
-  "version": 8,
-  "created_at": "2026-10-02T16:35:00Z",
-  "updated_at": "2026-10-02T16:36:36Z",
+  "version": 3,
+  "created_at": "2026-10-02T16:31:00Z",
+  "updated_at": "2026-10-02T17:03:00Z",
   "lang": "es",
   "channel": "web",
   "test": false,
@@ -37,7 +37,7 @@
     "turn": 1,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T16:36:36Z"
+    "updated_at": "2026-10-02T16:32:36Z"
    },
    "level": {
     "value": "undergrad",
@@ -50,7 +50,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T16:36:36Z"
+    "updated_at": "2026-10-02T16:32:36Z"
    },
    "units": {
     "value": "12",
@@ -63,7 +63,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T16:36:36Z"
+    "updated_at": "2026-10-02T16:32:36Z"
    },
    "age": {
     "value": "19",
@@ -76,7 +76,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T16:36:36Z"
+    "updated_at": "2026-10-02T16:32:36Z"
    },
    "lives_with_parent": {
     "value": "true",
@@ -89,7 +89,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T16:36:36Z"
+    "updated_at": "2026-10-02T16:32:36Z"
    }
   },
   "yellow_lines": [
@@ -99,13 +99,13 @@
     "kind": "policy",
     "code": "coordinator.parent_household",
     "reason": "Under 22 and living with a parent — the parent's household is counted together. Confirm, then help with a household application.",
-    "heard": "vivo con mis papás",
+    "heard": null,
     "assumed": null,
     "effect": null,
-    "created_at": "2026-10-02T16:36:36Z",
+    "created_at": "2026-10-02T16:32:36Z",
     "resolved": "confirm",
-    "resolved_at": "2026-10-02T17:01:00Z",
-    "resolved_note": "Confirmed with the student"
+    "resolved_at": "2026-10-02T17:03:00Z",
+    "resolved_note": null
    }
   ],
   "flags": [],
@@ -139,7 +139,7 @@
   "timeline": [
    {
     "turn": 1,
-    "at": "2026-10-02T16:35:14Z",
+    "at": "2026-10-02T16:31:24Z",
     "slots": [
      "consent"
     ],
@@ -148,7 +148,7 @@
    },
    {
     "turn": 2,
-    "at": "2026-10-02T16:35:28Z",
+    "at": "2026-10-02T16:31:48Z",
     "slots": [
      "level",
      "units"
@@ -158,7 +158,7 @@
    },
    {
     "turn": 3,
-    "at": "2026-10-02T16:35:42Z",
+    "at": "2026-10-02T16:32:12Z",
     "slots": [
      "age",
      "lives_with_parent"
@@ -170,7 +170,7 @@
   "rule_trace": [
    {
     "step": "parent_household",
-    "result": "Age 19, lives with a parent → the parent's household is counted together (no estimate)",
+    "result": "Under 22 and living with a parent — the parent's household is counted together, no exceptions",
     "source": "7-CFR-273",
     "value": null
    }
@@ -179,11 +179,11 @@
   "language_request": null,
   "table_id": "CA-CalFresh-FFY2027",
   "card": {
-   "token": "fixtureSofiaCard000002",
+   "token": "cardAAAAAAAAAAAAAAAAAK",
    "short_code": null,
    "short_code_expires_at": null,
-   "created_at": "2026-10-02T16:36:36Z",
-   "expires_at": "2026-10-09T16:36:36Z"
+   "created_at": "2026-10-02T16:32:36Z",
+   "expires_at": "2026-10-09T16:32:36Z"
   },
   "tracking": {
    "applied_at": null,
@@ -199,19 +199,19 @@
   },
   "consent": {
    "given": true,
-   "at": "2026-10-02T16:35:12Z",
+   "at": "2026-10-02T16:31:12Z",
    "disclosure_key": "consent.ask"
   },
-  "reviewed_at": "2026-10-02T17:02:00Z",
+  "reviewed_at": "2026-10-02T17:03:00Z",
   "program_answers": {},
   "program_progress": {}
  },
  "summary": {
   "id": "c_sofia2demo",
   "code": "R8W-3ND",
-  "version": 8,
-  "created_at": "2026-10-02T16:35:00Z",
-  "updated_at": "2026-10-02T16:36:36Z",
+  "version": 3,
+  "created_at": "2026-10-02T16:31:00Z",
+  "updated_at": "2026-10-02T17:03:00Z",
   "label": "R8W-3ND",
   "summary": "Undergrad · 1 person",
   "lang": "es",
@@ -234,7 +234,7 @@
   "next_deadline": null,
   "found_display": null
  },
- "card_url": "/c/fixtureSofiaCard000002",
+ "card_url": "/c/cardAAAAAAAAAAAAAAAAAK",
  "qr_svg_url": "/api/cases/c_sofia2demo/qr.svg",
  "short_code": null,
  "can_review": true,
@@ -424,12 +424,17 @@
      "medi_cal.if_claimed"
     ],
     "basis": [
-     "Lives with a parent: Medi-Cal may count the family's income (list only, no amount)"
+     "list only: no amounts until a person checks"
     ],
     "source_ids": [
-     "DHCS-ACWDL-26-01",
      "HHS-POVERTY-2026",
-     "SAWS-1"
+     "DHCS-ACWDL-26-01",
+     "ECFR-42-435-603",
+     "SAWS-1",
+     "DHCS-HR1-PLAN",
+     "DHCS-SPA-22-0045",
+     "DHCS-ACWDL-25-33",
+     "SFSU-SHS-INSURANCE"
     ],
     "applied": false
    },
@@ -447,13 +452,17 @@
     "vars": {},
     "note_keys": [],
     "basis": [
-     "Age 19: Clipper START is for ages 19 to 64 (list only, no amount)"
+     "list only: no amounts until a person checks"
     ],
     "source_ids": [
      "CLIPPER-START-FAQ",
+     "CLIPPER-START-APP",
+     "MTC-CALFRESH-VERIFY",
      "SFMTA-FARES",
+     "SFMTA-LIFELINE",
      "BART-FARES-2026",
-     "SFSU-GATOR-PASS"
+     "SFSU-GATOR-PASS",
+     "SFSU-ACAD-CAL"
     ],
     "applied": false
    }

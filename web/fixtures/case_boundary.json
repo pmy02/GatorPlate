@@ -2,9 +2,9 @@
  "case": {
   "id": "c_bound2demo",
   "code": "D7L-8RW",
-  "version": 12,
-  "created_at": "2026-10-02T13:55:00Z",
-  "updated_at": "2026-10-02T13:57:11Z",
+  "version": 1,
+  "created_at": "2026-10-02T13:51:00Z",
+  "updated_at": "2026-10-02T13:53:11Z",
   "lang": "en",
   "channel": "phone",
   "test": false,
@@ -26,7 +26,7 @@
    "hi": 25,
    "settled": true
   },
-  "expedited_possible": "no",
+  "expedited_possible": null,
   "first_month": {
    "apply_date": "2026-10-02",
    "filed_on": "2026-10-02",
@@ -48,7 +48,7 @@
     "turn": 1,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "level": {
     "value": "undergrad",
@@ -61,7 +61,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "units": {
     "value": "12",
@@ -74,7 +74,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "age": {
     "value": "21",
@@ -87,7 +87,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "lives_with_parent": {
     "value": "false",
@@ -100,7 +100,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "roommates": {
     "value": "true",
@@ -113,7 +113,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "household_food": {
     "value": "separate",
@@ -126,7 +126,7 @@
     "turn": 4,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "earned_monthly": {
     "value": "2660.00",
@@ -139,7 +139,7 @@
     "turn": 5,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "other_cash_monthly": {
     "value": "0.00",
@@ -152,7 +152,7 @@
     "turn": 5,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    },
    "rent_share": {
     "value": "1100.00",
@@ -165,7 +165,7 @@
     "turn": 6,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T13:57:11Z"
+    "updated_at": "2026-10-02T13:53:11Z"
    }
   },
   "yellow_lines": [],
@@ -196,6 +196,7 @@
     "detail": "Not asked — other utility bills, same estimate either way",
     "values": [
      25,
+     25,
      25
     ]
    }
@@ -203,7 +204,7 @@
   "timeline": [
    {
     "turn": 1,
-    "at": "2026-10-02T13:55:14Z",
+    "at": "2026-10-02T13:51:18Z",
     "slots": [
      "consent"
     ],
@@ -212,7 +213,7 @@
    },
    {
     "turn": 2,
-    "at": "2026-10-02T13:55:28Z",
+    "at": "2026-10-02T13:51:37Z",
     "slots": [
      "level",
      "units"
@@ -222,7 +223,7 @@
    },
    {
     "turn": 3,
-    "at": "2026-10-02T13:55:42Z",
+    "at": "2026-10-02T13:51:56Z",
     "slots": [
      "age",
      "lives_with_parent",
@@ -233,7 +234,7 @@
    },
    {
     "turn": 4,
-    "at": "2026-10-02T13:55:56Z",
+    "at": "2026-10-02T13:52:14Z",
     "slots": [
      "household_food"
     ],
@@ -242,7 +243,7 @@
    },
    {
     "turn": 5,
-    "at": "2026-10-02T13:56:10Z",
+    "at": "2026-10-02T13:52:33Z",
     "slots": [
      "earned_monthly",
      "other_cash_monthly"
@@ -252,7 +253,7 @@
    },
    {
     "turn": 6,
-    "at": "2026-10-02T13:56:24Z",
+    "at": "2026-10-02T13:52:52Z",
     "slots": [
      "rent_share"
     ],
@@ -264,37 +265,49 @@
    {
     "step": "student_rule",
     "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
-    "source": "ACL-26-25",
+    "source": "ACL-24-31",
     "value": null
    },
    {
-    "step": "gross_income_test",
-    "result": "Gross $2,660 ≤ $2,660 (200% limit, 1 person; equal passes)",
-    "source": "ACIN-I-40-26",
+    "step": "household",
+    "result": "Buys and cooks food separately from others → 1 person",
+    "source": "GP-PROJECT",
+    "value": "1"
+   },
+   {
+    "step": "income",
+    "result": "Monthly income: work $2,660 = gross $2,660",
+    "source": "ACL-26-16",
     "value": "2660.00"
    },
    {
-    "step": "adjusted_income",
-    "result": "$2,660 − $532 (20% of earnings) − $217 = $1,911",
+    "step": "gross_income_test",
+    "result": "Gross $2,660 ≤ $2,660 (gross income limit, 1 person)",
     "source": "ACIN-I-40-26",
-    "value": "1911"
+    "value": null
+   },
+   {
+    "step": "adjusted_income",
+    "result": "Earned-income deduction 20%: −$532 · standard deduction −$217 → $1,911",
+    "source": "CDSS-SHD-270",
+    "value": "1911.0000"
    },
    {
     "step": "shelter",
-    "result": "$1,100 rent + $0 utilities − $955.50 (half of $1,911) = $144.50",
+    "result": "Shelter: $1,100 − 50% of $1,911 ($955.50) = $144.50",
     "source": "ACIN-I-40-26",
-    "value": "144.50"
+    "value": "144.500000"
    },
    {
     "step": "net_income",
-    "result": "$1,911 − $144.50 = $1,766.50 → $1,767",
-    "source": "CDSS-SHD-270",
+    "result": "Net income: $1,911 − $144.50 → $1,767",
+    "source": "GP-PROJECT",
     "value": "1767"
    },
    {
     "step": "benefit",
-    "result": "$306 − $531 is below $0 → the 1–2 person minimum, $25",
-    "source": "ACL-15-42",
+    "result": "Estimate: $306 − 30% × $1,767 ($531) is below the minimum → $25 (1 person)",
+    "source": "ACIN-I-40-26",
     "value": "25"
    }
   ],
@@ -302,11 +315,11 @@
   "language_request": null,
   "table_id": "CA-CalFresh-FFY2027",
   "card": {
-   "token": "fixtureBoundCard000006",
+   "token": "cardAAAAAAAAAAAAAAAAAG",
    "short_code": null,
    "short_code_expires_at": null,
-   "created_at": "2026-10-02T13:57:11Z",
-   "expires_at": "2026-10-09T13:57:11Z"
+   "created_at": "2026-10-02T13:53:11Z",
+   "expires_at": "2026-10-09T13:53:11Z"
   },
   "tracking": {
    "applied_at": null,
@@ -322,7 +335,7 @@
   },
   "consent": {
    "given": true,
-   "at": "2026-10-02T13:55:12Z",
+   "at": "2026-10-02T13:51:12Z",
    "disclosure_key": "consent.ask"
   },
   "reviewed_at": null,
@@ -332,9 +345,9 @@
  "summary": {
   "id": "c_bound2demo",
   "code": "D7L-8RW",
-  "version": 12,
-  "created_at": "2026-10-02T13:55:00Z",
-  "updated_at": "2026-10-02T13:57:11Z",
+  "version": 1,
+  "created_at": "2026-10-02T13:51:00Z",
+  "updated_at": "2026-10-02T13:53:11Z",
   "label": "D7L-8RW",
   "summary": "Undergrad · 1 person · work $2,660 · rent $1,100",
   "lang": "en",
@@ -349,15 +362,15 @@
   "reason_code": "likely",
   "estimate_monthly": 25,
   "estimate_is_floor": false,
-  "expedited_possible": "no",
+  "expedited_possible": null,
   "yellow_open": 0,
   "yellow_total": 0,
   "asked_count": 0,
   "skipped_count": 3,
   "next_deadline": null,
-  "found_display": null
+  "found_display": 300
  },
- "card_url": "/c/fixtureBoundCard000006",
+ "card_url": "/c/cardAAAAAAAAAAAAAAAAAG",
  "qr_svg_url": "/api/cases/c_bound2demo/qr.svg",
  "short_code": null,
  "can_review": true,
@@ -520,5 +533,181 @@
    }
   ]
  },
- "programs": null
+ "programs": {
+  "table_id": "GP-Programs-2026",
+  "checked": "2026-10-01",
+  "mode": "full",
+  "calfresh_yearly": 300,
+  "found_yearly": 300,
+  "found_display": 300,
+  "share_display": 300,
+  "claimed_display": 0,
+  "lines": [
+   {
+    "id": "calfresh",
+    "status": "likely",
+    "value_yearly": 300,
+    "display_yearly": 300,
+    "counted": true,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "today",
+    "order": 1,
+    "apply_by": null,
+    "vars": {
+     "value": "300",
+     "calfresh_month": "25"
+    },
+    "note_keys": [],
+    "basis": [
+     "12 × $25 a month = $300",
+     "display $300"
+    ],
+    "source_ids": [
+     "CA-FY2027"
+    ],
+    "applied": false
+   },
+   {
+    "id": "clipper_start",
+    "status": "check",
+    "value_yearly": null,
+    "display_yearly": null,
+    "counted": false,
+    "range_lo": 98,
+    "range_hi": 440,
+    "stage": "after_approval",
+    "order": 2,
+    "apply_by": "2026-11-19",
+    "vars": {
+     "lo": "98",
+     "hi": "440"
+    },
+    "note_keys": [],
+    "basis": [
+     "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+     "($11.40 − $5.60) × 17 break weeks = $98.60 → $98",
+     "10 rides a week with BART: 10 × $5.18 × 0.50 × 17 break weeks = $440.30 → $440"
+    ],
+    "source_ids": [
+     "CLIPPER-START-FAQ",
+     "CLIPPER-START-APP",
+     "MTC-CALFRESH-VERIFY",
+     "SFMTA-FARES",
+     "SFMTA-LIFELINE",
+     "BART-FARES-2026",
+     "SFSU-GATOR-PASS",
+     "SFSU-ACAD-CAL"
+    ],
+    "applied": false
+   },
+   {
+    "id": "lifeline",
+    "status": "check",
+    "value_yearly": 228,
+    "display_yearly": 220,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "after_approval",
+    "order": 3,
+    "apply_by": null,
+    "vars": {
+     "value": "228",
+     "fed": "111"
+    },
+    "note_keys": [],
+    "basis": [
+     "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+     "shown only, never counted: 12 × $9.25 a month = $111 → $111"
+    ],
+    "source_ids": [
+     "CPUC-LIFELINE-2026",
+     "CPUC-LIFELINE-ELIG",
+     "ECFR-47-54-403"
+    ],
+    "applied": false
+   },
+   {
+    "id": "care",
+    "status": "check",
+    "value_yearly": 170,
+    "display_yearly": 170,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "after_approval",
+    "order": 4,
+    "apply_by": null,
+    "vars": {
+     "value": "170",
+     "household": "512",
+     "bill": "140",
+     "n": "3",
+     "count": "3"
+    },
+    "note_keys": [],
+    "basis": [
+     "12 × (0.35 × 0.70 + 0.20 × 0.30) × $140 assumed bill = $512.40 for the home",
+     "$512.40 ÷ 3 people on the bill = $170.80 → $170"
+    ],
+    "source_ids": [
+     "PGE-CARE",
+     "PGE-FORM-01-9077",
+     "PGE-RULE-19-1",
+     "CPUC-CARE-FERA",
+     "PGE-ELEC-ADVISORY-0326",
+     "PGE-GAS-ADVISORY-0326",
+     "SFSU-HOUSING-FEES"
+    ],
+    "applied": false
+   },
+   {
+    "id": "tax_credits",
+    "status": "maybe",
+    "value_yearly": 0,
+    "display_yearly": 0,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "tax_time",
+    "order": 5,
+    "apply_by": null,
+    "vars": {
+     "value": "0"
+    },
+    "note_keys": [
+     "tax.id_note",
+     "tax.unfiled_2025"
+    ],
+    "basis": [
+     "E = 12 × the monthly pay = $31,920 (the same pay all year)",
+     "CalEITC (2025 table) $0 + federal EITC $0 (no-child federal EITC only at ages 25–64) = $0"
+    ],
+    "source_ids": [
+     "FTB-CALEITC",
+     "FTB-3514-2025",
+     "FTB-YCTC",
+     "IRS-RP-2025-32",
+     "IRS-EITC-WHO",
+     "IRS-PUB-596",
+     "SFSU-VITA",
+     "CDSS-ACIN-I-87-22"
+    ],
+    "applied": false
+   }
+  ],
+  "open_questions": [
+   "break_transit",
+   "tax_dependent",
+   "pge_bill"
+  ],
+  "next_question": "break_transit",
+  "question_spreads": {
+   "break_transit": 440,
+   "tax_dependent": 228,
+   "pge_bill": 170
+  },
+  "console_notes": []
+ }
 }

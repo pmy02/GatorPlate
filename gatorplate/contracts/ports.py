@@ -147,7 +147,9 @@ class CardBuilderPort(Protocol):
 
     def status(self, case: Case) -> CardStatus: ...
 
-    def ics(self, case: Case, *, lang: Lang) -> str: ...  # 3 VEVENTs relative to first_month.filed_on
+    def ics(self, case: Case, *, lang: Lang, now: datetime | None = None) -> str: ...
+        # 3 VEVENTs relative to the filing day: tracking.filed_on, else the filing-date estimate for `now`
+        # (else first_month.filed_on); raises errors.NotFound when there is none
 
 
 @runtime_checkable

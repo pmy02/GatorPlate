@@ -1,0 +1,99 @@
+{
+  "id": "a04_is_recorded",
+  "version": "2026-10-01",
+  "title": "'Is this call being recorded?' at consent → answer.is_recorded + consent.reask",
+  "appendix": "A04",
+  "channel": "phone",
+  "lang": "en",
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "matching": {
+    "env": "The server environment this script needs (GP_CARD_DELIVERY always). The E2E runner never mixes card-delivery modes in one server run: it starts one server per declared environment.",
+    "expect_keys": "debug.keys of the reply must equal this list exactly, in order; expect_keys_include: these keys appear in this order; expect_keys_exclude: none of these keys appears.",
+    "when_pending": "A conditional turn is played only when the previous reply's keys include that question key, so the script answers value-of-information questions in whichever order the plan asks them.",
+    "reply": "These BrainReply fields must match exactly. ask/card_url/choices/display: 'present' = non-null, 'null' = null. Reply wording is owned by the sentence bank and is not compared.",
+    "fake_llm": "The ExtractionResult the fake model returns for this exact utterance (data/tests/utterances.jsonl).",
+    "case": "Checked on the stored case after this turn (console API); final: after /end."
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      },
+      "budget": "opening"
+    },
+    {
+      "user": "Is this call being recorded?",
+      "confidence": 0.93,
+      "expect_keys": [
+        "answer.is_recorded",
+        "consent.reask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "budget": "question",
+      "fake_llm": {
+        "observations": [],
+        "intents": [
+          "is_recorded"
+        ],
+        "answered_pending": "no",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "text_excludes": [
+        "nothing is recorded"
+      ]
+    },
+    {
+      "user": "Yes, that's fine.",
+      "confidence": 0.93,
+      "expect_keys": [
+        "ack.short",
+        "ask.level_units"
+      ],
+      "budget": "question",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "consent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Yes, that's fine",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    }
+  ],
+  "end": {
+    "reason": "caller_hangup"
+  }
+}

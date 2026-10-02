@@ -1,0 +1,167 @@
+{
+  "id": "a40_seventeen_with_parent",
+  "version": "2026-10-01",
+  "title": "A 17-year-old who lives with a parent → coordinator.parent_household, not the age route",
+  "appendix": "A40",
+  "channel": "phone",
+  "lang": "en",
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "matching": {
+    "env": "The server environment this script needs (GP_CARD_DELIVERY always). The E2E runner never mixes card-delivery modes in one server run: it starts one server per declared environment.",
+    "expect_keys": "debug.keys of the reply must equal this list exactly, in order; expect_keys_include: these keys appear in this order; expect_keys_exclude: none of these keys appears.",
+    "when_pending": "A conditional turn is played only when the previous reply's keys include that question key, so the script answers value-of-information questions in whichever order the plan asks them.",
+    "reply": "These BrainReply fields must match exactly. ask/card_url/choices/display: 'present' = non-null, 'null' = null. Reply wording is owned by the sentence bank and is not compared.",
+    "fake_llm": "The ExtractionResult the fake model returns for this exact utterance (data/tests/utterances.jsonl).",
+    "case": "Checked on the stored case after this turn (console API); final: after /end."
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      },
+      "budget": "opening"
+    },
+    {
+      "user": "Yes, that's fine.",
+      "confidence": 0.95,
+      "expect_keys": [
+        "ack.short",
+        "ask.level_units"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "budget": "question",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "consent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Yes, that's fine",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "I'm an SF State undergrad, a junior, and I'm taking 12 units.",
+      "confidence": 0.92,
+      "expect_keys": [
+        "ack.short",
+        "ask.age_parent"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "budget": "question",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "level",
+            "value": "undergrad",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm an SF State undergrad, a junior",
+            "quote_en": null
+          },
+          {
+            "slot": "units",
+            "value": "12",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm taking 12 units",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "I'm seventeen and I live with my mom.",
+      "confidence": 0.93,
+      "expect_keys_include": [
+        "result.coordinator.parent_household"
+      ],
+      "expect_keys_exclude": [
+        "result.coordinator.age_outside_student_rule",
+        "first_month.apply_today"
+      ],
+      "budget": "result",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "age",
+            "value": "17",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm seventeen",
+            "quote_en": null
+          },
+          {
+            "slot": "lives_with_parent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I live with my mom",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "tier": "coordinator",
+        "reason_code": "coordinator.parent_household"
+      }
+    }
+  ],
+  "end": {
+    "reason": "caller_hangup"
+  },
+  "final": {
+    "reason_code": "coordinator.parent_household"
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "id": "min_benefit_g8",
+  "version": "2026-10-01",
+  "title": "Gross exactly at the limit ($2,660), rent $1,100 → the $25 minimum (G8)",
+  "appendix": "S10",
+  "golden_case": "G8",
+  "channel": "phone",
+  "lang": "en",
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "matching": {
+    "env": "The server environment this script needs (GP_CARD_DELIVERY always). The E2E runner never mixes card-delivery modes in one server run: it starts one server per declared environment.",
+    "expect_keys": "debug.keys of the reply must equal this list exactly, in order; expect_keys_include: these keys appear in this order; expect_keys_exclude: none of these keys appears.",
+    "when_pending": "A conditional turn is played only when the previous reply's keys include that question key, so the script answers value-of-information questions in whichever order the plan asks them.",
+    "reply": "These BrainReply fields must match exactly. ask/card_url/choices/display: 'present' = non-null, 'null' = null. Reply wording is owned by the sentence bank and is not compared.",
+    "fake_llm": "The ExtractionResult the fake model returns for this exact utterance (data/tests/utterances.jsonl).",
+    "case": "Checked on the stored case after this turn (console API); final: after /end."
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      },
+      "budget": "opening"
+    },
+    {
+      "user": "Yes, that's fine.",
+      "confidence": 0.95,
+      "expect_keys": [
+        "ack.short",
+        "ask.level_units"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "budget": "question",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "consent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Yes, that's fine",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "I'm an SF State undergrad, a junior, and I'm taking 12 units.",
+      "confidence": 0.92,
+      "expect_keys": [
+        "ack.short",
+        "ask.age_parent"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "budget": "question",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "level",
+            "value": "undergrad",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm an SF State undergrad, a junior",
+            "quote_en": null
+          },
+          {
+            "slot": "units",
+            "value": "12",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm taking 12 units",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "I'm 21, I live by myself.",
+      "confidence": 0.93,
+      "expect_keys": [
+        "ack.short",
+        "ask.income"
+      ],
+      "budget": "question",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "age",
+            "value": "21",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm 21",
+            "quote_en": null
+          },
+          {
+            "slot": "lives_with_parent",
+            "value": "false",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I live by myself",
+            "quote_en": null
+          },
+          {
+            "slot": "household_food",
+            "value": "alone",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I live by myself",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "I make 2,660 a month, and nobody gives me cash.",
+      "confidence": 0.93,
+      "expect_keys_include": [
+        "readback.earned",
+        "ask.rent"
+      ],
+      "budget": "question",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "earned_monthly",
+            "value": "2660",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I make 2,660 a month",
+            "quote_en": null
+          },
+          {
+            "slot": "other_cash_monthly",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "nobody gives me cash",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "earned_monthly": "2660.00"
+        }
+      }
+    },
+    {
+      "user": "Eleven hundred.",
+      "confidence": 0.93,
+      "expect_keys_include": [
+        "readback.rent"
+      ],
+      "note": "No declared budget: with the minimum benefit no utility question may be worth asking, so this reply can be the result; the runner infers the class from the keys.",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "rent_share",
+            "value": "1100",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Eleven hundred",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.93,
+      "when_pending": "flip.heat_cool",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "heat_cool",
+            "value": "false",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "No, utilities are included in my rent",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.93,
+      "when_pending": "flip.other_utils",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "other_utils",
+            "value": "none",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Nothing, it's all included in rent",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "No.",
+      "confidence": 0.93,
+      "when_pending": "flip.rent_paid_by_others",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "rent_paid_by_others_to_landlord",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "No",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.93,
+      "when_pending": "flip.heat_cool",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "heat_cool",
+            "value": "false",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "No, utilities are included in my rent",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.93,
+      "when_pending": "flip.other_utils",
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "other_utils",
+            "value": "none",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Nothing, it's all included in rent",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    }
+  ],
+  "end": {
+    "reason": "caller_hangup"
+  },
+  "final": {
+    "golden_case": "G8",
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 25
+  }
+}

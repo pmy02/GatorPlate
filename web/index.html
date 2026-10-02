@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <meta name="description" content="GatorPlate is a student-built prototype that helps SF State students check CalFresh in a few minutes, by phone or in the browser. Estimate only — the county decides.">
+  <title>GatorPlate</title>
+  <link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/landing.css">
+  <script type="module" src="/landing.js"></script>
+</head>
+<body class="landing-page">
+  <a class="skip-link" href="#main" data-t="skip">Skip to main content</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <p class="brand">
+        <svg class="logo brand__logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg>
+        <span class="wordmark" translate="no">GatorPlate</span>
+      </p>
+      <div class="langswitch" role="group" data-t-label="lang.label" aria-label="Language">
+        <button type="button" class="langswitch__btn" lang="en" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" class="langswitch__btn" lang="es" data-lang="es" aria-pressed="false">Español</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="landing" tabindex="-1">
+    <section class="hero" aria-labelledby="headline">
+      <div class="hero__copy">
+        <h1 id="headline" class="hero__title">Check CalFresh in a few minutes in your browser.</h1>
+        <p class="hero__sub" data-t="sub">For SF State students. Free. Estimate only — the county decides.</p>
+        <div class="hero__actions">
+          <a id="talk-link" class="btn btn--primary btn--big" href="/talk?lang=en">
+            <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-mic"></use></svg>
+            <span data-t="talk">Talk in your browser</span>
+          </a>
+          <a id="phone-link" class="btn btn--big" hidden>
+            <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-phone"></use></svg>
+            <span id="phone-text" class="num"></span>
+          </a>
+        </div>
+        <p id="phone-note" class="hero__note" hidden></p>
+      </div>
+      <div class="hero__art" aria-hidden="true">
+        <svg class="hero__mark logo" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg>
+      </div>
+    </section>
+
+    <ul class="trust" role="list" data-t-label="trust.label" aria-label="Privacy and limits">
+      <li class="trust__item">
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-eye-off"></use></svg>
+        <span data-t="trust.recorded">Not recorded</span>
+      </li>
+      <li class="trust__item">
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg>
+        <span data-t="trust.ssn">Never asks for your Social Security number or immigration status</span>
+      </li>
+      <li class="trust__item">
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-info"></use></svg>
+        <span data-t="trust.estimate">Estimate only — the county decides</span>
+      </li>
+    </ul>
+
+    <nav class="more" data-t-label="more.label" aria-label="More about GatorPlate">
+      <a id="about-link" class="more__link" href="/about">
+        <span data-t="about">How it works and responsible AI</span>
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-arrow-right"></use></svg>
+      </a>
+      <a id="console-link" class="more__link" href="/console">
+        <span data-t="console">For coordinators</span>
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-arrow-right"></use></svg>
+      </a>
+    </nav>
+  </main>
+
+  <footer class="page-footer">
+    <p data-t="prototype">Student-built prototype — not an official SF State, county, or CalFresh service.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,2383 @@
+{
+ "version": "2026-10-01",
+ "label": "Text-level evaluation with simulated students",
+ "about": "Fictional personas for tools/simulate_student.py (docs/SPEC.md §10). `facts` uses the engine's Facts keys (the golden-case facts); the truth is these facts run through the rules engine. `answers` maps a question's sentence key to the persona's scripted paraphrase (a list is used in order, its last item repeats); keys a persona does not list get a neutral fallback. English personas run on the web channel and on the phone channel as signed test calls; Spanish personas run on the web channel. Crisis behavior is tested with fixed scripts only (tests/adversarial/scripts), never with personas.",
+ "native_review": true,
+ "count": 35,
+ "personas": [
+  {
+   "id": "p01_maria",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G1",
+   "title": "SF State junior: work $900/month, rent share $1,100, cash $1,000 (demo path)",
+   "covers": [
+    "G1",
+    "several facts at once"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": "2026-10-02",
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I work at the library on campus, around nine hundred a month. Nobody sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p02_parents_pay_all",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G1-b",
+   "title": "Maria, but a parent pays all of the rent straight to the landlord",
+   "covers": [
+    "G1-b",
+    "parents paying the landlord"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "1100",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "Yes, my parents pay all of it straight to the landlord.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I work at the library on campus, around nine hundred a month. Nobody sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars.",
+    "flip.rent_paid_by_others_amount": "All of it."
+   }
+  },
+  {
+   "id": "p03_heat_bill",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G1-c",
+   "title": "Maria with a separate heating/AC bill",
+   "covers": [
+    "G1-c"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "heat_cool",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "Yes, I pay the gas and electric bill separately.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I work at the library on campus, around nine hundred a month. Nobody sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p04_shared_food",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G2",
+   "title": "Maria, but she buys and cooks food with her roommates",
+   "covers": [
+    "G2",
+    "shared food"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "shared",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We split groceries and cook together most nights.",
+    "ask.income": "I work at the library on campus, around nine hundred a month. Nobody sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p05_couch",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G4",
+   "title": "Couch-surfing since August, pays nothing, no income, cash $40",
+   "covers": [
+    "G4",
+    "couch-surfing"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 24,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": true,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "40",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a senior at SF State, twelve units.",
+    "ask.age_parent": "I'm 24. I don't live with my parents. I've been sleeping on a friend's couch since August, and I buy my own food.",
+    "ask.income": "I don't have a job right now, and nobody gives me money.",
+    "ask.homeless_cost": "No, nothing.",
+    "ask.rent": "I don't pay anything, I'm just crashing on a friend's couch for now.",
+    "expedited.intro_cash": "Like forty bucks."
+   }
+  },
+  {
+   "id": "p06_f1",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G5",
+   "title": "Volunteers an F-1 visa",
+   "covers": [
+    "G5",
+    "a volunteered status"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": "F-1",
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm an undergrad at SF State.",
+    "ask.age_parent": "I'm 20, I live alone.",
+    "ask.household": "I live alone.",
+    "ask.income": "I'm an international student on an F-1 visa, so I can only work on campus. I make about 700 a month."
+   }
+  },
+  {
+   "id": "p07_grad_no_exemption",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G6",
+   "title": "Grad student, at least half-time, no listed exemption",
+   "covers": [
+    "G6"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 26,
+    "level": "grad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a grad student, first year of a master's, nine units.",
+    "ask.grad_exemption": "None of those, I just go to class.",
+    "ask.age_parent": "I'm 26 and I live by myself."
+   }
+  },
+  {
+   "id": "p08_grad_ta",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G6-b",
+   "title": "Grad TA (W-2 wages) $1,800/month, rent $1,000",
+   "covers": [
+    "G6-b",
+    "TA pay"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 26,
+    "level": "grad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": "ta_ra",
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "1800",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "TA wages (W-2)"
+     }
+    ],
+    "rent_share": "1000",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a grad student in biology, nine units.",
+    "ask.grad_exemption": "I'm a TA for an intro bio lab.",
+    "ask.age_parent": "I'm 26, I live by myself.",
+    "ask.household": "Just me, I live alone.",
+    "ask.income": "I'm a TA, it pays about 1,800 a month.",
+    "ask.rent": "One thousand a month."
+   }
+  },
+  {
+   "id": "p09_over_limit",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G7",
+   "title": "Work income $3,500/month",
+   "covers": [
+    "G7"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 21,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "3500",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a senior at SF State, full-time.",
+    "ask.age_parent": "I'm 21, I live by myself.",
+    "ask.income": "I make about 3,500 a month, and nobody gives me cash.",
+    "ask.rent": "I don't pay rent."
+   }
+  },
+  {
+   "id": "p10_boundary",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G8",
+   "title": "Gross exactly at the limit: $2,660/month, rent $1,100",
+   "covers": [
+    "G8"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 21,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "2660",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, full-time.",
+    "ask.age_parent": "I'm 21, I live by myself.",
+    "ask.income": "I make 2,660 a month, and nobody gives me cash.",
+    "ask.rent": "Eleven hundred a month."
+   }
+  },
+  {
+   "id": "p11_dorm",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G9",
+   "title": "On-campus dorm with a 14-meal plan",
+   "covers": [
+    "G9",
+    "dorm meal plan"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 18,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": true,
+    "meals_per_week": 14,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a freshman at SF State, fifteen units.",
+    "ask.age_parent": "Eighteen, and I live in the dorms.",
+    "ask.meal_plan": "I have the 14-meal plan."
+   }
+  },
+  {
+   "id": "p12_parent_cash",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G10",
+   "title": "Work $1,200 + $300 cash from a parent, rent $900",
+   "covers": [
+    "G10",
+    "family cash"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 21,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "1200",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     },
+     {
+      "amount": "300",
+      "freq": "monthly",
+      "kind": "unearned",
+      "excluded": false,
+      "label": "cash from a parent"
+     }
+    ],
+    "rent_share": "900",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units.",
+    "ask.age_parent": "I'm 21, I live by myself.",
+    "ask.income": "I make about 1,200 a month, and my mom sends me 300 a month.",
+    "ask.rent": "I pay 900 a month."
+   }
+  },
+  {
+   "id": "p13_four_units",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G11",
+   "title": "Maria taking 4 units (less than half-time)",
+   "covers": [
+    "G11",
+    "under half-time"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": false,
+    "units": 4,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm an SF State undergrad, a junior, and I'm taking 4 units.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I work at the library on campus, around nine hundred a month. Nobody sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p14_hourly",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G12",
+   "title": "Hourly pay: $20 an hour x 15 hours a week, rent $1,100",
+   "covers": [
+    "G12",
+    "hourly pay"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "300",
+      "freq": "weekly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "campus job: $20 an hour x 15 hours a week"
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I make 20 an hour, about 15 hours a week. No one sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p15_biweekly",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G13",
+   "title": "Paid $900 every two weeks, rent $1,100",
+   "covers": [
+    "G13",
+    "biweekly pay"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "biweekly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "paid $900 every two weeks"
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I get paid 900 every two weeks, and nobody gives me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p16_couple",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N1",
+   "title": "Couple (spouse works, not a student), heat/AC bill, cash $800",
+   "covers": [
+    "N1",
+    "spouse not a student"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 23,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 2,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "600",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "student's job"
+     },
+     {
+      "amount": "1500",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "spouse's job"
+     }
+    ],
+    "rent_share": "900",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "heat_cool",
+    "dependent_care": "0",
+    "cash_on_hand": "800",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "Yes, I pay the gas and electric bill separately.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a senior at SF State, twelve units.",
+    "ask.age_parent": "I'm 23, I live with my wife.",
+    "ask.household": "I live with my wife. She works full-time and isn't in school.",
+    "ask.income": "I make about 600 a month, and my wife makes around 1,500.",
+    "ask.rent": "Our rent is 900 a month.",
+    "expedited.intro_cash": "About 800 in the bank."
+   }
+  },
+  {
+   "id": "p17_grad_work_study",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N5",
+   "title": "Grad with work-study ($800, excluded) + job $400, rent $950, cash $500",
+   "covers": [
+    "N5",
+    "work-study excluded"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 27,
+    "level": "grad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": "work_study",
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "800",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": true,
+      "label": "federal work-study (excluded)"
+     },
+     {
+      "amount": "400",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "campus job"
+     }
+    ],
+    "rent_share": "950",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "500",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a master's student, nine units.",
+    "ask.grad_exemption": "I have work-study this year.",
+    "ask.age_parent": "I'm 27, I live alone.",
+    "ask.income": "I do work-study, around 800 a month, and I also work at the bookstore, about 400 a month.",
+    "ask.rent": "950 a month.",
+    "expedited.intro_cash": "Maybe 500."
+   }
+  },
+  {
+   "id": "p18_low_income",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N6-b",
+   "title": "Work $600, rent $1,000, cash $450, no utility bill",
+   "covers": [
+    "N6-b"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 22,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "600",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1000",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "450",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units.",
+    "ask.age_parent": "I'm 22, I live by myself.",
+    "ask.income": "About 600 a month from my job, nothing else.",
+    "ask.rent": "A thousand a month.",
+    "expedited.intro_cash": "About 450."
+   }
+  },
+  {
+   "id": "p19_couch_paid",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N7",
+   "title": "Couch-surfing, pays a friend $150, work $1,000, cash $60",
+   "covers": [
+    "N7",
+    "couch-surfing, pays a friend"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 25,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": true,
+    "homeless_shelter_cost": "150",
+    "incomes": [
+     {
+      "amount": "1000",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "60",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a senior, twelve units.",
+    "ask.age_parent": "I'm 25 and I've been staying on a friend's couch, I buy my own food.",
+    "ask.income": "About 1,000 a month from work, nobody gives me money.",
+    "ask.homeless_cost": "I give my friend about 150 a month for letting me crash there.",
+    "ask.rent": "I give my friend about 150 a month for letting me crash there.",
+    "expedited.intro_cash": "Like sixty dollars."
+   }
+  },
+  {
+   "id": "p20_parent_pays_part",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N18",
+   "title": "Maria; a parent pays $500 of the $1,100 to the landlord",
+   "covers": [
+    "N18",
+    "parents paying the landlord (part)"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "500",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "Yeah, my mom pays 500 of it directly to the landlord.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I work at the library on campus, around nine hundred a month. Nobody sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p21_low_rent",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N3-a",
+   "title": "Utility grid: work $1,200, rent $700, no utility bill",
+   "covers": [
+    "N3"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 21,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "1200",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "700",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units.",
+    "ask.age_parent": "I'm 21 and I live with roommates.",
+    "ask.household_food_roommates": "Separately.",
+    "ask.household": "Just me and my roommates, everyone does their own groceries.",
+    "ask.income": "1.2k a month from my job, nothing else.",
+    "ask.rent": "Seven hundred a month."
+   }
+  },
+  {
+   "id": "p22_income_range",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N10-a",
+   "title": "Income band end: work $1,200, rent $1,100",
+   "covers": [
+    "N10",
+    "ranges"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "1200",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": [
+     "I make between 1,000 and 1,200 a month, it depends on shifts. Nobody gives me cash.",
+     "Usually about 1,200."
+    ],
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars.",
+    "ask.income_band": "Between one and two thousand."
+   },
+   "notes": "Gives a range first; asked again, says about 1,200."
+  },
+  {
+   "id": "p23_no_family_cash",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "N13-a",
+   "title": "Work $1,000, rent $1,100, no family cash",
+   "covers": [
+    "N13",
+    "'sometimes' family cash"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "1000",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": "No, I pay it myself.",
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "My mom sometimes sends me money, but not every month. Basically nothing.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I make about 1,000 a month at the library.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   },
+   "notes": "Mentions occasional family money; the facts count none."
+  },
+  {
+   "id": "p24_correction",
+   "lang": "en",
+   "channels": [
+    "web",
+    "phone"
+   ],
+   "golden_case": "G1",
+   "title": "Maria, but she corrects her rent to $1,200 during the flip question",
+   "covers": [
+    "corrections"
+   ],
+   "facts": {
+    "lang": "en",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1200",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": "2026-10-02",
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Yes, go ahead.",
+    "consent.reask": "Yes.",
+    "close.anything_else": "No, thanks.",
+    "confirm.money": "Yes, that's right.",
+    "flip.rent_paid_by_others": [
+     "Oh wait, my rent is actually twelve hundred, not eleven.",
+     "No."
+    ],
+    "flip.heat_cool": "No, utilities are included in my rent.",
+    "flip.other_utils": "Nothing, it's all included in rent.",
+    "ask.other_cash": "Nobody, I'm on my own.",
+    "ask.level_units": "I'm a junior at SF State, twelve units this semester.",
+    "ask.age_parent": "I'm twenty, and I share an apartment with two roommates.",
+    "ask.household_food_roommates": "We each buy our own food.",
+    "ask.income": "I work at the library on campus, around nine hundred a month. Nobody sends me money.",
+    "ask.rent": "My share is eleven hundred.",
+    "expedited.intro_cash": "About a thousand dollars."
+   }
+  },
+  {
+   "id": "p25_sofia",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G3",
+   "title": "Age 19, lives with her parents (Spanish)",
+   "covers": [
+    "G3",
+    "under 22 with a parent"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 19,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": true,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State y tomo doce unidades.",
+    "ask.age_parent": "Tengo diecinueve años y vivo con mis papás."
+   }
+  },
+  {
+   "id": "p26_weekly_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "N12",
+   "title": "Spanish speaker paid weekly $292.50, rent $1,250, heat/AC bill, cash $200",
+   "covers": [
+    "N12",
+    "weekly pay"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 24,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "292.50",
+      "freq": "weekly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "15 hours a week at $19.50, paid weekly"
+     }
+    ],
+    "rent_share": "1250",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "heat_cool",
+    "dependent_care": "0",
+    "cash_on_hand": "200",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "Sí, pago la luz y el gas aparte.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Soy estudiante de licenciatura, de tiempo completo.",
+    "ask.age_parent": "Tengo veinticuatro años y vivo sola.",
+    "ask.income": "Trabajo quince horas a la semana y me pagan diecinueve con cincuenta la hora, cada semana.",
+    "ask.rent": "Mil doscientos cincuenta al mes.",
+    "expedited.intro_cash": "Unos doscientos en el banco."
+   }
+  },
+  {
+   "id": "p27_maria_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G1",
+   "title": "SF State junior: work $900/month, rent share $1,100, cash $1,000 (demo path)",
+   "covers": [
+    "G1 in Spanish"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": "2026-10-02",
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State y tomo doce unidades.",
+    "ask.age_parent": "Tengo veinte años y vivo con dos compañeros de cuarto.",
+    "ask.household_food_roommates": "Cada quien compra su propia comida.",
+    "ask.income": "Gano novecientos al mes en la biblioteca y nadie me da dinero.",
+    "ask.rent": "Mil cien.",
+    "expedited.intro_cash": "Como mil dólares."
+   }
+  },
+  {
+   "id": "p28_couch_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G4",
+   "title": "Couch-surfing since August, pays nothing, no income, cash $40",
+   "covers": [
+    "G4 in Spanish",
+    "couch-surfing"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 24,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": true,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "40",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State, doce unidades.",
+    "ask.age_parent": "Tengo veinticuatro años y duermo en el sofá de un amigo desde agosto. Compro mi propia comida.",
+    "ask.income": "No trabajo y nadie me da dinero.",
+    "ask.homeless_cost": "No le pago nada.",
+    "ask.rent": "No pago nada, me quedo en el sofá de un amigo.",
+    "expedited.intro_cash": "Como cuarenta dólares."
+   }
+  },
+  {
+   "id": "p29_over_limit_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G7",
+   "title": "Work income $3,500/month",
+   "covers": [
+    "G7 in Spanish"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 21,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "3500",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State, tiempo completo.",
+    "ask.age_parent": "Tengo veintiún años y vivo sola.",
+    "ask.income": "Gano tres mil quinientos al mes y nadie me da dinero.",
+    "ask.rent": "No pago renta."
+   }
+  },
+  {
+   "id": "p30_dorm_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G9",
+   "title": "On-campus dorm with a 14-meal plan",
+   "covers": [
+    "G9 in Spanish",
+    "dorm meal plan"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 18,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": true,
+    "meals_per_week": 14,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State, quince unidades.",
+    "ask.age_parent": "Tengo dieciocho años y vivo en las residencias del campus.",
+    "ask.meal_plan": "Tengo el plan de catorce comidas a la semana."
+   }
+  },
+  {
+   "id": "p31_parent_cash_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G10",
+   "title": "Work $1,200 + $300 cash from a parent, rent $900",
+   "covers": [
+    "G10 in Spanish",
+    "family cash"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 21,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "1200",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     },
+     {
+      "amount": "300",
+      "freq": "monthly",
+      "kind": "unearned",
+      "excluded": false,
+      "label": "cash from a parent"
+     }
+    ],
+    "rent_share": "900",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State, doce unidades.",
+    "ask.age_parent": "Tengo veintiún años y vivo sola.",
+    "ask.income": "Gano mil doscientos al mes y mis papás me mandan trescientos al mes.",
+    "ask.rent": "Pago novecientos al mes."
+   }
+  },
+  {
+   "id": "p32_biweekly_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G13",
+   "title": "Paid $900 every two weeks, rent $1,100",
+   "covers": [
+    "G13 in Spanish",
+    "biweekly pay"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "biweekly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "paid $900 every two weeks"
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State y tomo doce unidades.",
+    "ask.age_parent": "Tengo veinte años y vivo con dos compañeros de cuarto.",
+    "ask.household_food_roommates": "Cada quien compra su propia comida.",
+    "ask.income": "Me pagan novecientos cada dos semanas y nadie me da dinero.",
+    "ask.rent": "Mil cien.",
+    "expedited.intro_cash": "Como mil dólares."
+   }
+  },
+  {
+   "id": "p33_shared_food_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G2",
+   "title": "Maria, but she buys and cooks food with her roommates",
+   "covers": [
+    "G2 in Spanish",
+    "shared food"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "shared",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "900",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": ""
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State y tomo doce unidades.",
+    "ask.age_parent": "Tengo veinte años y vivo con dos compañeros de cuarto.",
+    "ask.household_food_roommates": "Compramos y cocinamos juntos.",
+    "ask.income": "Gano novecientos al mes en la biblioteca y nadie me da dinero.",
+    "ask.rent": "Mil cien.",
+    "expedited.intro_cash": "Como mil dólares."
+   }
+  },
+  {
+   "id": "p34_hourly_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G12",
+   "title": "Hourly pay: $20 an hour x 15 hours a week, rent $1,100",
+   "covers": [
+    "G12 in Spanish",
+    "hourly pay"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": null,
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": 12,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "separate",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [
+     {
+      "amount": "300",
+      "freq": "weekly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "campus job: $20 an hour x 15 hours a week"
+     }
+    ],
+    "rent_share": "1100",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": "1000",
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State y tomo doce unidades.",
+    "ask.age_parent": "Tengo veinte años y vivo con dos compañeros de cuarto.",
+    "ask.household_food_roommates": "Cada quien compra su propia comida.",
+    "ask.income": "Gano veinte dólares la hora, quince horas a la semana, y nadie me da dinero.",
+    "ask.rent": "Mil cien.",
+    "expedited.intro_cash": "Como mil dólares."
+   }
+  },
+  {
+   "id": "p35_daca_es",
+   "lang": "es",
+   "channels": [
+    "web"
+   ],
+   "golden_case": "G5",
+   "title": "Volunteers an F-1 visa",
+   "covers": [
+    "G5 in Spanish",
+    "a volunteered status"
+   ],
+   "facts": {
+    "lang": "es",
+    "volunteered_status": "DACA",
+    "elderly_or_disabled": false,
+    "age": 20,
+    "level": "undergrad",
+    "public_ca_degree_program": true,
+    "half_time": true,
+    "units": null,
+    "grad_exemption": null,
+    "child_under14_in_hh": false,
+    "under22_with_parent": false,
+    "dorm_on_campus": false,
+    "meals_per_week": 0,
+    "dorm_meals_over_10": null,
+    "household_food": "alone",
+    "household_size": 1,
+    "spouse_student": false,
+    "boarder": false,
+    "homeless": false,
+    "homeless_shelter_cost": "0",
+    "incomes": [],
+    "rent_share": "0",
+    "rent_paid_by_others_to_landlord": "0",
+    "utility": "none",
+    "dependent_care": "0",
+    "cash_on_hand": null,
+    "apply_date": null,
+    "income_changing_soon": false,
+    "works_80h_month": false,
+    "receives_unemployment": false
+   },
+   "answers": {
+    "consent.ask": "Sí, está bien.",
+    "consent.reask": "Sí.",
+    "close.anything_else": "No, gracias.",
+    "confirm.money": "Sí, correcto.",
+    "flip.rent_paid_by_others": "No, yo la pago.",
+    "flip.heat_cool": "No, todo está incluido en la renta.",
+    "flip.other_utils": "Ninguno, todo está incluido.",
+    "ask.other_cash": "Nadie, me mantengo solo.",
+    "ask.level_units": "Estudio una licenciatura en SF State.",
+    "ask.age_parent": "Tengo veinte años y vivo sola.",
+    "ask.income": "Tengo DACA y trabajo en una tienda, gano como mil al mes."
+   }
+  }
+ ]
+}

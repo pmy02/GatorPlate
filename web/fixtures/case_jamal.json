@@ -2,9 +2,9 @@
  "case": {
   "id": "c_jamal2demo",
   "code": "P2X-6TC",
-  "version": 12,
-  "created_at": "2026-10-01T08:00:00-07:00",
-  "updated_at": "2026-10-01T08:01:49-07:00",
+  "version": 1,
+  "created_at": "2026-10-01T15:00:00Z",
+  "updated_at": "2026-10-01T15:01:49Z",
   "lang": "en",
   "channel": "phone",
   "test": false,
@@ -48,7 +48,7 @@
     "turn": 1,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "level": {
     "value": "undergrad",
@@ -61,7 +61,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "units": {
     "value": "12",
@@ -74,7 +74,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "age": {
     "value": "24",
@@ -87,7 +87,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "lives_with_parent": {
     "value": "false",
@@ -100,7 +100,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "homeless": {
     "value": "true",
@@ -113,7 +113,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "household_food": {
     "value": "separate",
@@ -126,7 +126,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "earned_monthly": {
     "value": "0.00",
@@ -139,7 +139,7 @@
     "turn": 4,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "other_cash_monthly": {
     "value": "0.00",
@@ -152,7 +152,7 @@
     "turn": 4,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "homeless_shelter_cost_monthly": {
     "value": "0.00",
@@ -165,7 +165,7 @@
     "turn": 5,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    },
    "cash_on_hand": {
     "value": "40.00",
@@ -178,7 +178,7 @@
     "turn": 6,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-01T08:01:49-07:00"
+    "updated_at": "2026-10-01T15:01:49Z"
    }
   },
   "yellow_lines": [],
@@ -247,7 +247,7 @@
   "timeline": [
    {
     "turn": 1,
-    "at": "2026-10-01T08:00:14-07:00",
+    "at": "2026-10-01T15:00:15Z",
     "slots": [
      "consent"
     ],
@@ -256,7 +256,7 @@
    },
    {
     "turn": 2,
-    "at": "2026-10-01T08:00:28-07:00",
+    "at": "2026-10-01T15:00:31Z",
     "slots": [
      "level",
      "units"
@@ -266,7 +266,7 @@
    },
    {
     "turn": 3,
-    "at": "2026-10-01T08:00:42-07:00",
+    "at": "2026-10-01T15:00:46Z",
     "slots": [
      "age",
      "lives_with_parent",
@@ -278,17 +278,17 @@
    },
    {
     "turn": 4,
-    "at": "2026-10-01T08:00:56-07:00",
+    "at": "2026-10-01T15:01:02Z",
     "slots": [
      "earned_monthly",
      "other_cash_monthly"
     ],
-    "lo": 306,
-    "hi": 306
+    "lo": null,
+    "hi": null
    },
    {
     "turn": 5,
-    "at": "2026-10-01T08:01:10-07:00",
+    "at": "2026-10-01T15:01:17Z",
     "slots": [
      "homeless_shelter_cost_monthly"
     ],
@@ -297,7 +297,7 @@
    },
    {
     "turn": 6,
-    "at": "2026-10-01T08:01:24-07:00",
+    "at": "2026-10-01T15:01:33Z",
     "slots": [
      "cash_on_hand"
     ],
@@ -309,48 +309,54 @@
    {
     "step": "student_rule",
     "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
-    "source": "ACL-26-25",
+    "source": "ACL-24-31",
     "value": null
    },
    {
     "step": "household",
-    "result": "No fixed place to stay, buys food on his own → 1 person",
-    "source": "7-CFR-271-2",
+    "result": "Buys and cooks food separately from others → 1 person",
+    "source": "GP-PROJECT",
     "value": "1"
    },
    {
-    "step": "gross_income_test",
-    "result": "Gross $0 ≤ $2,660 (200% limit, 1 person)",
-    "source": "ACIN-I-40-26",
+    "step": "income",
+    "result": "Monthly income: work $0 = gross $0",
+    "source": "ACL-26-16",
     "value": "0.00"
    },
    {
-    "step": "adjusted_income",
-    "result": "$0 − $217 standard deduction → $0",
+    "step": "gross_income_test",
+    "result": "Gross $0 ≤ $2,660 (gross income limit, 1 person)",
     "source": "ACIN-I-40-26",
+    "value": null
+   },
+   {
+    "step": "adjusted_income",
+    "result": "Earned-income deduction 20%: −$0 · standard deduction −$217 → $0",
+    "source": "CDSS-SHD-270",
     "value": "0"
    },
    {
     "step": "shelter",
-    "result": "Pays nothing to stay → no homeless shelter deduction",
+    "result": "No fixed home and pays nothing to stay — no shelter deduction",
     "source": "CDSS-SHD-270",
-    "value": "0"
+    "value": null
    },
    {
     "step": "net_income",
-    "result": "$0",
-    "source": "CDSS-SHD-270",
+    "result": "Net income: $0 − $0 → $0",
+    "source": "GP-PROJECT",
     "value": "0"
    },
    {
     "step": "benefit",
-    "result": "$306 − 30% × $0 = $306",
-    "source": "ACIN-I-40-26",
+    "result": "Estimate: $306 − 30% × $0 ($0) = $306",
+    "source": "7-CFR-273",
     "value": "306"
    },
    {
     "step": "expedited",
-    "result": "Gross $0 < $150 and cash $40 ≤ $100 → 3-day service likely",
+    "result": "3-day service check: gross $0, cash $40, housing $0 → yes",
     "source": "MPP-63-301",
     "value": null
    }
@@ -359,11 +365,11 @@
   "language_request": null,
   "table_id": "CA-CalFresh-FFY2027",
   "card": {
-   "token": "fixtureJamalCard000003",
+   "token": "cardAAAAAAAAAAAAAAAAAJ",
    "short_code": null,
    "short_code_expires_at": null,
-   "created_at": "2026-10-01T08:01:49-07:00",
-   "expires_at": "2026-10-08T08:01:49-07:00"
+   "created_at": "2026-10-01T15:01:49Z",
+   "expires_at": "2026-10-08T15:01:49Z"
   },
   "tracking": {
    "applied_at": "2026-10-01",
@@ -379,19 +385,19 @@
   },
   "consent": {
    "given": true,
-   "at": "2026-10-01T08:00:12-07:00",
+   "at": "2026-10-01T15:00:12Z",
    "disclosure_key": "consent.ask"
   },
   "reviewed_at": null,
   "program_answers": {
    "tax_dependent": {
     "value": "no",
-    "at": "2026-10-01T08:01:49-07:00",
+    "at": "2026-10-01T15:01:49Z",
     "source": "seed"
    },
    "break_transit": {
     "value": "two_days",
-    "at": "2026-10-01T08:01:49-07:00",
+    "at": "2026-10-01T15:01:49Z",
     "source": "seed"
    }
   },
@@ -400,9 +406,9 @@
  "summary": {
   "id": "c_jamal2demo",
   "code": "P2X-6TC",
-  "version": 12,
-  "created_at": "2026-10-01T08:00:00-07:00",
-  "updated_at": "2026-10-01T08:01:49-07:00",
+  "version": 1,
+  "created_at": "2026-10-01T15:00:00Z",
+  "updated_at": "2026-10-01T15:01:49Z",
   "label": "P2X-6TC",
   "summary": "Undergrad · 1 person · no fixed home",
   "lang": "en",
@@ -425,7 +431,7 @@
   "next_deadline": "2026-10-31",
   "found_display": 3980
  },
- "card_url": "/c/fixtureJamalCard000003",
+ "card_url": "/c/cardAAAAAAAAAAAAAAAAAJ",
  "qr_svg_url": "/api/cases/c_jamal2demo/qr.svg",
  "short_code": null,
  "can_review": true,
@@ -616,7 +622,8 @@
     },
     "note_keys": [],
     "basis": [
-     "12 × $306 a month = $3,672 → display $3,670"
+     "12 × $306 a month = $3,672",
+     "display $3,670"
     ],
     "source_ids": [
      "CA-FY2027"
@@ -637,12 +644,18 @@
     "vars": {},
     "note_keys": [],
     "basis": [
-     "No income ≤ $1,836 (138%, 1 person) → coverage, $0 cash"
+     "magi_monthly $0 a month ≤ $1,836 (medi_cal.limit_138, 1 person)",
+     "coverage: health coverage, $0 cash"
     ],
     "source_ids": [
-     "DHCS-ACWDL-26-01",
      "HHS-POVERTY-2026",
-     "SAWS-1"
+     "DHCS-ACWDL-26-01",
+     "ECFR-42-435-603",
+     "SAWS-1",
+     "DHCS-HR1-PLAN",
+     "DHCS-SPA-22-0045",
+     "DHCS-ACWDL-25-33",
+     "SFSU-SHS-INSURANCE"
     ],
     "applied": false
    },
@@ -664,13 +677,18 @@
      "clipper.two_cards"
     ],
     "basis": [
-     "4 rides/week × 17 break weeks: (4 × $2.85 − 4 × $1.40) = $5.80 a week → $98"
+     "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+     "($11.40 − $5.60) × 17 break weeks = $98.60 → $98"
     ],
     "source_ids": [
      "CLIPPER-START-FAQ",
+     "CLIPPER-START-APP",
+     "MTC-CALFRESH-VERIFY",
      "SFMTA-FARES",
+     "SFMTA-LIFELINE",
      "BART-FARES-2026",
-     "SFSU-GATOR-PASS"
+     "SFSU-GATOR-PASS",
+     "SFSU-ACAD-CAL"
     ],
     "applied": false
    },
@@ -694,11 +712,13 @@
      "lifeline.family_plan"
     ],
     "basis": [
-     "$19.00 a month × 12 = $228 (a ceiling; a cheaper plan saves less)"
+     "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+     "shown only, never counted: 12 × $9.25 a month = $111 → $111"
     ],
     "source_ids": [
      "CPUC-LIFELINE-2026",
-     "CPUC-LIFELINE-ELIG"
+     "CPUC-LIFELINE-ELIG",
+     "ECFR-47-54-403"
     ],
     "applied": false
    }

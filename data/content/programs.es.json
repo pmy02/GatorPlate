@@ -124,6 +124,21 @@
       "type": "int",
       "fill": "fact people_in_home",
       "example": "3"
+    },
+    "month": {
+      "type": "text",
+      "fill": "ui.date.*: a month name from ui.months (apply-by dates) or ui.months_short (the checked date)",
+      "example": "noviembre"
+    },
+    "day": {
+      "type": "int",
+      "fill": "ui.date.*: the day of the month",
+      "example": "19"
+    },
+    "year": {
+      "type": "int",
+      "fill": "ui.date.full: the year",
+      "example": "2026"
     }
   },
   "programs": {
@@ -353,6 +368,10 @@
     "ui.list_only_intro": "Esto también podría ayudarte. Una persona lo revisa contigo, por eso aún no hay cantidades.",
     "ui.share_button": "Compartir",
     "ui.copied": "Copiado",
+    "ui.months": "enero febrero marzo abril mayo junio julio agosto septiembre octubre noviembre diciembre",
+    "ui.months_short": "ene feb mar abr may jun jul ago sep oct nov dic",
+    "ui.date.month_day": "{day} de {month}",
+    "ui.date.full": "{day} {month} {year}",
     "share.text": "Encontré unos {share} al año en ayudas que quizá no estoy recibiendo (son cálculos, no promesas). Revisa las tuyas en 2 minutos: {site}",
     "q.break_transit": "En las vacaciones de invierno y verano, ¿usarás Muni o BART en el Área de la Bahía?",
     "q.break_transit.none": "No, o no estaré aquí",

@@ -15,13 +15,13 @@
    "who": "student",
    "text": "Yes, that's fine.",
    "lang": "en",
-   "at": "2026-10-02T16:57:12Z"
+   "at": "2026-10-02T16:57:14Z"
   },
   {
    "case_id": "c_maria2demo",
    "turn": 1,
    "who": "assistant",
-   "text": "Great. Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+   "text": "Great. Are you an undergrad or a grad student at SF State, and how many units are you taking this term?",
    "lang": "en",
    "at": "2026-10-02T16:57:14Z"
   },
@@ -31,13 +31,13 @@
    "who": "student",
    "text": "I'm an SF State undergrad, a junior, and I'm taking 12 units.",
    "lang": "en",
-   "at": "2026-10-02T16:57:26Z"
+   "at": "2026-10-02T16:57:28Z"
   },
   {
    "case_id": "c_maria2demo",
    "turn": 2,
    "who": "assistant",
-   "text": "Thanks. How old are you, and who do you live with?",
+   "text": "Got it. How old are you, and who do you live with?",
    "lang": "en",
    "at": "2026-10-02T16:57:28Z"
   },
@@ -47,13 +47,13 @@
    "who": "student",
    "text": "I'm 20, and I live with two roommates.",
    "lang": "en",
-   "at": "2026-10-02T16:57:40Z"
+   "at": "2026-10-02T16:57:42Z"
   },
   {
    "case_id": "c_maria2demo",
    "turn": 3,
    "who": "assistant",
-   "text": "Got it. Do you buy and cook food with your roommates, or separately?",
+   "text": "Thanks. Do you buy and cook food with your roommates, or separately?",
    "lang": "en",
    "at": "2026-10-02T16:57:42Z"
   },
@@ -63,13 +63,13 @@
    "who": "student",
    "text": "Separately.",
    "lang": "en",
-   "at": "2026-10-02T16:57:54Z"
+   "at": "2026-10-02T16:57:56Z"
   },
   {
    "case_id": "c_maria2demo",
    "turn": 4,
    "who": "assistant",
-   "text": "Okay. About how much do you earn a month from work before taxes, not counting financial aid, and does anyone give you cash?",
+   "text": "Thanks. About how much do you earn a month from work before taxes, not counting financial aid, and does anyone give you cash?",
    "lang": "en",
    "at": "2026-10-02T16:57:56Z"
   },
@@ -79,13 +79,13 @@
    "who": "student",
    "text": "I work at the campus library, about 900 a month. Nobody gives me cash.",
    "lang": "en",
-   "at": "2026-10-02T16:58:08Z"
+   "at": "2026-10-02T16:58:10Z"
   },
   {
    "case_id": "c_maria2demo",
    "turn": 5,
    "who": "assistant",
-   "text": "Got it — about nine hundred dollars a month from work. How much is your share of the rent each month?",
+   "text": "Got it — about nine hundred dollars a month from work. What's your share of the rent each month?",
    "lang": "en",
    "at": "2026-10-02T16:58:10Z"
   },
@@ -95,13 +95,13 @@
    "who": "student",
    "text": "Eleven hundred.",
    "lang": "en",
-   "at": "2026-10-02T16:58:22Z"
+   "at": "2026-10-02T16:58:24Z"
   },
   {
    "case_id": "c_maria2demo",
    "turn": 6,
    "who": "assistant",
-   "text": "Got it — eleven hundred dollars a month. One more question. Does anyone, like a parent, pay part of your rent straight to your landlord?",
+   "text": "Okay — eleven hundred dollars a month. Another quick one. Does anyone, like a parent, pay part of your rent straight to your landlord?",
    "lang": "en",
    "at": "2026-10-02T16:58:24Z"
   }

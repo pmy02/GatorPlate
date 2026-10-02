@@ -123,6 +123,21 @@
       "type": "int",
       "fill": "fact people_in_home",
       "example": "3"
+    },
+    "month": {
+      "type": "text",
+      "fill": "ui.date.*: a month name from ui.months (apply-by dates) or ui.months_short (the checked date)",
+      "example": "November"
+    },
+    "day": {
+      "type": "int",
+      "fill": "ui.date.*: the day of the month",
+      "example": "19"
+    },
+    "year": {
+      "type": "int",
+      "fill": "ui.date.full: the year",
+      "example": "2026"
     }
   },
   "programs": {
@@ -352,6 +367,10 @@
     "ui.list_only_intro": "These may help you too. A person checks them with you, so no amounts yet.",
     "ui.share_button": "Share",
     "ui.copied": "Copied",
+    "ui.months": "January February March April May June July August September October November December",
+    "ui.months_short": "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec",
+    "ui.date.month_day": "{month} {day}",
+    "ui.date.full": "{month} {day}, {year}",
     "share.text": "I found about {share} a year in aid I may be missing (estimates, not promises). Check yours in 2 minutes: {site}",
     "q.break_transit": "During winter and summer break, will you ride Muni or BART in the Bay Area?",
     "q.break_transit.none": "No, or I'll be away",

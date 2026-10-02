@@ -2,6 +2,7 @@
   "id": "jamal_g4",
   "version": "2026-10-01",
   "title": "Jamal, phone, English: likely $306 and 3-day service likely (couch-surfing, no income)",
+  "appendix": "S05",
   "golden_case": "G4",
   "demo_case": "jamal_g4",
   "contract_example": "contracts/examples/jamal_phone_expedited.json",

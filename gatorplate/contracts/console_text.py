@@ -34,6 +34,9 @@ COORDINATOR_TEXTS: dict[str, str] = {
 UNRESOLVED_TEMPLATE = "Still open and could change the result: {label}. Confirm it with the student."
 ABAWD_TEMPLATE = ("Fewer than {units} units: the county may apply the 3-month work rule unless the student works "
                   "{hours} hours a month.")
+# Graduate students: half-time depends on the program, not on a unit count (docs/SPEC.md §5.2 step 2).
+ABAWD_GRAD_TEMPLATE = ("Less than half-time: the county may apply the 3-month work rule unless the student works "
+                       "{hours} hours a month.")
 INCOME_CHANGING_SOON = "Student said income will change soon. Check the expected amount."
 TA_RA_INCOME_TYPE = "TA/RA pay counted as wages. Confirm it is paid work, not a fellowship or grant."
 RULES_NOT_VALID = "Rules table not valid for this date — no estimate. Check the rules table."
@@ -76,7 +79,9 @@ def unresolved(label: str) -> str:
     return UNRESOLVED_TEMPLATE.format(label=label)
 
 
-def abawd_possible(units: int, hours: int) -> str:
+def abawd_possible(units: int, hours: int, *, graduate: bool = False) -> str:
+    if graduate:
+        return ABAWD_GRAD_TEMPLATE.format(hours=hours)
     return ABAWD_TEMPLATE.format(units=units, hours=hours)
 
 

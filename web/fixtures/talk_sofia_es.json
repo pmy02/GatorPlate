@@ -19,7 +19,7 @@
  },
  {
   "say": "Gracias.",
-  "ask": "¿Estudias una licenciatura o un posgrado en SF State, y cuántas unidades tomas este semestre?",
+  "ask": "En SF State, ¿estudias licenciatura o posgrado, y cuántas unidades tomas este semestre?",
   "end": false,
   "end_reason": null,
   "lang": "es",
@@ -27,14 +27,14 @@
   "expect": "open",
   "interruptible": true,
   "hold_s": 0,
-  "display": "Gracias. ¿Estudias una licenciatura o un posgrado en SF State, y cuántas unidades tomas este semestre?",
+  "display": "Gracias. En SF State, ¿estudias licenciatura o posgrado, y cuántas unidades tomas este semestre?",
   "choices": null,
   "card_url": null,
   "debug": null
  },
  {
-  "say": "Perfecto.",
-  "ask": "¿Cuántos años tienes y con quién vives?",
+  "say": "Muy bien.",
+  "ask": "¿Cuántos años tienes, y vives con tu mamá o tu papá, con otras personas o por tu cuenta?",
   "end": false,
   "end_reason": null,
   "lang": "es",
@@ -42,7 +42,7 @@
   "expect": "open",
   "interruptible": true,
   "hold_s": 0,
-  "display": "Perfecto. ¿Cuántos años tienes y con quién vives?",
+  "display": "Muy bien. ¿Cuántos años tienes, y vives con tu mamá o tu papá, con otras personas o por tu cuenta?",
   "choices": null,
   "card_url": null,
   "debug": null

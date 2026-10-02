@@ -1,0 +1,81 @@
+/* About page (docs/UI_SPEC.md A7.3). Links after /landing.css (shared top bar and footer). Light only; tokens only. */
+
+.about__talk { min-height: var(--gp-tap); font-size: var(--gp-fs-body); }
+
+.about {
+  flex: 1 0 auto;
+  width: min(100%, 44rem);
+  margin-inline: auto;
+  padding: var(--gp-s7) var(--gp-s4) var(--gp-s9);
+}
+.about:focus { outline: none; }
+.about p + p { margin-top: var(--gp-s3); }
+
+.about__head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s3); padding-bottom: var(--gp-s6); border-bottom: 1px solid var(--gp-border); }
+.about__head h1 { font-size: var(--gp-fs-h1); font-weight: var(--gp-fw-heavy); text-wrap: balance; }
+.about__lead { color: var(--gp-text-2); font-size: var(--gp-fs-body-l); }
+
+/* minmax(0, 1fr): a long word at 200 % text wraps inside its column instead of widening the page. */
+.about__section { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s4); padding-top: var(--gp-s7); }
+.about__section h2 { font-size: var(--gp-fs-card-h2); text-wrap: balance; scroll-margin-top: var(--gp-s6); }
+.about__section > p, .limits { max-width: var(--gp-text-max); }
+
+/* The model listens, rules decide, a person confirms. */
+.steps { display: grid; gap: var(--gp-s3); margin: 0; padding: 0; list-style: none; }
+.steps__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--gp-s4);
+  align-items: start;
+  padding: var(--gp-s5);
+  border-radius: var(--gp-r-lg);
+  background: var(--gp-surface);
+  box-shadow: var(--gp-sh-1);
+}
+.steps__item h3 { margin-bottom: var(--gp-s1); font-size: var(--gp-fs-body-l); }
+.steps__item p { color: var(--gp-text-2); font-size: var(--gp-fs-body); }
+.steps__icon {
+  box-sizing: content-box;
+  padding: var(--gp-s2);
+  border-radius: 50%;
+  background: var(--gp-primary-tint);
+  color: var(--gp-primary);
+}
+
+.kept { display: flex; flex-wrap: wrap; gap: var(--gp-s2); margin: 0; padding: 0; list-style: none; }
+.kept li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gp-s2);
+  min-height: var(--gp-chip);
+  padding: var(--gp-s1) var(--gp-s3);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-sunken);
+  font-size: var(--gp-fs-body);
+  font-weight: var(--gp-fw-semibold);
+}
+.kept .icon { color: var(--gp-primary); }
+
+/* Facts with their source and date. */
+.fact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gp-s2);
+  margin: 0;
+  padding: var(--gp-s4) var(--gp-s5);
+  border-left: 4px solid var(--gp-primary);
+  border-radius: var(--gp-r-md);
+  background: var(--gp-surface);
+  box-shadow: var(--gp-sh-1);
+}
+.fact__text { font-size: var(--gp-fs-body-l); }
+.fact--lead .fact__text { font-size: var(--gp-fs-h2); font-weight: var(--gp-fw-semibold); line-height: var(--gp-lh); }
+.fact__source { color: var(--gp-text-2); font-size: var(--gp-fs-body); }
+
+.limits { display: grid; gap: var(--gp-s2); margin: 0; padding-left: var(--gp-s5); }
+.limits li::marker { color: var(--gp-text-2); }
+
+@media print {
+  .about__talk { display: none !important; }
+  .fact, .steps__item { box-shadow: none; break-inside: avoid; }
+}

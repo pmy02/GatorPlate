@@ -2,6 +2,7 @@
   "id": "sofia_g3",
   "version": "2026-10-01",
   "title": "Sofia, web, Spanish: coordinator check (under 22, lives with a parent)",
+  "appendix": "S04",
   "golden_case": "G3",
   "demo_case": "sofia_g3",
   "contract_example": "contracts/examples/sofia_web_es.json",

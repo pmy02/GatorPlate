@@ -169,8 +169,8 @@
         "web"
       ],
       "all": [
-        "Yes, I'm an AI built by students, not an official SF State service.",
-        "Yes. I'm an AI made by students, not an official SF State service."
+        "I'm an AI built by students, not an official SF State service.",
+        "I'm an AI made by students, not an official SF State service."
       ],
       "vars": [],
       "notes": "Also the answer to 'Is this official?'. Then re-ask the pending question (short form); during consent use consent.reask."
@@ -182,11 +182,11 @@
         "web"
       ],
       "phone": [
-        "No, the call audio isn't recorded. We keep your answers, not the conversation.",
-        "No. The call audio isn't recorded, and we keep only your answers."
+        "The call audio isn't recorded. We keep your answers, not the conversation.",
+        "The call audio isn't recorded, and we keep only your answers."
       ],
       "web": [
-        "No. GatorPlate never gets your voice, only the text that your browser makes. We keep your answers, not the conversation."
+        "GatorPlate never gets your voice, only the text that your browser makes. We keep your answers, not the conversation."
       ],
       "vars": [],
       "notes": "Same facts as the opening disclosure and the card footer."

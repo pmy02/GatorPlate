@@ -1,0 +1,153 @@
+/* Landing page (docs/UI_SPEC.md A7.2) and the shared chrome of the small public pages (the about page links this
+   file too). Light only; every color, font, size, radius, shadow and duration is a var(--gp-*) token. */
+
+.landing-page, .about-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-size: var(--gp-fs-body-l);
+}
+
+/* ------------------------------------------------------------------------------------------- top bar */
+.topbar { background: var(--gp-surface); border-bottom: 1px solid var(--gp-border); }
+.topbar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gp-s2) var(--gp-s3);
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  padding: var(--gp-s2) var(--gp-s4);
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gp-s2);
+  min-height: var(--gp-tap);
+  margin: 0 auto 0 0;
+  color: var(--gp-text);
+  font-size: var(--gp-fs-body-l);
+  text-decoration: none;
+  border-radius: var(--gp-r-sm);
+}
+a.brand:hover { color: var(--gp-text); }
+.brand__logo { width: var(--gp-s7); height: var(--gp-s7); }
+.langswitch { display: inline-flex; }
+.langswitch__btn {
+  min-height: var(--gp-tap);
+  padding: 0 var(--gp-s3);
+  border: 1px solid var(--gp-border-strong);
+  background: var(--gp-surface);
+  color: var(--gp-text-2);
+  font-size: var(--gp-fs-body);
+  font-weight: var(--gp-fw-semibold);
+}
+.langswitch__btn:first-child { border-radius: var(--gp-r-md) 0 0 var(--gp-r-md); }
+.langswitch__btn:last-child { border-left: 0; border-radius: 0 var(--gp-r-md) var(--gp-r-md) 0; }
+.langswitch__btn:hover { background: var(--gp-sunken); color: var(--gp-text); }
+.langswitch__btn[aria-pressed="true"] { background: var(--gp-primary-tint); color: var(--gp-primary); }
+
+.btn--big { min-height: calc(var(--gp-tap) + var(--gp-s2)); padding-inline: var(--gp-s5); font-size: var(--gp-fs-body-l); }
+.btn--big:active { transform: translateY(1px); }
+.landing-page a, .landing-page button, .about-page a { touch-action: manipulation; }
+
+.page-footer {
+  padding: var(--gp-s4);
+  border-top: 1px solid var(--gp-border);
+  color: var(--gp-text-2);
+  font-size: var(--gp-fs-small);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------------------------------- landing */
+.landing {
+  flex: 1 0 auto;
+  display: grid;
+  align-content: center;
+  gap: var(--gp-s7);
+  width: min(100%, 72rem);
+  margin-inline: auto;
+  padding: var(--gp-s7) var(--gp-s4) var(--gp-s8);
+}
+.landing:focus { outline: none; }
+
+.hero { display: grid; gap: var(--gp-s6); align-items: center; }
+.hero__copy { display: grid; gap: var(--gp-s4); max-width: 40rem; }
+.hero__title {
+  font-size: var(--gp-fs-h1);
+  font-weight: var(--gp-fw-heavy);
+  line-height: var(--gp-lh-tight);
+  text-wrap: balance;
+}
+.hero__sub { color: var(--gp-text-2); font-size: var(--gp-fs-body-l); }
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--gp-s3); margin-top: var(--gp-s2); }
+.hero__actions .btn { flex: 1 1 15rem; }
+.hero__note { color: var(--gp-text-2); font-size: var(--gp-fs-body); }
+.hero__art { display: none; }
+
+.trust {
+  display: grid;
+  gap: var(--gp-s3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.trust__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--gp-s3);
+  align-items: center;
+  padding: var(--gp-s4);
+  border-radius: var(--gp-r-lg);
+  background: var(--gp-surface);
+  box-shadow: var(--gp-sh-1);
+  font-size: var(--gp-fs-body);
+}
+.trust__item .icon { color: var(--gp-primary); }
+
+.more { display: flex; flex-wrap: wrap; gap: var(--gp-s2) var(--gp-s6); }
+.more__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gp-s2);
+  min-height: var(--gp-tap);
+  font-weight: var(--gp-fw-semibold);
+  text-decoration: none;
+  border-radius: var(--gp-r-sm);
+}
+.more__link span { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.more__link .icon { transition: transform var(--gp-d2) var(--gp-ease); }
+.more__link:hover .icon { transform: translateX(3px); }
+
+@media (min-width: 48em) {
+  .landing { padding-top: var(--gp-s9); }
+  .hero { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: var(--gp-s8); }
+  .hero__title { font-size: var(--gp-fs-hero); }
+  .hero__actions .btn { flex: 0 1 auto; }
+  .hero__art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    justify-self: center;
+    width: min(100%, 20rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--gp-surface);
+    box-shadow: var(--gp-sh-2);
+  }
+  .hero__art::before {
+    content: "";
+    position: absolute;
+    inset: 12%;
+    border-radius: 50%;
+    background: var(--gp-sunken);
+  }
+  .hero__mark { position: relative; width: 46%; height: 46%; }
+  .trust { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .more__link .icon { transition: none; }
+  .more__link:hover .icon { transform: none; }
+}

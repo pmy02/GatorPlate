@@ -1,0 +1,276 @@
+{
+  "id": "a38_espera_correction_web",
+  "version": "2026-10-01",
+  "title": "'No, espera, son mil doscientos, no mil cien.' on the web → a correction read back, never hold.ok",
+  "appendix": "A38",
+  "channel": "web",
+  "lang": "es",
+  "fake_llm_ok": true,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "matching": {
+    "env": "The server environment this script needs (GP_CARD_DELIVERY always). The E2E runner never mixes card-delivery modes in one server run: it starts one server per declared environment.",
+    "expect_keys": "debug.keys of the reply must equal this list exactly, in order; expect_keys_include: these keys appear in this order; expect_keys_exclude: none of these keys appears.",
+    "when_pending": "A conditional turn is played only when the previous reply's keys include that question key, so the script answers value-of-information questions in whichever order the plan asks them.",
+    "reply": "These BrainReply fields must match exactly. ask/card_url/choices/display: 'present' = non-null, 'null' = null. Reply wording is owned by the sentence bank and is not compared.",
+    "fake_llm": "The ExtractionResult the fake model returns for this exact utterance (data/tests/utterances.jsonl).",
+    "case": "Checked on the stored case after this turn (console API); final: after /end."
+  },
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Sí, está bien.",
+      "confidence": 0.91,
+      "expect_keys": [
+        "ack.short",
+        "ask.level_units"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "open",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "consent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Sí, está bien",
+            "quote_en": "Yes, that's fine"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "Estudio una licenciatura en SF State y tomo doce unidades.",
+      "confidence": 0.9,
+      "expect_keys": [
+        "ack.short",
+        "ask.age_parent"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "open",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "level",
+            "value": "undergrad",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Estudio una licenciatura en SF State",
+            "quote_en": "I'm working on a bachelor's degree at SF State"
+          },
+          {
+            "slot": "units",
+            "value": "12",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "tomo doce unidades",
+            "quote_en": "I'm taking twelve units"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "Tengo veintidós años y vivo sola.",
+      "confidence": 0.93,
+      "expect_keys": [
+        "ack.short",
+        "ask.income"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "number",
+        "interruptible": true,
+        "ask": "present"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "age",
+            "value": "22",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Tengo veintidós años",
+            "quote_en": "I'm twenty-two"
+          },
+          {
+            "slot": "lives_with_parent",
+            "value": "false",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "vivo sola",
+            "quote_en": "I live alone"
+          },
+          {
+            "slot": "household_food",
+            "value": "alone",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "vivo sola",
+            "quote_en": "I live alone"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "Gano novecientos al mes en la biblioteca y nadie me da dinero.",
+      "confidence": 0.93,
+      "expect_keys": [
+        "readback.earned",
+        "ask.rent"
+      ],
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "earned_monthly",
+            "value": "900",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Gano novecientos al mes",
+            "quote_en": "I earn nine hundred a month"
+          },
+          {
+            "slot": "other_cash_monthly",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "nadie me da dinero",
+            "quote_en": "nobody gives me money"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "Mil cien.",
+      "confidence": 0.6,
+      "expect_keys": [
+        "confirm.money"
+      ],
+      "reply": {
+        "end": false,
+        "expect": "confirm",
+        "lang": "es"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "rent_share",
+            "value": "1100",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Mil cien",
+            "quote_en": "Eleven hundred"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "No, espera, son mil doscientos, no mil cien.",
+      "confidence": 0.93,
+      "expect_keys_include": [
+        "readback.rent"
+      ],
+      "expect_keys_exclude": [
+        "hold.ok"
+      ],
+      "reply": {
+        "hold_s": 0
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "rent_share",
+            "value": "1200",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "son mil doscientos",
+            "quote_en": "it's twelve hundred"
+          }
+        ],
+        "intents": [
+          "correction"
+        ],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "rent_share": "1200.00"
+        }
+      }
+    }
+  ],
+  "end": {
+    "reason": "caller_hangup"
+  }
+}

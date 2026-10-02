@@ -3,7 +3,7 @@
   "format": {
     "summary": "Input guard (redaction and keyword intents) and output guard (forbidden wording) for every reply and every card string.",
     "regex": "All patterns are Python regular expressions, matched with re.search and re.IGNORECASE on text normalized as: curly quotes made straight, whitespace collapsed.",
-    "redact": "Run before anything else sees the utterance (model, logs, case). Order: card (card_patterns: 13-19 written digits), then ssn (any 9+ digit run, with an optional single space, dot or dash between digits), then spoken digit runs (spoken_digit_patterns: 7+ digit words or digits; the match is leftmost and greedy, so it covers the whole run). Replace each hit with the replacement text and record only the kind: card_number for a written card run or a spoken run of 13-19 digits (spoken_card_digits); ssn for every other hit. A phone utterance with masked true is a hit too: the gateway already replaced a run of 9+ digits with '#', and the number of '#' characters means nothing (docs/BRAIN_API.md, docs/SPEC.md redaction), so it is card_number when the utterance mentions a card or a bank account (masked_card_words) and ssn otherwise. Privacy events: card_number -> card_number_blocked, ssn -> ssn_blocked.",
+    "redact": "Run before anything else sees the utterance (model, logs, case). Order: card (card_patterns: 13-19 written digits), then ssn (any 9+ digit run; up to three spaces, dots, dashes or parentheses may sit between digits, so '(415) 338-1203' and '123 - 45 - 6789' count), then spoken digit runs (spoken_digit_patterns: 7+ digit words or digits; the match is leftmost and greedy, so it covers the whole run). Replace each hit with the replacement text and record only the kind: card_number for a written card run or a spoken run of 13-19 digits (spoken_card_digits); ssn for every other hit. A phone utterance with masked true is a hit too: the gateway already replaced a run of 9+ digits with '#', and the number of '#' characters means nothing (docs/BRAIN_API.md, docs/SPEC.md redaction), so it is card_number when the utterance mentions a card or a bank account (masked_card_words) and ssn otherwise. Privacy events: card_number -> card_number_blocked, ssn -> ssn_blocked.",
     "keywords": "High-recall backstop for the model's intents. A hit adds that intent. Patterns that can end a call (stop, abuse) stay narrow: negations ('don't hang up', 'no quiero colgar') and frustration that is not aimed at GatorPlate do not count (see tests.keywords). spanish_request tells a request for Spanish apart from other languages.",
     "output": "Every final reply string (both banks, every channel) and every rendered card string must have zero hits in output.forbidden (regex) and output.forbidden_phrases (plain lower-case substrings, the same list as contracts/check_examples.py). A hit replaces the whole reply with error.generic. The same holds for every string of programs.en.json and programs.es.json (the card's 'money you may be missing' part), as written and filled with example values; the programs patterns block promises of savings, refunds, credits, discounts or coverage ('you'll save $', 'you will get a refund', 'you're covered', 'free money').",
     "tests": "Vectors that data/content/check_content.py runs: redaction kinds, keyword intents, routing (the reply key one utterance gets), blocked and allowed outputs. check_content.py also runs the redaction and keyword rules over data/tests/utterances.jsonl.",
@@ -13,11 +13,11 @@
     "redact": {
       "replacement": "[REDACTED]",
       "card_patterns": [
-        "(?<!\\d)(?:\\d[ .-]?){12,18}\\d(?!\\d)"
+        "(?<!\\d)(?:\\d[ .()-]{0,3}){12,18}\\d(?!\\d)"
       ],
       "ssn_patterns": [
         "(?<!\\d)\\d{3}[ .-]?\\d{2}[ .-]?\\d{4}(?!\\d)",
-        "(?<!\\d)(?:\\d[ .-]?){8,}\\d(?!\\d)"
+        "(?<!\\d)(?:\\d[ .()-]{0,3}){8,}\\d(?!\\d)"
       ],
       "spoken_digit_run_min": 7,
       "spoken_card_digits": [
@@ -171,6 +171,8 @@
       "language_request": {
         "en": [
           "\\b(?:in|speak|talk in|do this in|habla|hablas|hablar) (?:spanish|espa[nñ]ol)\\b",
+          "\\b(?:switch|change)(?: (?:it|this|over|the call))? (?:to|into) (?:spanish|espa[nñ]ol)\\b",
+          "\\b(?:prefer|rather have) spanish\\b",
           "\\bespa[nñ]ol\\b",
           "\\bspanish,? please\\b",
           "^\\W*spanish\\W*$",
@@ -181,6 +183,7 @@
         "es": [
           "\\bespa[nñ]ol\\b",
           "\\b(?:en|hablar|hablas|habla) ingl[eé]s\\b",
+          "\\bcambiar (?:a|al) (?:ingl[eé]s|espa[nñ]ol)\\b",
           "\\botro idioma\\b",
           "\\b(?:en|hablas|hablar) (?:chino|mandar[ií]n|canton[eé]s|vietnamita|tagalo|coreano|ruso|[aá]rabe|franc[eé]s|japon[eé]s|portugu[eé]s)\\b"
         ]
@@ -394,6 +397,7 @@
         "\\byou(?: will|'ll) save (?:about |around |up to )?\\$",
         "\\byou(?: will|'ll) (?:get|receive) (?:a |an |your )?(?:refund|tax credit|discount|medi-cal|coverage)\\b",
         "\\byou(?:'re| are) (?:covered|enrolled)\\b",
+        "\\byou(?: will|'ll) be (?:covered|enrolled)\\b",
         "\\bfree money\\b"
       ],
       "es": [
@@ -426,6 +430,7 @@
         "\\bahorrarás (?:unos |alrededor de |hasta )?\\$",
         "\\b(?:vas|va) a ahorrar (?:unos |alrededor de |hasta )?\\$",
         "\\b(?:estás|estas) (?:cubiert[oa]|inscrit[oa])\\b",
+        "\\b(?:recibirás|recibiras|(?:vas|va) a recibir|tendrás|tendras|(?:vas|va) a tener) (?:un |una |tu |su )?(?:reembolso|crédito|credito|descuento|medi-cal|cobertura)\\b",
         "\\bdinero gratis\\b"
       ]
     },
@@ -579,6 +584,26 @@
         "lang": "en",
         "text": "My student ID is 912345678, does that help?",
         "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "You can reach me at (415) 338-1203.",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "my social is 123 - 45 - 6789",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "I make $900 - $1,100 a month",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "rent is 1100 (1200 with utilities)",
+        "expect": null
       }
     ],
     "keywords": [
@@ -827,6 +852,25 @@
         "text": "eres un pendejo",
         "expect": [
           "abuse"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Can we switch to Spanish?",
+        "expect": [
+          "language_request"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I have to go to Spanish class after this.",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "¿Podemos cambiar a inglés?",
+        "expect": [
+          "language_request"
         ]
       },
       {
@@ -1316,6 +1360,30 @@
       {
         "lang": "es",
         "text": "¡Es dinero gratis!"
+      },
+      {
+        "lang": "en",
+        "text": "You will be enrolled in Medi-Cal."
+      },
+      {
+        "lang": "en",
+        "text": "You'll be covered next month."
+      },
+      {
+        "lang": "es",
+        "text": "Recibirás un reembolso de impuestos."
+      },
+      {
+        "lang": "es",
+        "text": "Vas a recibir un crédito fiscal."
+      },
+      {
+        "lang": "es",
+        "text": "Tendrás cobertura médica."
+      },
+      {
+        "lang": "es",
+        "text": "Va a tener un descuento en su factura."
       }
     ],
     "output_pass": [
@@ -1402,6 +1470,18 @@
       {
         "lang": "es",
         "text": "Encontré unos $4,200 al año en ayudas que quizá no estoy recibiendo (son cálculos, no promesas)."
+      },
+      {
+        "lang": "en",
+        "text": "You may be covered by Medi-Cal. Each agency decides. Not a promise."
+      },
+      {
+        "lang": "es",
+        "text": "Podrías recibir un descuento en tu factura. Cada agencia decide. No es una promesa."
+      },
+      {
+        "lang": "es",
+        "text": "Va a tener una entrevista con el condado."
       }
     ]
   }

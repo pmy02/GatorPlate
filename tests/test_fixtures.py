@@ -102,11 +102,15 @@ def test_console_programs_fixtures() -> None:
 def test_live_replay_shape() -> None:
     entries = load("maria_live_events.json")
     types = [e["event"]["type"] for e in entries]
-    assert types[0] == "case.created" and "live.ended" in types and types[-1] == "case.updated"
+    assert types[0] == "case.created" and "live.ended" in types and types[-1] in ("case.updated", "live.ended")
     reasons = [e["event"]["asked_reason"] for e in entries if e["event"].get("asked_reason")]
     assert "could change the estimate by $151: $155 or $306" in reasons
-    last = CaseDetail.model_validate(entries[-1]["detail"])
+    # every case event carries the detail the console shows at that moment; the last one is the ended call
+    case_events = [e for e in entries if e["event"]["type"] in ("case.created", "case.updated")]
+    assert all("detail" in e for e in case_events)
+    last = CaseDetail.model_validate(case_events[-1]["detail"])
     assert last.case.live is False and last.case.estimate_monthly == 306
+    assert all(e["delay_ms"] > 0 for e in entries)
 
 
 def test_talk_replies() -> None:

@@ -1,0 +1,13 @@
+/* The unlocked part's fixture harness only (the card page has its own layout). Light only, tokens only. */
+body { font-size: var(--gp-fs-body-l); }
+.harness { max-width: calc(var(--gp-text-max) + 2 * var(--gp-s4)); margin-inline: auto; padding: var(--gp-s4); }
+.harness > * + * { margin-top: var(--gp-s4); }
+.seg { display: inline-flex; gap: var(--gp-s1); padding: var(--gp-s1); border-radius: var(--gp-r-md);
+  background: var(--gp-sunken); }
+.seg button { min-height: var(--gp-tap); padding: 0 var(--gp-s3); border: 0; border-radius: var(--gp-r-sm);
+  background: transparent; color: var(--gp-text-2); font-weight: var(--gp-fw-semibold); }
+.seg button[aria-pressed="true"] { background: var(--gp-primary-tint); color: var(--gp-primary); }
+summary { list-style: none; }
+summary::-webkit-details-marker { display: none; }
+.proto { font-size: var(--gp-fs-small); color: var(--gp-text-2); }
+@media (max-width: 479.98px) { .card { padding: var(--gp-s4); } }

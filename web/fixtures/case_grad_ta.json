@@ -2,9 +2,9 @@
  "case": {
   "id": "c_gradta2dem",
   "code": "H5V-9KB",
-  "version": 12,
-  "created_at": "2026-10-02T15:25:00Z",
-  "updated_at": "2026-10-02T15:26:45Z",
+  "version": 1,
+  "created_at": "2026-10-02T15:21:00Z",
+  "updated_at": "2026-10-02T15:22:45Z",
   "lang": "en",
   "channel": "phone",
   "test": false,
@@ -26,7 +26,7 @@
    "hi": 55,
    "settled": true
   },
-  "expedited_possible": "no",
+  "expedited_possible": null,
   "first_month": {
    "apply_date": "2026-10-02",
    "filed_on": "2026-10-02",
@@ -48,7 +48,7 @@
     "turn": 1,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "level": {
     "value": "grad",
@@ -61,7 +61,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "half_time": {
     "value": "true",
@@ -74,7 +74,7 @@
     "turn": 2,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "grad_exemption": {
     "value": "ta_ra",
@@ -87,7 +87,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "ta_ra": {
     "value": "true",
@@ -100,7 +100,7 @@
     "turn": 3,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "age": {
     "value": "26",
@@ -113,7 +113,7 @@
     "turn": 4,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "lives_with_parent": {
     "value": "false",
@@ -126,7 +126,7 @@
     "turn": 4,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "household_food": {
     "value": "alone",
@@ -139,7 +139,7 @@
     "turn": 4,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "earned_monthly": {
     "value": "1800.00",
@@ -152,7 +152,7 @@
     "turn": 5,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "other_cash_monthly": {
     "value": "0.00",
@@ -165,7 +165,7 @@
     "turn": 5,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "rent_share": {
     "value": "1000.00",
@@ -178,7 +178,7 @@
     "turn": 6,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "heat_cool": {
     "value": "false",
@@ -191,7 +191,7 @@
     "turn": 7,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    },
    "other_utils": {
     "value": "none",
@@ -204,22 +204,22 @@
     "turn": 8,
     "source": "seed",
     "basis": null,
-    "updated_at": "2026-10-02T15:26:45Z"
+    "updated_at": "2026-10-02T15:22:45Z"
    }
   },
   "yellow_lines": [
    {
     "id": "y1",
-    "slot": null,
+    "slot": "earned_monthly",
     "kind": "policy",
     "code": "ta_ra_income_type",
     "reason": "TA/RA pay counted as wages. Confirm it is paid work, not a fellowship or grant.",
     "heard": null,
     "assumed": null,
     "effect": null,
-    "created_at": "2026-10-02T15:26:45Z",
+    "created_at": "2026-10-02T15:22:45Z",
     "resolved": "confirm",
-    "resolved_at": "2026-10-02T15:46:45Z",
+    "resolved_at": "2026-10-02T15:46:00Z",
     "resolved_note": "Checked in the demo seed"
    }
   ],
@@ -229,17 +229,17 @@
    {
     "slot": "rent_paid_by_others_to_landlord",
     "reason": "below_threshold",
-    "detail": "Not asked — assumed nobody pays the landlord; changes the estimate by $50 or less",
+    "detail": "Not asked — assumed $0; changes the estimate by $50 or less",
     "values": [
-     25,
-     55
+     55,
+     25
     ]
    }
   ],
   "timeline": [
    {
     "turn": 1,
-    "at": "2026-10-02T15:25:14Z",
+    "at": "2026-10-02T15:21:11Z",
     "slots": [
      "consent"
     ],
@@ -248,7 +248,7 @@
    },
    {
     "turn": 2,
-    "at": "2026-10-02T15:25:28Z",
+    "at": "2026-10-02T15:21:23Z",
     "slots": [
      "level",
      "half_time"
@@ -258,7 +258,7 @@
    },
    {
     "turn": 3,
-    "at": "2026-10-02T15:25:42Z",
+    "at": "2026-10-02T15:21:35Z",
     "slots": [
      "grad_exemption",
      "ta_ra"
@@ -268,7 +268,7 @@
    },
    {
     "turn": 4,
-    "at": "2026-10-02T15:25:56Z",
+    "at": "2026-10-02T15:21:46Z",
     "slots": [
      "age",
      "lives_with_parent",
@@ -279,7 +279,7 @@
    },
    {
     "turn": 5,
-    "at": "2026-10-02T15:26:10Z",
+    "at": "2026-10-02T15:21:58Z",
     "slots": [
      "earned_monthly",
      "other_cash_monthly"
@@ -289,67 +289,79 @@
    },
    {
     "turn": 6,
-    "at": "2026-10-02T15:26:24Z",
+    "at": "2026-10-02T15:22:10Z",
     "slots": [
      "rent_share"
     ],
     "lo": 25,
-    "hi": 55
+    "hi": 169
    },
    {
     "turn": 7,
-    "at": "2026-10-02T15:26:38Z",
+    "at": "2026-10-02T15:22:21Z",
     "slots": [
      "heat_cool"
     ],
-    "lo": null,
-    "hi": null
+    "lo": 25,
+    "hi": 108
    },
    {
     "turn": 8,
-    "at": "2026-10-02T15:26:52Z",
+    "at": "2026-10-02T15:22:33Z",
     "slots": [
      "other_utils"
     ],
-    "lo": 55,
+    "lo": 25,
     "hi": 55
    }
   ],
   "rule_trace": [
    {
     "step": "student_rule",
-    "result": "Grad student at least half-time, TA job → exemption ta_ra",
+    "result": "Graduate student, half-time or more, exemption: Teaching or research assistant → student rule met",
     "source": "ACL-26-25",
     "value": null
    },
    {
-    "step": "gross_income_test",
-    "result": "Gross $1,800 ≤ $2,660 (200% limit, 1 person)",
-    "source": "ACIN-I-40-26",
+    "step": "household",
+    "result": "Buys and cooks food alone → 1 person",
+    "source": "GP-PROJECT",
+    "value": "1"
+   },
+   {
+    "step": "income",
+    "result": "Monthly income: work $1,800 = gross $1,800",
+    "source": "ACL-26-16",
     "value": "1800.00"
    },
    {
-    "step": "adjusted_income",
-    "result": "$1,800 − $360 (20% of earnings) − $217 = $1,223",
+    "step": "gross_income_test",
+    "result": "Gross $1,800 ≤ $2,660 (gross income limit, 1 person)",
     "source": "ACIN-I-40-26",
-    "value": "1223"
+    "value": null
+   },
+   {
+    "step": "adjusted_income",
+    "result": "Earned-income deduction 20%: −$360 · standard deduction −$217 → $1,223",
+    "source": "CDSS-SHD-270",
+    "value": "1223.0000"
    },
    {
     "step": "shelter",
-    "result": "$1,000 rent + $0 utilities − $611.50 (half of $1,223) = $388.50",
+    "result": "Shelter: $1,000 − 50% of $1,223 ($611.50) = $388.50",
     "source": "ACIN-I-40-26",
-    "value": "388.50"
+    "value": "388.500000"
    },
    {
     "step": "net_income",
-    "result": "$1,223 − $388.50 = $834.50 → $835",
-    "source": "CDSS-SHD-270",
+    "result": "Net income: $1,223 − $388.50 → $835",
+    "source": "GP-PROJECT",
     "value": "835"
    },
    {
     "step": "benefit",
-    "result": "$306 − 30% × $835 ($251, rounded up) = $55",
-    "source": "ACIN-I-40-26",
+    "result": "Estimate: $306 − 30% × $835 ($251) = $55",
+    "source": "7-CFR-273",
     "value": "55"
    }
   ],
@@ -357,11 +369,11 @@
   "language_request": null,
   "table_id": "CA-CalFresh-FFY2027",
   "card": {
-   "token": "fixtureGradTaCard00004",
+   "token": "cardAAAAAAAAAAAAAAAAAI",
    "short_code": null,
    "short_code_expires_at": null,
-   "created_at": "2026-10-02T15:26:45Z",
-   "expires_at": "2026-10-09T15:26:45Z"
+   "created_at": "2026-10-02T15:22:45Z",
+   "expires_at": "2026-10-09T15:22:45Z"
   },
   "tracking": {
    "applied_at": null,
@@ -377,19 +389,19 @@
   },
   "consent": {
    "given": true,
-   "at": "2026-10-02T15:25:12Z",
+   "at": "2026-10-02T15:21:12Z",
    "disclosure_key": "consent.ask"
   },
-  "reviewed_at": "2026-10-02T15:50:00Z",
+  "reviewed_at": "2026-10-02T15:46:00Z",
   "program_answers": {},
   "program_progress": {}
  },
  "summary": {
   "id": "c_gradta2dem",
   "code": "H5V-9KB",
-  "version": 12,
-  "created_at": "2026-10-02T15:25:00Z",
-  "updated_at": "2026-10-02T15:26:45Z",
+  "version": 1,
+  "created_at": "2026-10-02T15:21:00Z",
+  "updated_at": "2026-10-02T15:22:45Z",
   "label": "H5V-9KB",
   "summary": "Grad · 1 person · work $1,800 · rent $1,000",
   "lang": "en",
@@ -404,15 +416,15 @@
   "reason_code": "likely",
   "estimate_monthly": 55,
   "estimate_is_floor": false,
-  "expedited_possible": "no",
+  "expedited_possible": null,
   "yellow_open": 0,
   "yellow_total": 1,
   "asked_count": 0,
   "skipped_count": 1,
   "next_deadline": null,
-  "found_display": null
+  "found_display": 660
  },
- "card_url": "/c/fixtureGradTaCard00004",
+ "card_url": "/c/cardAAAAAAAAAAAAAAAAAI",
  "qr_svg_url": "/api/cases/c_gradta2dem/qr.svg",
  "short_code": null,
  "can_review": true,
@@ -575,5 +587,212 @@
    }
   ]
  },
- "programs": null
+ "programs": {
+  "table_id": "GP-Programs-2026",
+  "checked": "2026-10-01",
+  "mode": "full",
+  "calfresh_yearly": 660,
+  "found_yearly": 660,
+  "found_display": 660,
+  "share_display": 600,
+  "claimed_display": 0,
+  "lines": [
+   {
+    "id": "calfresh",
+    "status": "likely",
+    "value_yearly": 660,
+    "display_yearly": 660,
+    "counted": true,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "today",
+    "order": 1,
+    "apply_by": null,
+    "vars": {
+     "value": "660",
+     "calfresh_month": "55"
+    },
+    "note_keys": [],
+    "basis": [
+     "12 × $55 a month = $660",
+     "display $660"
+    ],
+    "source_ids": [
+     "CA-FY2027"
+    ],
+    "applied": false
+   },
+   {
+    "id": "medi_cal",
+    "status": "coverage",
+    "value_yearly": 0,
+    "display_yearly": 0,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "today",
+    "order": 2,
+    "apply_by": null,
+    "vars": {},
+    "note_keys": [
+     "medi_cal.if_claimed"
+    ],
+    "basis": [
+     "magi_monthly $1,800 a month ≤ $1,836 (medi_cal.limit_138, 1 person)",
+     "coverage: health coverage, $0 cash"
+    ],
+    "source_ids": [
+     "HHS-POVERTY-2026",
+     "DHCS-ACWDL-26-01",
+     "ECFR-42-435-603",
+     "SAWS-1",
+     "DHCS-HR1-PLAN",
+     "DHCS-SPA-22-0045",
+     "DHCS-ACWDL-25-33",
+     "SFSU-SHS-INSURANCE"
+    ],
+    "applied": false
+   },
+   {
+    "id": "clipper_start",
+    "status": "check",
+    "value_yearly": null,
+    "display_yearly": null,
+    "counted": false,
+    "range_lo": 98,
+    "range_hi": 440,
+    "stage": "after_approval",
+    "order": 3,
+    "apply_by": "2026-11-19",
+    "vars": {
+     "lo": "98",
+     "hi": "440"
+    },
+    "note_keys": [],
+    "basis": [
+     "4 rides a week on Muni: full fare min(4 × $2.85, $86 × 12 ÷ 52) = $11.40 a week; START fare min(4 × $1.40, $43 × 12 ÷ 52) = $5.60 a week",
+     "($11.40 − $5.60) × 17 break weeks = $98.60 → $98",
+     "10 rides a week with BART: 10 × $5.18 × 0.50 × 17 break weeks = $440.30 → $440"
+    ],
+    "source_ids": [
+     "CLIPPER-START-FAQ",
+     "CLIPPER-START-APP",
+     "MTC-CALFRESH-VERIFY",
+     "SFMTA-FARES",
+     "SFMTA-LIFELINE",
+     "BART-FARES-2026",
+     "SFSU-GATOR-PASS",
+     "SFSU-ACAD-CAL"
+    ],
+    "applied": false
+   },
+   {
+    "id": "care",
+    "status": "check",
+    "value_yearly": 366,
+    "display_yearly": 360,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "after_approval",
+    "order": 4,
+    "apply_by": null,
+    "vars": {
+     "value": "366",
+     "household": "366",
+     "bill": "100",
+     "n": "1",
+     "count": "1"
+    },
+    "note_keys": [],
+    "basis": [
+     "12 × (0.35 × 0.70 + 0.20 × 0.30) × $100 assumed bill = $366 for the home",
+     "one person on the bill → $366"
+    ],
+    "source_ids": [
+     "PGE-CARE",
+     "PGE-FORM-01-9077",
+     "PGE-RULE-19-1",
+     "CPUC-CARE-FERA",
+     "PGE-ELEC-ADVISORY-0326",
+     "PGE-GAS-ADVISORY-0326",
+     "SFSU-HOUSING-FEES"
+    ],
+    "applied": false
+   },
+   {
+    "id": "lifeline",
+    "status": "check",
+    "value_yearly": 228,
+    "display_yearly": 220,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "after_approval",
+    "order": 5,
+    "apply_by": null,
+    "vars": {
+     "value": "228",
+     "fed": "111"
+    },
+    "note_keys": [],
+    "basis": [
+     "12 × $19 a month = $228 → $228 (a ceiling: a cheaper plan saves less)",
+     "shown only, never counted: 12 × $9.25 a month = $111 → $111"
+    ],
+    "source_ids": [
+     "CPUC-LIFELINE-2026",
+     "CPUC-LIFELINE-ELIG",
+     "ECFR-47-54-403"
+    ],
+    "applied": false
+   },
+   {
+    "id": "tax_credits",
+    "status": "maybe",
+    "value_yearly": 82,
+    "display_yearly": 80,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "tax_time",
+    "order": 6,
+    "apply_by": null,
+    "vars": {
+     "value": "82"
+    },
+    "note_keys": [
+     "tax.id_note",
+     "tax.unfiled_2025"
+    ],
+    "basis": [
+     "E = 12 × the monthly pay = $21,600 (the same pay all year)",
+     "CalEITC (2025 table) $82 + federal EITC $0 = $82"
+    ],
+    "source_ids": [
+     "FTB-CALEITC",
+     "FTB-3514-2025",
+     "FTB-YCTC",
+     "IRS-RP-2025-32",
+     "IRS-EITC-WHO",
+     "IRS-PUB-596",
+     "SFSU-VITA",
+     "CDSS-ACIN-I-87-22"
+    ],
+    "applied": false
+   }
+  ],
+  "open_questions": [
+   "break_transit",
+   "pge_bill",
+   "tax_dependent"
+  ],
+  "next_question": "break_transit",
+  "question_spreads": {
+   "break_transit": 440,
+   "tax_dependent": 310,
+   "pge_bill": 366
+  },
+  "console_notes": []
+ }
 }

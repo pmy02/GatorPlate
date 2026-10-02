@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="only light">
+  <meta name="description" content="How GatorPlate works: the model listens, rules decide, a person confirms. What is kept, the rules and their sources, and the limits.">
+  <title>How GatorPlate works</title>
+  <link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/shared/tokens.css">
+  <link rel="stylesheet" href="/shared/base.css">
+  <link rel="stylesheet" href="/landing.css">
+  <link rel="stylesheet" href="/about/about.css">
+  <script type="module" src="/about/about.js"></script>
+</head>
+<body class="about-page">
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="/" aria-label="GatorPlate home" data-keep-fixtures>
+        <svg class="logo brand__logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg>
+        <span class="wordmark" translate="no">GatorPlate</span>
+      </a>
+      <a class="btn btn--primary about__talk" href="/talk?lang=en" data-keep-fixtures>
+        <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-mic"></use></svg>
+        <span>Talk in your browser</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="main" class="about" tabindex="-1">
+    <header class="about__head">
+      <h1>How GatorPlate works</h1>
+      <p class="about__lead">GatorPlate is a student-built prototype that helps SF State students check CalFresh,
+        California's food benefit, in one short conversation. It is not an official SF State, county, or CalFresh
+        service.</p>
+    </header>
+
+    <section class="about__section" aria-labelledby="what">
+      <h2 id="what">What GatorPlate is</h2>
+      <p>A student talks with GatorPlate by phone in English, or in the browser in English or Spanish, by voice or by
+        typing. GatorPlate asks only the questions that can change the answer. The student leaves with an estimate
+        and a card with the next steps: answers for the BenefitsCal application, the documents to gather and what the
+        county interview will ask.</p>
+      <p>On the phone, a hosted voice gateway turns speech into text and sends only the text to GatorPlate. In the
+        browser, the browser's own speech recognition does the same, and typing always works.</p>
+    </section>
+
+    <section class="about__section" aria-labelledby="how">
+      <h2 id="how">The model listens, rules decide, a person confirms</h2>
+      <ol class="steps" role="list">
+        <li class="steps__item">
+          <svg class="icon icon--card steps__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-quote"></use></svg>
+          <div>
+            <h3>The model listens</h3>
+            <p>A language model turns what the student says into answers, such as units, rent and income. It never
+              writes a sentence and never sets a number.</p>
+          </div>
+        </li>
+        <li class="steps__item">
+          <svg class="icon icon--card steps__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-table"></use></svg>
+          <div>
+            <h3>Rules decide</h3>
+            <p>A dated rules table computes the estimate, and every sentence comes from a sentence bank written in advance. A
+              question is asked only when its answer can change the result; the coordinator sees why each question
+              was asked and which ones were skipped.</p>
+          </div>
+        </li>
+        <li class="steps__item">
+          <svg class="icon icon--card steps__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-person-check"></use></svg>
+          <div>
+            <h3>A person confirms</h3>
+            <p>Anything uncertain becomes a yellow line. The SF State CalFresh coordinator confirms or edits each one
+              before a case can be marked reviewed. The county makes every eligibility decision.</p>
+          </div>
+        </li>
+      </ol>
+      <p id="programs-note">When the estimate is likely, the card also lists other help CalFresh can open this year, such as Medi-Cal
+        coverage, Clipper START, California LifeLine and tax credits. Those amounts come from a second dated table and
+        are computed by code, never by the AI. Each agency decides. Not a promise.</p>
+    </section>
+
+    <section class="about__section" aria-labelledby="kept">
+      <h2 id="kept">What is kept</h2>
+      <p>GatorPlate keeps the student's answers and short quotes of their words, not the conversation.</p>
+      <ul class="kept" role="list">
+        <li><svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-eye-off"></use></svg>No audio</li>
+        <li><svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg>No Social Security numbers</li>
+        <li><svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg>No immigration status</li>
+        <li><svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg>No phone numbers</li>
+      </ul>
+      <p>Digits that look like a Social Security or card number are removed before anything else sees the text.
+        Students can delete their information from their card.</p>
+      <figure class="fact">
+        <p class="fact__text">We don't collect Social Security numbers.</p>
+        <figcaption class="fact__source">Source: GatorPlate's design</figcaption>
+      </figure>
+    </section>
+
+    <section class="about__section" aria-labelledby="rules">
+      <h2 id="rules">Rules and sources</h2>
+      <p>One rules table holds every amount and limit with its source, for October 1, 2026 to September 30, 2027.
+        Outside those dates GatorPlate gives no estimate. Three changes from this year are built in:</p>
+      <figure class="fact">
+        <p class="fact__text">For applications since March 1, 2026, grants, scholarships, fellowships and loans for
+          college don't count as income for CalFresh (AB 42). Cash that family or friends give still counts.</p>
+        <figcaption class="fact__source">Source: CDSS ACL 26-16 (2026-03-19)</figcaption>
+      </figure>
+      <figure class="fact">
+        <p class="fact__text">Since June 1, 2026, students attending a community college, CSU or UC at least half-time
+          in an associate or bachelor's degree program meet an exemption from CalFresh's student rule.</p>
+        <figcaption class="fact__source">Source: CDSS ACL 26-25 (2026-04-13)</figcaption>
+      </figure>
+      <figure class="fact">
+        <p class="fact__text">New FY2027 amounts took effect on October 1, 2026 — for example, up to $306 a month for
+          one person.</p>
+        <figcaption class="fact__source">Source: CDSS ACIN I-40-26 (2026-09-10)</figcaption>
+      </figure>
+    </section>
+
+    <section class="about__section" aria-labelledby="why">
+      <h2 id="why">Why SF State</h2>
+      <figure class="fact fact--lead">
+        <p class="fact__text">In 2023–24, 14.3% of SF State undergraduates received CalFresh at some point in the
+          school year — below the CSU average (16.4%) and Chico State (33.0%). This is the share of undergraduates
+          receiving CalFresh, not a share of eligible students.</p>
+        <figcaption class="fact__source">Source: California Policy Lab, <cite>CalFresh Participation Among
+          California's College Students: A 2023–24 School Year Update</cite>, August 2026, Table 2</figcaption>
+      </figure>
+      <p>GatorPlate is built for two groups: SF State students, who get a fast, private estimate and one thing to do
+        today, and the SF State CalFresh coordinator, who gets cases that arrive checked, with what the student said,
+        what was assumed and why.</p>
+      <figure class="fact">
+        <p class="fact__text">The pilot uses no student records, so it needs no student-records integration; a real
+          pilot follows SF State's data and accessibility review.</p>
+        <figcaption class="fact__source">Source: GatorPlate's design</figcaption>
+      </figure>
+    </section>
+
+    <section class="about__section" aria-labelledby="limits">
+      <h2 id="limits">Limits</h2>
+      <ul class="limits">
+        <li>An estimate only. The county makes every eligibility decision.</li>
+        <li>English on the phone; English and Spanish on the web.</li>
+        <li>Not connected to county or school systems. GatorPlate never applies, signs or submits anything for a
+          student.</li>
+        <li>The Spanish text is waiting for a review by a native speaker.</li>
+        <li>Contacts and hours were checked on October 1, 2026 and can change.</li>
+      </ul>
+    </section>
+
+    <section class="about__section" aria-labelledby="person">
+      <h2 id="person">Talk to a person</h2>
+      <p>SF State CalFresh coordinator, Basic Needs:
+        <a class="num" href="tel:+14153381203">(415) 338-1203</a> ·
+        <a href="mailto:calfresh@sfsu.edu">calfresh@sfsu.edu</a> (appointments by email) ·
+        Student Services Building, Room 301 · <span class="num">Mon–Thu 8:30 AM–5 PM, Fri 8:30 AM–4 PM</span>.</p>
+    </section>
+
+    <section class="about__section" aria-labelledby="team">
+      <h2 id="team">Team</h2>
+      <p>Built by an SF State student team.</p>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>Student-built prototype — not an official SF State, county, or CalFresh service.</p>
+  </footer>
+</body>
+</html>

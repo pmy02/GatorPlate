@@ -271,13 +271,6 @@
    "url": null
   },
   {
-   "id": "MPP-63-301",
-   "title": "CDSS MPP 63-301.5 (expedited service within 3 days), as summarized by a legal-aid CalFresh guide",
-   "date": "current",
-   "grade": null,
-   "url": null
-  },
-  {
    "id": "CF-386",
    "title": "CDSS form CF 386, Notice of Missed Interview",
    "date": "current",
@@ -296,35 +289,35 @@
    "title": "BenefitsCal live application pages (2021-2022 how-to guides for the rest)",
    "date": "2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://benefitscal.com/StudentCenter/Home?lang=en"
   },
   {
    "id": "SFSU-CLINIC",
    "title": "SF State Basic Needs, CalFresh Help Clinic page",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic"
   },
   {
    "id": "SFSU-BASIC-NEEDS",
    "title": "SF State Basic Needs, About page (contact and office hours)",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/basic-needs"
   },
   {
    "id": "SFSU-PANTRY",
    "title": "SF State Basic Needs, AS Food Pantry & Gator Groceries page",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/associated-students-gator-groceries"
   },
   {
    "id": "SFSU-MEALS",
    "title": "SF State Basic Needs, Emergency Meals page",
    "date": "page as saved 2026-10-01",
    "grade": null,
-   "url": null
+   "url": "https://basicneeds.sfsu.edu/emergency-meals"
   }
  ],
  "rules_label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
@@ -335,8 +328,8 @@
   "tier": "likely",
   "estimate_monthly": 306
  },
- "generated_at": "2026-10-02T17:00:00Z",
- "expires_at": "2026-10-09T16:58:58Z",
+ "generated_at": "2026-10-02T16:59:40Z",
+ "expires_at": "2026-10-09T16:58:52Z",
  "reminders_url": "/api/card/fixtureMariaCard000001/reminders.ics?lang=en",
  "delete_url": "/api/card/fixtureMariaCard000001",
  "unlocked": {

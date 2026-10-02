@@ -294,7 +294,7 @@ Canonical intent names (the extraction output and the keyword lists use exactly 
 | `/turn` silence | under 100 ms, no language model |
 | Client budgets, filler lines, retry and failure ladder | BRAIN_API.md §8–§9 |
 | Demo call (golden dialogue `maria_g1`) | about 2:00, at most 10 student turns (the contract example has 9) |
-| Call cap in the brain | 24 student turns or 8 minutes → result with the current defaults (flag `turn_cap`) |
+| Call cap in the brain | 24 student turns or 8 minutes → result with the current defaults (flag `turn_cap`); a work or other-cash income never answered is not read as $0: the result is `coordinator.unresolved` with its yellow line |
 
 Fast path without the language model: silence; keypad turns; utterances of three words or fewer that the parser maps
 confidently to the pending closed question with no keyword intent. Everything else makes exactly one model call.
@@ -304,7 +304,7 @@ confidently to the pending closed question with no keyword intent. Everything el
 | Situation | Behavior |
 |---|---|
 | Language model times out (2.3 s), errors, refuses or returns invalid output | Use the parser's observations. If the pending question is still unanswered, re-ask it in its **closed** form (yes/no, or at most three choices; the phone adds single-key options such as "press one, two, or three", the web adds quick replies). A money question's closed form is a spoken band choice; amounts are never typed on the keypad. |
-| Two model failures in a row | Closed mode for the rest of the call: closed questions only, parser and keypad only. |
+| Two model failures in a row | Closed mode for the rest of the call: closed questions only, parser and keypad only. The closed age question asks only the age band, so a student under 22 whose living situation stays unknown gets `coordinator.unresolved` (yellow line on "Lives with a parent"), never an amount that could belong to the parents' household. |
 | Daily model turn cap reached (setting) | New calls run in closed mode. |
 | Silence 1 / 2 / 3 | `reprompt.silence_1` + the question · `reprompt.silence_2` + the closed form with the keypad · `close.silence` (coordinator number), end `no_input`. |
 | Interrupted and no answer | `reprompt.after_interrupt` + the question (short form). |
@@ -609,7 +609,7 @@ Fourteen groups. Each situation has its handling and one tag:
 | 11.16 | Student tries to type an amount on the keypad | Never asked for: amounts are answered by voice, and a money question's closed form is a spoken band choice. A `dtmf` event that carries more than one key is an unclear answer (`reprompt.unclear` + the closed form) | [basic] |
 | 11.17 | Stop or goodbye mid-call | `stop.goodbye`; incomplete yellow if before the result | [handled] |
 | 11.18 | Hang-up mid-call | `/end caller_hangup` → incomplete + yellow; live transcript wiped | [handled] |
-| 11.19 | Very long call | 24 student turns or 8 minutes → result with the current defaults (flag `turn_cap`) | [basic] |
+| 11.19 | Very long call | 24 student turns or 8 minutes → result with the current defaults (flag `turn_cap`); an income never answered → `coordinator.unresolved` + yellow (never the highest amount) | [basic] |
 | 11.20 | Relay-service call | Not specially handled and never claimed; the web page with typing is the recommended path | [basic] |
 
 ### 4.12 System
@@ -1246,7 +1246,7 @@ Sofia's the list_only one.
 
 ### 6.3 Calendar file
 
-`reminders.ics` (the endpoint keeps this name) holds 3 all-day events relative to `filed_on`, titled as in
+`reminders.ics` (the endpoint keeps this name; the downloaded file is `gatorplate-dates.ics`) holds 3 all-day events relative to the filing day (the application day the coordinator recorded, else the card's filing-date estimate `filed_on`), titled as in
 `card.{en,es}.json` `ui.calendar` (English, with `{county_phone}` = (855) 355-5757): day 3 "CalFresh: check BenefitsCal
 and answer calls from unknown numbers" · day 10 "CalFresh: no interview call yet? Call {county_phone}" · day 28
 "CalFresh: last days to finish your interview. No call yet? Call {county_phone}" [verify the day-30 deadline]. The
