@@ -161,3 +161,15 @@ def test_oversized_bodies_are_refused(h) -> None:
     assert r.status_code == 422 and r.json()["error"]["message"] == "Request body too large."
     turn = h.client.post("/v1/calls/0d000000000000000000000000000001/turn", content=big)
     assert turn.status_code == 422
+
+
+def test_static_cache_headers(h) -> None:
+    """Pages and their assets revalidate on every load; fonts are cached for a day; API answers are never stored."""
+    for path in ("/", "/landing.css", "/landing.js", "/shared/tokens.css", "/shared/icons.svg", "/talk", "/console"):
+        r = h.client.get(path)
+        assert r.status_code == 200, path
+        assert r.headers["cache-control"] == "no-cache", path
+    font = h.client.get("/shared/fonts/Archivo-Variable.woff2")
+    assert font.status_code == 200 and font.headers["cache-control"] == "public, max-age=86400"
+    assert h.client.get("/healthz").headers["cache-control"] == "no-store"
+    assert h.client.get("/api/public/info").headers["cache-control"] == "no-store"

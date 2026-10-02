@@ -1,6 +1,6 @@
 """Security headers on every response (docs/SPEC.md §8.9): a same-origin Content Security Policy with no inline
-script or style, no referrer, no MIME sniffing, the microphone only on the talk page, `no-store` on every API answer
-and `noindex` on the card, console and code pages."""
+script or style, no referrer, no MIME sniffing, the microphone only on the talk page, `no-store` on every API answer,
+`no-cache` on pages and their assets (fonts: one day), and `noindex` on the card, console and code pages."""
 
 from __future__ import annotations
 
@@ -24,6 +24,12 @@ def security_headers(path: str) -> list[tuple[bytes, bytes]]:
         headers.append((b"cache-control", b"no-store, no-transform"))
     elif path.startswith("/api/") or path.startswith("/v1/") or path == "/healthz":
         headers.append((b"cache-control", b"no-store"))
+    elif path.endswith(".woff2"):
+        headers.append((b"cache-control", b"public, max-age=86400"))  # font files keep their names across releases
+    else:
+        # Pages and their CSS, JS, JSON and SVG revalidate on every load (they carry an ETag), so a browser never
+        # mixes a new page with the styles or scripts of an earlier release.
+        headers.append((b"cache-control", b"no-cache"))
     if path.startswith(NOINDEX_PREFIXES):
         headers.append((b"x-robots-tag", b"noindex"))
     return headers
