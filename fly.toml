@@ -1,0 +1,39 @@
+# Fly.io app for GatorPlate: one always-on machine, one worker, a 1 GB volume at /data.
+# Secrets (GP_LLM_API_KEY, GP_GATEWAY_SECRET, GP_CONSOLE_PASSCODE, GP_SESSION_SECRET, GP_CARD_DELIVERY,
+# GP_DEMO_PHONE_DISPLAY) are set with `fly secrets set`, never written here.
+app = "gatorplate"
+primary_region = "iad"
+
+[build]
+
+[env]
+  GP_ENV = "prod"
+  GP_PUBLIC_BASE_URL = "https://gatorplate.fly.dev"
+  GP_DB_PATH = "/data/gatorplate.db"
+  GP_LLM_PROVIDER = "anthropic"
+  GP_DEBUG_KEYS = "0"
+  GP_DEMO_MODE = "1"
+  GP_LIVE_TRANSCRIPT = "1"
+  GP_TZ = "America/Los_Angeles"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "15s"
+    method = "GET"
+    path = "/v1/health"
+    timeout = "5s"
+
+[mounts]
+  source = "gp_data"
+  destination = "/data"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

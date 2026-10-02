@@ -1,0 +1,69 @@
+{
+ "$defs": {
+  "UtilityNames": {
+   "additionalProperties": false,
+   "properties": {
+    "heat_cool": {
+     "title": "Heat Cool",
+     "type": "string"
+    },
+    "none": {
+     "title": "None",
+     "type": "string"
+    },
+    "phone_only": {
+     "title": "Phone Only",
+     "type": "string"
+    },
+    "two_other": {
+     "title": "Two Other",
+     "type": "string"
+    }
+   },
+   "required": [
+    "heat_cool",
+    "two_other",
+    "phone_only",
+    "none"
+   ],
+   "title": "UtilityNames",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "from_slots": {
+   "title": "From Slots",
+   "type": "string"
+  },
+  "heat_cool": {
+   "title": "Heat Cool",
+   "type": "string"
+  },
+  "lua_utilities": {
+   "title": "Lua Utilities",
+   "type": "string"
+  },
+  "names": {
+   "$ref": "#/$defs/UtilityNames"
+  },
+  "one_per_household": {
+   "title": "One Per Household",
+   "type": "string"
+  },
+  "shared_bills": {
+   "title": "Shared Bills",
+   "type": "string"
+  }
+ },
+ "required": [
+  "names",
+  "from_slots",
+  "heat_cool",
+  "lua_utilities",
+  "one_per_household",
+  "shared_bills"
+ ],
+ "title": "UtilityRules",
+ "type": "object"
+}

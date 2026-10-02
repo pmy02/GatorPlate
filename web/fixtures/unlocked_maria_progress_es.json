@@ -1,0 +1,258 @@
+{
+ "mode": "full",
+ "title": "Dinero que quizá te falta reclamar este año",
+ "total_text": "Unos $4,220 al año",
+ "found_display": 4220,
+ "claimed_display": 3670,
+ "calfresh_display": 3670,
+ "segments": [
+  [
+   "calfresh",
+   3670
+  ],
+  [
+   "clipper_start",
+   160
+  ],
+  [
+   "lifeline",
+   220
+  ],
+  [
+   "care",
+   170
+  ]
+ ],
+ "question": null,
+ "chips": [
+  "+ cobertura médica (Medi-Cal)",
+  "quizá +$200"
+ ],
+ "programs": [
+  {
+   "id": "calfresh",
+   "name": "CalFresh",
+   "status": "likely",
+   "status_label": "Probable",
+   "value_text": "unos $3,670 al año",
+   "counted": true,
+   "line": "Solicita CalFresh hoy en BenefitsCal. Los pasos están arriba, en esta tarjeta.",
+   "notes": [
+    "12 veces el cálculo mensual, si nada cambia. El primer mes se paga desde el día en que solicitas; el total puede ser algo menor."
+   ],
+   "stage": "today",
+   "stage_label": "Hoy",
+   "apply_by_text": null,
+   "apply_url": "#today_action",
+   "apply_label": "Ver los pasos de hoy",
+   "applied": true,
+   "can_mark_applied": true,
+   "prefill": [],
+   "source_text": "Fuente: Tabla de CalFresh, año fiscal 2027 (CDSS ACIN I-40-26), 10 sep 2026"
+  },
+  {
+   "id": "medi_cal",
+   "name": "Medi-Cal",
+   "status": "coverage",
+   "status_label": "Cobertura",
+   "value_text": "cobertura médica",
+   "counted": false,
+   "line": "Cobertura médica para médico, hospital y medicinas, sin costo hoy para la mayoría de los estudiantes. Marca la casilla de salud en la misma solicitud de BenefitsCal.",
+   "notes": [
+    "Es la misma solicitud que CalFresh. No hay otro formulario."
+   ],
+   "stage": "today",
+   "stage_label": "Hoy",
+   "apply_by_text": null,
+   "apply_url": "https://benefitscal.com/",
+   "apply_label": "Abrir BenefitsCal",
+   "applied": false,
+   "can_mark_applied": true,
+   "prefill": [
+    {
+     "screen": "Programs",
+     "question": "¿También quieres cobertura médica (Medi-Cal)?",
+     "answer": "Sí"
+    },
+    {
+     "screen": "Tax filing",
+     "question": "¿Alguien te va a declarar como dependiente en sus impuestos?",
+     "answer": "No"
+    },
+    {
+     "screen": "Income",
+     "question": "¿Cuánto ganas al mes por tu trabajo?",
+     "answer": "$900 al mes"
+    }
+   ],
+   "source_text": "Fuente: Carta ACWDL 26-01 de DHCS (límites de ingreso 2026), 21 ene 2026"
+  },
+  {
+   "id": "clipper_start",
+   "name": "Clipper START",
+   "status": "likely",
+   "status_label": "Probable",
+   "value_text": "unos $160 al año",
+   "counted": true,
+   "line": "Muni, BART y autobuses a mitad de precio en las vacaciones de invierno y verano: unos $160 al año. Tu Gator Pass ya cubre los semestres.",
+   "notes": [
+    "Usa tu OneCard en los semestres y la tarjeta Clipper START en las vacaciones.",
+    "Con CalFresh puedes elegir \"Verify instantly through CalFresh\". La tarjeta llega por correo, por lo general en 30 días."
+   ],
+   "stage": "after_approval",
+   "stage_label": "Cuando llegue tu carta de aprobación de CalFresh",
+   "apply_by_text": "Solicítalo antes del 19 de noviembre, más o menos",
+   "apply_url": "https://www.clipperstartcard.com/s/application",
+   "apply_label": "Solicitar Clipper START",
+   "applied": false,
+   "can_mark_applied": true,
+   "prefill": [
+    {
+     "screen": "Verification",
+     "question": "¿Qué prueba vas a usar?",
+     "answer": "\"Verify instantly through CalFresh\""
+    },
+    {
+     "screen": "Photo ID",
+     "question": "¿Qué identificación con foto vas a subir?",
+     "answer": "Una identificación con foto que muestre tu fecha de nacimiento (el formulario dice cuáles sirven)"
+    },
+    {
+     "screen": "Mailing address",
+     "question": "¿A qué dirección te envían la tarjeta?",
+     "answer": "Cualquier dirección donde recibas correo"
+    }
+   ],
+   "source_text": "Fuente: Preguntas frecuentes de Clipper START, revisado el 1 oct 2026"
+  },
+  {
+   "id": "lifeline",
+   "name": "California LifeLine",
+   "status": "likely",
+   "status_label": "Probable",
+   "value_text": "hasta $220 al año",
+   "counted": true,
+   "line": "Descuento de teléfono: hasta $220 al año con California LifeLine (máximo $19 al mes; menos si tu plan cuesta menos).",
+   "notes": [
+    "Lifeline federal puede sumar hasta $110 más al año.",
+    "Si tu familia paga tu plan de teléfono, el ahorro es para ellos.",
+    "CalFresh o Medi-Cal sirven como prueba. Elige una compañía de LifeLine y solicita con ella."
+   ],
+   "stage": "after_approval",
+   "stage_label": "Cuando llegue tu carta de aprobación de CalFresh",
+   "apply_by_text": null,
+   "apply_url": "https://www.californialifeline.com/",
+   "apply_label": "Buscar una compañía de LifeLine",
+   "applied": false,
+   "can_mark_applied": true,
+   "prefill": [
+    {
+     "screen": "Qualifying program",
+     "question": "¿Qué programa recibes?",
+     "answer": "CalFresh o Medi-Cal (cuando llegue tu carta de aprobación)"
+    },
+    {
+     "screen": "Household",
+     "question": "¿Compartes dinero con otros adultos donde vives?",
+     "answer": "No, mis compañeros y yo no compartimos dinero"
+    },
+    {
+     "screen": "Service",
+     "question": "¿Para qué servicio es el descuento?",
+     "answer": "Mi plan de celular"
+    }
+   ],
+   "source_text": "Fuente: CPUC: California LifeLine y Lifeline federal, 18 feb 2026"
+  },
+  {
+   "id": "care",
+   "name": "PG&E CARE",
+   "status": "likely",
+   "status_label": "Probable",
+   "value_text": "unos $170 al año",
+   "counted": true,
+   "line": "Descuento de PG&E: unos $170 al año como tu parte (unos $510 para la casa). Factura supuesta: $140 al mes dividida entre 3; la tuya puede variar.",
+   "notes": [
+    "Tu compañero titular lo solicita y marca la casilla de CalFresh cuando tengas CalFresh. No puede ser dependiente de nadie en impuestos.",
+    "CalFresh lo abre: marca la casilla de CalFresh. No hacen falta papeles de ingresos para solicitarlo."
+   ],
+   "stage": "after_approval",
+   "stage_label": "Cuando llegue tu carta de aprobación de CalFresh",
+   "apply_by_text": null,
+   "apply_url": "https://www.pge.com/en/account/billing-and-assistance/financial-assistance/california-alternate-rates-for-energy-program.html",
+   "apply_label": "Solicitar CARE",
+   "applied": false,
+   "can_mark_applied": true,
+   "prefill": [
+    {
+     "screen": "Section 2A",
+     "question": "Sección 2A: ¿qué programa recibe alguien en tu casa?",
+     "answer": "CalFresh (marca esta casilla)"
+    },
+    {
+     "screen": "Section 1",
+     "question": "¿Cuántas personas viven en tu casa?",
+     "answer": "3"
+    },
+    {
+     "screen": "Section 1",
+     "question": "¿A nombre de quién está la factura de PG&E?",
+     "answer": "De mi compañero (lo solicita él o ella)"
+    }
+   ],
+   "source_text": "Fuente: CPUC: programas CARE y FERA, revisado el 1 oct 2026"
+  },
+  {
+   "id": "tax_credits",
+   "name": "Créditos fiscales (CalEITC, EITC)",
+   "status": "maybe",
+   "status_label": "Quizá",
+   "value_text": "quizá unos $200 al año",
+   "counted": false,
+   "line": "Quizá unos $200 en créditos fiscales en la temporada de impuestos. Un voluntario de SF State VITA revisa gratis si puedes pedirlos.",
+   "notes": [
+    "El crédito del estado funciona con SSN o ITIN. El federal necesita un SSN válido para trabajar.",
+    "¿No declaraste impuestos de 2025? Quizá todavía puedas declarar y pedir créditos gratis.",
+    "Los créditos fiscales como el EITC no bajan tu CalFresh.",
+    "Según las tablas estatales de 2025 (las de 2026 aún no salen) y tu pago mensual todo el año. Es un crédito, no tu reembolso."
+   ],
+   "stage": "tax_time",
+   "stage_label": "En la temporada de impuestos (por lo general, de fin de enero al 15 de abril)",
+   "apply_by_text": null,
+   "apply_url": "https://cob.sfsu.edu/VITA",
+   "apply_label": "Abrir SF State VITA",
+   "applied": false,
+   "can_mark_applied": true,
+   "prefill": [
+    {
+     "screen": "Intake form 13614-C",
+     "question": "¿Cuánto ganaste por tu trabajo en 2026? Lleva tu W-2.",
+     "answer": "$900 al mes"
+    },
+    {
+     "screen": "Intake form 13614-C",
+     "question": "¿Viviste con tu mamá o tu papá? El tiempo fuera por estudios puede contar.",
+     "answer": "Díselo al voluntario. Eso decide quién puede pedir el crédito."
+    }
+   ],
+   "source_text": "Fuente: Instrucciones y tabla FTB 3514, año fiscal 2025, 2025"
+  }
+ ],
+ "share_text": "Encontré unos $4,200 al año en ayudas que quizá no estoy recibiendo (son cálculos, no promesas). Revisa las tuyas en 2 minutos: https://gatorplate.fly.dev",
+ "footnote": "Cálculos para los próximos 12 meses con reglas oficiales, revisadas el 1 oct 2026. Cada agencia decide. No es una promesa.",
+ "labels": {
+  "ui.claimed": "Ya empezaste $3,670 de $4,220",
+  "ui.calfresh_part": "CalFresh: unos $3,670 al año ($306 al mes)",
+  "ui.key_line": "CalFresh es la llave. Abre las demás ayudas.",
+  "ui.question_count": "Pregunta {i} de {n}",
+  "ui.plan_title": "Tu plan",
+  "ui.answers_title": "Tus respuestas para este formulario",
+  "ui.new_tab": "se abre en otra pestaña",
+  "ui.mark_applied": "Ya lo solicité",
+  "ui.undo": "Deshacer",
+  "ui.share_button": "Compartir",
+  "ui.copied": "Copiado",
+  "ui.list_only_intro": "Esto también podría ayudarte. Una persona lo revisa contigo, por eso aún no hay cantidades."
+ },
+ "lang": "es"
+}

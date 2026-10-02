@@ -1,0 +1,51 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "created_at": {
+   "format": "date-time",
+   "title": "Created At",
+   "type": "string"
+  },
+  "expires_at": {
+   "format": "date-time",
+   "title": "Expires At",
+   "type": "string"
+  },
+  "short_code": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Short Code"
+  },
+  "short_code_expires_at": {
+   "anyOf": [
+    {
+     "format": "date-time",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Short Code Expires At"
+  },
+  "token": {
+   "title": "Token",
+   "type": "string"
+  }
+ },
+ "required": [
+  "token",
+  "created_at",
+  "expires_at"
+ ],
+ "title": "CardRef",
+ "type": "object"
+}

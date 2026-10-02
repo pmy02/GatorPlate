@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "applied": {
+   "title": "Applied",
+   "type": "boolean"
+  },
+  "program": {
+   "title": "Program",
+   "type": "string"
+  }
+ },
+ "required": [
+  "program",
+  "applied"
+ ],
+ "title": "ProgramProgressRequest",
+ "type": "object"
+}

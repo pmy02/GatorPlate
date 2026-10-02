@@ -1,0 +1,88 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "age": {
+   "maxItems": 2,
+   "minItems": 2,
+   "prefixItems": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "integer"
+    }
+   ],
+   "title": "Age",
+   "type": "array"
+  },
+  "ca_effective": {
+   "format": "date",
+   "title": "Ca Effective",
+   "type": "string"
+  },
+  "child_exempt_under": {
+   "title": "Child Exempt Under",
+   "type": "integer"
+  },
+  "earnings_basis": {
+   "title": "Earnings Basis",
+   "type": "string"
+  },
+  "earnings_exempt_monthly": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Earnings Exempt Monthly"
+  },
+  "half_time_student_exempt": {
+   "title": "Half Time Student Exempt",
+   "type": "boolean"
+  },
+  "sf_waiver": {
+   "title": "Sf Waiver",
+   "type": "boolean"
+  },
+  "unemployment_exempt": {
+   "title": "Unemployment Exempt",
+   "type": "boolean"
+  },
+  "work_requirement_hours_month": {
+   "title": "Work Requirement Hours Month",
+   "type": "integer"
+  },
+  "yellow_code": {
+   "title": "Yellow Code",
+   "type": "string"
+  },
+  "yellow_text": {
+   "title": "Yellow Text",
+   "type": "string"
+  },
+  "yellow_when": {
+   "title": "Yellow When",
+   "type": "string"
+  }
+ },
+ "required": [
+  "age",
+  "child_exempt_under",
+  "earnings_exempt_monthly",
+  "earnings_basis",
+  "work_requirement_hours_month",
+  "unemployment_exempt",
+  "half_time_student_exempt",
+  "ca_effective",
+  "sf_waiver",
+  "yellow_code",
+  "yellow_when",
+  "yellow_text"
+ ],
+ "title": "Abawd",
+ "type": "object"
+}

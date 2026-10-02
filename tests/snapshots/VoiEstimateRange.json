@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "lo_hi": {
+   "title": "Lo Hi",
+   "type": "string"
+  },
+  "settled": {
+   "title": "Settled",
+   "type": "string"
+  }
+ },
+ "required": [
+  "lo_hi",
+  "settled"
+ ],
+ "title": "VoiEstimateRange",
+ "type": "object"
+}

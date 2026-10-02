@@ -1,0 +1,21 @@
+{
+ "additionalProperties": false,
+ "description": "The card's \"I applied\" mark for one program.",
+ "properties": {
+  "applied": {
+   "title": "Applied",
+   "type": "boolean"
+  },
+  "at": {
+   "format": "date-time",
+   "title": "At",
+   "type": "string"
+  }
+ },
+ "required": [
+  "applied",
+  "at"
+ ],
+ "title": "ProgramProgress",
+ "type": "object"
+}

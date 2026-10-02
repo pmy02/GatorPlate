@@ -1,0 +1,41 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "amount": {
+   "title": "Amount",
+   "type": "integer"
+  },
+  "apply_date": {
+   "format": "date",
+   "title": "Apply Date",
+   "type": "string"
+  },
+  "days_counted": {
+   "title": "Days Counted",
+   "type": "integer"
+  },
+  "estimate": {
+   "default": true,
+   "title": "Estimate",
+   "type": "boolean"
+  },
+  "filed_on": {
+   "format": "date",
+   "title": "Filed On",
+   "type": "string"
+  },
+  "month_label": {
+   "title": "Month Label",
+   "type": "string"
+  }
+ },
+ "required": [
+  "apply_date",
+  "filed_on",
+  "amount",
+  "days_counted",
+  "month_label"
+ ],
+ "title": "FirstMonth",
+ "type": "object"
+}

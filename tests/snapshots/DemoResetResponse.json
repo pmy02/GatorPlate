@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "deleted": {
+   "title": "Deleted",
+   "type": "integer"
+  },
+  "kept": {
+   "title": "Kept",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "deleted",
+  "kept"
+ ],
+ "title": "DemoResetResponse",
+ "type": "object"
+}

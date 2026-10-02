@@ -1,0 +1,25 @@
+{
+ "additionalProperties": false,
+ "description": "One row of a form helper table: the official screen name, its question and the student's answer.\n\nDefined here (and re-exported by card_api) so that programs.py can use it without an import cycle.",
+ "properties": {
+  "answer": {
+   "title": "Answer",
+   "type": "string"
+  },
+  "question": {
+   "title": "Question",
+   "type": "string"
+  },
+  "screen": {
+   "title": "Screen",
+   "type": "string"
+  }
+ },
+ "required": [
+  "screen",
+  "question",
+  "answer"
+ ],
+ "title": "CardRow",
+ "type": "object"
+}

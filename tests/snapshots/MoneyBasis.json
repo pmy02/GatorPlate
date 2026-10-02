@@ -1,0 +1,52 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "amount": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Amount"
+  },
+  "hours_per_week": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Hours Per Week"
+  },
+  "period": {
+   "enum": [
+    "hour",
+    "week",
+    "biweek",
+    "semimonth",
+    "month",
+    "year",
+    "once"
+   ],
+   "title": "Period",
+   "type": "string"
+  }
+ },
+ "required": [
+  "amount",
+  "period"
+ ],
+ "title": "MoneyBasis",
+ "type": "object"
+}

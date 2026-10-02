@@ -1,0 +1,357 @@
+{
+ "$defs": {
+  "CardRow": {
+   "additionalProperties": false,
+   "description": "One row of a form helper table: the official screen name, its question and the student's answer.\n\nDefined here (and re-exported by card_api) so that programs.py can use it without an import cycle.",
+   "properties": {
+    "answer": {
+     "title": "Answer",
+     "type": "string"
+    },
+    "question": {
+     "title": "Question",
+     "type": "string"
+    },
+    "screen": {
+     "title": "Screen",
+     "type": "string"
+    }
+   },
+   "required": [
+    "screen",
+    "question",
+    "answer"
+   ],
+   "title": "CardRow",
+   "type": "object"
+  },
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  },
+  "UnlockedChoice": {
+   "additionalProperties": false,
+   "properties": {
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "value": {
+     "title": "Value",
+     "type": "string"
+    }
+   },
+   "required": [
+    "value",
+    "label"
+   ],
+   "title": "UnlockedChoice",
+   "type": "object"
+  },
+  "UnlockedProgram": {
+   "additionalProperties": false,
+   "properties": {
+    "applied": {
+     "title": "Applied",
+     "type": "boolean"
+    },
+    "apply_by_text": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Apply By Text"
+    },
+    "apply_label": {
+     "title": "Apply Label",
+     "type": "string"
+    },
+    "apply_url": {
+     "title": "Apply Url",
+     "type": "string"
+    },
+    "can_mark_applied": {
+     "title": "Can Mark Applied",
+     "type": "boolean"
+    },
+    "counted": {
+     "title": "Counted",
+     "type": "boolean"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "line": {
+     "title": "Line",
+     "type": "string"
+    },
+    "name": {
+     "title": "Name",
+     "type": "string"
+    },
+    "notes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Notes",
+     "type": "array"
+    },
+    "prefill": {
+     "items": {
+      "$ref": "#/$defs/CardRow"
+     },
+     "title": "Prefill",
+     "type": "array"
+    },
+    "source_text": {
+     "title": "Source Text",
+     "type": "string"
+    },
+    "stage": {
+     "enum": [
+      "today",
+      "after_approval",
+      "tax_time"
+     ],
+     "title": "Stage",
+     "type": "string"
+    },
+    "stage_label": {
+     "title": "Stage Label",
+     "type": "string"
+    },
+    "status": {
+     "enum": [
+      "likely",
+      "maybe",
+      "check",
+      "coverage",
+      "zero",
+      "note"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "status_label": {
+     "title": "Status Label",
+     "type": "string"
+    },
+    "value_text": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Value Text"
+    }
+   },
+   "required": [
+    "id",
+    "name",
+    "status",
+    "status_label",
+    "value_text",
+    "counted",
+    "line",
+    "notes",
+    "stage",
+    "stage_label",
+    "apply_by_text",
+    "apply_url",
+    "apply_label",
+    "applied",
+    "can_mark_applied",
+    "prefill",
+    "source_text"
+   ],
+   "title": "UnlockedProgram",
+   "type": "object"
+  },
+  "UnlockedQuestion": {
+   "additionalProperties": false,
+   "properties": {
+    "choices": {
+     "items": {
+      "$ref": "#/$defs/UnlockedChoice"
+     },
+     "title": "Choices",
+     "type": "array"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "index": {
+     "title": "Index",
+     "type": "integer"
+    },
+    "text": {
+     "title": "Text",
+     "type": "string"
+    },
+    "total": {
+     "title": "Total",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "id",
+    "text",
+    "choices",
+    "index",
+    "total"
+   ],
+   "title": "UnlockedQuestion",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "description": "Everything the card widget shows, in one language; every string passed the output guard.",
+ "properties": {
+  "calfresh_display": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Calfresh Display"
+  },
+  "chips": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Chips",
+   "type": "array"
+  },
+  "claimed_display": {
+   "title": "Claimed Display",
+   "type": "integer"
+  },
+  "footnote": {
+   "title": "Footnote",
+   "type": "string"
+  },
+  "found_display": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Found Display"
+  },
+  "labels": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Labels",
+   "type": "object"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang"
+  },
+  "mode": {
+   "enum": [
+    "full",
+    "list_only"
+   ],
+   "title": "Mode",
+   "type": "string"
+  },
+  "programs": {
+   "items": {
+    "$ref": "#/$defs/UnlockedProgram"
+   },
+   "title": "Programs",
+   "type": "array"
+  },
+  "question": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/UnlockedQuestion"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "segments": {
+   "items": {
+    "maxItems": 2,
+    "minItems": 2,
+    "prefixItems": [
+     {
+      "type": "string"
+     },
+     {
+      "type": "integer"
+     }
+    ],
+    "type": "array"
+   },
+   "title": "Segments",
+   "type": "array"
+  },
+  "share_text": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Share Text"
+  },
+  "title": {
+   "title": "Title",
+   "type": "string"
+  },
+  "total_text": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Total Text"
+  }
+ },
+ "required": [
+  "mode",
+  "title",
+  "total_text",
+  "found_display",
+  "claimed_display",
+  "calfresh_display",
+  "segments",
+  "question",
+  "chips",
+  "programs",
+  "share_text",
+  "footnote",
+  "labels",
+  "lang"
+ ],
+ "title": "UnlockedView",
+ "type": "object"
+}

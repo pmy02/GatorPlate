@@ -1,0 +1,476 @@
+{
+  "example": "maria_phone",
+  "description": "Golden phone dialogue maria_g1: an SF State junior who likely gets about $306 a month. Replies are illustrative but follow the phone text rules and word budgets.",
+  "api": "brain_api.v1",
+  "illustrative_text": true,
+  "native_review": false,
+  "scenarios": [
+    {
+      "id": "maria_phone",
+      "title": "Maria, phone, English: likely $306, one flip question, not expedited",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0a000000000000000000000000000001",
+      "settings": {
+        "GP_CARD_DELIVERY": "screen"
+      },
+      "exchanges": [
+        {
+          "step": "start",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/start",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "channel": "phone",
+              "lang": "en",
+              "test": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.",
+              "ask": "Okay to start? Say yes, or press one.",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "consent.ask"
+          ],
+          "budget": "opening"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Yes, that's fine.",
+              "masked": false,
+              "confidence": 0.95,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Great.",
+              "ask": "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.level_units"
+          ],
+          "budget": "question"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "en",
+              "event": "utterance",
+              "text": "I'm an SF State undergrad, a junior, and I'm taking 12 units.",
+              "masked": false,
+              "confidence": 0.92,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Thanks.",
+              "ask": "How old are you, and who do you live with?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.age_parent"
+          ],
+          "budget": "question"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 3,
+              "lang": "en",
+              "event": "utterance",
+              "text": "I'm 20, and I live with two roommates.",
+              "masked": false,
+              "confidence": 0.93,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Got it.",
+              "ask": "Do you buy and cook food with your roommates, or separately?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "choice",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.household_food_roommates"
+          ],
+          "budget": "question"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 4,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Separately.",
+              "masked": false,
+              "confidence": 0.96,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Okay.",
+              "ask": "About how much do you earn a month from work before taxes, not counting financial aid, and does anyone give you cash?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.income"
+          ],
+          "budget": "question"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 5,
+              "lang": "en",
+              "event": "utterance",
+              "text": "I work at the campus library, about 900 a month. Nobody gives me cash.",
+              "masked": false,
+              "confidence": 0.91,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Got it — about nine hundred dollars a month from work.",
+              "ask": "How much is your share of the rent each month?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "readback.earned",
+            "ask.rent"
+          ],
+          "budget": "question"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 6,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Eleven hundred.",
+              "masked": false,
+              "confidence": 0.89,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Got it — eleven hundred dollars a month. One more question.",
+              "ask": "Does anyone, like a parent, pay part of your rent straight to your landlord?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "readback.rent",
+            "flip.intro",
+            "flip.rent_paid_by_others"
+          ],
+          "budget": "question",
+          "note": "Flip question: the only open slot that changes the estimate (by $151: $155 or $306). Heat/AC and other utility bills are skipped because the estimate is the same either way. flip.intro precedes the first flip question of the call because the whole reply (say + ask, read-back included) stays within the 25-word question budget: 7 + 3 + 14 = 24 words."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 7,
+              "lang": "en",
+              "event": "utterance",
+              "text": "No.",
+              "masked": false,
+              "confidence": 0.97,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Based on what you told me, you may get about three hundred six dollars a month. The county makes the final decision.",
+              "ask": "Roughly how much money do you have right now, in cash and in the bank?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "result.likely",
+            "expedited.intro_cash"
+          ],
+          "budget": "result",
+          "note": "Expedited screen: the cash question is asked because rent plus a utility allowance exceeds gross income in a remaining world."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 8,
+              "lang": "en",
+              "event": "utterance",
+              "text": "About a thousand.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Apply today if you can — your first month counts from your application date. Your card is ready — scan the QR code on the screen. The SF State CalFresh coordinator is at four one five, three three eight, one two zero three.",
+              "ask": "Anything else?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "first_month.apply_today",
+            "card.phone_screen",
+            "close.anything_else"
+          ],
+          "budget": "result",
+          "note": "GP_CARD_DELIVERY=screen (demo table). Cash $1,000 means no expedited service in any remaining world, so nothing is said about it."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 9,
+              "lang": "en",
+              "event": "utterance",
+              "text": "No, thanks.",
+              "masked": false,
+              "confidence": 0.95,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Thanks for calling GatorPlate. Good luck. Goodbye.",
+              "ask": null,
+              "end": true,
+              "end_reason": "completed",
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "close.goodbye"
+          ],
+          "budget": "question"
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0a000000000000000000000000000001/end",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "reason": "completed",
+              "turns": 9,
+              "duration_ms": 118000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {}
+          }
+        }
+      ],
+      "expect_final": {
+        "note": "Outcome the brain must reach (checked by the brain's own end-to-end tests; names are descriptive, not part of this API).",
+        "golden_case": "G1",
+        "tier": "likely",
+        "estimate_monthly": 306,
+        "expedited": "no",
+        "cash_on_hand": "1000",
+        "flips_asked": [
+          "rent_paid_by_others_to_landlord"
+        ],
+        "flip_reason": "could change the estimate by $151: $155 or $306",
+        "skipped_no_effect": [
+          "heat_cool",
+          "other_utils"
+        ],
+        "yellow_open": 0,
+        "student_turns": 9
+      }
+    }
+  ]
+}

@@ -1,0 +1,400 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:gatorplate:contracts:brain-api:v1",
+  "title": "GatorPlate Brain API v1",
+  "description": "Contract between GatorPlate's brain and its two clients: the hosted voice gateway (phone, English) and the GatorPlate talk page (web, English and Spanish). The gateway handles audio and timing; GatorPlate decides every word. Requests carry text, events and counters only: never audio, never the student's phone number or anything derived from it. Frozen 2026-10-01. Human reference: docs/BRAIN_API.md. Test vectors: contracts/examples/. Checker: contracts/check_examples.py.",
+  "x-version": {
+    "api": 1,
+    "path_prefix": "/v1",
+    "frozen_on": "2026-10-01",
+    "change_policy": "Request fields may be added inside v1 (receivers ignore unknown request fields). Reply fields, enum values, error codes, auth and endpoint meanings change only with a new version (/v2 paths and \"v\": 2)."
+  },
+  "x-auth": {
+    "call_id_pattern": "^[a-f0-9]{32}$",
+    "call_id_source": "phone: the gateway creates a new random UUID (version 4) for every call and writes it as 32 lowercase hex characters without dashes; web: issued by POST /api/web/sessions",
+    "gateway": {
+      "channel": "phone",
+      "applies_to": [
+        "GET /v1/lines",
+        "POST /v1/calls/{call_id}/start",
+        "POST /v1/calls/{call_id}/turn",
+        "POST /v1/calls/{call_id}/end"
+      ],
+      "headers": {
+        "timestamp": "X-GP-Timestamp",
+        "signature": "X-GP-Signature"
+      },
+      "timestamp_format": "unix seconds as a decimal integer string (digits only)",
+      "signing_string": "{ts}.{METHOD}.{path}.{sha256_hex(body)}",
+      "signing_string_parts": {
+        "ts": "the X-GP-Timestamp header value exactly as sent",
+        "METHOD": "HTTP method in upper case: GET or POST",
+        "path": "URL path exactly as sent, without scheme, host or query string (GET /v1/lines?lang=en signs /v1/lines)",
+        "sha256_hex(body)": "lowercase hex SHA-256 of the exact body bytes sent; for an empty body (GET) e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "signature_format": "v1=<lowercase hex HMAC-SHA256(key, signing_string as UTF-8)>",
+      "key": "UTF-8 bytes of the shared secret string exactly as stored (do not base64-decode it)",
+      "secret_setting": "GP_GATEWAY_SECRET",
+      "secret_format": "48 random bytes as URL-safe base64 text",
+      "window_s": 120,
+      "compare": "constant time (hmac.compare_digest)",
+      "check_order": [
+        "X-GP-Timestamp or X-GP-Signature missing (and no bearer token): 401 unauthorized",
+        "timestamp not digits, or signature not 'v1=' + 64 lowercase hex: 401 bad_signature",
+        "signature does not match: 401 bad_signature",
+        "abs(server_now - ts) > 120: 401 stale_timestamp",
+        "channel in a start body is not phone: 401 unauthorized"
+      ]
+    },
+    "web": {
+      "channel": "web",
+      "applies_to": [
+        "POST /v1/calls/{call_id}/start",
+        "POST /v1/calls/{call_id}/turn",
+        "POST /v1/calls/{call_id}/end"
+      ],
+      "header": "Authorization: Bearer <token>",
+      "issued_by": "POST /api/web/sessions",
+      "bound_to": "the call_id issued together with the token",
+      "lifetime_s": 1800,
+      "errors": "missing, unknown or expired token, token issued for another call_id, or a start body whose channel is not web: 401 unauthorized"
+    }
+  },
+  "x-endpoints": [
+    {
+      "method": "GET",
+      "path": "/v1/health",
+      "auth": "none",
+      "response": "#/$defs/HealthResponse"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/lines",
+      "query": {"lang": "en (default) or es"},
+      "auth": "gateway",
+      "response": "#/$defs/GatewayLines",
+      "note": "Fetched and cached by the gateway when it boots; the gateway also keeps identical built-in copies."
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calls/{call_id}/start",
+      "auth": "gateway or bearer",
+      "request": "#/$defs/StartRequest",
+      "response": "#/$defs/BrainReply"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calls/{call_id}/turn",
+      "auth": "gateway or bearer",
+      "request": "#/$defs/TurnRequest",
+      "response": "#/$defs/BrainReply"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/calls/{call_id}/end",
+      "auth": "gateway or bearer",
+      "request": "#/$defs/EndRequest",
+      "response": "#/$defs/EndResponse"
+    },
+    {
+      "method": "POST",
+      "path": "/api/web/sessions",
+      "auth": "none",
+      "rate_limit": "20 per hour per IP address",
+      "request": "#/$defs/WebSessionRequest",
+      "response": "#/$defs/WebSessionResponse"
+    }
+  ],
+  "x-success-status": 200,
+  "x-errors": {
+    "unknown_call": {"status": 404, "retryable": false, "when": "turn or end for a call_id the brain has never started"},
+    "bad_signature": {"status": 401, "retryable": false, "when": "gateway signature malformed or wrong"},
+    "stale_timestamp": {"status": 401, "retryable": false, "when": "gateway timestamp more than 120 s from the brain's clock"},
+    "unauthorized": {"status": 401, "retryable": false, "when": "no credentials, bad or expired bearer token, token for another call, channel not allowed for these credentials"},
+    "rate_limited": {"status": 429, "retryable": true, "when": "web session limit reached (20 per hour per IP address)"},
+    "invalid_request": {"status": 422, "retryable": false, "when": "body is not valid JSON or does not match the request schema; malformed call_id; unsupported lang"},
+    "stale_seq": {"status": 409, "retryable": false, "when": "turn seq lower than the last accepted seq of the call"},
+    "conflict": {"status": 409, "retryable": false, "when": "turn for a call that has already ended"},
+    "locked": {"status": 409, "retryable": false, "when": "not used by the Brain API endpoints (shared code list)"},
+    "not_found": {"status": 404, "retryable": false, "when": "not used by the Brain API endpoints (shared code list)"},
+    "gone": {"status": 410, "retryable": false, "when": "not used by the Brain API endpoints (shared code list)"},
+    "internal": {"status": 500, "retryable": true, "when": "unexpected brain failure; sending the same seq again is safe"}
+  },
+  "x-timing": {
+    "start": {"gateway_budget_s": 3.0, "brain_target": "under 50 ms, never calls the language model"},
+    "end": {"gateway_budget_s": 3.0, "mode": "fire-and-forget", "brain_target": "under 50 ms, never calls the language model"},
+    "lines_and_health": {"brain_target": "under 50 ms, never calls the language model"},
+    "turn_utterance_or_dtmf": {
+      "gateway_budget_s": 6.0,
+      "filler_at_s": 1.5,
+      "brain_p50_s": 0.8,
+      "brain_p95_s": 1.5,
+      "language_model_timeout_s": 2.3,
+      "on_language_model_timeout": "answer with a closed question",
+      "brain_hard_turn_budget_s": 2.6
+    },
+    "turn_silence": {"gateway_budget_s": 2.5, "filler": false, "brain_target": "under 100 ms, never calls the language model"},
+    "budget_note": "Gateway budgets are totals including at most one retry.",
+    "retry": "The gateway retries once, only after a connection error or a 502/503/504 status, and only with at least 2 s of the budget left. A retry sends the same request again (same seq).",
+    "failure_ladder": [
+      "1st consecutive failure: say GatewayLines.retry, then repeat the last ask",
+      "2nd consecutive failure: say GatewayLines.fatal, then hang up",
+      "failed start: say GatewayLines.fatal_start, then hang up",
+      "failed silence request: the client may answer it on its own by repeating the last ask; at the third silence in a row it says GatewayLines.no_input_bye and hangs up (end reason no_input)"
+    ]
+  },
+  "x-text-rules": {
+    "phone_say_and_ask": {
+      "forbidden_symbols": ["$", "%", "/", "~", "–"],
+      "numbers": "in words: money as 'three hundred six dollars'; phone numbers and codes digit by digit in groups ('four one five, three three eight, one two zero three'); keypad keys as 'press one'",
+      "urls": "spoken: 'gatorplate dot fly dot dev slash go'",
+      "markup": "plain sentences only: no markdown, emoji or markup tags"
+    },
+    "web_display": "may use digits and symbols ('$306', '(415) 338-1203')",
+    "never_in_any_reply": [
+      "a rejection ('not eligible', 'ineligible', 'don't qualify', 'denied', 'no califica', 'no eres elegible')",
+      "a promise of a text message, a callback, a live transfer, a reminder message, or that anything was 'sent to the coordinator'",
+      "a claim of relay-service support or of 'any language'",
+      "an eligibility decision ('you qualify', 'you are eligible', 'approved'): only the county decides"
+    ],
+    "amounts": "every estimated amount is followed in the same reply by the county-decides sentence"
+  },
+  "x-word-budgets": {
+    "applies_to": "phone replies",
+    "counted": "words of say and ask together",
+    "word": "a whitespace-separated token that contains at least one letter or digit ('student-built' and \"isn't\" are one word; a lone dash is none)",
+    "opening": 40,
+    "question": 25,
+    "result": 45,
+    "classes": {
+      "opening": "the /start reply",
+      "result": "a reply whose say gives an outcome or contact details to keep: the estimate or a routing result, the expedited outlook, the apply-today and card lines, or a phone number (coordinator, county, crisis)",
+      "question": "every other reply: acknowledgement plus the next question, confirmations, re-asks, short notices, goodbyes without a phone number"
+    }
+  },
+  "x-reply-rules": [
+    "The /start reply has a non-empty say, a question in ask (the consent question), end false and interruptible false (the opening disclosure is never interruptible). On the phone, say states that GatorPlate is an AI, student-built and not an official SF State service, that an AI turns what the student says into text to check CalFresh, and that the call audio isn't recorded; ask asks for consent with the keypad option ('press one').",
+    "Phone replies: display, choices and card_url are always null; lang is en except a single-reply Spanish notice (language.offer_web).",
+    "Web replies: display is always a string; card_url, once set, stays set in every later reply of the call.",
+    "end true: the client says say and hangs up; ask is null, hold_s is 0, interruptible is false.",
+    "say empty, ask null and end false: the client says nothing and keeps listening (for example after a keypad key that is part of a longer entry).",
+    "hold_s 1-60: ask is null; the client keeps listening and sends no silence event for hold_s seconds. If the student is still silent when the hold ends, the client may say the last ask again; then silence events resume as usual.",
+    "ask null: expect is open.",
+    "choices only together with a question (ask not null).",
+    "debug is null unless the brain runs with GP_DEBUG_KEYS=1 (never in production)."
+  ],
+  "$defs": {
+    "Lang": {
+      "description": "Language code: en (English) or es (Spanish).",
+      "enum": ["en", "es"]
+    },
+    "Channel": {
+      "description": "phone = hosted voice gateway; web = GatorPlate talk page.",
+      "enum": ["phone", "web"]
+    },
+    "CallId": {
+      "description": "32 lowercase hex characters.",
+      "type": "string",
+      "pattern": "^[a-f0-9]{32}$"
+    },
+    "StartRequest": {
+      "title": "StartRequest",
+      "description": "Body of POST /v1/calls/{call_id}/start. Sent once when the call begins. A repeated start returns the stored first reply. Unknown properties are ignored (tolerant reader).",
+      "type": "object",
+      "required": ["v", "seq", "channel", "lang"],
+      "properties": {
+        "v": {"description": "API version.", "const": 1},
+        "seq": {"description": "Always 0 for start.", "const": 0},
+        "channel": {"description": "Must match the credentials: gateway signature = phone, bearer token = web.", "$ref": "#/$defs/Channel"},
+        "lang": {"description": "Phone: always en. Web: the language the student picked on the talk page.", "$ref": "#/$defs/Lang"},
+        "test": {"description": "true for a test call placed by the team, not by a student.", "type": "boolean", "default": false}
+      },
+      "additionalProperties": true
+    },
+    "TurnRequest": {
+      "title": "TurnRequest",
+      "description": "Body of POST /v1/calls/{call_id}/turn. Exactly one event per request: utterance needs text, dtmf needs dtmf, silence needs silence_n. Fields that belong to another event are ignored. Unknown properties are ignored (tolerant reader).",
+      "type": "object",
+      "required": ["v", "seq", "event"],
+      "properties": {
+        "v": {"description": "API version.", "const": 1},
+        "seq": {"description": "1 for the first turn, then +1 per turn request. Same seq = same request (idempotent).", "type": "integer", "minimum": 1},
+        "lang": {"description": "Language of the text. Phone: always en. Web: the talk page's current language. Default: the call's language.", "$ref": "#/$defs/Lang"},
+        "event": {"description": "What happened: the student spoke or typed (utterance), pressed keypad keys (dtmf), or stayed silent (silence).", "enum": ["utterance", "dtmf", "silence"]},
+        "text": {"description": "utterance: the final transcript (or typed text). No partial transcripts. May be empty; the brain then re-asks.", "type": "string", "maxLength": 1000},
+        "masked": {"description": "utterance, phone: true when the gateway replaced a run of 9 or more digits (SSN, phone or card number) with '#' characters. The number of '#' characters carries no meaning.", "type": "boolean", "default": false},
+        "confidence": {"description": "utterance: how sure the transcript is, 0 to 1, or null when unknown.", "type": ["number", "null"], "minimum": 0, "maximum": 1, "default": null},
+        "interrupted": {"description": "utterance: the student spoke over the previous reply.", "type": "boolean", "default": false},
+        "typed": {"description": "utterance: the text was typed, not spoken (web typing mode and quick replies; on the phone only in test calls). It does not mark a test call: only StartRequest.test does.", "type": "boolean", "default": false},
+        "dtmf": {"description": "dtmf: the keypad key pressed. The phone gateway sends every key press as its own dtmf event (exactly one key) and never collects several keys into one event; a brain that accepts a longer keypad entry (for example an amount ending with #) collects the keys itself and answers each key before the last with an empty reply. Up to 20 keys are accepted for tolerance.", "type": "string", "pattern": "^[0-9*#]{1,20}$"},
+        "silence_n": {"description": "silence: how many silence events in a row, counting from 1. Any utterance or dtmf resets the count.", "type": "integer", "minimum": 1},
+        "silence_ms": {"description": "silence: approximate time since the student last spoke or pressed a key, in milliseconds; it grows with silence_n (informational only).", "type": "integer", "minimum": 0}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"event": {"const": "utterance"}}, "required": ["event"]},
+          "then": {"required": ["text"]}
+        },
+        {
+          "if": {"properties": {"event": {"const": "dtmf"}}, "required": ["event"]},
+          "then": {"required": ["dtmf"]}
+        },
+        {
+          "if": {"properties": {"event": {"const": "silence"}}, "required": ["event"]},
+          "then": {"required": ["silence_n"]}
+        }
+      ],
+      "additionalProperties": true
+    },
+    "EndRequest": {
+      "title": "EndRequest",
+      "description": "Body of POST /v1/calls/{call_id}/end. Sent once when the call is over, possibly before /start finished. Unknown properties are ignored (tolerant reader).",
+      "type": "object",
+      "required": ["v", "reason"],
+      "properties": {
+        "v": {"description": "API version.", "const": 1},
+        "reason": {
+          "description": "completed / declined / no_input: the client ended the call after a reply with end true and that end_reason (no_input also when the gateway ends a silent call on its own). caller_hangup: the student hung up or left. timeout: replies did not arrive in time and the fatal line was said. max_duration: the call reached its time limit (the time_limit line was said). error: any other failure ended the call (including a failed /start). The brain treats timeout and error alike.",
+          "enum": ["completed", "caller_hangup", "no_input", "timeout", "max_duration", "declined", "error"]
+        },
+        "turns": {"description": "Number of student turns sent in the call: utterance and dtmf requests, each seq counted once. Silence events are not counted.", "type": "integer", "minimum": 0},
+        "duration_ms": {"description": "Call length in milliseconds.", "type": "integer", "minimum": 0}
+      },
+      "additionalProperties": true
+    },
+    "EndResponse": {
+      "title": "EndResponse",
+      "description": "Body returned by /end: an empty object.",
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    },
+    "ReplyEndReason": {
+      "description": "Why the brain ends the call (only with end true).",
+      "enum": ["completed", "no_input", "declined"]
+    },
+    "BrainReply": {
+      "title": "BrainReply",
+      "description": "Reply to /start and /turn. Every property is always present. The client says say, then ask. All wording comes from GatorPlate's sentence bank; numbers are inserted by code.",
+      "type": "object",
+      "required": ["say", "ask", "end", "end_reason", "lang", "listen", "expect", "interruptible", "hold_s", "display", "choices", "card_url", "debug"],
+      "properties": {
+        "say": {"description": "Statement spoken first. May be empty (with ask null and end false: say nothing and keep listening). On /start: the opening disclosure, never empty. Phone replies stay far below the limit because of the word budgets; the limit leaves room for longer web replies in Spanish.", "type": "string", "maxLength": 1000},
+        "ask": {"description": "The question, spoken after say, or null. Always interruptible. The gateway repeats the last non-null ask after the retry line.", "type": ["string", "null"], "minLength": 1, "maxLength": 300},
+        "end": {"description": "true: say, then hang up (phone) or close the conversation (web).", "type": "boolean"},
+        "end_reason": {"description": "null unless end is true.", "anyOf": [{"type": "null"}, {"$ref": "#/$defs/ReplyEndReason"}]},
+        "lang": {"description": "Language to speak this reply in. Phone: en, or es for a single Spanish notice. Web: the conversation language.", "$ref": "#/$defs/Lang"},
+        "listen": {"description": "normal, or long = patient end of turn and a longer silence timeout (amounts, slow talkers).", "enum": ["normal", "long"]},
+        "expect": {"description": "Kind of answer the ask expects: open, yes_no, confirm (yes or no about a value just repeated back), number, choice.", "enum": ["open", "yes_no", "confirm", "number", "choice"]},
+        "interruptible": {"description": "May the student cut off say? Always false for the /start reply and for end replies.", "type": "boolean"},
+        "hold_s": {"description": "0, or 1-60 when the student asked to wait: keep listening and send no silence event for this many seconds. If the student is still silent when the hold ends, the client may say the last ask again; then silence events resume as usual.", "type": "integer", "minimum": 0, "maximum": 60},
+        "display": {"description": "Web only: on-screen text of this reply (say and ask together) with digits and symbols. Always null on the phone.", "type": ["string", "null"], "maxLength": 1500},
+        "choices": {"description": "Web only: quick-reply labels for the ask; a tap sends the label as an utterance with typed true. Null when there are none and always null on the phone.", "type": ["array", "null"], "items": {"type": "string", "minLength": 1, "maxLength": 60}, "minItems": 1, "maxItems": 6},
+        "card_url": {"description": "Web only: same-origin path of the student's card once it exists, else null. Always null on the phone.", "type": ["string", "null"], "pattern": "^/c/[A-Za-z0-9_-]{22,64}$"},
+        "debug": {
+          "description": "Null unless GP_DEBUG_KEYS=1 (never in production): the sentence keys used for this reply and the conversation phase.",
+          "type": ["object", "null"],
+          "properties": {
+            "keys": {"type": "array", "items": {"type": "string", "minLength": 1}},
+            "phase": {"type": "string"}
+          },
+          "additionalProperties": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"end": {"const": true}}, "required": ["end"]},
+          "then": {
+            "properties": {
+              "end_reason": {"$ref": "#/$defs/ReplyEndReason"},
+              "ask": {"type": "null"},
+              "hold_s": {"const": 0},
+              "interruptible": {"const": false}
+            }
+          },
+          "else": {
+            "properties": {
+              "end_reason": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"hold_s": {"minimum": 1}}, "required": ["hold_s"]},
+          "then": {"properties": {"ask": {"type": "null"}}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "GatewayLines": {
+      "title": "GatewayLines",
+      "description": "Fixed lines the gateway says on its own (GET /v1/lines). All wording is owned by GatorPlate; the gateway caches them at boot and keeps identical built-in copies. Spoken text: same rules as phone replies.",
+      "type": "object",
+      "required": ["lang", "filler", "retry", "fatal", "fatal_start", "no_input_bye", "time_limit", "line_unavailable"],
+      "properties": {
+        "lang": {"$ref": "#/$defs/Lang"},
+        "filler": {"description": "One is said when a turn reply (utterance or dtmf) has not arrived after 1.5 s.", "type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 3, "maxItems": 3},
+        "retry": {"description": "Said before repeating the last ask after the first consecutive failure.", "type": "string", "minLength": 1},
+        "fatal": {"description": "Said after the second consecutive failure; then hang up.", "type": "string", "minLength": 1},
+        "fatal_start": {"description": "Said when /start fails; includes the AI disclosure; then hang up.", "type": "string", "minLength": 1},
+        "no_input_bye": {"description": "Said if the gateway ends a silent call on its own; then hang up.", "type": "string", "minLength": 1},
+        "time_limit": {"description": "Said when the call reaches its time limit; then hang up (end reason max_duration).", "type": "string", "minLength": 1},
+        "line_unavailable": {"description": "Said instead of a conversation when the phone line cannot take a call right now (for example, the team switched it off); then hang up.", "type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "WebSessionRequest": {
+      "title": "WebSessionRequest",
+      "description": "Body of POST /api/web/sessions (no auth, 20 per hour per IP address). May be empty ({}). Unknown properties are ignored.",
+      "type": "object",
+      "properties": {
+        "lang": {"description": "Language the student picked. Default en.", "$ref": "#/$defs/Lang", "default": "en"}
+      },
+      "additionalProperties": true
+    },
+    "WebSessionResponse": {
+      "title": "WebSessionResponse",
+      "description": "A new web call: its call_id and a bearer token bound to it for 30 minutes.",
+      "type": "object",
+      "required": ["call_id", "token", "expires_at"],
+      "properties": {
+        "call_id": {"$ref": "#/$defs/CallId"},
+        "token": {"description": "Opaque URL-safe token with at least 128 bits of randomness.", "type": "string", "pattern": "^[A-Za-z0-9_-]{22,128}$"},
+        "expires_at": {"description": "RFC 3339 time, 30 minutes after issue.", "type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "HealthResponse": {
+      "title": "HealthResponse",
+      "description": "GET /v1/health (no auth, no data).",
+      "type": "object",
+      "required": ["ok"],
+      "properties": {
+        "ok": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "ErrorCode": {
+      "description": "Machine-readable error code; HTTP status and retryable flag per code are listed in x-errors.",
+      "enum": ["unknown_call", "bad_signature", "stale_timestamp", "unauthorized", "rate_limited", "invalid_request", "stale_seq", "conflict", "locked", "not_found", "gone", "internal"]
+    },
+    "ErrorEnvelope": {
+      "title": "ErrorEnvelope",
+      "description": "Body of every non-200 response. The message is short and generic: no stack traces, no request text.",
+      "type": "object",
+      "required": ["error"],
+      "properties": {
+        "error": {
+          "type": "object",
+          "required": ["code", "message", "retryable"],
+          "properties": {
+            "code": {"$ref": "#/$defs/ErrorCode"},
+            "message": {"type": "string", "minLength": 1, "maxLength": 200},
+            "retryable": {"description": "true when sending the same request again later may succeed.", "type": "boolean"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

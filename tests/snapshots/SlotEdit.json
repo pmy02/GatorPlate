@@ -1,0 +1,32 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "expected_version": {
+   "title": "Expected Version",
+   "type": "integer"
+  },
+  "note": {
+   "anyOf": [
+    {
+     "maxLength": 200,
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Note"
+  },
+  "value": {
+   "title": "Value",
+   "type": "string"
+  }
+ },
+ "required": [
+  "value",
+  "expected_version"
+ ],
+ "title": "SlotEdit",
+ "type": "object"
+}

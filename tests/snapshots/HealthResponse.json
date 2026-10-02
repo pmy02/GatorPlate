@@ -1,0 +1,15 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "ok": {
+   "const": true,
+   "title": "Ok",
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "ok"
+ ],
+ "title": "HealthResponse",
+ "type": "object"
+}

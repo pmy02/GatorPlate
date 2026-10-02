@@ -1,0 +1,78 @@
+{
+ "$defs": {
+  "CaseStatus": {
+   "description": "Coordinator status of a case (docs/UI_SPEC.md A3.7). \"Live\", \"Ended early\" and \"Sample\" are badges.",
+   "enum": [
+    "new",
+    "reviewed",
+    "applied",
+    "interview_scheduled",
+    "approved",
+    "follow_up"
+   ],
+   "title": "CaseStatus",
+   "type": "string"
+  },
+  "Tier": {
+   "enum": [
+    "likely",
+    "coordinator",
+    "other_help"
+   ],
+   "title": "Tier",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "estimate_monthly": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Estimate Monthly"
+  },
+  "reviewed": {
+   "title": "Reviewed",
+   "type": "boolean"
+  },
+  "reviewed_at": {
+   "anyOf": [
+    {
+     "format": "date-time",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Reviewed At"
+  },
+  "status": {
+   "$ref": "#/$defs/CaseStatus"
+  },
+  "tier": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Tier"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  }
+ },
+ "required": [
+  "status",
+  "reviewed",
+  "reviewed_at",
+  "tier",
+  "estimate_monthly"
+ ],
+ "title": "CardStatus",
+ "type": "object"
+}

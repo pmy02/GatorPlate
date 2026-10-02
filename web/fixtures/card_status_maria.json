@@ -1,0 +1,30 @@
+[
+ {
+  "status": "new",
+  "reviewed": false,
+  "reviewed_at": null,
+  "tier": "likely",
+  "estimate_monthly": 306
+ },
+ {
+  "status": "new",
+  "reviewed": false,
+  "reviewed_at": null,
+  "tier": "likely",
+  "estimate_monthly": 306
+ },
+ {
+  "status": "new",
+  "reviewed": false,
+  "reviewed_at": null,
+  "tier": "likely",
+  "estimate_monthly": 306
+ },
+ {
+  "status": "reviewed",
+  "reviewed": true,
+  "reviewed_at": "2026-10-02T17:03:00Z",
+  "tier": "likely",
+  "estimate_monthly": 306
+ }
+]

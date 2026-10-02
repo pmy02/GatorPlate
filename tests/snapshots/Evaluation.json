@@ -1,0 +1,218 @@
+{
+ "$defs": {
+  "FirstMonth": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "title": "Amount",
+     "type": "integer"
+    },
+    "apply_date": {
+     "format": "date",
+     "title": "Apply Date",
+     "type": "string"
+    },
+    "days_counted": {
+     "title": "Days Counted",
+     "type": "integer"
+    },
+    "estimate": {
+     "default": true,
+     "title": "Estimate",
+     "type": "boolean"
+    },
+    "filed_on": {
+     "format": "date",
+     "title": "Filed On",
+     "type": "string"
+    },
+    "month_label": {
+     "title": "Month Label",
+     "type": "string"
+    }
+   },
+   "required": [
+    "apply_date",
+    "filed_on",
+    "amount",
+    "days_counted",
+    "month_label"
+   ],
+   "title": "FirstMonth",
+   "type": "object"
+  },
+  "RuleStep": {
+   "additionalProperties": false,
+   "properties": {
+    "result": {
+     "title": "Result",
+     "type": "string"
+    },
+    "source": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Source"
+    },
+    "step": {
+     "title": "Step",
+     "type": "string"
+    },
+    "value": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    }
+   },
+   "required": [
+    "step",
+    "result"
+   ],
+   "title": "RuleStep",
+   "type": "object"
+  },
+  "Tier": {
+   "enum": [
+    "likely",
+    "coordinator",
+    "other_help"
+   ],
+   "title": "Tier",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "expedited": {
+   "anyOf": [
+    {
+     "type": "boolean"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Expedited"
+  },
+  "expedited_screen": {
+   "default": false,
+   "title": "Expedited Screen",
+   "type": "boolean"
+  },
+  "first_month": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/FirstMonth"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "gross_monthly": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Gross Monthly"
+  },
+  "hard_stop": {
+   "default": false,
+   "title": "Hard Stop",
+   "type": "boolean"
+  },
+  "household_size": {
+   "title": "Household Size",
+   "type": "integer"
+  },
+  "irt_applies": {
+   "default": false,
+   "title": "Irt Applies",
+   "type": "boolean"
+  },
+  "min_benefit_applied": {
+   "default": false,
+   "title": "Min Benefit Applied",
+   "type": "boolean"
+  },
+  "monthly": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Monthly"
+  },
+  "net_monthly": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Net Monthly"
+  },
+  "policy_flags": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Policy Flags",
+   "type": "array"
+  },
+  "reason_code": {
+   "title": "Reason Code",
+   "type": "string"
+  },
+  "table_id": {
+   "title": "Table Id",
+   "type": "string"
+  },
+  "tier": {
+   "$ref": "#/$defs/Tier"
+  },
+  "trace": {
+   "items": {
+    "$ref": "#/$defs/RuleStep"
+   },
+   "title": "Trace",
+   "type": "array"
+  }
+ },
+ "required": [
+  "tier",
+  "reason_code",
+  "household_size",
+  "gross_monthly",
+  "trace",
+  "table_id"
+ ],
+ "title": "Evaluation",
+ "type": "object"
+}

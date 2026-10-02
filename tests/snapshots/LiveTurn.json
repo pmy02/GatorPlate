@@ -1,0 +1,54 @@
+{
+ "$defs": {
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "description": "One live transcript line (memory only).",
+ "properties": {
+  "at": {
+   "format": "date-time",
+   "title": "At",
+   "type": "string"
+  },
+  "case_id": {
+   "title": "Case Id",
+   "type": "string"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang"
+  },
+  "text": {
+   "title": "Text",
+   "type": "string"
+  },
+  "turn": {
+   "title": "Turn",
+   "type": "integer"
+  },
+  "who": {
+   "enum": [
+    "student",
+    "assistant"
+   ],
+   "title": "Who",
+   "type": "string"
+  }
+ },
+ "required": [
+  "case_id",
+  "turn",
+  "who",
+  "text",
+  "lang",
+  "at"
+ ],
+ "title": "LiveTurn",
+ "type": "object"
+}

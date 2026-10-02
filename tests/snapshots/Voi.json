@@ -1,0 +1,460 @@
+{
+ "$defs": {
+  "IncomeBand": {
+   "additionalProperties": false,
+   "properties": {
+    "edges_1_person": {
+     "items": {
+      "type": "integer"
+     },
+     "title": "Edges 1 Person",
+     "type": "array"
+    },
+    "fractions_of_gross_limit": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+        "type": "string"
+       }
+      ]
+     },
+     "title": "Fractions Of Gross Limit",
+     "type": "array"
+    },
+    "round_to_usd": {
+     "title": "Round To Usd",
+     "type": "integer"
+    },
+    "split_rule": {
+     "title": "Split Rule",
+     "type": "string"
+    },
+    "stop": {
+     "title": "Stop",
+     "type": "string"
+    }
+   },
+   "required": [
+    "fractions_of_gross_limit",
+    "round_to_usd",
+    "edges_1_person",
+    "split_rule",
+    "stop"
+   ],
+   "title": "IncomeBand",
+   "type": "object"
+  },
+  "RequiredResult": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "title": "Amount",
+     "type": "integer"
+    },
+    "answers": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Answers",
+     "type": "object"
+    },
+    "asked": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Asked",
+     "type": "array"
+    },
+    "below_threshold": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Below Threshold",
+     "type": "array"
+    },
+    "case": {
+     "title": "Case",
+     "type": "string"
+    },
+    "no_effect": {
+     "items": {
+      "type": "string"
+     },
+     "title": "No Effect",
+     "type": "array"
+    },
+    "yellow": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Yellow",
+     "type": "array"
+    },
+    "yellow_could_be_up_to": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Could Be Up To"
+    }
+   },
+   "required": [
+    "case",
+    "asked",
+    "amount"
+   ],
+   "title": "RequiredResult",
+   "type": "object"
+  },
+  "VoiDefaultModes": {
+   "additionalProperties": false,
+   "properties": {
+    "conservative": {
+     "title": "Conservative",
+     "type": "string"
+    },
+    "natural": {
+     "title": "Natural",
+     "type": "string"
+    }
+   },
+   "required": [
+    "natural",
+    "conservative"
+   ],
+   "title": "VoiDefaultModes",
+   "type": "object"
+  },
+  "VoiEstimateRange": {
+   "additionalProperties": false,
+   "properties": {
+    "lo_hi": {
+     "title": "Lo Hi",
+     "type": "string"
+    },
+    "settled": {
+     "title": "Settled",
+     "type": "string"
+    }
+   },
+   "required": [
+    "lo_hi",
+    "settled"
+   ],
+   "title": "VoiEstimateRange",
+   "type": "object"
+  },
+  "VoiNotAsked": {
+   "additionalProperties": false,
+   "properties": {
+    "left_by_cap_spread_over_threshold": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "left_by_cap_tier_change": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "spread_up_to_threshold": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "spread_zero": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "unclear_never_resolved": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    }
+   },
+   "required": [
+    "spread_zero",
+    "spread_up_to_threshold",
+    "left_by_cap_spread_over_threshold",
+    "left_by_cap_tier_change",
+    "unclear_never_resolved"
+   ],
+   "title": "VoiNotAsked",
+   "type": "object"
+  },
+  "VoiNotAskedRule": {
+   "additionalProperties": false,
+   "properties": {
+    "line": {
+     "title": "Line",
+     "type": "string"
+    },
+    "route": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Route"
+    },
+    "skipped_reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Skipped Reason"
+    },
+    "value": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    },
+    "yellow_text": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Text"
+    },
+    "yellow_text_when_default_is_highest": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Text When Default Is Highest"
+    }
+   },
+   "required": [
+    "line"
+   ],
+   "title": "VoiNotAskedRule",
+   "type": "object"
+  },
+  "VoiSlot": {
+   "additionalProperties": false,
+   "properties": {
+    "ask_key": {
+     "title": "Ask Key",
+     "type": "string"
+    },
+    "candidates": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      {
+       "type": "string"
+      }
+     ],
+     "title": "Candidates"
+    },
+    "default": {
+     "title": "Default",
+     "type": "string"
+    },
+    "follow_up_key": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Follow Up Key"
+    },
+    "follow_up_when": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Follow Up When"
+    },
+    "only_if": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "type": "boolean"
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Only If"
+    }
+   },
+   "required": [
+    "candidates",
+    "default",
+    "ask_key"
+   ],
+   "title": "VoiSlot",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "conservative_value": {
+   "title": "Conservative Value",
+   "type": "string"
+  },
+  "default_mode": {
+   "enum": [
+    "natural",
+    "conservative"
+   ],
+   "title": "Default Mode",
+   "type": "string"
+  },
+  "default_mode_values": {
+   "$ref": "#/$defs/VoiDefaultModes"
+  },
+  "estimate_range": {
+   "$ref": "#/$defs/VoiEstimateRange"
+  },
+  "estimate_spoken": {
+   "title": "Estimate Spoken",
+   "type": "string"
+  },
+  "expedited_never_flips": {
+   "title": "Expedited Never Flips",
+   "type": "boolean"
+  },
+  "flip_reason_text": {
+   "title": "Flip Reason Text",
+   "type": "string"
+  },
+  "flip_threshold_usd": {
+   "title": "Flip Threshold Usd",
+   "type": "integer"
+  },
+  "income_band": {
+   "$ref": "#/$defs/IncomeBand"
+  },
+  "max_questions": {
+   "title": "Max Questions",
+   "type": "integer"
+  },
+  "measure": {
+   "title": "Measure",
+   "type": "string"
+  },
+  "not_asked": {
+   "$ref": "#/$defs/VoiNotAsked"
+  },
+  "order": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Order",
+   "type": "array"
+  },
+  "other_cash_band_usd": {
+   "items": {
+    "type": "integer"
+   },
+   "title": "Other Cash Band Usd",
+   "type": "array"
+  },
+  "priority": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Priority",
+   "type": "array"
+  },
+  "replan_after_each_answer": {
+   "title": "Replan After Each Answer",
+   "type": "boolean"
+  },
+  "required_results": {
+   "items": {
+    "$ref": "#/$defs/RequiredResult"
+   },
+   "title": "Required Results",
+   "type": "array"
+  },
+  "slots": {
+   "additionalProperties": {
+    "$ref": "#/$defs/VoiSlot"
+   },
+   "title": "Slots",
+   "type": "object"
+  },
+  "threshold_rule": {
+   "title": "Threshold Rule",
+   "type": "string"
+  },
+  "unclear_answer_value": {
+   "title": "Unclear Answer Value",
+   "type": "string"
+  },
+  "unknown_income_value": {
+   "title": "Unknown Income Value",
+   "type": "string"
+  }
+ },
+ "required": [
+  "default_mode",
+  "default_mode_values",
+  "flip_threshold_usd",
+  "threshold_rule",
+  "max_questions",
+  "order",
+  "priority",
+  "replan_after_each_answer",
+  "measure",
+  "conservative_value",
+  "unclear_answer_value",
+  "unknown_income_value",
+  "slots",
+  "not_asked",
+  "estimate_spoken",
+  "estimate_range",
+  "flip_reason_text",
+  "income_band",
+  "other_cash_band_usd",
+  "expedited_never_flips",
+  "required_results"
+ ],
+ "title": "Voi",
+ "type": "object"
+}

@@ -1,0 +1,55 @@
+{
+ "additionalProperties": false,
+ "description": "One income in the facts. Golden G12 stores \"$20 × 15 h/week\" as weekly 300; live hourly pay is normalized to\nmonthly in the slot before facts_from_case runs.",
+ "properties": {
+  "amount": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Amount"
+  },
+  "excluded": {
+   "default": false,
+   "title": "Excluded",
+   "type": "boolean"
+  },
+  "freq": {
+   "enum": [
+    "weekly",
+    "biweekly",
+    "semimonthly",
+    "monthly",
+    "yearly"
+   ],
+   "title": "Freq",
+   "type": "string"
+  },
+  "kind": {
+   "enum": [
+    "earned",
+    "unearned",
+    "self_employment"
+   ],
+   "title": "Kind",
+   "type": "string"
+  },
+  "label": {
+   "default": "",
+   "title": "Label",
+   "type": "string"
+  }
+ },
+ "required": [
+  "amount",
+  "freq",
+  "kind"
+ ],
+ "title": "IncomeItem",
+ "type": "object"
+}

@@ -1,0 +1,67 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "amount": {
+   "title": "Amount",
+   "type": "integer"
+  },
+  "answers": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Answers",
+   "type": "object"
+  },
+  "asked": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Asked",
+   "type": "array"
+  },
+  "below_threshold": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Below Threshold",
+   "type": "array"
+  },
+  "case": {
+   "title": "Case",
+   "type": "string"
+  },
+  "no_effect": {
+   "items": {
+    "type": "string"
+   },
+   "title": "No Effect",
+   "type": "array"
+  },
+  "yellow": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Yellow",
+   "type": "array"
+  },
+  "yellow_could_be_up_to": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Yellow Could Be Up To"
+  }
+ },
+ "required": [
+  "case",
+  "asked",
+  "amount"
+ ],
+ "title": "RequiredResult",
+ "type": "object"
+}

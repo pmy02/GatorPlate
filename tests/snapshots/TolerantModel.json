@@ -1,0 +1,6 @@
+{
+ "description": "Client requests: unknown properties are ignored.",
+ "properties": {},
+ "title": "TolerantModel",
+ "type": "object"
+}

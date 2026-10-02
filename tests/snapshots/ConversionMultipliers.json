@@ -1,0 +1,61 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "biweek": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Biweek"
+  },
+  "month": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Month"
+  },
+  "semimonth": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Semimonth"
+  },
+  "week": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Week"
+  }
+ },
+ "required": [
+  "month",
+  "week",
+  "biweek",
+  "semimonth"
+ ],
+ "title": "ConversionMultipliers",
+ "type": "object"
+}

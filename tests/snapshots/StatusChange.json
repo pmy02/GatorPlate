@@ -1,0 +1,33 @@
+{
+ "$defs": {
+  "CaseStatus": {
+   "description": "Coordinator status of a case (docs/UI_SPEC.md A3.7). \"Live\", \"Ended early\" and \"Sample\" are badges.",
+   "enum": [
+    "new",
+    "reviewed",
+    "applied",
+    "interview_scheduled",
+    "approved",
+    "follow_up"
+   ],
+   "title": "CaseStatus",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "expected_version": {
+   "title": "Expected Version",
+   "type": "integer"
+  },
+  "status": {
+   "$ref": "#/$defs/CaseStatus"
+  }
+ },
+ "required": [
+  "status",
+  "expected_version"
+ ],
+ "title": "StatusChange",
+ "type": "object"
+}

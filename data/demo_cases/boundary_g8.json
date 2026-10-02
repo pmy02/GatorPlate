@@ -1,0 +1,84 @@
+{
+  "version": "2026-10-01",
+  "id": "boundary_g8",
+  "title": "List filler: income exactly at the limit, likely the $25 minimum",
+  "about": "Demo case. seed=true: created by POST /api/demo/seed; every case can also be created by POST /api/demo/inject. Build a Case (seeded, live false, persona and code as given, created minutes_ago before now, ended_reason as given), set each slot from `slots` with state clear, source seed, heard / heard_en / turn from the maps below and confirmed for the listed slots; copy the `asked` entries as given when the file has them (AskedQuestion, in order; `turn` = the student turn whose reply asked the question; never a second entry for a key already listed); run the rules, create the card, then apply status (and tracking dates). Every time and date is relative to the seed time (now) in America/Los_Angeles and never falls before not_before, the first morning of the FY2027 table: a computed time earlier than not_before is raised to it, but never later than now (created_at = min(now, max(now - minutes_ago, not_before)); reviewed_at and tracking dates likewise), and the order created_at <= tracking dates <= reviewed_at <= now is kept. `expect` is what the rules must produce for this case.",
+  "golden_case": "G8",
+  "golden_dialogue": null,
+  "persona": null,
+  "code": "D7L-8RW",
+  "channel": "phone",
+  "lang": "en",
+  "seed": true,
+  "not_before": "2026-10-01T08:00:00-07:00",
+  "minutes_ago": 185,
+  "call_seconds": 131,
+  "ended_reason": "completed",
+  "status": "new",
+  "slots": {
+    "consent": "true",
+    "level": "undergrad",
+    "units": "12",
+    "age": "21",
+    "lives_with_parent": "false",
+    "roommates": "true",
+    "household_food": "separate",
+    "earned_monthly": "2660.00",
+    "other_cash_monthly": "0.00",
+    "rent_share": "1100.00"
+  },
+  "heard": {
+    "consent": "Okay",
+    "level": "I'm a senior",
+    "units": "12 units",
+    "age": "I'm 21",
+    "lives_with_parent": "I live with roommates",
+    "roommates": "I live with roommates",
+    "household_food": "we buy food separately",
+    "earned_monthly": "2,660 a month",
+    "other_cash_monthly": "nobody gives me cash",
+    "rent_share": "eleven hundred"
+  },
+  "heard_en": {},
+  "turns": {
+    "consent": 1,
+    "level": 2,
+    "units": 2,
+    "age": 3,
+    "lives_with_parent": 3,
+    "roommates": 3,
+    "household_food": 4,
+    "earned_monthly": 5,
+    "other_cash_monthly": 5,
+    "rent_share": 6
+  },
+  "confirmed": [],
+  "native_review": false,
+  "expect": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 25,
+    "estimate_is_floor": false,
+    "irt_applies": false,
+    "yellow_open": 0,
+    "estimate_range": {
+      "lo": 25,
+      "hi": 25,
+      "settled": true
+    },
+    "skipped": [
+      {
+        "slot": "rent_paid_by_others_to_landlord",
+        "reason": "no_effect"
+      },
+      {
+        "slot": "heat_cool",
+        "reason": "no_effect"
+      },
+      {
+        "slot": "other_utils",
+        "reason": "no_effect"
+      }
+    ]
+  }
+}

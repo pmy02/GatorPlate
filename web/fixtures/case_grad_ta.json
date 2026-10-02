@@ -1,0 +1,579 @@
+{
+ "case": {
+  "id": "c_gradta2dem",
+  "code": "H5V-9KB",
+  "version": 12,
+  "created_at": "2026-10-02T15:25:00Z",
+  "updated_at": "2026-10-02T15:26:45Z",
+  "lang": "en",
+  "channel": "phone",
+  "test": false,
+  "live": false,
+  "status": "reviewed",
+  "seeded": true,
+  "persona": null,
+  "phase": "end",
+  "turn_count": 9,
+  "ended_reason": "completed",
+  "ended_early": false,
+  "tier": "likely",
+  "reason_code": "likely",
+  "route_override": null,
+  "estimate_monthly": 55,
+  "estimate_is_floor": false,
+  "estimate_range": {
+   "lo": 25,
+   "hi": 55,
+   "settled": true
+  },
+  "expedited_possible": "no",
+  "first_month": {
+   "apply_date": "2026-10-02",
+   "filed_on": "2026-10-02",
+   "amount": 53,
+   "days_counted": 30,
+   "month_label": "October",
+   "estimate": true
+  },
+  "summary": "Grad · 1 person · work $1,800 · rent $1,000",
+  "slots": {
+   "consent": {
+    "value": "true",
+    "display": "Yes",
+    "state": "clear",
+    "heard": "Sure",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 1,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "level": {
+    "value": "grad",
+    "display": "Grad student",
+    "state": "clear",
+    "heard": "I'm a full-time grad student",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 2,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "half_time": {
+    "value": "true",
+    "display": "Yes",
+    "state": "clear",
+    "heard": "I'm a full-time grad student",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 2,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "grad_exemption": {
+    "value": "ta_ra",
+    "display": "ta_ra",
+    "state": "clear",
+    "heard": "I'm a teaching assistant",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "ta_ra": {
+    "value": "true",
+    "display": "Yes",
+    "state": "clear",
+    "heard": "I'm a teaching assistant",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "age": {
+    "value": "26",
+    "display": "26",
+    "state": "clear",
+    "heard": "I'm 26",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 4,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "lives_with_parent": {
+    "value": "false",
+    "display": "No",
+    "state": "clear",
+    "heard": "I live alone",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 4,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "household_food": {
+    "value": "alone",
+    "display": "Lives alone",
+    "state": "clear",
+    "heard": "I live alone",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 4,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "earned_monthly": {
+    "value": "1800.00",
+    "display": "$1,800/mo",
+    "state": "clear",
+    "heard": "about 1,800 a month from the TA job",
+    "heard_en": null,
+    "confirmed": true,
+    "changed_from": null,
+    "turn": 5,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "other_cash_monthly": {
+    "value": "0.00",
+    "display": "$0/mo",
+    "state": "clear",
+    "heard": "no one sends me money",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 5,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "rent_share": {
+    "value": "1000.00",
+    "display": "$1,000/mo",
+    "state": "clear",
+    "heard": "my rent is a thousand",
+    "heard_en": null,
+    "confirmed": true,
+    "changed_from": null,
+    "turn": 6,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "heat_cool": {
+    "value": "false",
+    "display": "No",
+    "state": "clear",
+    "heard": "no, heat is included",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 7,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   },
+   "other_utils": {
+    "value": "none",
+    "display": "None",
+    "state": "clear",
+    "heard": "no other bills",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 8,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T15:26:45Z"
+   }
+  },
+  "yellow_lines": [
+   {
+    "id": "y1",
+    "slot": null,
+    "kind": "policy",
+    "code": "ta_ra_income_type",
+    "reason": "TA/RA pay counted as wages. Confirm it is paid work, not a fellowship or grant.",
+    "heard": null,
+    "assumed": null,
+    "effect": null,
+    "created_at": "2026-10-02T15:26:45Z",
+    "resolved": "confirm",
+    "resolved_at": "2026-10-02T15:46:45Z",
+    "resolved_note": "Checked in the demo seed"
+   }
+  ],
+  "flags": [],
+  "asked": [],
+  "skipped": [
+   {
+    "slot": "rent_paid_by_others_to_landlord",
+    "reason": "below_threshold",
+    "detail": "Not asked — assumed nobody pays the landlord; changes the estimate by $50 or less",
+    "values": [
+     25,
+     55
+    ]
+   }
+  ],
+  "timeline": [
+   {
+    "turn": 1,
+    "at": "2026-10-02T15:25:14Z",
+    "slots": [
+     "consent"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 2,
+    "at": "2026-10-02T15:25:28Z",
+    "slots": [
+     "level",
+     "half_time"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 3,
+    "at": "2026-10-02T15:25:42Z",
+    "slots": [
+     "grad_exemption",
+     "ta_ra"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 4,
+    "at": "2026-10-02T15:25:56Z",
+    "slots": [
+     "age",
+     "lives_with_parent",
+     "household_food"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 5,
+    "at": "2026-10-02T15:26:10Z",
+    "slots": [
+     "earned_monthly",
+     "other_cash_monthly"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 6,
+    "at": "2026-10-02T15:26:24Z",
+    "slots": [
+     "rent_share"
+    ],
+    "lo": 25,
+    "hi": 55
+   },
+   {
+    "turn": 7,
+    "at": "2026-10-02T15:26:38Z",
+    "slots": [
+     "heat_cool"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 8,
+    "at": "2026-10-02T15:26:52Z",
+    "slots": [
+     "other_utils"
+    ],
+    "lo": 55,
+    "hi": 55
+   }
+  ],
+  "rule_trace": [
+   {
+    "step": "student_rule",
+    "result": "Grad student at least half-time, TA job → exemption ta_ra",
+    "source": "ACL-26-25",
+    "value": null
+   },
+   {
+    "step": "gross_income_test",
+    "result": "Gross $1,800 ≤ $2,660 (200% limit, 1 person)",
+    "source": "ACIN-I-40-26",
+    "value": "1800.00"
+   },
+   {
+    "step": "adjusted_income",
+    "result": "$1,800 − $360 (20% of earnings) − $217 = $1,223",
+    "source": "ACIN-I-40-26",
+    "value": "1223"
+   },
+   {
+    "step": "shelter",
+    "result": "$1,000 rent + $0 utilities − $611.50 (half of $1,223) = $388.50",
+    "source": "ACIN-I-40-26",
+    "value": "388.50"
+   },
+   {
+    "step": "net_income",
+    "result": "$1,223 − $388.50 = $834.50 → $835",
+    "source": "CDSS-SHD-270",
+    "value": "835"
+   },
+   {
+    "step": "benefit",
+    "result": "$306 − 30% × $835 ($251, rounded up) = $55",
+    "source": "ACIN-I-40-26",
+    "value": "55"
+   }
+  ],
+  "privacy_events": [],
+  "language_request": null,
+  "table_id": "CA-CalFresh-FFY2027",
+  "card": {
+   "token": "fixtureGradTaCard00004",
+   "short_code": null,
+   "short_code_expires_at": null,
+   "created_at": "2026-10-02T15:26:45Z",
+   "expires_at": "2026-10-09T15:26:45Z"
+  },
+  "tracking": {
+   "applied_at": null,
+   "filed_on": null,
+   "deadline_30d": null,
+   "interview_at": null,
+   "interview_missed": false,
+   "doc_request_at": null,
+   "doc_due": null,
+   "approved_at": null,
+   "sar7_due": null,
+   "recert_due": null
+  },
+  "consent": {
+   "given": true,
+   "at": "2026-10-02T15:25:12Z",
+   "disclosure_key": "consent.ask"
+  },
+  "reviewed_at": "2026-10-02T15:50:00Z",
+  "program_answers": {},
+  "program_progress": {}
+ },
+ "summary": {
+  "id": "c_gradta2dem",
+  "code": "H5V-9KB",
+  "version": 12,
+  "created_at": "2026-10-02T15:25:00Z",
+  "updated_at": "2026-10-02T15:26:45Z",
+  "label": "H5V-9KB",
+  "summary": "Grad · 1 person · work $1,800 · rent $1,000",
+  "lang": "en",
+  "channel": "phone",
+  "live": false,
+  "test": false,
+  "seeded": true,
+  "phase": "end",
+  "status": "reviewed",
+  "ended_early": false,
+  "tier": "likely",
+  "reason_code": "likely",
+  "estimate_monthly": 55,
+  "estimate_is_floor": false,
+  "expedited_possible": "no",
+  "yellow_open": 0,
+  "yellow_total": 1,
+  "asked_count": 0,
+  "skipped_count": 1,
+  "next_deadline": null,
+  "found_display": null
+ },
+ "card_url": "/c/fixtureGradTaCard00004",
+ "qr_svg_url": "/api/cases/c_gradta2dem/qr.svg",
+ "short_code": null,
+ "can_review": true,
+ "allowed_status": [
+  "applied",
+  "follow_up"
+ ],
+ "rules": {
+  "table_id": "CA-CalFresh-FFY2027",
+  "label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
+  "effective_from": "2026-10-01",
+  "effective_to": "2027-09-30",
+  "sources": [
+   {
+    "id": "ACIN-I-40-26",
+    "title": "CDSS All County Information Notice I-40-26: CalFresh cost-of-living adjustments effective October 1, 2026 (Attachment I and notice CF 11 (9/26))",
+    "date": "2026-09-10",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "USDA-FNS-FY2027-COLA",
+    "title": "USDA SNAP fiscal year 2027 cost-of-living adjustments memo (2026-08-21)",
+    "date": "2026-08-21",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "ACL-24-31",
+    "title": "CDSS All County Letter 24-31: CalFresh Student Eligibility Handbook v2.0",
+    "date": "2024-05-03",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-25",
+    "title": "CDSS All County Letter 26-25: associate and bachelor's degree programs at CCC, CSU and UC qualify as local programs that increase employability (from 2026-06-01)",
+    "date": "2026-04-13",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-16",
+    "title": "CDSS All County Letter 26-16: AB 42 (Chapter 430, Statutes of 2025), aid for higher education not counted as income (from 2026-03-01)",
+    "date": "2026-03-19",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-93",
+    "title": "CDSS All County Letter 25-93: ABAWD time-limit changes under H.R. 1 (from 2026-06-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-79",
+    "title": "CDSS All County Letter 25-79: ABAWD waiver only for Colusa, Imperial and Tulare counties (2025-11-01 to 2026-10-31)",
+    "date": "2025-11-07",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-29",
+    "title": "CDSS All County Letter 26-29: CalFresh ABAWD Time Limit Handbook v3.0",
+    "date": "2026-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-92",
+    "title": "CDSS All County Letter 25-92: noncitizen eligibility changes under H.R. 1 (from 2026-04-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-15-42",
+    "title": "CDSS All County Letter 15-42: income reporting threshold (IRT) under semi-annual reporting",
+    "date": "2015-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-13-35",
+    "title": "CDSS All County Letter 13-35: Heat and Eat program (homeless households keep the deduction that does not lower benefits)",
+    "date": "2013-04-24",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-270",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 270 Deductions (MPP 63-502)",
+    "date": "2016-02-13",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-280",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 280 Budgeting (MPP 63-503, 63-509)",
+    "date": "2016-07-09",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-273",
+    "title": "7 CFR Part 273 (SNAP certification): 273.1(b)(1)(ii) children under 22 living with a parent; 273.2(g) 30-day processing; 273.10(a)(1)(ii) first-month proration; 273.10(e)(2)(ii)(A) 30 percent reduction rounded up",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-271-2",
+    "title": "7 CFR 271.2: definition of a homeless individual (includes a temporary stay of up to 90 days in another person's home)",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MPP-63-301",
+    "title": "CDSS Manual of Policies and Procedures 63-301.5 and 7 CFR 273.2(i): expedited service",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MT-SNAP-201-1",
+    "title": "Montana DPHHS SNAP Manual 201-1, Household Composition: a child under 22 living with a parent is in the parent's household even with their own spouse or child",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "LA-DPSS-CALFRESH-APPLICATION",
+    "title": "Los Angeles County DPSS ePolicy, CalFresh application process: applications received after business hours, on weekends or on holidays are dated the next business day",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://my.dpss.lacounty.gov"
+   },
+   {
+    "id": "SFSU-CALFRESH-CLINIC",
+    "title": "SF State Basic Needs: CalFresh Help Clinic page",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic"
+   },
+   {
+    "id": "GP-PROJECT",
+    "title": "GatorPlate project rule (docs/SPEC.md, rules section): a deterministic convention or routing choice, not a CDSS rule",
+    "date": "2026-10-01",
+    "grade": "project",
+    "url": null
+   },
+   {
+    "id": "UNVERIFIED",
+    "title": "Common county practice not yet checked against a CDSS letter for this table: show dates from it as approximate",
+    "date": "2026-10-01",
+    "grade": "unverified",
+    "url": null
+   }
+  ]
+ },
+ "programs": null
+}

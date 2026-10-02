@@ -1,0 +1,49 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "after_conversion": {
+   "title": "After Conversion",
+   "type": "string"
+  },
+  "benefit_reduction": {
+   "title": "Benefit Reduction",
+   "type": "string"
+  },
+  "benefit_reduction_integer_formula": {
+   "title": "Benefit Reduction Integer Formula",
+   "type": "string"
+  },
+  "builtin_round_allowed": {
+   "title": "Builtin Round Allowed",
+   "type": "boolean"
+  },
+  "float_allowed": {
+   "title": "Float Allowed",
+   "type": "boolean"
+  },
+  "income_conversion": {
+   "title": "Income Conversion",
+   "type": "string"
+  },
+  "net_income": {
+   "title": "Net Income",
+   "type": "string"
+  },
+  "proration": {
+   "title": "Proration",
+   "type": "string"
+  }
+ },
+ "required": [
+  "income_conversion",
+  "after_conversion",
+  "net_income",
+  "benefit_reduction",
+  "benefit_reduction_integer_formula",
+  "proration",
+  "float_allowed",
+  "builtin_round_allowed"
+ ],
+ "title": "Rounding",
+ "type": "object"
+}

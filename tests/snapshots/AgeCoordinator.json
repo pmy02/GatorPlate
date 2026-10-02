@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "at_or_over": {
+   "title": "At Or Over",
+   "type": "integer"
+  },
+  "under": {
+   "title": "Under",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "under",
+  "at_or_over"
+ ],
+ "title": "AgeCoordinator",
+ "type": "object"
+}

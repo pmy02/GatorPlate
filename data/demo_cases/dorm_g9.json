@@ -1,0 +1,54 @@
+{
+  "version": "2026-10-01",
+  "id": "dorm_g9",
+  "title": "List filler: first-year in the dorms with a 14-meal plan (other help)",
+  "about": "Demo case. seed=true: created by POST /api/demo/seed; every case can also be created by POST /api/demo/inject. Build a Case (seeded, live false, persona and code as given, created minutes_ago before now, ended_reason as given), set each slot from `slots` with state clear, source seed, heard / heard_en / turn from the maps below and confirmed for the listed slots; copy the `asked` entries as given when the file has them (AskedQuestion, in order; `turn` = the student turn whose reply asked the question; never a second entry for a key already listed); run the rules, create the card, then apply status (and tracking dates). Every time and date is relative to the seed time (now) in America/Los_Angeles and never falls before not_before, the first morning of the FY2027 table: a computed time earlier than not_before is raised to it, but never later than now (created_at = min(now, max(now - minutes_ago, not_before)); reviewed_at and tracking dates likewise), and the order created_at <= tracking dates <= reviewed_at <= now is kept. `expect` is what the rules must produce for this case.",
+  "golden_case": "G9",
+  "golden_dialogue": null,
+  "persona": null,
+  "code": "Z4M-7QE",
+  "channel": "web",
+  "lang": "en",
+  "seed": true,
+  "not_before": "2026-10-01T08:00:00-07:00",
+  "minutes_ago": 140,
+  "call_seconds": 88,
+  "ended_reason": "completed",
+  "status": "new",
+  "slots": {
+    "consent": "true",
+    "level": "undergrad",
+    "units": "15",
+    "age": "18",
+    "lives_with_parent": "false",
+    "dorm_on_campus": "true",
+    "meals_per_week": "14"
+  },
+  "heard": {
+    "consent": "Yes",
+    "level": "first-year undergrad",
+    "units": "15 units",
+    "age": "I'm 18",
+    "lives_with_parent": "I live in the dorms",
+    "dorm_on_campus": "I live in the dorms",
+    "meals_per_week": "the 14-meal plan"
+  },
+  "heard_en": {},
+  "turns": {
+    "consent": 1,
+    "level": 2,
+    "units": 2,
+    "age": 3,
+    "lives_with_parent": 3,
+    "dorm_on_campus": 3,
+    "meals_per_week": 4
+  },
+  "confirmed": [],
+  "native_review": false,
+  "expect": {
+    "tier": "other_help",
+    "reason_code": "other_help.dorm_meal_plan",
+    "estimate_monthly": null,
+    "yellow_open": 0
+  }
+}

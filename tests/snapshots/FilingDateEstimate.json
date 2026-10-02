@@ -1,0 +1,64 @@
+{
+ "$defs": {
+  "FilingExample": {
+   "additionalProperties": false,
+   "properties": {
+    "filed_on": {
+     "format": "date",
+     "title": "Filed On",
+     "type": "string"
+    },
+    "first_month_for_306": {
+     "title": "First Month For 306",
+     "type": "integer"
+    },
+    "now": {
+     "title": "Now",
+     "type": "string"
+    }
+   },
+   "required": [
+    "now",
+    "filed_on",
+    "first_month_for_306"
+   ],
+   "title": "FilingExample",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "cutoff_local": {
+   "title": "Cutoff Local",
+   "type": "string"
+  },
+  "examples": {
+   "items": {
+    "$ref": "#/$defs/FilingExample"
+   },
+   "title": "Examples",
+   "type": "array"
+  },
+  "label": {
+   "title": "Label",
+   "type": "string"
+  },
+  "note": {
+   "title": "Note",
+   "type": "string"
+  },
+  "rule": {
+   "title": "Rule",
+   "type": "string"
+  }
+ },
+ "required": [
+  "cutoff_local",
+  "rule",
+  "label",
+  "examples",
+  "note"
+ ],
+ "title": "FilingDateEstimate",
+ "type": "object"
+}

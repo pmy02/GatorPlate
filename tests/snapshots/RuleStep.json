@@ -1,0 +1,43 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "result": {
+   "title": "Result",
+   "type": "string"
+  },
+  "source": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Source"
+  },
+  "step": {
+   "title": "Step",
+   "type": "string"
+  },
+  "value": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Value"
+  }
+ },
+ "required": [
+  "step",
+  "result"
+ ],
+ "title": "RuleStep",
+ "type": "object"
+}

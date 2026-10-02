@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "rule": {
+   "title": "Rule",
+   "type": "string"
+  },
+  "step": {
+   "title": "Step",
+   "type": "string"
+  }
+ },
+ "required": [
+  "step",
+  "rule"
+ ],
+ "title": "DecisionStep",
+ "type": "object"
+}

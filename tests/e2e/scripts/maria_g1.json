@@ -1,0 +1,560 @@
+{
+  "id": "maria_g1",
+  "version": "2026-10-01",
+  "title": "Maria, phone, English: likely $306, one flip question, not expedited (demo path)",
+  "golden_case": "G1",
+  "demo_case": "maria_g1",
+  "contract_example": "contracts/examples/maria_phone.json",
+  "channel": "phone",
+  "lang": "en",
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "screen",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "matching": {
+    "env": "The server environment this script needs (GP_CARD_DELIVERY always). The E2E runner never mixes card-delivery modes in one server run: it starts one server per declared environment. Contract examples keep their own `settings` block; scripts use only `env`.",
+    "expect_keys": "debug.keys of the reply (GP_DEBUG_KEYS=1) must equal this list exactly, in order.",
+    "reply": "These BrainReply fields must match exactly. ask/card_url/choices/display: 'present' = non-null, 'null' = null. Reply wording is owned by the sentence bank and is not compared.",
+    "budget": "Phone word budget class of the reply (opening <= 40, question <= 25, result <= 45 words, say + ask).",
+    "fake_llm": "The ExtractionResult the fake LLM returns for this exact utterance. With a live LLM it is the expected understanding: compare slot, value and period; quotes may differ.",
+    "case": "Checked on the stored case after this turn (console API): slots use canonical encodings (money as monthly 2-decimal strings); estimate_range and asked_last only where given.",
+    "final": "Checked on the stored case after /end. 'skipped' entries must be present (other skipped entries with reason hard_stop or not_applicable are allowed); 'asked_flip' must match exactly."
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "budget": "opening",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      }
+    },
+    {
+      "user": "Yes, that's fine.",
+      "confidence": 0.95,
+      "expect_keys": [
+        "ack.short",
+        "ask.level_units"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "consent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Yes, that's fine",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "consent": "true"
+        }
+      }
+    },
+    {
+      "user": "I'm an SF State undergrad, a junior, and I'm taking 12 units.",
+      "confidence": 0.92,
+      "expect_keys": [
+        "ack.short",
+        "ask.age_parent"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "level",
+            "value": "undergrad",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm an SF State undergrad, a junior",
+            "quote_en": null
+          },
+          {
+            "slot": "units",
+            "value": "12",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm taking 12 units",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "level": "undergrad",
+          "units": "12"
+        }
+      }
+    },
+    {
+      "user": "I'm 20, and I live with two roommates.",
+      "confidence": 0.93,
+      "expect_keys": [
+        "ack.short",
+        "ask.household_food_roommates"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "choice",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "age",
+            "value": "20",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm 20",
+            "quote_en": null
+          },
+          {
+            "slot": "lives_with_parent",
+            "value": "false",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I live with two roommates",
+            "quote_en": null
+          },
+          {
+            "slot": "roommates",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I live with two roommates",
+            "quote_en": null
+          },
+          {
+            "slot": "roommates_count",
+            "value": "2",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "two roommates",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "age": "20",
+          "lives_with_parent": "false",
+          "roommates": "true",
+          "roommates_count": "2"
+        }
+      }
+    },
+    {
+      "user": "Separately.",
+      "confidence": 0.96,
+      "expect_keys": [
+        "ack.short",
+        "ask.income"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "number",
+        "listen": "long",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "household_food",
+            "value": "separate",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Separately",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "household_food": "separate"
+        }
+      }
+    },
+    {
+      "user": "I work at the campus library, about 900 a month. Nobody gives me cash.",
+      "confidence": 0.91,
+      "expect_keys": [
+        "readback.earned",
+        "ask.rent"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "number",
+        "listen": "long",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "earned_monthly",
+            "value": "900",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "about 900 a month",
+            "quote_en": null
+          },
+          {
+            "slot": "other_cash_monthly",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Nobody gives me cash",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "earned_monthly": "900.00",
+          "other_cash_monthly": "0.00"
+        }
+      }
+    },
+    {
+      "user": "Eleven hundred.",
+      "confidence": 0.89,
+      "expect_keys": [
+        "readback.rent",
+        "flip.intro",
+        "flip.rent_paid_by_others"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "rent_share",
+            "value": "1100",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Eleven hundred",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "rent_share": "1100.00"
+        },
+        "estimate_range": {
+          "lo": 155,
+          "hi": 306,
+          "settled": false
+        },
+        "asked_last": {
+          "key": "flip.rent_paid_by_others",
+          "kind": "flip",
+          "slots": [
+            "rent_paid_by_others_to_landlord"
+          ],
+          "reason": "could change the estimate by $151: $155 or $306"
+        }
+      },
+      "note": "Flip question, introduced by flip.intro: read-back 7 + intro 3 + question 14 = 24 words, within the 25-word question budget. It is the only open slot that can move the estimate by more than $50 ($155 or $306). Heat/AC and other utility bills cannot change it, so they are not asked."
+    },
+    {
+      "user": "No.",
+      "confidence": 0.97,
+      "expect_keys": [
+        "result.likely",
+        "expedited.intro_cash"
+      ],
+      "budget": "result",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "number",
+        "listen": "long",
+        "interruptible": false,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "rent_paid_by_others_to_landlord",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "No",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "rent_paid_by_others_to_landlord": "0.00"
+        },
+        "tier": "likely",
+        "estimate_monthly": 306,
+        "estimate_range": {
+          "lo": 306,
+          "hi": 306,
+          "settled": true
+        }
+      },
+      "note": "Cash question: rent + any utility allowance (1,100 or more) is above gross income (900)."
+    },
+    {
+      "user": "About a thousand.",
+      "confidence": 0.9,
+      "expect_keys": [
+        "first_month.apply_today",
+        "card.phone_screen",
+        "close.anything_else"
+      ],
+      "budget": "result",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "cash_on_hand",
+            "value": "1000",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "About a thousand",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "cash_on_hand": "1000.00"
+        },
+        "expedited_possible": "no"
+      },
+      "note": "900 + 1,000 = 1,900 is not below 1,100 + 686 = 1,786 in any utility world, so nothing is said about 3-day service. GP_CARD_DELIVERY=screen."
+    },
+    {
+      "user": "No, thanks.",
+      "confidence": 0.95,
+      "expect_keys": [
+        "close.goodbye"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": true,
+        "end_reason": "completed",
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "null",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "expect_end": true
+    }
+  ],
+  "end": {
+    "reason": "completed",
+    "turns": 9,
+    "duration_ms": 118000
+  },
+  "final": {
+    "golden_case": "G1",
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306,
+    "estimate_is_floor": false,
+    "estimate_range": {
+      "lo": 306,
+      "hi": 306,
+      "settled": true
+    },
+    "expedited_possible": "no",
+    "slots": {
+      "consent": "true",
+      "level": "undergrad",
+      "units": "12",
+      "age": "20",
+      "lives_with_parent": "false",
+      "roommates": "true",
+      "roommates_count": "2",
+      "household_food": "separate",
+      "earned_monthly": "900.00",
+      "other_cash_monthly": "0.00",
+      "rent_share": "1100.00",
+      "rent_paid_by_others_to_landlord": "0.00",
+      "cash_on_hand": "1000.00"
+    },
+    "asked_flip": [
+      {
+        "slot": "rent_paid_by_others_to_landlord",
+        "reason": "could change the estimate by $151: $155 or $306"
+      }
+    ],
+    "skipped": [
+      {
+        "slot": "heat_cool",
+        "reason": "no_effect"
+      },
+      {
+        "slot": "other_utils",
+        "reason": "no_effect"
+      }
+    ],
+    "yellow_open": 0,
+    "card_created": true,
+    "summary": "Undergrad · 1 person · work $900 · rent $1,100",
+    "student_turns": 9,
+    "max_student_turns": 10,
+    "privacy_events": [],
+    "ended_reason": "completed",
+    "live": false
+  }
+}

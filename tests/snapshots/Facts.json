@@ -1,0 +1,339 @@
+{
+ "$defs": {
+  "IncomeItem": {
+   "additionalProperties": false,
+   "description": "One income in the facts. Golden G12 stores \"$20 × 15 h/week\" as weekly 300; live hourly pay is normalized to\nmonthly in the slot before facts_from_case runs.",
+   "properties": {
+    "amount": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Amount"
+    },
+    "excluded": {
+     "default": false,
+     "title": "Excluded",
+     "type": "boolean"
+    },
+    "freq": {
+     "enum": [
+      "weekly",
+      "biweekly",
+      "semimonthly",
+      "monthly",
+      "yearly"
+     ],
+     "title": "Freq",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "earned",
+      "unearned",
+      "self_employment"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "label": {
+     "default": "",
+     "title": "Label",
+     "type": "string"
+    }
+   },
+   "required": [
+    "amount",
+    "freq",
+    "kind"
+   ],
+   "title": "IncomeItem",
+   "type": "object"
+  },
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "description": "The engine's input: exactly the golden-case `facts` keys, plus `status_route` (a live case routes on a\nvolunteered status without storing its value).\n\nA golden case is {id, source, title, facts, expected, hand_calc} plus optional test-harness keys (normalize, trap,\ntoday, route_step) that are not Facts fields.",
+ "properties": {
+  "age": {
+   "title": "Age",
+   "type": "integer"
+  },
+  "apply_date": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Apply Date"
+  },
+  "boarder": {
+   "title": "Boarder",
+   "type": "boolean"
+  },
+  "cash_on_hand": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Cash On Hand"
+  },
+  "child_under14_in_hh": {
+   "title": "Child Under14 In Hh",
+   "type": "boolean"
+  },
+  "dependent_care": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Dependent Care"
+  },
+  "dorm_meals_over_10": {
+   "anyOf": [
+    {
+     "type": "boolean"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Dorm Meals Over 10"
+  },
+  "dorm_on_campus": {
+   "title": "Dorm On Campus",
+   "type": "boolean"
+  },
+  "elderly_or_disabled": {
+   "title": "Elderly Or Disabled",
+   "type": "boolean"
+  },
+  "grad_exemption": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Grad Exemption"
+  },
+  "half_time": {
+   "title": "Half Time",
+   "type": "boolean"
+  },
+  "homeless": {
+   "title": "Homeless",
+   "type": "boolean"
+  },
+  "homeless_shelter_cost": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Homeless Shelter Cost"
+  },
+  "household_food": {
+   "enum": [
+    "alone",
+    "separate",
+    "shared"
+   ],
+   "title": "Household Food",
+   "type": "string"
+  },
+  "household_size": {
+   "title": "Household Size",
+   "type": "integer"
+  },
+  "income_changing_soon": {
+   "title": "Income Changing Soon",
+   "type": "boolean"
+  },
+  "incomes": {
+   "items": {
+    "$ref": "#/$defs/IncomeItem"
+   },
+   "title": "Incomes",
+   "type": "array"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang"
+  },
+  "level": {
+   "enum": [
+    "undergrad",
+    "grad",
+    "not_degree",
+    "not_sfsu"
+   ],
+   "title": "Level",
+   "type": "string"
+  },
+  "meals_per_week": {
+   "title": "Meals Per Week",
+   "type": "integer"
+  },
+  "public_ca_degree_program": {
+   "title": "Public Ca Degree Program",
+   "type": "boolean"
+  },
+  "receives_unemployment": {
+   "default": false,
+   "title": "Receives Unemployment",
+   "type": "boolean"
+  },
+  "rent_paid_by_others_to_landlord": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Rent Paid By Others To Landlord"
+  },
+  "rent_share": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Rent Share"
+  },
+  "spouse_student": {
+   "title": "Spouse Student",
+   "type": "boolean"
+  },
+  "status_route": {
+   "anyOf": [
+    {
+     "enum": [
+      "other_help",
+      "coordinator"
+     ],
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Status Route"
+  },
+  "under22_with_parent": {
+   "title": "Under22 With Parent",
+   "type": "boolean"
+  },
+  "units": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Units"
+  },
+  "utility": {
+   "enum": [
+    "heat_cool",
+    "two_other",
+    "phone_only",
+    "none"
+   ],
+   "title": "Utility",
+   "type": "string"
+  },
+  "volunteered_status": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Volunteered Status"
+  },
+  "works_80h_month": {
+   "default": false,
+   "title": "Works 80H Month",
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "lang",
+  "volunteered_status",
+  "elderly_or_disabled",
+  "age",
+  "level",
+  "public_ca_degree_program",
+  "half_time",
+  "units",
+  "grad_exemption",
+  "child_under14_in_hh",
+  "under22_with_parent",
+  "dorm_on_campus",
+  "meals_per_week",
+  "dorm_meals_over_10",
+  "household_food",
+  "household_size",
+  "spouse_student",
+  "boarder",
+  "homeless",
+  "homeless_shelter_cost",
+  "incomes",
+  "rent_share",
+  "rent_paid_by_others_to_landlord",
+  "utility",
+  "dependent_care",
+  "cash_on_hand",
+  "apply_date",
+  "income_changing_soon"
+ ],
+ "title": "Facts",
+ "type": "object"
+}

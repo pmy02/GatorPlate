@@ -1,0 +1,2991 @@
+{
+  "lang": "en",
+  "version": "2026-10-01",
+  "native_review": false,
+  "format": {
+    "summary": "Every spoken or displayed sentence of the conversation. The model listens, rules decide, these templates speak: code fills every {var} and never writes wording of its own.",
+    "message": "messages.<key> = {group, channels, phone|web|all, closed?, short?, expect?, vars, notes?}.",
+    "channels": "Where the key is used: phone, web or both. phone/web/all are lists of variants; a channel uses its own list, else all. all is always phone-safe.",
+    "spanish": "Phone conversations are English only. The es bank carries phone variants only for phone-only keys; only language.offer_web and line.* are ever spoken in Spanish on the phone.",
+    "variant": "A string, or {say, ask}. A string in a key with expect is the ask; otherwise it is said. {say, ask} gives both parts (the opening, close.anything_else, re-ask lines).",
+    "pick": "Variant = hash(call_id, key, turn) % n, deterministic.",
+    "question_var": "{question} is the pending question's ask, rendered by code (for a {say, ask} key only the ask part): main form after the 1st silence and after an interruption, closed form after the 2nd silence and after an unclear answer, short form after any other line (ssn.block, card_number.block, info lines). The reply then uses that question's expect and listen.",
+    "closed": "closed = the same question as a yes/no or a choice of at most three single keys, with the keypad option on the phone ('press one for yes, two for no'; 'press one, two, or three') and tap choices on the web. Used in closed mode (model late or failing), after an unclear answer, and after the 2nd silence. closed.expect overrides expect when present. Money questions are answered by voice; their closed form is a spoken band choice (ask.rent, expedited.intro_cash, ask.income_band, flip.other_cash_band) or a yes/no that leads to one (ask.income -> ask.income_band; ask.other_cash -> flip.other_cash_band). The phone never asks for a typed number: the gateway sends one key per event and never collects digits (docs/BRAIN_API.md, TurnRequest keypad note).",
+    "short": "short = a brief re-ask used after another line in the same reply, so phone replies stay inside the word budget.",
+    "expect": "{expect, listen, slots, keypad, choices, band_edges?, yes?, no?}. expect and listen use the Brain API enums. slots = what the question asks for. keypad: null, 'yes_no' (1 = yes, 2 = no), or {key: entry} with single keys '1' to '3' (at most three). No multi-key entry: no amounts or ages typed on the keypad, no '#'. choices = web quick replies, each {label, entry}. Entry = {set: {slot: value}} | {band: token} | {intent: name} | {answer: yes|no} | {action: name} | {note}. yes/no say what a yes or no means when the slot is not a plain boolean. band_edges = {a, b}: fixed edges for a band choice on a key that has no a and b vars.",
+    "budgets": "Phone say + ask: opening 40, question 25, result 45 words (contract word = whitespace token with a letter or digit). Result class = result.*, expedited.yes|maybe, first_month.*, card.*, close.anything_else, close.silence, or any line with a phone number. Build a reply key by key; when the next key would push it over its budget, end the reply there (ask null) and give the rest on the next turn, as in the contract's Jamal example. flip.intro precedes the first flip question of a call when the whole reply (say + ask) stays within 25 words, read-back included; otherwise it is dropped. Maria's flip reply is readback.rent + flip.intro + flip.rent_paid_by_others (24 of 25 words with her values). readback.cash is never spoken after the cash answer (see confirm_policy). check_content.py lists the compositions that are known to fit.",
+    "entry_values": "set values are raw answers that code normalizes like any other answer (money '0' -> '0.00'; booleans 'true'/'false'). For rent_paid_by_others_to_landlord the value 'rent_share' means the whole rent share. Band tokens: below_a (under a), between (a up to b), above_b (more than b) for ask.income_band and flip.other_cash_band (a and b are vars) and for the closed band choices of ask.rent, expedited.intro_cash and ask.age_parent (a and b are the key's band_edges); below_x, above_x for flip.earned_split. A band answer is a range, not a value, handled like ask.income_band: code keeps the range, uses its conservative end (the end that gives the lower estimate), lets the question plan narrow it where it can, and leaves a yellow line for a range still open at the result; the expedited outlook is computed over the whole range (yes, maybe or no).",
+    "renamed": "Older draft names that are not used: card.phone (now card.phone_screen | card.phone_code); human.handoff (now human.request; no hand-off field exists); line.timeout_reask and line.error_goodbye (now the seven line.* keys of GET /v1/lines); expect.kind (now expect.expect, the Brain API enum, plus expect.listen).",
+    "never": "No rejection wording, no promise of texts, callbacks, live hand-off, reminders or 'sent to the coordinator', no 'any language', no eligibility decision, no claim of fewer errors. data/content/guards.json output.forbidden is the list; check_content.py enforces it on every variant.",
+    "confirm": "Explicit confirm (confirm.money) only for the slots in confirm_policy.confirm_slots, and only when the parser and the model disagree, a teen/ty word is involved, confidence is under 0.75, or the value is out of range. One explicit confirm per slot; still unclear -> conservative value + yellow line. Every other slot is accepted as heard. cash_on_hand gets neither a confirm nor a read-back."
+  },
+  "var_types": {
+    "money": "an amount; code verbalizes it on the phone and formats it ($306) on the web",
+    "int": "a whole number",
+    "phone": "a phone number from contacts.json",
+    "url": "a web address",
+    "code": "the 6-digit card code",
+    "date": "a date in America/Los_Angeles",
+    "text": "text rendered by code from this bank (a question) or from spoken.period",
+    "hours": "office hours from contacts.json"
+  },
+  "spoken": {
+    "money": "Whole dollars in words. Under 1,000: 306 -> 'three hundred six dollars', 900 -> 'nine hundred dollars'. 1,000-9,999 with a hundreds digit other than zero: say hundreds, 1100 -> 'eleven hundred dollars', 1975 -> 'nineteen hundred seventy-five dollars', 2500 -> 'twenty-five hundred dollars'. Whole thousands, a zero hundreds digit, and 10,000 or more: say thousands, 2000 -> 'two thousand dollars', 1050 -> 'one thousand fifty dollars', 12197 -> 'twelve thousand one hundred ninety-seven dollars'. Hourly rates keep cents: 18.50 -> 'eighteen dollars fifty'.",
+    "int": "In words: 12 -> 'twelve'.",
+    "phone": "Digit by digit in groups: 'four one five, three three eight, one two zero three'. Take it from contacts.json (spoken.en).",
+    "code": "Digit by digit, two groups of three: 'four eight one, two zero six'.",
+    "url": "short_url: 'gatorplate dot fly dot dev slash go'; talk_url: 'gatorplate dot fly dot dev slash talk'.",
+    "hours": "contacts.json coordinator.hours.spoken.en.",
+    "date": "'Friday, October second'.",
+    "period": {
+      "month": "a month",
+      "week": "a week",
+      "biweek": "every two weeks",
+      "semimonth": "twice a month",
+      "hour": "an hour",
+      "year": "a year"
+    },
+    "display": "Web display: money '$306' / '$1,100'; phone '(415) 338-1203'; url 'gatorplate.fly.dev/go'; code '481 206'; hours contacts.json coordinator.hours.text.en; date 'Fri, Oct 2'."
+  },
+  "messages": {
+    "consent.ask": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        {
+          "say": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.",
+          "ask": "Okay to start? Say yes, or press one."
+        }
+      ],
+      "web": [
+        {
+          "say": "Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio.",
+          "ask": "Is that okay?"
+        }
+      ],
+      "closed": {
+        "phone": [
+          "Okay to start? Press one for yes, or two for no."
+        ],
+        "web": [
+          "Is it okay to start? Tap Yes or No."
+        ]
+      },
+      "short": {
+        "phone": [
+          "Okay to start? Say yes, or press one."
+        ],
+        "web": [
+          "Is that okay?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "consent"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Yes",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "The /start reply. say is never interruptible. The phone wording keeps every required element of the opening (an AI; student-built; not an official SF State service; an AI turns what you say into text to check CalFresh; the call audio isn't recorded) and asks for consent with the keypad option, within the 40-word opening budget. Same text as contracts/examples."
+    },
+    "consent.reask": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Okay to start? Say yes or no, or press one or two.",
+        "Should we start? Say yes or no, or press one or two."
+      ],
+      "closed": {
+        "phone": [
+          "Okay to start? Press one for yes, or two for no."
+        ],
+        "web": [
+          "Is it okay to start? Tap Yes or No."
+        ]
+      },
+      "short": {
+        "all": [
+          "Okay to start?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "consent"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Yes",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "One re-ask after an unclear consent answer, or after answer.is_ai / answer.is_recorded during consent. Still unclear: treat as no."
+    },
+    "consent.declined": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "No problem. If you want help from a person, the SF State CalFresh coordinator is at {coordinator_phone}. Goodbye.",
+        "Okay, no problem. To talk with a person, call the SF State CalFresh coordinator at {coordinator_phone}. Goodbye."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ],
+      "notes": "end true, end_reason declined."
+    },
+    "answer.is_ai": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Yes, I'm an AI built by students, not an official SF State service.",
+        "Yes. I'm an AI made by students, not an official SF State service."
+      ],
+      "vars": [],
+      "notes": "Also the answer to 'Is this official?'. Then re-ask the pending question (short form); during consent use consent.reask."
+    },
+    "answer.is_recorded": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "No, the call audio isn't recorded. We keep your answers, not the conversation.",
+        "No. The call audio isn't recorded, and we keep only your answers."
+      ],
+      "web": [
+        "No. GatorPlate never gets your voice, only the text that your browser makes. We keep your answers, not the conversation."
+      ],
+      "vars": [],
+      "notes": "Same facts as the opening disclosure and the card footer."
+    },
+    "language.offer_web": {
+      "group": "opening",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "This phone line is in English only. For Spanish, use GatorPlate on the web: {talk_url}."
+      ],
+      "vars": [
+        "talk_url:url"
+      ],
+      "notes": "Phone only. Rendered from the es bank with lang es (one Spanish notice, ask null); the next reply is English again."
+    },
+    "language.unsupported": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Sorry, this line only works in English. The web page also has Spanish."
+      ],
+      "web": [
+        "Sorry, I can only help in English or Spanish right now."
+      ],
+      "vars": [],
+      "notes": "A language other than English or Spanish. Then re-ask the pending question (short form). Never claim other languages."
+    },
+    "proxy.caller": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "The student should answer these questions. If they're with you, let's continue."
+      ],
+      "vars": [],
+      "notes": "Someone calling for a student. Then re-ask the pending question (short form)."
+    },
+    "hold.ok": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Sure, take your time.",
+        "No problem, take your time.",
+        "Of course. I'll wait."
+      ],
+      "vars": [],
+      "notes": "hold_s 30, ask null."
+    },
+    "abuse.warn": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "I'm here to help with CalFresh. Let's keep it respectful.",
+        "I want to help, so let's keep it respectful."
+      ],
+      "vars": [],
+      "notes": "First time only. Then re-ask the pending question (short form)."
+    },
+    "abuse.end": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "I'm going to end the call now. If you want help later, the SF State CalFresh coordinator is at {coordinator_phone}. Goodbye."
+      ],
+      "web": [
+        "I'm going to end our chat now. If you want help later, the SF State CalFresh coordinator is at {coordinator_phone}. Goodbye."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ],
+      "notes": "Second time. end true."
+    },
+    "ask.level_units": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+        "Are you an undergrad or a grad student at SF State, and how many units are you taking this term?"
+      ],
+      "closed": {
+        "phone": [
+          "At SF State, are you an undergrad, a grad student, or something else? Press one, two, or three."
+        ],
+        "web": [
+          "At SF State, are you an undergrad, a grad student, or something else?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "level"
+          ],
+          "keypad": {
+            "1": {
+              "set": {
+                "level": "undergrad"
+              }
+            },
+            "2": {
+              "set": {
+                "level": "grad"
+              }
+            },
+            "3": {
+              "set": {
+                "level": "not_degree"
+              }
+            }
+          },
+          "choices": [
+            {
+              "label": "Undergrad",
+              "set": {
+                "level": "undergrad"
+              }
+            },
+            {
+              "label": "Grad student",
+              "set": {
+                "level": "grad"
+              }
+            },
+            {
+              "label": "Something else",
+              "set": {
+                "level": "not_degree"
+              }
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "Undergrad or grad, and how many units?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [
+          "level",
+          "units"
+        ],
+        "keypad": null,
+        "choices": null
+      },
+      "vars": [],
+      "notes": "Main form: open question, no quick replies (as in contracts/examples/sofia_web_es.json). Closed form: keypad and quick replies; key 3 ('something else') maps to not_degree, so a person checks; the parser still hears 'not at SF State'."
+    },
+    "ask.units": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "How many units are you taking this term?"
+      ],
+      "closed": {
+        "phone": [
+          "Are you taking eight or more units this term? Press one for yes, two for no."
+        ],
+        "web": [
+          "Are you taking 8 or more units this term?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "half_time"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "half_time": "true"
+            }
+          },
+          "no": {
+            "set": {
+              "half_time": "false"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "How many units this term?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "normal",
+        "slots": [
+          "units"
+        ],
+        "keypad": null,
+        "choices": null
+      },
+      "vars": [],
+      "notes": "Asked when the units are missing. Closed form: SF State undergrads are half-time at 8 units; a grad student's half-time comes from ask.grad_exemption (under_half_time), not from units."
+    },
+    "ask.grad_exemption": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Do you have a campus job, TA or RA job, work-study, twenty-plus work hours a week, or a child under six?"
+      ],
+      "web": [
+        "Do you have any of these: a campus job, a TA or RA job, work-study, a job with 20 or more hours a week, or a child under 6?"
+      ],
+      "closed": {
+        "phone": [
+          "Which fits you? Press one for a campus, TA or RA job, two for work-study, three for none of these."
+        ],
+        "web": [
+          "Which fits you: a campus, TA or RA job, work-study, or none of these?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "grad_exemption"
+          ],
+          "keypad": {
+            "1": {
+              "set": {
+                "grad_exemption": "campus_job"
+              }
+            },
+            "2": {
+              "set": {
+                "grad_exemption": "work_study"
+              }
+            },
+            "3": {
+              "set": {
+                "grad_exemption": "none"
+              }
+            }
+          },
+          "choices": [
+            {
+              "label": "Campus, TA or RA job",
+              "set": {
+                "grad_exemption": "campus_job"
+              }
+            },
+            {
+              "label": "Work-study",
+              "set": {
+                "grad_exemption": "work_study"
+              }
+            },
+            {
+              "label": "None of these",
+              "set": {
+                "grad_exemption": "none"
+              }
+            }
+          ]
+        }
+      },
+      "short": {
+        "phone": [
+          "Any campus job, work-study, or young child?"
+        ],
+        "web": [
+          "Do any of these fit you?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "grad_exemption"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Campus job",
+            "set": {
+              "grad_exemption": "campus_job"
+            }
+          },
+          {
+            "label": "TA or RA job",
+            "set": {
+              "grad_exemption": "ta_ra"
+            }
+          },
+          {
+            "label": "Work-study",
+            "set": {
+              "grad_exemption": "work_study"
+            }
+          },
+          {
+            "label": "Job with 20+ hours a week",
+            "set": {
+              "grad_exemption": "work20h"
+            }
+          },
+          {
+            "label": "Child under 6",
+            "set": {
+              "grad_exemption": "child_under_6"
+            }
+          },
+          {
+            "label": "None of these",
+            "set": {
+              "grad_exemption": "none"
+            }
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "Rarer exemptions (DOR or WIOA services, CalWORKs, final term, under half-time) come up only if the student says them; none means a person checks (coordinator.grad_no_exemption)."
+    },
+    "ask.age_parent": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "How old are you, and who do you live with?",
+        "How old are you, and do you live with your parents, with others, or on your own?"
+      ],
+      "closed": {
+        "phone": [
+          "How old are you? Press one for under twenty-two, two for twenty-two to forty-nine, three for fifty or older."
+        ],
+        "web": [
+          "How old are you? You can type your age or pick a range."
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "age"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Under 22",
+              "band": "below_a"
+            },
+            {
+              "label": "22 to 49",
+              "band": "between"
+            },
+            {
+              "label": "50 or older",
+              "band": "above_b"
+            }
+          ],
+          "band_edges": {
+            "a": "22",
+            "b": "50"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "How old are you, and who do you live with?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [
+          "age",
+          "lives_with_parent"
+        ],
+        "keypad": null,
+        "choices": null
+      },
+      "vars": [],
+      "notes": "The closed form asks age only, as a band (the edges that change the route: under 22 with a parent, 50 or older); ask.household then covers living with a parent. A band is kept as a range; the student rule's lower age (18) is not asked here, and 'under 22' living apart from a parent is read as 18 to 21 with a yellow line."
+    },
+    "ask.meal_plan": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Do you have a campus meal plan? If so, how many meals a week does it give you?"
+      ],
+      "closed": {
+        "phone": [
+          "Does your campus meal plan give you more than ten meals a week? Press one for yes, two for no."
+        ],
+        "web": [
+          "Does your campus meal plan give you more than 10 meals a week?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "dorm_meals_over_10"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "How many meals a week is your plan?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "normal",
+        "slots": [
+          "meals_per_week",
+          "dorm_meals_over_10"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No meal plan",
+            "set": {
+              "meals_per_week": "0",
+              "dorm_meals_over_10": "false"
+            }
+          },
+          {
+            "label": "10 meals a week or fewer",
+            "set": {
+              "dorm_meals_over_10": "false"
+            }
+          },
+          {
+            "label": "11 or more meals a week",
+            "set": {
+              "dorm_meals_over_10": "true"
+            }
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "Asked only when the student lives on campus."
+    },
+    "ask.household": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Who do you live with? And do you buy and cook food with them, or separately?",
+        "Do you live alone or with others? If with others, do you buy and cook food together?"
+      ],
+      "closed": {
+        "phone": [
+          "Do you buy and cook food with anyone you live with? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do you buy and cook food with anyone you live with?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "household_food"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          "no": {
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "Who do you live with, and do you share food?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [
+          "household_food",
+          "lives_with_parent",
+          "roommates",
+          "spouse",
+          "children_count"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "I live alone",
+            "set": {
+              "household_food": "alone",
+              "roommates": "false",
+              "lives_with_parent": "false"
+            }
+          },
+          {
+            "label": "Roommates, separate food",
+            "set": {
+              "household_food": "separate",
+              "roommates": "true"
+            }
+          },
+          {
+            "label": "Roommates, shared food",
+            "set": {
+              "household_food": "shared",
+              "roommates": "true"
+            }
+          },
+          {
+            "label": "With my parents",
+            "set": {
+              "lives_with_parent": "true"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.household_food_roommates": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Do you buy and cook food with your roommates, or separately?",
+        "Do you and your roommates buy and cook food together, or separately?"
+      ],
+      "closed": {
+        "phone": [
+          "Do you buy and cook food with your roommates? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do you buy and cook food with your roommates?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "household_food"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          "no": {
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "Do you share food with your roommates?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "household_food"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Separately",
+            "set": {
+              "household_food": "separate"
+            }
+          },
+          {
+            "label": "Together",
+            "set": {
+              "household_food": "shared"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.income": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "About how much do you earn a month from work before taxes, not counting financial aid, and does anyone give you cash?",
+        "Before taxes, about how much do you make a month from work? Leave out financial aid. Does anyone give you cash?"
+      ],
+      "web": [
+        "About how much do you earn a month from work, before taxes? Don't count financial aid. And does anyone, like family, give you money?"
+      ],
+      "closed": {
+        "phone": [
+          "Do you earn money from work right now? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do you earn money from work right now?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "earned_monthly"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            },
+            {
+              "label": "I'm not sure",
+              "intent": "dont_know"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed: ask ask.income_band next (spoken band choice)"
+          },
+          "no": {
+            "set": {
+              "earned_monthly": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "How much do you earn a month?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "earned_monthly",
+          "other_cash_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "I don't have a job",
+            "set": {
+              "earned_monthly": "0"
+            }
+          },
+          {
+            "label": "I'm not sure",
+            "intent": "dont_know"
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "Work-study pay, gig pay and other benefits are extracted into their own slots when the student mentions them. Closed form: a yes leads to ask.income_band (the spoken band choice); the amount is never typed on the keypad."
+    },
+    "ask.other_cash": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Does anyone, like family or friends, give you money each month? How much?"
+      ],
+      "closed": {
+        "phone": [
+          "Does anyone, like family, give you money each month? Press one for yes, two for no."
+        ],
+        "web": [
+          "Does anyone, like family, give you money each month?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "other_cash_monthly"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed: ask flip.other_cash_band next (spoken band choice)"
+          },
+          "no": {
+            "set": {
+              "other_cash_monthly": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "Does anyone give you money each month?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "other_cash_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No one",
+            "set": {
+              "other_cash_monthly": "0"
+            }
+          },
+          {
+            "label": "I'm not sure",
+            "intent": "dont_know"
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "Money from family or friends counts even when it is for tuition."
+    },
+    "ask.income_band": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "No problem.",
+          "ask": "Is it under {a} a month, between {a} and {b}, or more?"
+        }
+      ],
+      "closed": {
+        "phone": [
+          "Monthly pay: press one for under {a}, two for up to {b}, three for more."
+        ],
+        "web": [
+          "Is your monthly pay under {a}, between {a} and {b}, or more?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "earned_monthly"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Under {a}",
+              "band": "below_a"
+            },
+            {
+              "label": "{a} to {b}",
+              "band": "between"
+            },
+            {
+              "label": "More than {b}",
+              "band": "above_b"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "Under {a}, up to {b}, or more?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "earned_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Under {a}",
+            "band": "below_a"
+          },
+          {
+            "label": "{a} to {b}",
+            "band": "between"
+          },
+          {
+            "label": "More than {b}",
+            "band": "above_b"
+          }
+        ]
+      },
+      "vars": [
+        "a:money",
+        "b:money"
+      ],
+      "notes": "After 'I don't know' about income. a and b come from the rules table (income_band_fractions_of_gross_limit)."
+    },
+    "ask.rent": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "How much is your share of the rent each month?",
+        "What's your share of the rent each month?"
+      ],
+      "closed": {
+        "phone": [
+          "Your monthly rent share: press one for under a thousand, two for up to fifteen hundred, three for more."
+        ],
+        "web": [
+          "About how much is your share of the rent each month? You can type it or pick a range."
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "long",
+          "slots": [
+            "rent_share"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Under $1,000",
+              "band": "below_a"
+            },
+            {
+              "label": "$1,000 to $1,500",
+              "band": "between"
+            },
+            {
+              "label": "More than $1,500",
+              "band": "above_b"
+            },
+            {
+              "label": "I don't pay rent",
+              "set": {
+                "rent_share": "0"
+              }
+            }
+          ],
+          "band_edges": {
+            "a": "1000.00",
+            "b": "1500.00"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "What's your share of the rent?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "rent_share"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "I don't pay rent",
+            "set": {
+              "rent_share": "0"
+            }
+          },
+          {
+            "label": "I don't have a stable place",
+            "set": {
+              "homeless": "true"
+            }
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "rent_share is a critical slot (confirm_policy). Closed form: a spoken band choice; a band is a range, and the lower end (the lower estimate) is used with a yellow line until the student says the amount."
+    },
+    "ask.homeless_cost": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Do you pay anything to stay where you're sleeping now?"
+      ],
+      "closed": {
+        "phone": [
+          "Do you pay anything to stay where you sleep now? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do you pay anything to stay where you sleep now?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "homeless_shelter_cost_monthly"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed"
+          },
+          "no": {
+            "set": {
+              "homeless_shelter_cost_monthly": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "Do you pay anything to stay there?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "homeless_shelter_cost_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No, nothing",
+            "set": {
+              "homeless_shelter_cost_monthly": "0"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "expedited.intro_cash": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Roughly how much money do you have right now, in cash and in the bank?"
+      ],
+      "closed": {
+        "phone": [
+          "In cash and the bank: press one for under a hundred, two for up to five hundred, three for more."
+        ],
+        "web": [
+          "About how much money do you have now, in cash and the bank? You can type it or pick a range."
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "long",
+          "slots": [
+            "cash_on_hand"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Under $100",
+              "band": "below_a"
+            },
+            {
+              "label": "$100 to $500",
+              "band": "between"
+            },
+            {
+              "label": "More than $500",
+              "band": "above_b"
+            }
+          ],
+          "band_edges": {
+            "a": "100.00",
+            "b": "500.00"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "How much money do you have right now?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "cash_on_hand"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "I'm not sure",
+            "intent": "dont_know"
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "Asked only for the expedited (3-day) screen: when gross income is under $150, or when the student's own rent plus a utility allowance is more than gross income in a remaining world. Never a flip question. The answer gets no confirm and no read-back (confirm_policy). Closed form: a spoken band choice; the outlook is computed over the band (yes, maybe or no)."
+    },
+    "flip.intro": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "One more question.",
+        "Another quick one."
+      ],
+      "closed": {
+        "all": [
+          "One more question."
+        ]
+      },
+      "vars": [],
+      "notes": "Optional statement right before the first flip question of a call. Say it when the whole reply (say + ask, read-back included) stays within 25 words; otherwise drop it. Maria's flip reply has it: readback.rent + flip.intro + flip.rent_paid_by_others, 24 words."
+    },
+    "flip.rent_paid_by_others": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Does anyone, like a parent, pay part of your rent straight to your landlord?"
+      ],
+      "closed": {
+        "phone": [
+          "Does anyone pay part of your rent to your landlord for you? Press one for yes, two for no."
+        ],
+        "web": [
+          "Does anyone pay part of your rent to your landlord for you?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "rent_paid_by_others_to_landlord"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed: ask flip.rent_paid_by_others_amount"
+          },
+          "no": {
+            "set": {
+              "rent_paid_by_others_to_landlord": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "Does anyone pay your landlord for you?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "rent_paid_by_others_to_landlord"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Yes",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          },
+          {
+            "label": "Yes, all of it",
+            "set": {
+              "rent_paid_by_others_to_landlord": "rent_share"
+            }
+          }
+        ],
+        "yes": {
+          "note": "amount still needed: ask flip.rent_paid_by_others_amount"
+        },
+        "no": {
+          "set": {
+            "rent_paid_by_others_to_landlord": "0"
+          }
+        }
+      },
+      "vars": [],
+      "notes": "Fixed wording (Maria demo path); check_content.py checks it."
+    },
+    "flip.rent_paid_by_others_amount": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Do they pay all of it, or about how much a month?"
+      ],
+      "closed": {
+        "phone": [
+          "Do they pay all of your rent? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do they pay all of your rent?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "rent_paid_by_others_to_landlord"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "rent_paid_by_others_to_landlord": "rent_share"
+            }
+          },
+          "no": {
+            "note": "part of the rent: amount unknown, use the conservative value"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "How much do they pay a month?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "rent_paid_by_others_to_landlord"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "All of it",
+            "set": {
+              "rent_paid_by_others_to_landlord": "rent_share"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.heat_cool": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Do you pay a separate bill for heating or air conditioning, apart from rent?"
+      ],
+      "closed": {
+        "phone": [
+          "Do you pay a heating or cooling bill apart from rent? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do you pay a heating or cooling bill apart from rent?"
+        ]
+      },
+      "short": {
+        "all": [
+          "Do you pay a heating or cooling bill?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "heat_cool"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Yes",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.other_utils": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Other bills you pay: none, only a phone, or two or more, like water or electricity?"
+      ],
+      "web": [
+        "Besides rent, which bills do you pay yourself: none, only a phone bill, or two or more (like water, trash or electric)? Internet doesn't count."
+      ],
+      "closed": {
+        "phone": [
+          "Other bills? Press one for none, two for only a phone, three for two or more."
+        ],
+        "web": [
+          "Other bills besides rent: none, only a phone bill, or two or more?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "other_utils"
+          ],
+          "keypad": {
+            "1": {
+              "set": {
+                "other_utils": "none"
+              }
+            },
+            "2": {
+              "set": {
+                "other_utils": "phone_only"
+              }
+            },
+            "3": {
+              "set": {
+                "other_utils": "two_plus"
+              }
+            }
+          },
+          "choices": [
+            {
+              "label": "None",
+              "set": {
+                "other_utils": "none"
+              }
+            },
+            {
+              "label": "Only a phone bill",
+              "set": {
+                "other_utils": "phone_only"
+              }
+            },
+            {
+              "label": "Two or more",
+              "set": {
+                "other_utils": "two_plus"
+              }
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "Any other bills, like water or a phone?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "other_utils"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "None",
+            "set": {
+              "other_utils": "none"
+            }
+          },
+          {
+            "label": "Only a phone bill",
+            "set": {
+              "other_utils": "phone_only"
+            }
+          },
+          {
+            "label": "Two or more",
+            "set": {
+              "other_utils": "two_plus"
+            }
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "Asked only when heat_cool is false."
+    },
+    "flip.household_food": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Do you and your roommates usually buy and cook food together, or separately?"
+      ],
+      "closed": {
+        "phone": [
+          "Do you usually buy and cook food together with your roommates? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do you usually buy and cook food together with your roommates?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "household_food"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          "no": {
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "Do you usually share food with them?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "household_food"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Together",
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          {
+            "label": "Separately",
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.other_cash_band": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Money from others each month: under {a}, up to {b}, or more?"
+      ],
+      "web": [
+        "How much do others give you a month: under {a}, {a} to {b}, or more?"
+      ],
+      "closed": {
+        "phone": [
+          "Money from others: press one for under {a}, two for up to {b}, three for more."
+        ],
+        "web": [
+          "Money from others each month: under {a}, {a} to {b}, or more?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "other_cash_monthly"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Under {a}",
+              "band": "below_a"
+            },
+            {
+              "label": "{a} to {b}",
+              "band": "between"
+            },
+            {
+              "label": "More than {b}",
+              "band": "above_b"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "About how much do others give you a month?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "other_cash_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Under {a}",
+            "band": "below_a"
+          },
+          {
+            "label": "{a} to {b}",
+            "band": "between"
+          },
+          {
+            "label": "More than {b}",
+            "band": "above_b"
+          }
+        ]
+      },
+      "vars": [
+        "a:money",
+        "b:money"
+      ]
+    },
+    "flip.earned_split": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Is your pay from work less than {x} a month?"
+      ],
+      "closed": {
+        "phone": [
+          "Is your work pay less than {x} a month? Press one for yes, two for no."
+        ],
+        "web": [
+          "Is your work pay less than {x} a month?"
+        ]
+      },
+      "short": {
+        "all": [
+          "Less than {x} a month from work?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "earned_monthly"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Yes",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ],
+        "yes": {
+          "band": "below_x"
+        },
+        "no": {
+          "band": "above_x"
+        }
+      },
+      "vars": [
+        "x:money"
+      ]
+    },
+    "ack.short": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Great.",
+        "Thanks.",
+        "Got it.",
+        "Okay."
+      ],
+      "vars": []
+    },
+    "readback.earned": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Got it — about {amount} a month from work.",
+        "Okay — about {amount} a month from work."
+      ],
+      "vars": [
+        "amount:money"
+      ],
+      "notes": "Implicit read-back: the amount with its period, before the next question."
+    },
+    "readback.hourly": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Got it — {rate} an hour, about {hours} hours a week.",
+        "Okay — {rate} an hour, about {hours} hours a week."
+      ],
+      "vars": [
+        "rate:money",
+        "hours:int"
+      ]
+    },
+    "readback.rent": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Got it — {amount} a month.",
+        "Okay — {amount} a month."
+      ],
+      "vars": [
+        "amount:money"
+      ],
+      "notes": "Short on purpose, so that readback.rent + flip.intro + a flip question fits the 25-word question budget (Maria: 7 + 3 + 14 = 24 words)."
+    },
+    "readback.other_cash": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Got it — {amount} a month from others.",
+        "Okay — {amount} a month from family or friends."
+      ],
+      "vars": [
+        "amount:money"
+      ]
+    },
+    "readback.cash": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Okay, about {amount}.",
+        "Got it — about {amount}."
+      ],
+      "vars": [
+        "amount:money"
+      ],
+      "notes": "Not used in any reply after the cash answer (word budget; cash_on_hand gets no read-back, see confirm_policy). Kept in the bank for the web display."
+    },
+    "confirm.money": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Just to check, did you say {amount} {period}?",
+        "Did I hear that right: {amount} {period}?"
+      ],
+      "closed": {
+        "phone": [
+          "Did you say {amount} {period}? Press one for yes, two for no."
+        ],
+        "web": [
+          "Did you say {amount} {period}?"
+        ]
+      },
+      "short": {
+        "all": [
+          "Did you say {amount} {period}?"
+        ]
+      },
+      "expect": {
+        "expect": "confirm",
+        "listen": "normal",
+        "slots": [],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Yes",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": [
+        "amount:money",
+        "period:text"
+      ],
+      "notes": "Explicit confirm only for the critical money slots (earned_monthly, other_cash_monthly, rent_share, rent_paid_by_others_to_landlord) and only when parser and model disagree, a teen/ty word is involved, confidence is under 0.75, or the value is out of range. One per slot. cash_on_hand never; teen/ty words on other slots are accepted as heard."
+    },
+    "reprompt.silence_1": {
+      "group": "readback",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        {
+          "say": "Are you there?",
+          "ask": "{question}"
+        },
+        {
+          "say": "Still with me?",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ],
+      "notes": "First silence: {question} = the pending question's main form."
+    },
+    "reprompt.silence_2": {
+      "group": "readback",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        {
+          "say": "Still there?",
+          "ask": "{question}"
+        },
+        {
+          "say": "Are you there?",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ],
+      "notes": "Second silence: {question} = the pending question's closed form (keypad option)."
+    },
+    "reprompt.unclear": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Sorry, I didn't catch that.",
+          "ask": "{question}"
+        },
+        {
+          "say": "Sorry, I missed that.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ],
+      "notes": "{question} = the closed form."
+    },
+    "reprompt.after_interrupt": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Sorry about that.",
+          "ask": "{question}"
+        },
+        {
+          "say": "Oh, sorry.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ],
+      "notes": "Student spoke over the reply and did not answer: {question} = the main or short form."
+    },
+    "result.likely": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Based on what you told me, you may get about {amount} a month. The county makes the final decision.",
+        "From what you told me, you may get about {amount} a month. The county makes the final decision."
+      ],
+      "vars": [
+        "amount:money"
+      ],
+      "notes": "The county-decides sentence always follows the amount."
+    },
+    "result.likely_floor": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Based on what you told me, you may get about {amount} a month, maybe more. The county makes the final decision."
+      ],
+      "vars": [
+        "amount:money"
+      ],
+      "notes": "When the estimate used the conservative value for an unclear answer, so the real amount may be higher."
+    },
+    "result.note.abawd": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Under half-time, a work rule may apply.",
+        "Below half-time, a work rule may apply."
+      ],
+      "web": [
+        "Because you're taking fewer units than half-time (8 units for SF State undergrads), a CalFresh work rule may apply: after 3 months in 3 years, you may need to work, volunteer or train at least 80 hours a month to keep getting CalFresh. The coordinator can check this with you."
+      ],
+      "vars": [],
+      "notes": "Only with the work-rule yellow line (flag abawd_possible). Half-time is 8 units for SF State undergrads; a grad student's half-time is set by the school, so the phone line names no number. Kept short so result + note + cash question fit 45 words."
+    },
+    "result.coordinator.generic": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "One detail needs a person to check, so I won't guess an amount."
+      ],
+      "web": [
+        "One detail needs a person to check, so I won't guess an amount. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.parent_household": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Since you're under twenty-two and live with a parent, CalFresh counts you and your family as one household. The coordinator can help you apply together."
+      ],
+      "web": [
+        "Since you're under 22 and live with a parent, CalFresh counts you and your family as one household. The SF State CalFresh coordinator can help you apply as a family. Your answers are saved for the coordinator."
+      ],
+      "vars": [],
+      "notes": "No apply-today line after it: this student applies together with the parents' household, so the card says to talk to the coordinator first."
+    },
+    "result.coordinator.shared_household": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Since you buy and cook food with others, CalFresh may count them with you."
+      ],
+      "web": [
+        "Since you buy and cook food with others, CalFresh may count them with you. A person needs to check who is in your household. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.grad_no_exemption": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "For grad students, CalFresh has extra student rules, so a person needs to check."
+      ],
+      "web": [
+        "For grad students, CalFresh has extra student rules, so a person needs to check your case. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.not_degree": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "For programs that aren't a degree, the student rules need a person to check."
+      ],
+      "web": [
+        "For programs that aren't a degree, like a credential or a certificate, CalFresh's student rules need a person to check. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.age_outside_student_rule": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "At your age, different CalFresh student rules apply, so a person needs to check."
+      ],
+      "web": [
+        "At your age, different CalFresh student rules apply, so a person needs to check. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.gig_income": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Gig and self-employed pay is counted in a special way, so a person needs to check."
+      ],
+      "web": [
+        "Gig and self-employed pay is counted in a special way, so a person needs to check it. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.boarder": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "When you pay for both a room and meals, special rules apply, so a person needs to check."
+      ],
+      "web": [
+        "When you pay someone for both a room and meals, special CalFresh rules apply, so a person needs to check. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.spouse_student": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Since your spouse is also a student, a person needs to check your household."
+      ],
+      "web": [
+        "Since your spouse is also a student, a person needs to check how CalFresh counts your household. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.status_complex": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Thanks for telling me. I don't save that. Rules for your situation changed this year, so a person needs to check."
+      ],
+      "web": [
+        "Thanks for telling me. I don't save that. CalFresh rules for your situation changed this year, so a person needs to check. Your other answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.elderly_disabled": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "With a disability benefit or age sixty or older, different rules apply, so a person needs to check."
+      ],
+      "web": [
+        "With a disability benefit, or at age 60 or older, different CalFresh rules apply, so a person needs to check. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.coordinator.unresolved": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "One answer could change your result, so a person needs to check it."
+      ],
+      "web": [
+        "One answer could change your result, so a person needs to check it before giving a number. Your answers are saved for the SF State CalFresh coordinator."
+      ],
+      "vars": []
+    },
+    "result.other_help.generic": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "CalFresh rules for your situation are complicated, so I won't guess. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "vars": []
+    },
+    "result.other_help.status": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Thanks for telling me. I don't save that. CalFresh rules for your situation are complicated, so I won't guess. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "web": [
+        "Thanks for telling me. I don't save that. CalFresh rules for your situation are complicated, so I won't guess. Gator Groceries and the AS Food Pantry are open to all SF State students. The SF State CalFresh coordinator can talk with you about other help."
+      ],
+      "vars": []
+    },
+    "result.other_help.over_gross_limit": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Your income may be over the CalFresh limit for your household. The county decides. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "web": [
+        "Your income may be over the CalFresh limit for your household. The county decides. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "vars": []
+    },
+    "result.other_help.dorm_meal_plan": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "With more than ten campus meals a week, CalFresh works differently, so I won't guess. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "web": [
+        "With a campus meal plan of more than 10 meals a week, CalFresh works differently, so I won't guess. If your meal plan changes, check again. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "vars": []
+    },
+    "result.other_help.not_sfsu": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "GatorPlate is built for SF State students. For CalFresh help, you can call San Francisco CalFresh at {county_phone}, or your own county."
+      ],
+      "web": [
+        "GatorPlate is built for SF State students. For CalFresh help, you can call San Francisco CalFresh at {county_phone}, or your own county's CalFresh office."
+      ],
+      "vars": [
+        "county_phone:phone"
+      ]
+    },
+    "result.other_help.zero_benefit": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "For your household size, my estimate may come out very low or zero, so I won't guess. The county decides. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "web": [
+        "For a household your size, my estimate may come out very low or at zero, so I won't guess. The county decides. Gator Groceries and the AS Food Pantry are open to all SF State students."
+      ],
+      "vars": []
+    },
+    "result.info.already_receiving": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Since you already get CalFresh, watch for your SAR seven report around month six, and renew every year. The coordinator can help."
+      ],
+      "web": [
+        "Since you already get CalFresh, watch for your SAR 7 report around month 6, and renew every 12 months. The SF State CalFresh coordinator can help with both."
+      ],
+      "vars": []
+    },
+    "result.info.interview_waiting": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Since you already applied, the county will call you for an interview. It may show as an unknown number, so please answer."
+      ],
+      "web": [
+        "Since you already applied, the county will call you for an interview. It may show as an unknown number or as spam, so please answer. If you miss it, call the county right away."
+      ],
+      "vars": []
+    },
+    "expedited.yes": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "You may get CalFresh within three days — the county checks this when you apply.",
+        "You might get CalFresh within three days — the county checks this when you apply."
+      ],
+      "vars": []
+    },
+    "expedited.maybe": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "The county also checks if you can get CalFresh within three days, so answer the emergency questions honestly."
+      ],
+      "vars": []
+    },
+    "first_month.apply_today": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Apply today if you can — your first month counts from your application date.",
+        "Try to apply today — your first month counts from the day you apply."
+      ],
+      "vars": [],
+      "notes": "Said for the likely tier and for every coordinator route except coordinator.parent_household (that student applies as the parents' household, so the card says to talk to the coordinator first). Never for other_help.* or the info routes."
+    },
+    "card.phone_screen": {
+      "group": "result",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Your card is ready — scan the QR code on the screen."
+      ],
+      "vars": [],
+      "notes": "GP_CARD_DELIVERY=screen. Fixed wording; check_content.py checks it."
+    },
+    "card.phone_code": {
+      "group": "result",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Go to {short_url} and enter code {code}."
+      ],
+      "vars": [
+        "short_url:url",
+        "code:code"
+      ],
+      "notes": "GP_CARD_DELIVERY=code. Fixed wording; it renders to 'Go to gatorplate dot fly dot dev slash go and enter code four eight one, two zero six.' (check_content.py checks it)."
+    },
+    "card.web": {
+      "group": "result",
+      "channels": [
+        "web"
+      ],
+      "web": [
+        "Your card is ready. Open it to see your next steps."
+      ],
+      "vars": [],
+      "notes": "The talk page shows the open-my-card button for card_url. Generic on purpose: what the card holds depends on the route (docs/SPEC.md, student card blocks)."
+    },
+    "close.anything_else": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        {
+          "say": "The SF State CalFresh coordinator is at {coordinator_phone}.",
+          "ask": "Anything else?"
+        },
+        {
+          "say": "You can call the SF State CalFresh coordinator at {coordinator_phone}.",
+          "ask": "Anything else?"
+        }
+      ],
+      "web": [
+        {
+          "say": "To talk to a person, call the SF State CalFresh coordinator at {coordinator_phone}.",
+          "ask": "Anything else I can help with?"
+        },
+        {
+          "say": "If you want to talk to a person, the SF State CalFresh coordinator is at {coordinator_phone}.",
+          "ask": "Anything else?"
+        }
+      ],
+      "closed": {
+        "phone": [
+          "Anything else? Press one for yes, two for no."
+        ],
+        "web": [
+          "Anything else? You can answer yes or no."
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Yes",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "Anything else?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No, thanks",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": [
+        "coordinator_phone:phone"
+      ]
+    },
+    "close.goodbye": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Thanks for calling GatorPlate. Good luck. Goodbye.",
+        "Thanks for calling GatorPlate. Take care. Goodbye."
+      ],
+      "web": [
+        "Thanks for using GatorPlate. Good luck!",
+        "Thanks for using GatorPlate. Take care!"
+      ],
+      "vars": [],
+      "notes": "end true, end_reason completed. No phone number here."
+    },
+    "close.silence": {
+      "group": "result",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "I still can't hear you, so I'll end the call. The SF State CalFresh coordinator is at {coordinator_phone}. Goodbye."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ],
+      "notes": "Third silence. end true, end_reason no_input."
+    },
+    "crisis.resources": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "I'm really sorry you're going through this. You can call nine eight eight anytime, or call nine one one in an emergency.",
+        "I'm sorry you're dealing with this. Please call nine eight eight, the crisis line, anytime. In an emergency, call nine one one."
+      ],
+      "web": [
+        "I'm really sorry you're going through this. You can call 9-8-8 anytime, or call 9-1-1 in an emergency."
+      ],
+      "vars": [],
+      "notes": "Said at once, in full (not interruptible). No quote is stored. Then crisis.continue_or_stop."
+    },
+    "crisis.continue_or_stop": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Do you want to keep going with the CalFresh check, or stop here?"
+      ],
+      "closed": {
+        "phone": [
+          "Press one to keep going, or two to stop."
+        ],
+        "web": [
+          "Do you want to keep going, or stop here? Tap one."
+        ]
+      },
+      "short": {
+        "all": [
+          "Keep going, or stop here?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [],
+        "keypad": {
+          "1": {
+            "action": "resume"
+          },
+          "2": {
+            "intent": "stop"
+          }
+        },
+        "choices": [
+          {
+            "label": "Keep going",
+            "action": "resume"
+          },
+          {
+            "label": "Stop here",
+            "intent": "stop"
+          }
+        ]
+      },
+      "vars": [],
+      "notes": "A choice of two (keep going: the pending question again; stop: stop.goodbye), as in contracts/examples/edge_cases.json (crisis)."
+    },
+    "ssn.block": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Please don't share your Social Security number. GatorPlate doesn't need it.",
+          "ask": "{question}"
+        },
+        {
+          "say": "Please don't share Social Security or other ID numbers. GatorPlate doesn't need them.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ],
+      "notes": "Masked or redacted digits (9+ written, 7+ spoken). {question} = the pending question's short form. Nothing is stored except a content-free privacy event."
+    },
+    "card_number.block": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Please don't share card or bank account numbers. GatorPlate doesn't need them.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ],
+      "notes": "Card-like runs of 13-19 digits. {question} = the short form."
+    },
+    "human.request": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        {
+          "say": "I can't hand this call to a person, but the SF State CalFresh coordinator is at {coordinator_phone}, {coordinator_hours}.",
+          "ask": "Keep going with me for now?"
+        }
+      ],
+      "web": [
+        {
+          "say": "I can't hand this chat to a person, but you can reach the SF State CalFresh coordinator at {coordinator_phone}, {coordinator_hours}.",
+          "ask": "Do you want to keep going with me for now?"
+        }
+      ],
+      "closed": {
+        "phone": [
+          "Keep going for now? Press one for yes, two for no."
+        ],
+        "web": [
+          "Do you want to keep going for now?"
+        ]
+      },
+      "short": {
+        "all": [
+          "Keep going for now?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Keep going",
+            "answer": "yes"
+          },
+          {
+            "label": "Stop here",
+            "answer": "no"
+          }
+        ],
+        "yes": {
+          "action": "resume"
+        },
+        "no": {
+          "intent": "stop"
+        }
+      },
+      "vars": [
+        "coordinator_phone:phone",
+        "coordinator_hours:hours"
+      ],
+      "notes": "No live hand-off exists; never promise one."
+    },
+    "stop.goodbye": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Okay, I'll stop here. If you need help later, the SF State CalFresh coordinator is at {coordinator_phone}. Goodbye."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ],
+      "notes": "end true."
+    },
+    "delete.confirm_ask": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Should I delete everything you told me on this call? Say yes or no."
+      ],
+      "web": [
+        "Should I delete everything you told me in this chat?"
+      ],
+      "closed": {
+        "phone": [
+          "Delete your answers? Press one for yes, two for no."
+        ],
+        "web": [
+          "Delete your answers? You can answer yes or no."
+        ]
+      },
+      "short": {
+        "all": [
+          "Should I delete your answers?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Yes, delete it",
+            "answer": "yes"
+          },
+          {
+            "label": "No, keep it",
+            "answer": "no"
+          }
+        ],
+        "yes": {
+          "intent": "delete_data"
+        },
+        "no": {
+          "action": "delete.cancelled"
+        }
+      },
+      "vars": []
+    },
+    "delete.done": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Okay. I'm deleting your answers from this call now. Goodbye."
+      ],
+      "web": [
+        "Okay. I'm deleting your answers from this chat now. Goodbye."
+      ],
+      "vars": [],
+      "notes": "The case is deleted right after this reply. end true."
+    },
+    "delete.cancelled": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Okay, I won't delete anything."
+      ],
+      "vars": [],
+      "notes": "Then re-ask the pending question (short form)."
+    },
+    "apply_for_me": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "I can't apply for you, but your card will show your next steps."
+      ],
+      "web": [
+        "I can't sign or submit anything for you. You apply yourself on BenefitsCal, and your card shows your next steps."
+      ],
+      "vars": [],
+      "notes": "Never promise the answer sheet here: the route is not known yet, and only likely cards and coordinator cards other than the parent-household one have it. Then re-ask the pending question (short form)."
+    },
+    "immigration.question": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "I can't answer that. The coordinator or a legal aid office can help."
+      ],
+      "vars": [],
+      "notes": "Never answer immigration questions; the utterance is dropped from short-term memory."
+    },
+    "food_today": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "phone": [
+        "Gator Groceries and the AS Food Pantry have free food for SF State students."
+      ],
+      "web": [
+        "For food today, Gator Groceries and the AS Food Pantry give free food to all SF State students, every week. They're in the Cesar Chavez Student Center, on the bottom floor."
+      ],
+      "vars": []
+    },
+    "side_question.noted": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "I can't answer that here, but I noted your question for the coordinator."
+      ],
+      "vars": [],
+      "notes": "Becomes a yellow student_question line on the console. Never say it was sent anywhere."
+    },
+    "info.previously_denied": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "The rules changed this year, so it's worth checking again.",
+        "Rules changed this year, so a new check is worth it."
+      ],
+      "vars": [],
+      "notes": "For a student who applied before without getting CalFresh. Then continue."
+    },
+    "error.generic": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Sorry, something went wrong on my side. If it keeps happening, the SF State CalFresh coordinator is at {coordinator_phone}."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ],
+      "notes": "Replaces any reply that fails the output guard."
+    },
+    "line.filler": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "One moment.",
+        "Let me check that.",
+        "Okay, one second."
+      ],
+      "vars": [],
+      "notes": "GatewayLines.filler (all three, in this order)."
+    },
+    "line.retry": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Sorry, I didn't catch that."
+      ],
+      "vars": [],
+      "notes": "GatewayLines.retry"
+    },
+    "line.fatal": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Sorry, something went wrong on our side. You can reach the SF State CalFresh coordinator at four one five, three three eight, one two zero three. Goodbye."
+      ],
+      "vars": [],
+      "notes": "GatewayLines.fatal"
+    },
+    "line.fatal_start": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Hi, this is GatorPlate, a student-built AI assistant. Sorry, it isn't working right now. You can reach the SF State CalFresh coordinator at four one five, three three eight, one two zero three. Goodbye."
+      ],
+      "vars": [],
+      "notes": "GatewayLines.fatal_start"
+    },
+    "line.no_input_bye": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "I can't hear you, so I'll hang up now. You can call back anytime. Goodbye."
+      ],
+      "vars": [],
+      "notes": "GatewayLines.no_input_bye"
+    },
+    "line.time_limit": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "We've reached the time limit for this call. Your answers so far are saved for the coordinator. Goodbye."
+      ],
+      "vars": [],
+      "notes": "GatewayLines.time_limit"
+    },
+    "line.line_unavailable": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Hi, this is GatorPlate, a student-built AI assistant for SF State students. The line isn't available right now. You can reach the SF State CalFresh coordinator at four one five, three three eight, one two zero three. Goodbye."
+      ],
+      "vars": [],
+      "notes": "GatewayLines.line_unavailable"
+    }
+  },
+  "confirm_policy": {
+    "confirm_slots": [
+      "earned_monthly",
+      "other_cash_monthly",
+      "rent_share",
+      "rent_paid_by_others_to_landlord"
+    ],
+    "when": [
+      "parser and model disagree by more than 1 %",
+      "a teen/ty word (thirteen ... nineteen vs thirty ... ninety; quince/cincuenta)",
+      "confidence under 0.75",
+      "the value is outside the slot's range"
+    ],
+    "accepted_as_heard": "Every slot not in confirm_slots: a teen/ty word or a low confidence is accepted as heard, with no confirm question.",
+    "no_confirm": [
+      "cash_on_hand"
+    ],
+    "no_readback": [
+      "cash_on_hand"
+    ],
+    "readback_keys": {
+      "earned_monthly": "readback.earned",
+      "other_cash_monthly": "readback.other_cash",
+      "rent_share": "readback.rent"
+    },
+    "readback_cash": "readback.cash stays in the bank for the web display; no reply after the cash answer uses it (word budget; the contract examples have none)."
+  }
+}

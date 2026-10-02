@@ -1,0 +1,99 @@
+{
+  "version": "2026-10-01",
+  "id": "grad_ta_g6b",
+  "title": "List filler: grad TA, likely about $55 a month, already reviewed",
+  "about": "Demo case. seed=true: created by POST /api/demo/seed; every case can also be created by POST /api/demo/inject. Build a Case (seeded, live false, persona and code as given, created minutes_ago before now, ended_reason as given), set each slot from `slots` with state clear, source seed, heard / heard_en / turn from the maps below and confirmed for the listed slots; copy the `asked` entries as given when the file has them (AskedQuestion, in order; `turn` = the student turn whose reply asked the question; never a second entry for a key already listed); run the rules, create the card, then apply status (and tracking dates). Every time and date is relative to the seed time (now) in America/Los_Angeles and never falls before not_before, the first morning of the FY2027 table: a computed time earlier than not_before is raised to it, but never later than now (created_at = min(now, max(now - minutes_ago, not_before)); reviewed_at and tracking dates likewise), and the order created_at <= tracking dates <= reviewed_at <= now is kept. `expect` is what the rules must produce for this case.",
+  "golden_case": "G6-b",
+  "golden_dialogue": null,
+  "persona": null,
+  "code": "H5V-9KB",
+  "channel": "phone",
+  "lang": "en",
+  "seed": true,
+  "not_before": "2026-10-01T08:00:00-07:00",
+  "minutes_ago": 95,
+  "call_seconds": 105,
+  "ended_reason": "completed",
+  "status": "reviewed",
+  "reviewed_minutes_ago": 70,
+  "confirm_open_yellow_lines": true,
+  "seed_note": "Seeded as already reviewed: confirm any open yellow line (note 'Checked in the demo seed'), then set status reviewed.",
+  "slots": {
+    "consent": "true",
+    "level": "grad",
+    "half_time": "true",
+    "grad_exemption": "ta_ra",
+    "ta_ra": "true",
+    "age": "26",
+    "lives_with_parent": "false",
+    "household_food": "alone",
+    "earned_monthly": "1800.00",
+    "other_cash_monthly": "0.00",
+    "rent_share": "1000.00",
+    "heat_cool": "false",
+    "other_utils": "none"
+  },
+  "heard": {
+    "consent": "Sure",
+    "level": "I'm a full-time grad student",
+    "half_time": "I'm a full-time grad student",
+    "grad_exemption": "I'm a teaching assistant",
+    "ta_ra": "I'm a teaching assistant",
+    "age": "I'm 26",
+    "lives_with_parent": "I live alone",
+    "household_food": "I live alone",
+    "earned_monthly": "about 1,800 a month from the TA job",
+    "other_cash_monthly": "no one sends me money",
+    "rent_share": "my rent is a thousand",
+    "heat_cool": "no, heat is included",
+    "other_utils": "no other bills"
+  },
+  "heard_en": {},
+  "turns": {
+    "consent": 1,
+    "level": 2,
+    "half_time": 2,
+    "grad_exemption": 3,
+    "ta_ra": 3,
+    "age": 4,
+    "lives_with_parent": 4,
+    "household_food": 4,
+    "earned_monthly": 5,
+    "other_cash_monthly": 5,
+    "rent_share": 6,
+    "heat_cool": 7,
+    "other_utils": 8
+  },
+  "confirmed": [
+    "earned_monthly",
+    "rent_share"
+  ],
+  "native_review": false,
+  "expect": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 55,
+    "estimate_is_floor": false,
+    "irt_applies": false,
+    "yellow_open": 0,
+    "yellow_total": 1,
+    "yellow": [
+      {
+        "kind": "policy",
+        "code": "ta_ra_income_type",
+        "resolved": "confirm"
+      }
+    ],
+    "estimate_range": {
+      "lo": 25,
+      "hi": 55,
+      "settled": true
+    },
+    "skipped": [
+      {
+        "slot": "rent_paid_by_others_to_landlord",
+        "reason": "below_threshold"
+      }
+    ]
+  }
+}

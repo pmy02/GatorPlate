@@ -1,0 +1,1408 @@
+{
+  "version": "2026-10-01",
+  "format": {
+    "summary": "Input guard (redaction and keyword intents) and output guard (forbidden wording) for every reply and every card string.",
+    "regex": "All patterns are Python regular expressions, matched with re.search and re.IGNORECASE on text normalized as: curly quotes made straight, whitespace collapsed.",
+    "redact": "Run before anything else sees the utterance (model, logs, case). Order: card (card_patterns: 13-19 written digits), then ssn (any 9+ digit run, with an optional single space, dot or dash between digits), then spoken digit runs (spoken_digit_patterns: 7+ digit words or digits; the match is leftmost and greedy, so it covers the whole run). Replace each hit with the replacement text and record only the kind: card_number for a written card run or a spoken run of 13-19 digits (spoken_card_digits); ssn for every other hit. A phone utterance with masked true is a hit too: the gateway already replaced a run of 9+ digits with '#', and the number of '#' characters means nothing (docs/BRAIN_API.md, docs/SPEC.md redaction), so it is card_number when the utterance mentions a card or a bank account (masked_card_words) and ssn otherwise. Privacy events: card_number -> card_number_blocked, ssn -> ssn_blocked.",
+    "keywords": "High-recall backstop for the model's intents. A hit adds that intent. Patterns that can end a call (stop, abuse) stay narrow: negations ('don't hang up', 'no quiero colgar') and frustration that is not aimed at GatorPlate do not count (see tests.keywords). spanish_request tells a request for Spanish apart from other languages.",
+    "output": "Every final reply string (both banks, every channel) and every rendered card string must have zero hits in output.forbidden (regex) and output.forbidden_phrases (plain lower-case substrings, the same list as contracts/check_examples.py). A hit replaces the whole reply with error.generic. The same holds for every string of programs.en.json and programs.es.json (the card's 'money you may be missing' part), as written and filled with example values; the programs patterns block promises of savings, refunds, credits, discounts or coverage ('you'll save $', 'you will get a refund', 'you're covered', 'free money').",
+    "tests": "Vectors that data/content/check_content.py runs: redaction kinds, keyword intents, routing (the reply key one utterance gets), blocked and allowed outputs. check_content.py also runs the redaction and keyword rules over data/tests/utterances.jsonl.",
+    "routing": "routing.precedence is the order in which the intents of one turn win the reply (docs/SPEC.md, global intents), with delete_data ahead of stop so that 'erase my info and hang up' deletes first. 'redaction' stands for a redacted or masked number. The first entry present gives the reply key in routing.reply. close_phase: while the pending question is close.anything_else, a stop intent or a done phrase ('no, that's all', 'no, thanks', 'eso es todo') ends the call with close.goodbye, not stop.goodbye; 'that's all' is never a stop keyword."
+  },
+  "input": {
+    "redact": {
+      "replacement": "[REDACTED]",
+      "card_patterns": [
+        "(?<!\\d)(?:\\d[ .-]?){12,18}\\d(?!\\d)"
+      ],
+      "ssn_patterns": [
+        "(?<!\\d)\\d{3}[ .-]?\\d{2}[ .-]?\\d{4}(?!\\d)",
+        "(?<!\\d)(?:\\d[ .-]?){8,}\\d(?!\\d)"
+      ],
+      "spoken_digit_run_min": 7,
+      "spoken_card_digits": [
+        13,
+        19
+      ],
+      "spoken_digit_words": {
+        "en": [
+          "zero",
+          "oh",
+          "one",
+          "two",
+          "three",
+          "four",
+          "five",
+          "six",
+          "seven",
+          "eight",
+          "nine"
+        ],
+        "es": [
+          "cero",
+          "uno",
+          "una",
+          "dos",
+          "tres",
+          "cuatro",
+          "cinco",
+          "seis",
+          "siete",
+          "ocho",
+          "nueve"
+        ]
+      },
+      "spoken_digit_patterns": {
+        "en": [
+          "\\b(?:(?:zero|oh|one|two|three|four|five|six|seven|eight|nine|\\d)[\\s,.-]+){6,}(?:zero|oh|one|two|three|four|five|six|seven|eight|nine|\\d)\\b"
+        ],
+        "es": [
+          "\\b(?:(?:cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|\\d)[\\s,.-]+){6,}(?:cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|\\d)\\b"
+        ]
+      },
+      "masked_char": "#",
+      "masked_card_words": {
+        "en": [
+          "\\bcard\\b",
+          "\\bdebit\\b",
+          "\\bcredit\\b",
+          "\\bbank\\b",
+          "\\baccount\\b",
+          "\\brouting\\b"
+        ],
+        "es": [
+          "\\btarjeta\\b",
+          "\\bd[eé]bito\\b",
+          "\\bcr[eé]dito\\b",
+          "\\bbanco\\b",
+          "\\bcuenta\\b"
+        ]
+      }
+    },
+    "keywords": {
+      "crisis": {
+        "en": [
+          "\\bkill(?:ing)? myself\\b",
+          "\\bsuicid",
+          "\\bend (?:my life|it all)\\b",
+          "\\btake my (?:own )?life\\b",
+          "\\b(?:want|wanna|going) to die\\b",
+          "\\bdon'?t want to (?:live|be alive|be here anymore)\\b",
+          "\\b(?:hurt|hurting|harm|harming|cut|cutting) myself\\b",
+          "\\bself[- ]?harm",
+          "\\bno reason to live\\b",
+          "\\bbetter off dead\\b",
+          "\\b(?:i'?m|i am) not safe\\b",
+          "\\bi don'?t feel safe\\b",
+          "\\bnot safe at home\\b",
+          "\\boverdose\\b",
+          "\\b(?:no|don'?t (?:really )?see (?:the|any)) point (?:of|in) (?:living|being alive|going on)\\b",
+          "\\b(?:can'?t|cannot) go on (?:anymore|like this)\\b"
+        ],
+        "es": [
+          "\\bmatarme\\b",
+          "\\bsuicid",
+          "\\bquitarme la vida\\b",
+          "\\b(?:me )?quiero morir(?:me)?\\b",
+          "\\bno quiero (?:vivir|seguir viviendo)\\b",
+          "\\b(?:hacerme|me hago) daño\\b",
+          "\\blastimarme\\b",
+          "\\bcortarme\\b",
+          "\\bno estoy a salvo\\b",
+          "\\bno me siento segur[oa]\\b",
+          "\\bsobredosis\\b",
+          "\\bno (?:le )?veo (?:el |ning[uú]n )?sentido a (?:la vida|vivir|seguir viviendo)\\b"
+        ]
+      },
+      "human_request": {
+        "en": [
+          "\\b(?:talk|speak|chat) (?:to|with) (?:a |an |the )?(?:real |live |actual )?(?:person|human|someone|somebody|staff|representative|agent|advisor|counselor|coordinator)\\b",
+          "\\bconnect me (?:to|with)\\b",
+          "\\b(?:want|need) (?:a |an |to talk to a |to speak to a |to speak with a )?(?:real|live|actual) (?:person|human)\\b",
+          "\\brepresentative\\b",
+          "\\boperator\\b",
+          "\\bcustomer service\\b"
+        ],
+        "es": [
+          "\\bpersona real\\b",
+          "\\bhablar con (?:una persona|alguien|un humano|una humana|un representante|una representante|el personal|la coordinaci[oó]n)\\b",
+          "\\brepresentante\\b",
+          "\\boperador(?:a)?\\b",
+          "\\bcomunicar(?:me)? con (?:alguien|una persona|un humano|la oficina|la coordinaci[oó]n|el personal)\\b"
+        ]
+      },
+      "stop": {
+        "en": [
+          "^\\W*(?:stop|quit|cancel|goodbye|bye|bye bye|i'?m done)\\W*$",
+          "^\\W*hang up\\W*$",
+          "\\b(?:i'?ll|i will|i'?m going to|i'?m gonna|gonna|gotta|i have to|let me) hang up\\b",
+          "\\b(?:end|stop) (?:the|this) (?:call|chat|conversation)\\b",
+          "\\bi (?:want|need|would like|'d like) to (?:stop|quit|end this|hang up)\\b",
+          "\\bno more questions\\b",
+          "\\bi don'?t want to (?:do|continue) this anymore\\b",
+          "\\b(?:bye|goodbye|bye bye)\\W*$",
+          "\\bi (?:have|need|gotta|got) to go\\b(?!\\s+(?:to|back|in|at|out|for|over|through|get|see|pick|work)\\b)",
+          "\\b(?:then|and) hang up\\b"
+        ],
+        "es": [
+          "^\\W*(?:para|basta|ya|adi[oó]s|chao|chau|termina|terminar)\\W*$",
+          "^\\W*cuelga\\W*$",
+          "(?<!no )\\b(?:voy a|tengo que|quiero|necesito) colgar\\b",
+          "\\b(?:termina|terminar|acaba|acabar) (?:la|esta) (?:llamada|conversaci[oó]n)\\b",
+          "\\bquiero (?:parar|terminar|dejar esto)\\b",
+          "\\bya no quiero (?:seguir|continuar)\\b",
+          "\\b(?:mejor )?paramos aqu[ií]\\b",
+          "\\bya me voy\\b",
+          "\\b(?:adi[oó]s|chao|chau)\\W*$"
+        ]
+      },
+      "delete_data": {
+        "en": [
+          "\\b(?:delete|erase|remove|wipe|clear) (?:my|all my|all of my) (?:info|information|data|answers|stuff|details|records?)\\b",
+          "\\bforget (?:everything|what) i (?:said|told you)\\b",
+          "\\bdelete (?:this|everything|it all)\\b"
+        ],
+        "es": [
+          "\\b(?:borra|borrar|elimina|eliminar|quita|quitar) (?:mis|todos mis|toda mi) (?:datos|respuestas|informaci[oó]n)\\b",
+          "\\bborra (?:todo|esto)\\b",
+          "\\b(?:borra|elimina|olvida) (?:todo )?lo que (?:te )?dije\\b"
+        ]
+      },
+      "language_request": {
+        "en": [
+          "\\b(?:in|speak|talk in|do this in|habla|hablas|hablar) (?:spanish|espa[nñ]ol)\\b",
+          "\\bespa[nñ]ol\\b",
+          "\\bspanish,? please\\b",
+          "^\\W*spanish\\W*$",
+          "\\bdo you (?:speak|have) spanish\\b",
+          "\\b(?:another|other|different) language\\b",
+          "\\b(?:in|speak) (?:chinese|mandarin|cantonese|vietnamese|tagalog|korean|russian|arabic|french|japanese|hindi|punjabi|portuguese)\\b"
+        ],
+        "es": [
+          "\\bespa[nñ]ol\\b",
+          "\\b(?:en|hablar|hablas|habla) ingl[eé]s\\b",
+          "\\botro idioma\\b",
+          "\\b(?:en|hablas|hablar) (?:chino|mandar[ií]n|canton[eé]s|vietnamita|tagalo|coreano|ruso|[aá]rabe|franc[eé]s|japon[eé]s|portugu[eé]s)\\b"
+        ]
+      },
+      "hold": {
+        "en": [
+          "\\b(?:hold on|hang on)\\b",
+          "\\b(?:one|a|just a) (?:sec|second|moment|minute|min)\\b(?=\\W*$|\\s*[,.!?]|\\s+please\\b)",
+          "\\bgive me a (?:sec|second|moment|minute|min)\\b",
+          "\\bwait,? (?:a|one) (?:sec|second|moment|minute)\\b",
+          "\\blet me (?:check|look|find|grab|get)\\b",
+          "\\b(?:can|could) you (?:wait|hold)\\b",
+          "\\bbrb\\b"
+        ],
+        "es": [
+          "\\bun (?:momento|momentito|segundo|segundito|minuto|minutito)\\b(?=\\W*$|\\s*[,.!?]|\\s+(?:por favor|porfa)\\b)",
+          "\\bdame un (?:momento|segundo|minuto)\\b",
+          "\\besp[eé]r(?:ame|eme)\\b",
+          "\\besp[eé]ra (?:un|tantito)\\b",
+          "\\bd[eé]jame (?:ver|revisar|buscar|checar)\\b",
+          "\\baguanta\\b"
+        ]
+      },
+      "abuse": {
+        "en": [
+          "\\bf+u+c+k+ (?:you|off|u)\\b",
+          "\\bscrew (?:you|u)\\b",
+          "\\bshut up\\b",
+          "\\b(?:you'?re|you are|ur|u r) (?:so |such an? |a |an )?(?:stupid|useless|dumb|idiot|moron|worthless|garbage|trash)\\b",
+          "\\b(?:stupid|dumb|useless) (?:bot|robot|machine|ai)\\b",
+          "\\b(?:you|u|ur)(?:'?re| are| r)?(?: \\w+){0,2} (?:bitch|asshole|motherf\\w*|dickhead)\\b",
+          "^\\W*(?:bitch|asshole|motherf\\w*|dickhead)\\W*$"
+        ],
+        "es": [
+          "\\bchinga tu madre\\b",
+          "\\bvete a la (?:mierda|verga)\\b",
+          "^\\W*(?:pinche )?pendej[oa]\\W*$",
+          "\\b(?:eres|est[aá]s) (?:un[a]? )?(?:idiota|est[uú]pid[oa]|in[uú]til|basura|pendej[oa])\\b",
+          "\\bc[aá]llate\\b",
+          "^\\W*(?:pinche )?hij[oa] de puta\\W*$",
+          "\\beres (?:un[a]? )?hij[oa] de puta\\b",
+          "\\bpinche (?:robot|m[aá]quina|bot)\\b"
+        ]
+      },
+      "repeat": {
+        "en": [
+          "\\b(?:say|repeat) (?:that|it|the question) again\\b",
+          "\\b(?:can|could) you repeat\\b",
+          "\\brepeat (?:that|please|the question)\\b",
+          "\\bwhat did you (?:say|ask)\\b",
+          "^\\W*(?:what|huh|sorry|pardon|come again)\\W*$",
+          "\\bwhat was the question\\b"
+        ],
+        "es": [
+          "\\brep[ií]t(?:e|es|elo|a|as|eme)\\b",
+          "\\b(?:dilo|d[ií]melo|di) otra vez\\b",
+          "\\bqu[eé] dijiste\\b",
+          "^\\W*(?:qu[eé]|c[oó]mo|perd[oó]n)\\W*$",
+          "\\bno (?:te )?entend[ií]\\b"
+        ]
+      },
+      "is_ai": {
+        "en": [
+          "\\bare you (?:a |an )?(?:robot|bot|real|human|ai|machine|computer|person|real person)\\b",
+          "\\bis this (?:a |an )?(?:robot|bot|machine|ai|computer|real person)\\b",
+          "\\bam i (?:talking|speaking) (?:to|with) (?:a |an )?(?:robot|bot|machine|ai|computer|person|human|real person)\\b",
+          "\\bis this (?:an? )?official\\b",
+          "\\bis this (?:run by|from) (?:sf state|the school|the county|the government)\\b"
+        ],
+        "es": [
+          "\\beres (?:un[a]? )?(?:robot|bot|humano|humana|persona|persona real|ia|m[aá]quina|inteligencia artificial)\\b",
+          "\\bestoy hablando con (?:un[a]? )?(?:robot|m[aá]quina|persona|humano|humana)\\b",
+          "\\besto es (?:un[a]? )?(?:robot|bot|m[aá]quina|ia|inteligencia artificial|persona real)\\b",
+          "\\b(?:esto es|es esto) (?:del gobierno|oficial|de sf state|del condado)\\b"
+        ]
+      },
+      "is_recorded": {
+        "en": [
+          "\\b(?:is|are) (?:this|this call|you|it|the call) (?:being )?record(?:ed|ing)\\b",
+          "\\bare you recording\\b",
+          "\\b(?:do|will) you record\\b",
+          "\\brecording (?:this|me|the call)\\b",
+          "\\bis this a recording\\b",
+          "\\bare you (?:saving|keeping|storing) (?:this|what i say|my voice|everything|our conversation)\\b",
+          "\\b(?:do|will) you (?:save|keep|store) (?:this|what i say|my voice|the call|our conversation)\\b"
+        ],
+        "es": [
+          "\\b(?:me )?est[aá]s grabando\\b",
+          "\\bse (?:est[aá] )?grab(?:a|ando)\\b",
+          "\\best[aá]n grabando\\b",
+          "\\bgrabas (?:esto|la llamada)\\b"
+        ]
+      }
+    },
+    "routing": {
+      "precedence": [
+        "crisis",
+        "redaction",
+        "delete_data",
+        "stop",
+        "human_request",
+        "is_ai",
+        "is_recorded",
+        "language_request",
+        "hold",
+        "apply_for_me",
+        "immigration_question",
+        "food_today",
+        "already_receiving",
+        "interview_waiting",
+        "previously_denied",
+        "proxy_caller",
+        "side_question",
+        "abuse",
+        "repeat"
+      ],
+      "reply": {
+        "crisis": "crisis.resources",
+        "redaction": {
+          "ssn": "ssn.block",
+          "card_number": "card_number.block"
+        },
+        "delete_data": "delete.confirm_ask",
+        "stop": "stop.goodbye",
+        "human_request": "human.request",
+        "is_ai": "answer.is_ai",
+        "is_recorded": "answer.is_recorded",
+        "language_request": "language.offer_web",
+        "hold": "hold.ok",
+        "apply_for_me": "apply_for_me",
+        "immigration_question": "immigration.question",
+        "food_today": "food_today",
+        "already_receiving": "result.info.already_receiving",
+        "interview_waiting": "result.info.interview_waiting",
+        "previously_denied": "info.previously_denied",
+        "proxy_caller": "proxy.caller",
+        "side_question": "side_question.noted",
+        "abuse": "abuse.warn",
+        "repeat": "repeat"
+      },
+      "reply_notes": {
+        "language_request": "Phone: language.offer_web (lang es). Web: the conversation switches language. Any language other than English or Spanish: language.unsupported.",
+        "abuse": "First time abuse.warn, second time abuse.end.",
+        "repeat": "The last reply again (no sentence key of its own)."
+      },
+      "close_phase": {
+        "pending": "close.anything_else",
+        "reply": "close.goodbye",
+        "stop_becomes": "close.goodbye",
+        "done": {
+          "en": [
+            "^\\W*(?:no|nope|nah)(?:[\\s,.!]+(?:thanks|thank you))?\\W*$",
+            "\\bthat'?s (?:all|it)\\b",
+            "\\bnothing else\\b",
+            "\\b(?:i'?m|i am) (?:good|all set|fine)\\W*(?:thanks|thank you)?\\W*$"
+          ],
+          "es": [
+            "^\\W*no(?:[\\s,.!]+gracias)?\\W*$",
+            "\\b(?:eso )?es todo\\W*(?:gracias)?\\W*$",
+            "\\bnada m[aá]s\\W*(?:gracias)?\\W*$",
+            "\\b(?:estoy bien|as[ií] est[aá] bien)\\W*(?:gracias)?\\W*$"
+          ]
+        }
+      }
+    },
+    "spanish_request": {
+      "en": [
+        "\\bspanish\\b",
+        "\\bespa[nñ]ol\\b"
+      ],
+      "es": [
+        "\\bespa[nñ]ol\\b"
+      ]
+    }
+  },
+  "output": {
+    "forbidden": {
+      "en": [
+        "\\bnot eligible\\b",
+        "\\bineligible\\b",
+        "\\b(?:don'?t|do not|doesn'?t|does not|won'?t|will not|can'?t|cannot|didn'?t|did not) qualify\\b",
+        "\\bden(?:y|ied|ial|ies)\\b",
+        "\\bdisqualif",
+        "\\breject(?:ed|ion|s)?\\b",
+        "\\byou(?: are|'re| were| will be|'ll be)(?: (?:likely|probably|definitely|clearly|surely|fully|also|now|already))? (?:eligible|approved|accepted)\\b",
+        "\\byou(?:'ll| (?:likely|probably|definitely|clearly|surely|also|now|already|do|will|should))? qualify\\b",
+        "\\bapproved\\b",
+        "\\byou(?: will|'ll) (?:get|receive) (?:about |around |up to )?(?:\\$|\\d|calfresh|benefits|food stamps|ebt|money|an? (?:amount|payment))",
+        "\\bguarantee",
+        "\\bdefinitely (?:get|qualify|eligible)\\b",
+        "\\btext message",
+        "\\b(?:send|sending) you (?:a |an )?(?:text|sms|link|message|email|reminder)",
+        "\\b(?:we|i)(?:'ll| will| can| could) (?:text|sms|email|call) you\\b",
+        "\\btext(?:ing)? you\\b",
+        "\\bcall(?:ing)? you back\\b",
+        "\\bcallback",
+        "\\b(?:transfer|transferring|connect|connecting|put) you (?:to|through|with)\\b",
+        "\\btransfer you\\b",
+        "\\bconnect you\\b",
+        "\\b(?:sent|send|sending|forwarded|forward|forwarding|passed|passing)\\b[^.?!]{0,40}\\bcoordinator\\b",
+        "\\bremind(?:er|ers|ing)?\\b",
+        "\\b(?:we|i|the coordinator|a coordinator)(?:'ll| will) (?:contact|reach out to|call|email|text) you\\b",
+        "\\b(?:any|every|all|many) languages?\\b",
+        "\\brelay\\b",
+        "\\bnothing is recorded\\b",
+        "\\b(?:we|gatorplate) (?:don'?t|do not) (?:keep|store|save) anything\\b",
+        "(?<!not )\\b(?:an|the) official (?:sf state|county|state|calfresh|government) (?:service|app|program|website|site)\\b",
+        "\\bferpa (?:doesn'?t|does not) apply\\b",
+        "\\b(?:reduce[sd]?|reducing|cut(?:s|ting)?|lower(?:s|ed|ing)?)\\b[^.?!]{0,30}\\berrors?\\b",
+        "\\bfewer (?:errors|mistakes)\\b",
+        "\\byou(?: will|'ll) save (?:about |around |up to )?\\$",
+        "\\byou(?: will|'ll) (?:get|receive) (?:a |an |your )?(?:refund|tax credit|discount|medi-cal|coverage)\\b",
+        "\\byou(?:'re| are) (?:covered|enrolled)\\b",
+        "\\bfree money\\b"
+      ],
+      "es": [
+        "\\b(?:es|eres|serás|eras|fuiste)(?: (?:probablemente|seguramente|definitivamente|claramente|también|ya))? elegible\\b",
+        "\\bno califica",
+        "\\bcalificas\\b|\\bcalificarás\\b|\\b(?:vas|va) a calificar\\b",
+        "\\bno (?:cumples|cumple|cumplirás) (?:con )?(?:los requisitos|las reglas)\\b",
+        "\\b(?:negad|denegad|rechazad)[oa]s?\\b",
+        "\\baprobad[oa]s?\\b",
+        "\\brecibirás (?:unos |alrededor de |hasta )?(?:\\$|\\d|calfresh|beneficios|dinero)",
+        "\\b(?:vas|va) a recibir (?:unos |alrededor de |hasta )?(?:\\$|\\d|calfresh|beneficios|dinero)",
+        "\\bgarantiz",
+        "\\bmensaje de texto\\b",
+        "\\bsms\\b",
+        "\\bte (?:enviaremos|mandaremos|envío|mando|enviamos|mandamos) (?:un |una )?(?:mensaje|texto|sms|recordatorio|correo|enlace)",
+        "\\bte (?:llamaremos|llamamos|volveremos a llamar|devolveremos la llamada)\\b",
+        "\\bte (?:transfiero|transferimos|transferiré|comunico con|comunicamos con|paso con|conecto con)\\b",
+        "\\benviado a\\b",
+        "\\blo envi[eé]\\b",
+        "\\b(?:envié|mandé|enviamos|mandamos|enviado|enviada|reenviado|reenviada)\\b[^.?!]{0,40}\\bcoordinaci[oó]n\\b",
+        "\\brecordatorio",
+        "\\bcualquier idioma\\b",
+        "\\b(?:todos los|muchos) idiomas\\b",
+        "\\bservicio de (?:relevo|retransmisi[oó]n)\\b",
+        "\\bnada se graba\\b",
+        "\\bno guardamos nada\\b",
+        "(?<!no )\\bes un servicio oficial\\b",
+        "\\breduc\\w*\\b[^.?!]{0,30}\\berror(?:es)?\\b",
+        "\\bmenos errores\\b",
+        "\\bahorrarás (?:unos |alrededor de |hasta )?\\$",
+        "\\b(?:vas|va) a ahorrar (?:unos |alrededor de |hasta )?\\$",
+        "\\b(?:estás|estas) (?:cubiert[oa]|inscrit[oa])\\b",
+        "\\bdinero gratis\\b"
+      ]
+    },
+    "forbidden_phrases": [
+      "not eligible",
+      "ineligible",
+      "don't qualify",
+      "do not qualify",
+      "denied",
+      "no califica",
+      "no calificas",
+      "no eres elegible",
+      "no es elegible",
+      "text message",
+      "send you a text",
+      "text you",
+      "call you back",
+      "callback",
+      "transfer you",
+      "connect you",
+      "sent to the coordinator",
+      "sent it to the coordinator",
+      "remind you",
+      "reminder",
+      "any language",
+      "relay",
+      "mensaje de texto",
+      "te llamaremos",
+      "te llamamos",
+      "te transfiero",
+      "te comunico con",
+      "enviado a",
+      "lo envié",
+      "recordatorio",
+      "cualquier idioma",
+      "you qualify",
+      "you are eligible",
+      "you're eligible",
+      "approved",
+      "eres elegible",
+      "aprobad"
+    ]
+  },
+  "tests": {
+    "redact": [
+      {
+        "lang": "en",
+        "text": "my social is 123-45-6789",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "it's 123456789 I think",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "card number 4111 1111 1111 1111",
+        "expect": "card_number"
+      },
+      {
+        "lang": "en",
+        "text": "call me at 415 338 1203",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "my social is one two three four five six seven eight nine",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "it's four one five, three three eight, one two zero three",
+        "expect": "ssn"
+      },
+      {
+        "lang": "es",
+        "text": "mi número es uno dos tres cuatro cinco seis siete",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "I make 900 a month and pay $1,100 in rent",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "I'm 20 and I take 12 units",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "about fifteen hundred a month, maybe nineteen fifty",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "my zip code is 94132",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "I applied on 10/02/2026",
+        "expect": null
+      },
+      {
+        "lang": "es",
+        "text": "gano unos novecientos al mes y pago mil cien de renta",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "Do you need my social? It's #########.",
+        "masked": true,
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "My card number is ################.",
+        "masked": true,
+        "expect": "card_number"
+      },
+      {
+        "lang": "en",
+        "text": "It's ######### on my debit card.",
+        "masked": true,
+        "expect": "card_number"
+      },
+      {
+        "lang": "en",
+        "text": "It's ################, is that what you need?",
+        "masked": true,
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "four one one one, one one one one, one one one one, one one one one",
+        "expect": "card_number"
+      },
+      {
+        "lang": "es",
+        "text": "Mi tarjeta es 4111 1111 1111 1111.",
+        "expect": "card_number"
+      },
+      {
+        "lang": "en",
+        "text": "It's nine eight seven, six five, four three two one.",
+        "expect": "ssn"
+      },
+      {
+        "lang": "en",
+        "text": "My student ID is 912345678, does that help?",
+        "expect": "ssn"
+      }
+    ],
+    "keywords": [
+      {
+        "lang": "en",
+        "text": "Honestly, sometimes I think about hurting myself.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I just want to die",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "a veces quiero morirme",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "this rent is killing me",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Can I talk to a real person?",
+        "expect": [
+          "human_request"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "quiero hablar con una persona",
+        "expect": [
+          "human_request"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "stop",
+        "expect": [
+          "stop"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "please end the call",
+        "expect": [
+          "stop"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I can't stop thinking about money",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "adiós",
+        "expect": [
+          "stop"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "please delete my info",
+        "expect": [
+          "delete_data"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "borra mis datos por favor",
+        "expect": [
+          "delete_data"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Can we do this in Spanish? Español, por favor.",
+        "expect": [
+          "language_request"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "do you speak spanish",
+        "expect": [
+          "language_request"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I'm taking a Spanish class",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Hold on, let me check my pay stub.",
+        "expect": [
+          "hold"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "un momento, déjame revisar",
+        "expect": [
+          "hold"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "fuck you",
+        "expect": [
+          "abuse"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "you're useless",
+        "expect": [
+          "abuse"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "this is so fucking hard",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "eres un idiota",
+        "expect": [
+          "abuse"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "sorry, can you repeat that?",
+        "expect": [
+          "repeat"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "are you a robot?",
+        "expect": [
+          "is_ai"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "is this call being recorded?",
+        "expect": [
+          "is_recorded"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "¿me estás grabando?",
+        "expect": [
+          "is_recorded"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I work at the campus library, about 900 a month. Nobody gives me cash.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Please don't hang up, I'm getting my pay stub.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I need to hang up now.",
+        "expect": [
+          "stop"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I have a second job at a cafe.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Just a sec.",
+        "expect": [
+          "hold"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Fuck this rent, it's so expensive.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Life's a bitch sometimes.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "you stupid bitch",
+        "expect": [
+          "abuse"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "no quiero colgar todavía",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "tengo un segundo trabajo",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "mi mamá espera que yo trabaje más",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "espérame un momento",
+        "expect": [
+          "hold"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "qué pendejo soy, se me olvidó",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "eres un pendejo",
+        "expect": [
+          "abuse"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "you're a stupid bitch",
+        "expect": [
+          "abuse"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "you know, life's a bitch",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Is this a real person?",
+        "expect": [
+          "is_ai"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I don't really see the point of living anymore.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I have to go to class at 3.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I have to go, bye.",
+        "expect": [
+          "stop"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Is this an official SF State service?",
+        "expect": [
+          "is_ai"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Un segundito, porfa.",
+        "expect": [
+          "hold"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "¿Me lo repites, por favor?",
+        "expect": [
+          "repeat"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "¿Esto es del gobierno?",
+        "expect": [
+          "is_ai"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Are you a real person or a bot?",
+        "expect": [
+          "is_ai"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I want a real person.",
+        "expect": [
+          "human_request"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "No, espera, son mil doscientos, no mil cien.",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "Espera, son mil doscientos.",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "Espera un momento.",
+        "expect": [
+          "hold"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "One sec.",
+        "expect": [
+          "hold"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "No le veo sentido a vivir.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "There's no point in living.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "No, that's all. Thanks.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "That's all I make, about 900 a month.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Can you erase my information and then hang up?",
+        "expect": [
+          "delete_data",
+          "stop"
+        ]
+      }
+    ],
+    "routing": [
+      {
+        "lang": "en",
+        "text": "Is this a real person?",
+        "pending": "ask.rent",
+        "expect": "answer.is_ai"
+      },
+      {
+        "lang": "en",
+        "text": "Can I talk to a real person?",
+        "pending": "ask.rent",
+        "expect": "human.request"
+      },
+      {
+        "lang": "en",
+        "text": "Hold on.",
+        "pending": "ask.income",
+        "expect": "hold.ok"
+      },
+      {
+        "lang": "en",
+        "text": "One sec.",
+        "pending": "ask.income",
+        "expect": "hold.ok"
+      },
+      {
+        "lang": "es",
+        "text": "Espera un momento.",
+        "pending": "ask.income",
+        "expect": "hold.ok"
+      },
+      {
+        "lang": "es",
+        "text": "Espérame tantito.",
+        "pending": "ask.income",
+        "expect": "hold.ok"
+      },
+      {
+        "lang": "es",
+        "text": "No, espera, son mil doscientos, no mil cien.",
+        "pending": "flip.rent_paid_by_others",
+        "expect": null
+      },
+      {
+        "lang": "es",
+        "text": "Espera, son mil doscientos.",
+        "pending": "ask.rent",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "I don't really see the point of living anymore.",
+        "pending": "ask.rent",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "es",
+        "text": "No le veo sentido a vivir.",
+        "pending": "ask.rent",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "en",
+        "text": "Honestly, I want to die. Can I talk to a person?",
+        "pending": "ask.rent",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "en",
+        "text": "My card number is 4111 1111 1111 1111.",
+        "pending": "ask.rent",
+        "expect": "card_number.block"
+      },
+      {
+        "lang": "en",
+        "text": "My card number is ################.",
+        "masked": true,
+        "pending": "ask.rent",
+        "expect": "card_number.block"
+      },
+      {
+        "lang": "en",
+        "text": "four one one one, one one one one, one one one one, one one one one",
+        "pending": "ask.rent",
+        "expect": "card_number.block"
+      },
+      {
+        "lang": "en",
+        "text": "My social is 987-65-4321.",
+        "pending": "ask.rent",
+        "expect": "ssn.block"
+      },
+      {
+        "lang": "en",
+        "text": "Do you need my social? It's #########.",
+        "masked": true,
+        "pending": "ask.rent",
+        "expect": "ssn.block"
+      },
+      {
+        "lang": "en",
+        "text": "It's nine eight seven, six five, four three two one.",
+        "pending": "ask.rent",
+        "expect": "ssn.block"
+      },
+      {
+        "lang": "en",
+        "text": "No, that's all. Thanks.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "That's all.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "No, thanks.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Bye!",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "No, gracias.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "Eso es todo.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "No, nada más, gracias.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "Nada más quería preguntar algo.",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "No, but I have one more question.",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "That's all I make, about 900 a month.",
+        "pending": "ask.income",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "Bye!",
+        "pending": "ask.rent",
+        "expect": "stop.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Can you erase my information and then hang up?",
+        "pending": "ask.rent",
+        "expect": "delete.confirm_ask"
+      },
+      {
+        "lang": "es",
+        "text": "Borra mis datos y ya me voy.",
+        "pending": "ask.rent",
+        "expect": "delete.confirm_ask"
+      },
+      {
+        "lang": "en",
+        "text": "Stop. I don't want to do this anymore.",
+        "pending": "ask.rent",
+        "expect": "stop.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Is this call being recorded?",
+        "pending": "ask.rent",
+        "expect": "answer.is_recorded"
+      },
+      {
+        "lang": "en",
+        "text": "I have to go to class at 3.",
+        "pending": "ask.units",
+        "expect": null
+      }
+    ],
+    "output_block": [
+      {
+        "lang": "en",
+        "text": "Sorry, you are not eligible."
+      },
+      {
+        "lang": "en",
+        "text": "You don't qualify for CalFresh."
+      },
+      {
+        "lang": "en",
+        "text": "Good news, you're approved!"
+      },
+      {
+        "lang": "en",
+        "text": "You will get $306 a month."
+      },
+      {
+        "lang": "en",
+        "text": "I'll text you the link."
+      },
+      {
+        "lang": "en",
+        "text": "We'll call you back tomorrow."
+      },
+      {
+        "lang": "en",
+        "text": "Let me transfer you to the coordinator."
+      },
+      {
+        "lang": "en",
+        "text": "I've sent your case to the SF State CalFresh coordinator."
+      },
+      {
+        "lang": "en",
+        "text": "We'll send you a reminder before your interview."
+      },
+      {
+        "lang": "en",
+        "text": "GatorPlate works in any language."
+      },
+      {
+        "lang": "en",
+        "text": "Your benefits are guaranteed."
+      },
+      {
+        "lang": "en",
+        "text": "Don't worry, nothing is recorded."
+      },
+      {
+        "lang": "en",
+        "text": "GatorPlate is an official SF State service."
+      },
+      {
+        "lang": "en",
+        "text": "Your application was denied."
+      },
+      {
+        "lang": "es",
+        "text": "Lo siento, no calificas para CalFresh."
+      },
+      {
+        "lang": "es",
+        "text": "¡Eres elegible!"
+      },
+      {
+        "lang": "es",
+        "text": "Recibirás $306 al mes."
+      },
+      {
+        "lang": "es",
+        "text": "Te enviaremos un mensaje de texto."
+      },
+      {
+        "lang": "es",
+        "text": "Te llamaremos mañana."
+      },
+      {
+        "lang": "es",
+        "text": "Fuiste aprobada."
+      },
+      {
+        "lang": "es",
+        "text": "Tu caso fue enviado a la coordinación."
+      },
+      {
+        "lang": "es",
+        "text": "GatorPlate es un servicio oficial de SF State."
+      },
+      {
+        "lang": "en",
+        "text": "GatorPlate reduces application errors by half."
+      },
+      {
+        "lang": "es",
+        "text": "GatorPlate reduce los errores en las solicitudes."
+      },
+      {
+        "lang": "en",
+        "text": "You're likely eligible for CalFresh."
+      },
+      {
+        "lang": "en",
+        "text": "You probably qualify for the full amount."
+      },
+      {
+        "lang": "es",
+        "text": "Eres probablemente elegible."
+      },
+      {
+        "lang": "es",
+        "text": "Vas a calificar para CalFresh."
+      },
+      {
+        "lang": "en",
+        "text": "You'll get about $306 a month."
+      },
+      {
+        "lang": "en",
+        "text": "You'll save about $440 a year on transit."
+      },
+      {
+        "lang": "en",
+        "text": "You will get a tax credit at tax time."
+      },
+      {
+        "lang": "en",
+        "text": "You're covered by Medi-Cal now."
+      },
+      {
+        "lang": "en",
+        "text": "Claim your free money today!"
+      },
+      {
+        "lang": "es",
+        "text": "Ahorrarás unos $440 al año en transporte."
+      },
+      {
+        "lang": "es",
+        "text": "Vas a ahorrar hasta $220 al año en tu teléfono."
+      },
+      {
+        "lang": "es",
+        "text": "Ya estás inscrita en Medi-Cal."
+      },
+      {
+        "lang": "es",
+        "text": "¡Es dinero gratis!"
+      }
+    ],
+    "output_pass": [
+      {
+        "lang": "en",
+        "text": "Based on what you told me, you may get about three hundred six dollars a month. The county makes the final decision."
+      },
+      {
+        "lang": "en",
+        "text": "Why you may qualify"
+      },
+      {
+        "lang": "en",
+        "text": "You can call back anytime."
+      },
+      {
+        "lang": "en",
+        "text": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service."
+      },
+      {
+        "lang": "en",
+        "text": "After approval"
+      },
+      {
+        "lang": "en",
+        "text": "The county will call you after you apply."
+      },
+      {
+        "lang": "en",
+        "text": "Your answers so far are saved for the coordinator."
+      },
+      {
+        "lang": "es",
+        "text": "Podrías recibir unos $306 al mes para comprar comida."
+      },
+      {
+        "lang": "es",
+        "text": "Prototipo hecho por estudiantes; no es un servicio oficial de SF State."
+      },
+      {
+        "lang": "es",
+        "text": "Desde junio de 2026, si estudias una licenciatura en SF State, cumples la regla de estudiantes de CalFresh."
+      },
+      {
+        "lang": "en",
+        "text": "Yes, I'm an AI built by students, not an official SF State service."
+      },
+      {
+        "lang": "es",
+        "text": "Sí, soy una IA hecha por estudiantes, no un servicio oficial de SF State."
+      },
+      {
+        "lang": "en",
+        "text": "I can't hand this call to a person, but the SF State CalFresh coordinator is at (415) 338-1203."
+      },
+      {
+        "lang": "en",
+        "text": "Riding Muni or BART over breaks? Clipper START could save about $90–$440 a year."
+      },
+      {
+        "lang": "en",
+        "text": "Maybe about $200 in tax credits at tax time. A free tax volunteer at SF State VITA checks whether you can claim it."
+      },
+      {
+        "lang": "en",
+        "text": "Health coverage for doctor, hospital and prescriptions, at no cost for most students today."
+      },
+      {
+        "lang": "en",
+        "text": "I found about $4,200 a year in aid I may be missing (estimates, not promises)."
+      },
+      {
+        "lang": "es",
+        "text": "Clipper START podría ahorrarte unos $90–$440 al año."
+      },
+      {
+        "lang": "es",
+        "text": "California LifeLine podría bajar tu factura de teléfono hasta $220 al año."
+      },
+      {
+        "lang": "es",
+        "text": "Marca la casilla de salud en la misma solicitud de BenefitsCal."
+      },
+      {
+        "lang": "es",
+        "text": "Encontré unos $4,200 al año en ayudas que quizá no estoy recibiendo (son cálculos, no promesas)."
+      }
+    ]
+  }
+}

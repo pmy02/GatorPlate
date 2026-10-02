@@ -1,0 +1,374 @@
+{
+ "$defs": {
+  "ProgramsMeta": {
+   "additionalProperties": false,
+   "description": "ProgramsPort.meta() -> ConsoleMeta.programs.",
+   "properties": {
+    "checked": {
+     "format": "date",
+     "title": "Checked",
+     "type": "string"
+    },
+    "console_texts": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Console Texts",
+     "type": "object"
+    },
+    "effective_from": {
+     "format": "date",
+     "title": "Effective From",
+     "type": "string"
+    },
+    "effective_to": {
+     "format": "date",
+     "title": "Effective To",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "names": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Names",
+     "type": "object"
+    },
+    "programs": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Programs",
+     "type": "array"
+    },
+    "questions": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Questions",
+     "type": "array"
+    },
+    "sources": {
+     "items": {
+      "$ref": "#/$defs/SourceRef"
+     },
+     "title": "Sources",
+     "type": "array"
+    },
+    "table_id": {
+     "title": "Table Id",
+     "type": "string"
+    }
+   },
+   "required": [
+    "table_id",
+    "label",
+    "checked",
+    "effective_from",
+    "effective_to",
+    "programs",
+    "names",
+    "console_texts",
+    "questions",
+    "sources"
+   ],
+   "title": "ProgramsMeta",
+   "type": "object"
+  },
+  "RulesMeta": {
+   "additionalProperties": false,
+   "properties": {
+    "effective_from": {
+     "format": "date",
+     "title": "Effective From",
+     "type": "string"
+    },
+    "effective_to": {
+     "format": "date",
+     "title": "Effective To",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "sources": {
+     "items": {
+      "$ref": "#/$defs/SourceRef"
+     },
+     "title": "Sources",
+     "type": "array"
+    },
+    "table_id": {
+     "title": "Table Id",
+     "type": "string"
+    }
+   },
+   "required": [
+    "table_id",
+    "label",
+    "effective_from",
+    "effective_to",
+    "sources"
+   ],
+   "title": "RulesMeta",
+   "type": "object"
+  },
+  "SlotName": {
+   "enum": [
+    "consent",
+    "level",
+    "units",
+    "half_time",
+    "grad_exemption",
+    "age",
+    "lives_with_parent",
+    "roommates",
+    "dorm_on_campus",
+    "meals_per_week",
+    "dorm_meals_over_10",
+    "household_food",
+    "spouse",
+    "spouse_student",
+    "children_count",
+    "youngest_child_age",
+    "boarder",
+    "homeless",
+    "homeless_shelter_cost_monthly",
+    "earned_monthly",
+    "work_study_monthly",
+    "gig_monthly",
+    "ta_ra",
+    "unearned_monthly",
+    "other_cash_monthly",
+    "dependent_care_monthly",
+    "rent_share",
+    "rent_paid_by_others_to_landlord",
+    "heat_cool",
+    "other_utils",
+    "cash_on_hand",
+    "volunteered_status",
+    "elderly_or_disabled",
+    "already_receiving",
+    "applied_waiting_interview",
+    "previously_denied",
+    "income_changing_soon",
+    "roommates_count"
+   ],
+   "title": "SlotName",
+   "type": "string"
+  },
+  "SlotSpec": {
+   "additionalProperties": false,
+   "properties": {
+    "choices": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Choices"
+    },
+    "critical": {
+     "default": false,
+     "title": "Critical",
+     "type": "boolean"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "max": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Max"
+    },
+    "min": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Min"
+    },
+    "periodic": {
+     "default": false,
+     "title": "Periodic",
+     "type": "boolean"
+    },
+    "short": {
+     "title": "Short",
+     "type": "string"
+    },
+    "type": {
+     "enum": [
+      "bool",
+      "int",
+      "money",
+      "enum"
+     ],
+     "title": "Type",
+     "type": "string"
+    }
+   },
+   "required": [
+    "type",
+    "label",
+    "short"
+   ],
+   "title": "SlotSpec",
+   "type": "object"
+  },
+  "SourceRef": {
+   "additionalProperties": false,
+   "properties": {
+    "date": {
+     "title": "Date",
+     "type": "string"
+    },
+    "grade": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Grade"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "title": {
+     "title": "Title",
+     "type": "string"
+    },
+    "url": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Url"
+    }
+   },
+   "required": [
+    "id",
+    "title",
+    "date"
+   ],
+   "title": "SourceRef",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "app_version": {
+   "title": "App Version",
+   "type": "string"
+  },
+  "card_delivery": {
+   "enum": [
+    "screen",
+    "code"
+   ],
+   "title": "Card Delivery",
+   "type": "string"
+  },
+  "demo_mode": {
+   "title": "Demo Mode",
+   "type": "boolean"
+  },
+  "demo_phone_display": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Demo Phone Display"
+  },
+  "live_transcript": {
+   "title": "Live Transcript",
+   "type": "boolean"
+  },
+  "programs": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/ProgramsMeta"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "rules": {
+   "$ref": "#/$defs/RulesMeta"
+  },
+  "rules_valid_today": {
+   "title": "Rules Valid Today",
+   "type": "boolean"
+  },
+  "slot_specs": {
+   "additionalProperties": {
+    "$ref": "#/$defs/SlotSpec"
+   },
+   "propertyNames": {
+    "$ref": "#/$defs/SlotName"
+   },
+   "title": "Slot Specs",
+   "type": "object"
+  }
+ },
+ "required": [
+  "rules",
+  "rules_valid_today",
+  "slot_specs",
+  "demo_mode",
+  "live_transcript",
+  "card_delivery",
+  "app_version",
+  "demo_phone_display"
+ ],
+ "title": "ConsoleMeta",
+ "type": "object"
+}

@@ -1,0 +1,15 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "code": {
+   "pattern": "^[0-9]{6}$",
+   "title": "Code",
+   "type": "string"
+  }
+ },
+ "required": [
+  "code"
+ ],
+ "title": "CardLookup",
+ "type": "object"
+}

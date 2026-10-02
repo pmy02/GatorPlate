@@ -1,0 +1,51 @@
+{
+ "$defs": {
+  "Channel": {
+   "enum": [
+    "phone",
+    "web"
+   ],
+   "title": "Channel",
+   "type": "string"
+  },
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  }
+ },
+ "properties": {
+  "channel": {
+   "$ref": "#/$defs/Channel"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang"
+  },
+  "seq": {
+   "const": 0,
+   "title": "Seq",
+   "type": "integer"
+  },
+  "test": {
+   "default": false,
+   "title": "Test",
+   "type": "boolean"
+  },
+  "v": {
+   "const": 1,
+   "title": "V",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "v",
+  "seq",
+  "channel",
+  "lang"
+ ],
+ "title": "StartRequest",
+ "type": "object"
+}

@@ -1,0 +1,74 @@
+{
+ "$defs": {
+  "ExpeditedOutlookText": {
+   "additionalProperties": false,
+   "properties": {
+    "maybe": {
+     "title": "Maybe",
+     "type": "string"
+    },
+    "no": {
+     "title": "No",
+     "type": "string"
+    },
+    "yes": {
+     "title": "Yes",
+     "type": "string"
+    }
+   },
+   "required": [
+    "yes",
+    "maybe",
+    "no"
+   ],
+   "title": "ExpeditedOutlookText",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "ask_cash_when": {
+   "title": "Ask Cash When",
+   "type": "string"
+  },
+  "days": {
+   "title": "Days",
+   "type": "integer"
+  },
+  "income_lt": {
+   "title": "Income Lt",
+   "type": "integer"
+  },
+  "is_flip_question": {
+   "title": "Is Flip Question",
+   "type": "boolean"
+  },
+  "liquid_le": {
+   "title": "Liquid Le",
+   "type": "integer"
+  },
+  "outlook": {
+   "$ref": "#/$defs/ExpeditedOutlookText"
+  },
+  "rule": {
+   "title": "Rule",
+   "type": "string"
+  },
+  "shelter_test": {
+   "title": "Shelter Test",
+   "type": "string"
+  }
+ },
+ "required": [
+  "income_lt",
+  "liquid_le",
+  "shelter_test",
+  "rule",
+  "days",
+  "ask_cash_when",
+  "outlook",
+  "is_flip_question"
+ ],
+ "title": "Expedited",
+ "type": "object"
+}

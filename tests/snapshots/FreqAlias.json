@@ -1,0 +1,34 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "biweekly": {
+   "title": "Biweekly",
+   "type": "string"
+  },
+  "monthly": {
+   "title": "Monthly",
+   "type": "string"
+  },
+  "semimonthly": {
+   "title": "Semimonthly",
+   "type": "string"
+  },
+  "weekly": {
+   "title": "Weekly",
+   "type": "string"
+  },
+  "yearly": {
+   "title": "Yearly",
+   "type": "string"
+  }
+ },
+ "required": [
+  "monthly",
+  "weekly",
+  "biweekly",
+  "semimonthly",
+  "yearly"
+ ],
+ "title": "FreqAlias",
+ "type": "object"
+}

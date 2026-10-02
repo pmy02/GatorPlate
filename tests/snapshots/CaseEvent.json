@@ -1,0 +1,454 @@
+{
+ "$defs": {
+  "CaseStatus": {
+   "description": "Coordinator status of a case (docs/UI_SPEC.md A3.7). \"Live\", \"Ended early\" and \"Sample\" are badges.",
+   "enum": [
+    "new",
+    "reviewed",
+    "applied",
+    "interview_scheduled",
+    "approved",
+    "follow_up"
+   ],
+   "title": "CaseStatus",
+   "type": "string"
+  },
+  "CaseSummary": {
+   "additionalProperties": false,
+   "properties": {
+    "asked_count": {
+     "title": "Asked Count",
+     "type": "integer"
+    },
+    "channel": {
+     "$ref": "#/$defs/Channel"
+    },
+    "code": {
+     "title": "Code",
+     "type": "string"
+    },
+    "created_at": {
+     "format": "date-time",
+     "title": "Created At",
+     "type": "string"
+    },
+    "ended_early": {
+     "title": "Ended Early",
+     "type": "boolean"
+    },
+    "estimate_is_floor": {
+     "title": "Estimate Is Floor",
+     "type": "boolean"
+    },
+    "estimate_monthly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Estimate Monthly"
+    },
+    "expedited_possible": {
+     "anyOf": [
+      {
+       "enum": [
+        "yes",
+        "maybe",
+        "no"
+       ],
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Expedited Possible"
+    },
+    "found_display": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Found Display"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "lang": {
+     "$ref": "#/$defs/Lang"
+    },
+    "live": {
+     "title": "Live",
+     "type": "boolean"
+    },
+    "next_deadline": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Next Deadline"
+    },
+    "phase": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Phase"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "reason_code": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Reason Code"
+    },
+    "seeded": {
+     "title": "Seeded",
+     "type": "boolean"
+    },
+    "skipped_count": {
+     "title": "Skipped Count",
+     "type": "integer"
+    },
+    "status": {
+     "$ref": "#/$defs/CaseStatus"
+    },
+    "summary": {
+     "title": "Summary",
+     "type": "string"
+    },
+    "test": {
+     "title": "Test",
+     "type": "boolean"
+    },
+    "tier": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Tier"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "updated_at": {
+     "format": "date-time",
+     "title": "Updated At",
+     "type": "string"
+    },
+    "version": {
+     "title": "Version",
+     "type": "integer"
+    },
+    "yellow_open": {
+     "title": "Yellow Open",
+     "type": "integer"
+    },
+    "yellow_total": {
+     "title": "Yellow Total",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "id",
+    "code",
+    "version",
+    "created_at",
+    "updated_at",
+    "label",
+    "summary",
+    "lang",
+    "channel",
+    "live",
+    "test",
+    "seeded",
+    "phase",
+    "status",
+    "ended_early",
+    "tier",
+    "reason_code",
+    "estimate_monthly",
+    "estimate_is_floor",
+    "expedited_possible",
+    "yellow_open",
+    "yellow_total",
+    "asked_count",
+    "skipped_count",
+    "next_deadline"
+   ],
+   "title": "CaseSummary",
+   "type": "object"
+  },
+  "Channel": {
+   "enum": [
+    "phone",
+    "web"
+   ],
+   "title": "Channel",
+   "type": "string"
+  },
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  },
+  "LiveTurn": {
+   "additionalProperties": false,
+   "description": "One live transcript line (memory only).",
+   "properties": {
+    "at": {
+     "format": "date-time",
+     "title": "At",
+     "type": "string"
+    },
+    "case_id": {
+     "title": "Case Id",
+     "type": "string"
+    },
+    "lang": {
+     "$ref": "#/$defs/Lang"
+    },
+    "text": {
+     "title": "Text",
+     "type": "string"
+    },
+    "turn": {
+     "title": "Turn",
+     "type": "integer"
+    },
+    "who": {
+     "enum": [
+      "student",
+      "assistant"
+     ],
+     "title": "Who",
+     "type": "string"
+    }
+   },
+   "required": [
+    "case_id",
+    "turn",
+    "who",
+    "text",
+    "lang",
+    "at"
+   ],
+   "title": "LiveTurn",
+   "type": "object"
+  },
+  "Phase": {
+   "description": "Conversation phases 0-10 plus end (docs/SPEC.md §3.2).",
+   "enum": [
+    "consent",
+    "student",
+    "age_home",
+    "household",
+    "income",
+    "housing",
+    "flip",
+    "result",
+    "expedited",
+    "card",
+    "close",
+    "end"
+   ],
+   "title": "Phase",
+   "type": "string"
+  },
+  "SlotName": {
+   "enum": [
+    "consent",
+    "level",
+    "units",
+    "half_time",
+    "grad_exemption",
+    "age",
+    "lives_with_parent",
+    "roommates",
+    "dorm_on_campus",
+    "meals_per_week",
+    "dorm_meals_over_10",
+    "household_food",
+    "spouse",
+    "spouse_student",
+    "children_count",
+    "youngest_child_age",
+    "boarder",
+    "homeless",
+    "homeless_shelter_cost_monthly",
+    "earned_monthly",
+    "work_study_monthly",
+    "gig_monthly",
+    "ta_ra",
+    "unearned_monthly",
+    "other_cash_monthly",
+    "dependent_care_monthly",
+    "rent_share",
+    "rent_paid_by_others_to_landlord",
+    "heat_cool",
+    "other_utils",
+    "cash_on_hand",
+    "volunteered_status",
+    "elderly_or_disabled",
+    "already_receiving",
+    "applied_waiting_interview",
+    "previously_denied",
+    "income_changing_soon",
+    "roommates_count"
+   ],
+   "title": "SlotName",
+   "type": "string"
+  },
+  "Tier": {
+   "enum": [
+    "likely",
+    "coordinator",
+    "other_help"
+   ],
+   "title": "Tier",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "asked_reason": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Asked Reason"
+  },
+  "at": {
+   "format": "date-time",
+   "title": "At",
+   "type": "string"
+  },
+  "case_id": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Case Id"
+  },
+  "changed_programs": {
+   "default": false,
+   "title": "Changed Programs",
+   "type": "boolean"
+  },
+  "changed_slots": {
+   "items": {
+    "$ref": "#/$defs/SlotName"
+   },
+   "title": "Changed Slots",
+   "type": "array"
+  },
+  "line": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/LiveTurn"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "now_asking": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Now Asking"
+  },
+  "now_asking_text": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Now Asking Text"
+  },
+  "seq": {
+   "title": "Seq",
+   "type": "integer"
+  },
+  "summary": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/CaseSummary"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "type": {
+   "enum": [
+    "case.created",
+    "case.updated",
+    "case.deleted",
+    "demo.reset",
+    "resync",
+    "live.turn",
+    "live.ended"
+   ],
+   "title": "Type",
+   "type": "string"
+  }
+ },
+ "required": [
+  "seq",
+  "type",
+  "at"
+ ],
+ "title": "CaseEvent",
+ "type": "object"
+}

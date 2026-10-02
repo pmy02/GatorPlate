@@ -1,0 +1,24 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "definition": {
+   "title": "Definition",
+   "type": "string"
+  },
+  "direct_if_cost": {
+   "title": "Direct If Cost",
+   "type": "string"
+  },
+  "excess_formula": {
+   "title": "Excess Formula",
+   "type": "string"
+  }
+ },
+ "required": [
+  "definition",
+  "direct_if_cost",
+  "excess_formula"
+ ],
+ "title": "HomelessRules",
+ "type": "object"
+}

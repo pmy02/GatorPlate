@@ -1,0 +1,232 @@
+[
+ {
+  "say": "Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio.",
+  "ask": "Is that okay?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "normal",
+  "expect": "yes_no",
+  "interruptible": false,
+  "hold_s": 0,
+  "display": "Hi, I'm GatorPlate, a student-built AI assistant, not an official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio. Is that okay?",
+  "choices": [
+   "Yes",
+   "No"
+  ],
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "consent.ask"
+   ],
+   "phase": "consent"
+  }
+ },
+ {
+  "say": "Great.",
+  "ask": "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "normal",
+  "expect": "open",
+  "interruptible": true,
+  "hold_s": 0,
+  "display": "Great. Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+  "choices": null,
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "ack.short",
+    "ask.level_units"
+   ],
+   "phase": "student"
+  }
+ },
+ {
+  "say": "Thanks.",
+  "ask": "How old are you, and who do you live with?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "normal",
+  "expect": "open",
+  "interruptible": true,
+  "hold_s": 0,
+  "display": "Thanks. How old are you, and who do you live with?",
+  "choices": null,
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "ack.short",
+    "ask.age_parent"
+   ],
+   "phase": "age_home"
+  }
+ },
+ {
+  "say": "Got it.",
+  "ask": "Do you buy and cook food with your roommates, or separately?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "normal",
+  "expect": "choice",
+  "interruptible": true,
+  "hold_s": 0,
+  "display": "Got it. Do you buy and cook food with your roommates, or separately?",
+  "choices": [
+   "Separately",
+   "Together"
+  ],
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "ack.short",
+    "ask.household_food_roommates"
+   ],
+   "phase": "household"
+  }
+ },
+ {
+  "say": "Okay.",
+  "ask": "About how much do you earn a month from work, before taxes? Don't count financial aid. And does anyone, like family, give you money?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "long",
+  "expect": "number",
+  "interruptible": true,
+  "hold_s": 0,
+  "display": "Okay. About how much do you earn a month from work, before taxes? Don't count financial aid. And does anyone, like family, give you money?",
+  "choices": [
+   "I don't have a job",
+   "I'm not sure"
+  ],
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "ack.short",
+    "ask.income"
+   ],
+   "phase": "income"
+  }
+ },
+ {
+  "say": "Got it — about $900 a month from work.",
+  "ask": "How much is your share of the rent each month?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "long",
+  "expect": "number",
+  "interruptible": false,
+  "hold_s": 0,
+  "display": "Got it — about $900 a month from work. How much is your share of the rent each month?",
+  "choices": [
+   "I don't pay rent",
+   "I don't have a stable place"
+  ],
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "readback.earned",
+    "ask.rent"
+   ],
+   "phase": "housing"
+  }
+ },
+ {
+  "say": "Got it — $1,100 a month. One more question.",
+  "ask": "Does anyone, like a parent, pay part of your rent straight to your landlord?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "normal",
+  "expect": "yes_no",
+  "interruptible": false,
+  "hold_s": 0,
+  "display": "Got it — $1,100 a month. One more question. Does anyone, like a parent, pay part of your rent straight to your landlord?",
+  "choices": [
+   "Yes",
+   "No",
+   "Yes, all of it"
+  ],
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "readback.rent",
+    "flip.intro",
+    "flip.rent_paid_by_others"
+   ],
+   "phase": "flip"
+  }
+ },
+ {
+  "say": "Based on what you told me, you may get about $306 a month. The county makes the final decision.",
+  "ask": "Roughly how much money do you have right now, in cash and in the bank?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "long",
+  "expect": "number",
+  "interruptible": false,
+  "hold_s": 0,
+  "display": "Based on what you told me, you may get about $306 a month. The county makes the final decision. Roughly how much money do you have right now, in cash and in the bank?",
+  "choices": [
+   "I'm not sure"
+  ],
+  "card_url": null,
+  "debug": {
+   "keys": [
+    "result.likely",
+    "expedited.intro_cash"
+   ],
+   "phase": "expedited"
+  }
+ },
+ {
+  "say": "Apply today if you can — your first month counts from your application date. Your card is ready. Open it to see your next steps. To talk to a person, call the SF State CalFresh coordinator at (415) 338-1203.",
+  "ask": "Anything else I can help with?",
+  "end": false,
+  "end_reason": null,
+  "lang": "en",
+  "listen": "normal",
+  "expect": "open",
+  "interruptible": false,
+  "hold_s": 0,
+  "display": "Apply today if you can — your first month counts from your application date. Your card is ready. Open it to see your next steps. To talk to a person, call the SF State CalFresh coordinator at (415) 338-1203. Anything else I can help with?",
+  "choices": [
+   "No, thanks"
+  ],
+  "card_url": "/c/fixtureMariaCard000001",
+  "debug": {
+   "keys": [
+    "first_month.apply_today",
+    "card.web",
+    "close.anything_else"
+   ],
+   "phase": "close"
+  }
+ },
+ {
+  "say": "Thanks for using GatorPlate. Good luck!",
+  "ask": null,
+  "end": true,
+  "end_reason": "completed",
+  "lang": "en",
+  "listen": "normal",
+  "expect": "open",
+  "interruptible": false,
+  "hold_s": 0,
+  "display": "Thanks for using GatorPlate. Good luck!",
+  "choices": null,
+  "card_url": "/c/fixtureMariaCard000001",
+  "debug": {
+   "keys": [
+    "close.goodbye"
+   ],
+   "phase": "end"
+  }
+ }
+]

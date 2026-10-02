@@ -1,0 +1,29 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "heat_cool": {
+   "title": "Heat Cool",
+   "type": "integer"
+  },
+  "none": {
+   "title": "None",
+   "type": "integer"
+  },
+  "phone_only": {
+   "title": "Phone Only",
+   "type": "integer"
+  },
+  "two_other": {
+   "title": "Two Other",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "heat_cool",
+  "two_other",
+  "phone_only",
+  "none"
+ ],
+ "title": "UtilityAllowance",
+ "type": "object"
+}

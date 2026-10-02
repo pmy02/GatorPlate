@@ -1,0 +1,2038 @@
+{
+ "$defs": {
+  "AskedQuestion": {
+   "additionalProperties": false,
+   "properties": {
+    "delta_usd": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Delta Usd"
+    },
+    "key": {
+     "title": "Key",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "standard",
+      "flip",
+      "confirm",
+      "band",
+      "closed",
+      "reprompt"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "outcomes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Outcomes",
+     "type": "array"
+    },
+    "reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason"
+    },
+    "slots": {
+     "items": {
+      "$ref": "#/$defs/SlotName"
+     },
+     "title": "Slots",
+     "type": "array"
+    },
+    "turn": {
+     "title": "Turn",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "turn",
+    "key",
+    "slots",
+    "kind"
+   ],
+   "title": "AskedQuestion",
+   "type": "object"
+  },
+  "CardRef": {
+   "additionalProperties": false,
+   "properties": {
+    "created_at": {
+     "format": "date-time",
+     "title": "Created At",
+     "type": "string"
+    },
+    "expires_at": {
+     "format": "date-time",
+     "title": "Expires At",
+     "type": "string"
+    },
+    "short_code": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Short Code"
+    },
+    "short_code_expires_at": {
+     "anyOf": [
+      {
+       "format": "date-time",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Short Code Expires At"
+    },
+    "token": {
+     "title": "Token",
+     "type": "string"
+    }
+   },
+   "required": [
+    "token",
+    "created_at",
+    "expires_at"
+   ],
+   "title": "CardRef",
+   "type": "object"
+  },
+  "Case": {
+   "additionalProperties": false,
+   "properties": {
+    "asked": {
+     "items": {
+      "$ref": "#/$defs/AskedQuestion"
+     },
+     "title": "Asked",
+     "type": "array"
+    },
+    "card": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/CardRef"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "channel": {
+     "$ref": "#/$defs/Channel"
+    },
+    "code": {
+     "pattern": "^[A-Z0-9]{3}-[A-Z0-9]{3}$",
+     "title": "Code",
+     "type": "string"
+    },
+    "consent": {
+     "$ref": "#/$defs/Consent"
+    },
+    "created_at": {
+     "format": "date-time",
+     "title": "Created At",
+     "type": "string"
+    },
+    "ended_early": {
+     "default": false,
+     "title": "Ended Early",
+     "type": "boolean"
+    },
+    "ended_reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Ended Reason"
+    },
+    "estimate_is_floor": {
+     "default": false,
+     "title": "Estimate Is Floor",
+     "type": "boolean"
+    },
+    "estimate_monthly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Estimate Monthly"
+    },
+    "estimate_range": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/EstimateRange"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "expedited_possible": {
+     "anyOf": [
+      {
+       "enum": [
+        "yes",
+        "maybe",
+        "no"
+       ],
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Expedited Possible"
+    },
+    "first_month": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/FirstMonth"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "flags": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Flags",
+     "type": "array"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "lang": {
+     "$ref": "#/$defs/Lang"
+    },
+    "language_request": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/LanguageRequest"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "live": {
+     "default": true,
+     "title": "Live",
+     "type": "boolean"
+    },
+    "persona": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Persona"
+    },
+    "phase": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Phase"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": "consent"
+    },
+    "privacy_events": {
+     "items": {
+      "$ref": "#/$defs/PrivacyEvent"
+     },
+     "title": "Privacy Events",
+     "type": "array"
+    },
+    "program_answers": {
+     "additionalProperties": {
+      "$ref": "#/$defs/ProgramAnswer"
+     },
+     "title": "Program Answers",
+     "type": "object"
+    },
+    "program_progress": {
+     "additionalProperties": {
+      "$ref": "#/$defs/ProgramProgress"
+     },
+     "title": "Program Progress",
+     "type": "object"
+    },
+    "reason_code": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reason Code"
+    },
+    "reviewed_at": {
+     "anyOf": [
+      {
+       "format": "date-time",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Reviewed At"
+    },
+    "route_override": {
+     "anyOf": [
+      {
+       "enum": [
+        "other_help.status",
+        "coordinator.status_complex",
+        "coordinator.elderly_disabled"
+       ],
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Route Override"
+    },
+    "rule_trace": {
+     "items": {
+      "$ref": "#/$defs/RuleStep"
+     },
+     "title": "Rule Trace",
+     "type": "array"
+    },
+    "seeded": {
+     "default": false,
+     "title": "Seeded",
+     "type": "boolean"
+    },
+    "skipped": {
+     "items": {
+      "$ref": "#/$defs/SkippedQuestion"
+     },
+     "title": "Skipped",
+     "type": "array"
+    },
+    "slots": {
+     "additionalProperties": {
+      "$ref": "#/$defs/Slot"
+     },
+     "propertyNames": {
+      "$ref": "#/$defs/SlotName"
+     },
+     "title": "Slots",
+     "type": "object"
+    },
+    "status": {
+     "$ref": "#/$defs/CaseStatus",
+     "default": "new"
+    },
+    "summary": {
+     "default": "",
+     "title": "Summary",
+     "type": "string"
+    },
+    "table_id": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Table Id"
+    },
+    "test": {
+     "default": false,
+     "title": "Test",
+     "type": "boolean"
+    },
+    "tier": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Tier"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "timeline": {
+     "items": {
+      "$ref": "#/$defs/TimelinePoint"
+     },
+     "title": "Timeline",
+     "type": "array"
+    },
+    "tracking": {
+     "$ref": "#/$defs/Tracking"
+    },
+    "turn_count": {
+     "default": 0,
+     "title": "Turn Count",
+     "type": "integer"
+    },
+    "updated_at": {
+     "format": "date-time",
+     "title": "Updated At",
+     "type": "string"
+    },
+    "version": {
+     "default": 0,
+     "title": "Version",
+     "type": "integer"
+    },
+    "yellow_lines": {
+     "items": {
+      "$ref": "#/$defs/YellowLine"
+     },
+     "title": "Yellow Lines",
+     "type": "array"
+    }
+   },
+   "required": [
+    "id",
+    "code",
+    "created_at",
+    "updated_at",
+    "lang",
+    "channel"
+   ],
+   "title": "Case",
+   "type": "object"
+  },
+  "CaseStatus": {
+   "description": "Coordinator status of a case (docs/UI_SPEC.md A3.7). \"Live\", \"Ended early\" and \"Sample\" are badges.",
+   "enum": [
+    "new",
+    "reviewed",
+    "applied",
+    "interview_scheduled",
+    "approved",
+    "follow_up"
+   ],
+   "title": "CaseStatus",
+   "type": "string"
+  },
+  "CaseSummary": {
+   "additionalProperties": false,
+   "properties": {
+    "asked_count": {
+     "title": "Asked Count",
+     "type": "integer"
+    },
+    "channel": {
+     "$ref": "#/$defs/Channel"
+    },
+    "code": {
+     "title": "Code",
+     "type": "string"
+    },
+    "created_at": {
+     "format": "date-time",
+     "title": "Created At",
+     "type": "string"
+    },
+    "ended_early": {
+     "title": "Ended Early",
+     "type": "boolean"
+    },
+    "estimate_is_floor": {
+     "title": "Estimate Is Floor",
+     "type": "boolean"
+    },
+    "estimate_monthly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Estimate Monthly"
+    },
+    "expedited_possible": {
+     "anyOf": [
+      {
+       "enum": [
+        "yes",
+        "maybe",
+        "no"
+       ],
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Expedited Possible"
+    },
+    "found_display": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Found Display"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "lang": {
+     "$ref": "#/$defs/Lang"
+    },
+    "live": {
+     "title": "Live",
+     "type": "boolean"
+    },
+    "next_deadline": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Next Deadline"
+    },
+    "phase": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Phase"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "reason_code": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Reason Code"
+    },
+    "seeded": {
+     "title": "Seeded",
+     "type": "boolean"
+    },
+    "skipped_count": {
+     "title": "Skipped Count",
+     "type": "integer"
+    },
+    "status": {
+     "$ref": "#/$defs/CaseStatus"
+    },
+    "summary": {
+     "title": "Summary",
+     "type": "string"
+    },
+    "test": {
+     "title": "Test",
+     "type": "boolean"
+    },
+    "tier": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/Tier"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "updated_at": {
+     "format": "date-time",
+     "title": "Updated At",
+     "type": "string"
+    },
+    "version": {
+     "title": "Version",
+     "type": "integer"
+    },
+    "yellow_open": {
+     "title": "Yellow Open",
+     "type": "integer"
+    },
+    "yellow_total": {
+     "title": "Yellow Total",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "id",
+    "code",
+    "version",
+    "created_at",
+    "updated_at",
+    "label",
+    "summary",
+    "lang",
+    "channel",
+    "live",
+    "test",
+    "seeded",
+    "phase",
+    "status",
+    "ended_early",
+    "tier",
+    "reason_code",
+    "estimate_monthly",
+    "estimate_is_floor",
+    "expedited_possible",
+    "yellow_open",
+    "yellow_total",
+    "asked_count",
+    "skipped_count",
+    "next_deadline"
+   ],
+   "title": "CaseSummary",
+   "type": "object"
+  },
+  "Channel": {
+   "enum": [
+    "phone",
+    "web"
+   ],
+   "title": "Channel",
+   "type": "string"
+  },
+  "Consent": {
+   "additionalProperties": false,
+   "properties": {
+    "at": {
+     "anyOf": [
+      {
+       "format": "date-time",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "At"
+    },
+    "disclosure_key": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Disclosure Key"
+    },
+    "given": {
+     "anyOf": [
+      {
+       "type": "boolean"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Given"
+    }
+   },
+   "title": "Consent",
+   "type": "object"
+  },
+  "EstimateRange": {
+   "additionalProperties": false,
+   "description": "docs/SPEC.md §5.6: exactly {lo, hi, settled}.",
+   "properties": {
+    "hi": {
+     "title": "Hi",
+     "type": "integer"
+    },
+    "lo": {
+     "title": "Lo",
+     "type": "integer"
+    },
+    "settled": {
+     "title": "Settled",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "lo",
+    "hi",
+    "settled"
+   ],
+   "title": "EstimateRange",
+   "type": "object"
+  },
+  "FirstMonth": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "title": "Amount",
+     "type": "integer"
+    },
+    "apply_date": {
+     "format": "date",
+     "title": "Apply Date",
+     "type": "string"
+    },
+    "days_counted": {
+     "title": "Days Counted",
+     "type": "integer"
+    },
+    "estimate": {
+     "default": true,
+     "title": "Estimate",
+     "type": "boolean"
+    },
+    "filed_on": {
+     "format": "date",
+     "title": "Filed On",
+     "type": "string"
+    },
+    "month_label": {
+     "title": "Month Label",
+     "type": "string"
+    }
+   },
+   "required": [
+    "apply_date",
+    "filed_on",
+    "amount",
+    "days_counted",
+    "month_label"
+   ],
+   "title": "FirstMonth",
+   "type": "object"
+  },
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  },
+  "LanguageRequest": {
+   "additionalProperties": false,
+   "properties": {
+    "asked": {
+     "title": "Asked",
+     "type": "string"
+    },
+    "offered": {
+     "enum": [
+      "web",
+      "switched",
+      "none"
+     ],
+     "title": "Offered",
+     "type": "string"
+    }
+   },
+   "required": [
+    "asked",
+    "offered"
+   ],
+   "title": "LanguageRequest",
+   "type": "object"
+  },
+  "MoneyBasis": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Amount"
+    },
+    "hours_per_week": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Hours Per Week"
+    },
+    "period": {
+     "enum": [
+      "hour",
+      "week",
+      "biweek",
+      "semimonth",
+      "month",
+      "year",
+      "once"
+     ],
+     "title": "Period",
+     "type": "string"
+    }
+   },
+   "required": [
+    "amount",
+    "period"
+   ],
+   "title": "MoneyBasis",
+   "type": "object"
+  },
+  "Phase": {
+   "description": "Conversation phases 0-10 plus end (docs/SPEC.md §3.2).",
+   "enum": [
+    "consent",
+    "student",
+    "age_home",
+    "household",
+    "income",
+    "housing",
+    "flip",
+    "result",
+    "expedited",
+    "card",
+    "close",
+    "end"
+   ],
+   "title": "Phase",
+   "type": "string"
+  },
+  "PrivacyEvent": {
+   "additionalProperties": false,
+   "description": "Content-free: only the kind and the time.",
+   "properties": {
+    "at": {
+     "format": "date-time",
+     "title": "At",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "ssn_blocked",
+      "card_number_blocked"
+     ],
+     "title": "Kind",
+     "type": "string"
+    }
+   },
+   "required": [
+    "kind",
+    "at"
+   ],
+   "title": "PrivacyEvent",
+   "type": "object"
+  },
+  "ProgramAnswer": {
+   "additionalProperties": false,
+   "description": "A card answer to one of the other-programs questions (docs/SPEC.md §6.6); re-exported by programs.py.",
+   "properties": {
+    "at": {
+     "format": "date-time",
+     "title": "At",
+     "type": "string"
+    },
+    "source": {
+     "default": "card",
+     "enum": [
+      "card",
+      "seed"
+     ],
+     "title": "Source",
+     "type": "string"
+    },
+    "value": {
+     "title": "Value",
+     "type": "string"
+    }
+   },
+   "required": [
+    "value",
+    "at"
+   ],
+   "title": "ProgramAnswer",
+   "type": "object"
+  },
+  "ProgramLine": {
+   "additionalProperties": false,
+   "description": "Engine output, language-free (console section 6b and the view builder).",
+   "properties": {
+    "applied": {
+     "default": false,
+     "title": "Applied",
+     "type": "boolean"
+    },
+    "apply_by": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Apply By"
+    },
+    "basis": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Basis",
+     "type": "array"
+    },
+    "counted": {
+     "title": "Counted",
+     "type": "boolean"
+    },
+    "display_yearly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Display Yearly"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "note_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Note Keys",
+     "type": "array"
+    },
+    "order": {
+     "title": "Order",
+     "type": "integer"
+    },
+    "range_hi": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Range Hi"
+    },
+    "range_lo": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Range Lo"
+    },
+    "source_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Source Ids",
+     "type": "array"
+    },
+    "stage": {
+     "enum": [
+      "today",
+      "after_approval",
+      "tax_time"
+     ],
+     "title": "Stage",
+     "type": "string"
+    },
+    "status": {
+     "enum": [
+      "likely",
+      "maybe",
+      "check",
+      "coverage",
+      "zero",
+      "note"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "value_yearly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Value Yearly"
+    },
+    "vars": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Vars",
+     "type": "object"
+    }
+   },
+   "required": [
+    "id",
+    "status",
+    "value_yearly",
+    "display_yearly",
+    "counted",
+    "stage",
+    "order"
+   ],
+   "title": "ProgramLine",
+   "type": "object"
+  },
+  "ProgramProgress": {
+   "additionalProperties": false,
+   "description": "The card's \"I applied\" mark for one program.",
+   "properties": {
+    "applied": {
+     "title": "Applied",
+     "type": "boolean"
+    },
+    "at": {
+     "format": "date-time",
+     "title": "At",
+     "type": "string"
+    }
+   },
+   "required": [
+    "applied",
+    "at"
+   ],
+   "title": "ProgramProgress",
+   "type": "object"
+  },
+  "ProgramsResult": {
+   "additionalProperties": false,
+   "properties": {
+    "calfresh_yearly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Calfresh Yearly"
+    },
+    "checked": {
+     "format": "date",
+     "title": "Checked",
+     "type": "string"
+    },
+    "claimed_display": {
+     "title": "Claimed Display",
+     "type": "integer"
+    },
+    "console_notes": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Console Notes",
+     "type": "array"
+    },
+    "found_display": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Found Display"
+    },
+    "found_yearly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Found Yearly"
+    },
+    "lines": {
+     "items": {
+      "$ref": "#/$defs/ProgramLine"
+     },
+     "title": "Lines",
+     "type": "array"
+    },
+    "mode": {
+     "enum": [
+      "full",
+      "list_only"
+     ],
+     "title": "Mode",
+     "type": "string"
+    },
+    "next_question": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Next Question"
+    },
+    "open_questions": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Open Questions",
+     "type": "array"
+    },
+    "question_spreads": {
+     "additionalProperties": {
+      "type": "integer"
+     },
+     "title": "Question Spreads",
+     "type": "object"
+    },
+    "share_display": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Share Display"
+    },
+    "table_id": {
+     "title": "Table Id",
+     "type": "string"
+    }
+   },
+   "required": [
+    "table_id",
+    "checked",
+    "mode",
+    "calfresh_yearly",
+    "found_yearly",
+    "found_display",
+    "share_display",
+    "claimed_display",
+    "lines",
+    "open_questions",
+    "next_question",
+    "question_spreads",
+    "console_notes"
+   ],
+   "title": "ProgramsResult",
+   "type": "object"
+  },
+  "RuleStep": {
+   "additionalProperties": false,
+   "properties": {
+    "result": {
+     "title": "Result",
+     "type": "string"
+    },
+    "source": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Source"
+    },
+    "step": {
+     "title": "Step",
+     "type": "string"
+    },
+    "value": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    }
+   },
+   "required": [
+    "step",
+    "result"
+   ],
+   "title": "RuleStep",
+   "type": "object"
+  },
+  "RulesMeta": {
+   "additionalProperties": false,
+   "properties": {
+    "effective_from": {
+     "format": "date",
+     "title": "Effective From",
+     "type": "string"
+    },
+    "effective_to": {
+     "format": "date",
+     "title": "Effective To",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "sources": {
+     "items": {
+      "$ref": "#/$defs/SourceRef"
+     },
+     "title": "Sources",
+     "type": "array"
+    },
+    "table_id": {
+     "title": "Table Id",
+     "type": "string"
+    }
+   },
+   "required": [
+    "table_id",
+    "label",
+    "effective_from",
+    "effective_to",
+    "sources"
+   ],
+   "title": "RulesMeta",
+   "type": "object"
+  },
+  "SkippedQuestion": {
+   "additionalProperties": false,
+   "properties": {
+    "detail": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Detail"
+    },
+    "reason": {
+     "enum": [
+      "no_effect",
+      "below_threshold",
+      "max_questions",
+      "hard_stop",
+      "not_applicable"
+     ],
+     "title": "Reason",
+     "type": "string"
+    },
+    "slot": {
+     "$ref": "#/$defs/SlotName"
+    },
+    "values": {
+     "items": {
+      "type": "integer"
+     },
+     "title": "Values",
+     "type": "array"
+    }
+   },
+   "required": [
+    "slot",
+    "reason"
+   ],
+   "title": "SkippedQuestion",
+   "type": "object"
+  },
+  "Slot": {
+   "additionalProperties": false,
+   "properties": {
+    "basis": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/MoneyBasis"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "changed_from": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Changed From"
+    },
+    "confirmed": {
+     "default": false,
+     "title": "Confirmed",
+     "type": "boolean"
+    },
+    "display": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Display"
+    },
+    "heard": {
+     "anyOf": [
+      {
+       "maxLength": 80,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Heard"
+    },
+    "heard_en": {
+     "anyOf": [
+      {
+       "maxLength": 120,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Heard En"
+    },
+    "source": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/SlotSource"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "state": {
+     "$ref": "#/$defs/SlotState",
+     "default": "missing"
+    },
+    "turn": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Turn"
+    },
+    "updated_at": {
+     "anyOf": [
+      {
+       "format": "date-time",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Updated At"
+    },
+    "value": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    }
+   },
+   "title": "Slot",
+   "type": "object"
+  },
+  "SlotName": {
+   "enum": [
+    "consent",
+    "level",
+    "units",
+    "half_time",
+    "grad_exemption",
+    "age",
+    "lives_with_parent",
+    "roommates",
+    "dorm_on_campus",
+    "meals_per_week",
+    "dorm_meals_over_10",
+    "household_food",
+    "spouse",
+    "spouse_student",
+    "children_count",
+    "youngest_child_age",
+    "boarder",
+    "homeless",
+    "homeless_shelter_cost_monthly",
+    "earned_monthly",
+    "work_study_monthly",
+    "gig_monthly",
+    "ta_ra",
+    "unearned_monthly",
+    "other_cash_monthly",
+    "dependent_care_monthly",
+    "rent_share",
+    "rent_paid_by_others_to_landlord",
+    "heat_cool",
+    "other_utils",
+    "cash_on_hand",
+    "volunteered_status",
+    "elderly_or_disabled",
+    "already_receiving",
+    "applied_waiting_interview",
+    "previously_denied",
+    "income_changing_soon",
+    "roommates_count"
+   ],
+   "title": "SlotName",
+   "type": "string"
+  },
+  "SlotSource": {
+   "description": "Where a slot value came from (docs/UI_SPEC.md A3.5 source icons).",
+   "enum": [
+    "llm",
+    "parser",
+    "keypad",
+    "coordinator",
+    "default",
+    "seed"
+   ],
+   "title": "SlotSource",
+   "type": "string"
+  },
+  "SlotState": {
+   "enum": [
+    "clear",
+    "assumed",
+    "unclear",
+    "missing"
+   ],
+   "title": "SlotState",
+   "type": "string"
+  },
+  "SourceRef": {
+   "additionalProperties": false,
+   "properties": {
+    "date": {
+     "title": "Date",
+     "type": "string"
+    },
+    "grade": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Grade"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "title": {
+     "title": "Title",
+     "type": "string"
+    },
+    "url": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Url"
+    }
+   },
+   "required": [
+    "id",
+    "title",
+    "date"
+   ],
+   "title": "SourceRef",
+   "type": "object"
+  },
+  "Tier": {
+   "enum": [
+    "likely",
+    "coordinator",
+    "other_help"
+   ],
+   "title": "Tier",
+   "type": "string"
+  },
+  "TimelinePoint": {
+   "additionalProperties": false,
+   "description": "One per turn that changed slots; drives the console's range bar and replay.",
+   "properties": {
+    "at": {
+     "format": "date-time",
+     "title": "At",
+     "type": "string"
+    },
+    "hi": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Hi"
+    },
+    "lo": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Lo"
+    },
+    "slots": {
+     "items": {
+      "$ref": "#/$defs/SlotName"
+     },
+     "title": "Slots",
+     "type": "array"
+    },
+    "turn": {
+     "title": "Turn",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "turn",
+    "at",
+    "slots"
+   ],
+   "title": "TimelinePoint",
+   "type": "object"
+  },
+  "Tracking": {
+   "additionalProperties": false,
+   "properties": {
+    "applied_at": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Applied At"
+    },
+    "approved_at": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Approved At"
+    },
+    "deadline_30d": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Deadline 30D"
+    },
+    "doc_due": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Doc Due"
+    },
+    "doc_request_at": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Doc Request At"
+    },
+    "filed_on": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Filed On"
+    },
+    "interview_at": {
+     "anyOf": [
+      {
+       "format": "date-time",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Interview At"
+    },
+    "interview_missed": {
+     "default": false,
+     "title": "Interview Missed",
+     "type": "boolean"
+    },
+    "recert_due": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Recert Due"
+    },
+    "sar7_due": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Sar7 Due"
+    }
+   },
+   "title": "Tracking",
+   "type": "object"
+  },
+  "YellowEffect": {
+   "additionalProperties": false,
+   "properties": {
+    "delta_usd": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Delta Usd"
+    },
+    "kind": {
+     "enum": [
+      "amount",
+      "tier",
+      "expedited"
+     ],
+     "title": "Kind",
+     "type": "string"
+    }
+   },
+   "required": [
+    "kind"
+   ],
+   "title": "YellowEffect",
+   "type": "object"
+  },
+  "YellowKind": {
+   "enum": [
+    "unclear",
+    "conflict",
+    "policy",
+    "assumed",
+    "student_question",
+    "incomplete"
+   ],
+   "title": "YellowKind",
+   "type": "string"
+  },
+  "YellowLine": {
+   "additionalProperties": false,
+   "properties": {
+    "assumed": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Assumed"
+    },
+    "code": {
+     "title": "Code",
+     "type": "string"
+    },
+    "created_at": {
+     "format": "date-time",
+     "title": "Created At",
+     "type": "string"
+    },
+    "effect": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/YellowEffect"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "heard": {
+     "anyOf": [
+      {
+       "maxLength": 80,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Heard"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "kind": {
+     "$ref": "#/$defs/YellowKind"
+    },
+    "reason": {
+     "maxLength": 240,
+     "title": "Reason",
+     "type": "string"
+    },
+    "resolved": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/YellowResolution"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    },
+    "resolved_at": {
+     "anyOf": [
+      {
+       "format": "date-time",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resolved At"
+    },
+    "resolved_note": {
+     "anyOf": [
+      {
+       "maxLength": 200,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Resolved Note"
+    },
+    "slot": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/SlotName"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null
+    }
+   },
+   "required": [
+    "id",
+    "kind",
+    "code",
+    "reason",
+    "created_at"
+   ],
+   "title": "YellowLine",
+   "type": "object"
+  },
+  "YellowResolution": {
+   "description": "A coordinator resolves a yellow line by confirming it or by editing the value; nothing else.",
+   "enum": [
+    "confirm",
+    "edit"
+   ],
+   "title": "YellowResolution",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "allowed_status": {
+   "items": {
+    "$ref": "#/$defs/CaseStatus"
+   },
+   "title": "Allowed Status",
+   "type": "array"
+  },
+  "can_review": {
+   "title": "Can Review",
+   "type": "boolean"
+  },
+  "card_url": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Card Url"
+  },
+  "case": {
+   "$ref": "#/$defs/Case"
+  },
+  "programs": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/ProgramsResult"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "qr_svg_url": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Qr Svg Url"
+  },
+  "rules": {
+   "$ref": "#/$defs/RulesMeta"
+  },
+  "short_code": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Short Code"
+  },
+  "summary": {
+   "$ref": "#/$defs/CaseSummary"
+  }
+ },
+ "required": [
+  "case",
+  "summary",
+  "card_url",
+  "qr_svg_url",
+  "short_code",
+  "can_review",
+  "allowed_status",
+  "rules"
+ ],
+ "title": "CaseDetail",
+ "type": "object"
+}

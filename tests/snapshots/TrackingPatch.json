@@ -1,0 +1,78 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "applied_at": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Applied At"
+  },
+  "approved_at": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Approved At"
+  },
+  "doc_request_at": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Doc Request At"
+  },
+  "expected_version": {
+   "title": "Expected Version",
+   "type": "integer"
+  },
+  "interview_at": {
+   "anyOf": [
+    {
+     "format": "date-time",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Interview At"
+  },
+  "interview_missed": {
+   "anyOf": [
+    {
+     "type": "boolean"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Interview Missed"
+  }
+ },
+ "required": [
+  "expected_version"
+ ],
+ "title": "TrackingPatch",
+ "type": "object"
+}

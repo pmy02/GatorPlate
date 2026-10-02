@@ -1,0 +1,217 @@
+{
+  "version": "2026-10-01",
+  "format": {
+    "summary": "Public contact facts used by the sentence bank (spoken forms) and the card (display forms). Phone numbers: E.164 in phone, (xxx) xxx-xxxx in display, digit groups in spoken.",
+    "hours": "hours.weekly is machine-readable (America/Los_Angeles) for display and checks only; GatorPlate has no 'open now' logic (docs/SPEC.md, situation 9.2): hours.text and hours.spoken are always given with the number.",
+    "rule": "Only numbers listed here may appear in the repo (besides 988, 911 and the demo number setting). Never invent hours: null means 'see the website'.",
+    "omitted": "The county fax number and drop-box address from earlier drafts are left out: they are not on a page saved for this project. Students are pointed to BenefitsCal uploads and the county phone line instead."
+  },
+  "coordinator": {
+    "name": {
+      "en": "SF State CalFresh coordinator",
+      "es": "la coordinación de CalFresh de SF State"
+    },
+    "office": {
+      "en": "SF State Basic Needs Center, CalFresh Help Clinic",
+      "es": "Basic Needs Center de SF State, CalFresh Help Clinic"
+    },
+    "phone": "+14153381203",
+    "display": "(415) 338-1203",
+    "spoken": {
+      "en": "four one five, three three eight, one two zero three",
+      "es": "cuatro uno cinco, tres tres ocho, uno dos cero tres"
+    },
+    "email": "calfresh@sfsu.edu",
+    "place": {
+      "en": "Student Services Building, Room 301",
+      "es": "Student Services Building, salón 301"
+    },
+    "booking": {
+      "en": "By appointment: email calfresh@sfsu.edu to book a time.",
+      "es": "Con cita: escribe a calfresh@sfsu.edu para pedirla."
+    },
+    "hours": {
+      "timezone": "America/Los_Angeles",
+      "weekly": [
+        {
+          "days": [
+            "mon",
+            "tue",
+            "wed",
+            "thu"
+          ],
+          "open": "08:30",
+          "close": "17:00"
+        },
+        {
+          "days": [
+            "fri"
+          ],
+          "open": "08:30",
+          "close": "16:00"
+        }
+      ],
+      "text": {
+        "en": "Mon–Thu 8:30 AM–5 PM, Fri 8:30 AM–4 PM",
+        "es": "lun a jue 8:30 a. m.–5 p. m., vie 8:30 a. m.–4 p. m."
+      },
+      "spoken": {
+        "en": "Monday to Thursday eight thirty to five, Friday eight thirty to four",
+        "es": "de lunes a jueves de ocho y media a cinco, y los viernes de ocho y media a cuatro"
+      },
+      "note": "Office hours as posted. Holidays and campus closures are not listed on the page."
+    },
+    "source": {
+      "title": "SF State Basic Needs pages (CalFresh Help Clinic; About Basic Needs): Contact, Location and Office Hours",
+      "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic",
+      "checked": "2026-10-01",
+      "saved_page": true
+    }
+  },
+  "county": {
+    "name": {
+      "en": "San Francisco CalFresh (Human Services Agency)",
+      "es": "CalFresh de San Francisco (Human Services Agency)"
+    },
+    "phone": "+18553555757",
+    "display": "(855) 355-5757",
+    "spoken": {
+      "en": "eight five five, three five five, five seven five seven",
+      "es": "ocho cinco cinco, tres cinco cinco, cinco siete cinco siete"
+    },
+    "hours": {
+      "timezone": "America/Los_Angeles",
+      "weekly": [
+        {
+          "days": [
+            "mon",
+            "tue",
+            "wed",
+            "thu",
+            "fri"
+          ],
+          "open": "08:00",
+          "close": "17:00"
+        }
+      ],
+      "text": {
+        "en": "weekdays 8 AM–5 PM",
+        "es": "lunes a viernes, 8 a. m.–5 p. m."
+      },
+      "spoken": {
+        "en": "weekdays eight to five",
+        "es": "de lunes a viernes, de ocho a cinco"
+      }
+    },
+    "note": {
+      "en": "For students who live in San Francisco. Students in other counties use their own county's CalFresh office.",
+      "es": "Para estudiantes que viven en San Francisco. Si vives en otro condado, usa la oficina de CalFresh de tu condado."
+    },
+    "source": {
+      "title": "San Francisco Human Services Agency public CalFresh line (agency notices 2025-10 and 2026-04)",
+      "checked": "2026-10-01",
+      "saved_page": false,
+      "note": "From the project's 2026-10-01 fact review of the agency's public notices, not from a page saved for this project. Re-check on the agency site before a real pilot."
+    }
+  },
+  "ebt_lost": {
+    "name": {
+      "en": "California EBT customer service (lost or stolen card)",
+      "es": "Servicio al cliente de EBT de California (tarjeta perdida o robada)"
+    },
+    "phone": "+18773289677",
+    "display": "(877) 328-9677",
+    "spoken": {
+      "en": "eight seven seven, three two eight, nine six seven seven",
+      "es": "ocho siete siete, tres dos ocho, nueve seis siete siete"
+    },
+    "source": {
+      "title": "California EBT customer service line",
+      "checked": "2026-10-01",
+      "saved_page": false,
+      "note": "From the project's 2026-10-01 fact review, not from a page saved for this project. Re-check before a real pilot."
+    }
+  },
+  "crisis": {
+    "lifeline": {
+      "name": {
+        "en": "988 Suicide and Crisis Lifeline",
+        "es": "988 Línea de Prevención del Suicidio y Crisis"
+      },
+      "number": "988",
+      "display": "988",
+      "spoken": {
+        "en": "nine eight eight",
+        "es": "nueve ocho ocho"
+      }
+    },
+    "emergency": {
+      "name": {
+        "en": "Emergency",
+        "es": "Emergencias"
+      },
+      "number": "911",
+      "display": "911",
+      "spoken": {
+        "en": "nine one one",
+        "es": "nueve uno uno"
+      }
+    }
+  },
+  "food": [
+    {
+      "id": "gator_groceries_and_as_food_pantry",
+      "name": {
+        "en": "Gator Groceries and the AS Food Pantry",
+        "es": "Gator Groceries y el AS Food Pantry"
+      },
+      "note": {
+        "en": "Free food every week, open to all SF State students.",
+        "es": "Comida gratis cada semana, para todos los estudiantes de SF State."
+      },
+      "place": {
+        "en": "Cesar Chavez Student Center, Rec and Dining Level (bottom floor)",
+        "es": "Cesar Chavez Student Center, nivel Rec and Dining (el piso de abajo)"
+      },
+      "url": "https://asi.sfsu.edu/gator-groceries",
+      "hours_text": null,
+      "hours_note": {
+        "en": "Hours change; see the AS website.",
+        "es": "El horario cambia; revisa el sitio de AS."
+      },
+      "source": {
+        "title": "SF State Basic Needs, AS Food Pantry & Gator Groceries page",
+        "url": "https://basicneeds.sfsu.edu/associated-students-gator-groceries",
+        "checked": "2026-10-01",
+        "saved_page": true
+      }
+    }
+  ],
+  "emergency_meals": {
+    "name": {
+      "en": "SF State Basic Needs emergency meal card",
+      "es": "Tarjeta de comidas de emergencia de Basic Needs de SF State"
+    },
+    "note": {
+      "en": "Short-term meals in the campus dining halls for students in a crisis, during the fall and spring semesters. Fall 2026: request through Basic Needs.",
+      "es": "Comidas por poco tiempo en los comedores del campus para estudiantes en crisis, en los semestres de otoño y primavera. Otoño 2026: se pide a Basic Needs."
+    },
+    "url": "https://basicneeds.sfsu.edu/emergency-meals",
+    "source": {
+      "title": "SF State Basic Needs, Emergency Meals page",
+      "url": "https://basicneeds.sfsu.edu/emergency-meals",
+      "checked": "2026-10-01",
+      "saved_page": true
+    }
+  },
+  "benefitscal": {
+    "name": "BenefitsCal",
+    "url": "https://benefitscal.com",
+    "display": "BenefitsCal.com",
+    "spoken": {
+      "en": "benefits cal dot com",
+      "es": "benefits cal punto com"
+    },
+    "note": "The state's online application. GatorPlate never applies, signs or submits for the student."
+  }
+}

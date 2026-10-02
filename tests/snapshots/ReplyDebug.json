@@ -1,0 +1,21 @@
+{
+ "additionalProperties": true,
+ "description": "Schema: an object whose two properties are optional and whose extra properties are allowed.",
+ "properties": {
+  "keys": {
+   "items": {
+    "minLength": 1,
+    "type": "string"
+   },
+   "title": "Keys",
+   "type": "array"
+  },
+  "phase": {
+   "default": "",
+   "title": "Phase",
+   "type": "string"
+  }
+ },
+ "title": "ReplyDebug",
+ "type": "object"
+}

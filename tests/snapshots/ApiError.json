@@ -1,0 +1,40 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "code": {
+   "enum": [
+    "unknown_call",
+    "bad_signature",
+    "stale_timestamp",
+    "unauthorized",
+    "rate_limited",
+    "invalid_request",
+    "stale_seq",
+    "conflict",
+    "locked",
+    "not_found",
+    "gone",
+    "internal"
+   ],
+   "title": "Code",
+   "type": "string"
+  },
+  "message": {
+   "maxLength": 200,
+   "minLength": 1,
+   "title": "Message",
+   "type": "string"
+  },
+  "retryable": {
+   "title": "Retryable",
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "code",
+  "message",
+  "retryable"
+ ],
+ "title": "ApiError",
+ "type": "object"
+}

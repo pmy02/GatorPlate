@@ -1,0 +1,129 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "applied_at": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Applied At"
+  },
+  "approved_at": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Approved At"
+  },
+  "deadline_30d": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Deadline 30D"
+  },
+  "doc_due": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Doc Due"
+  },
+  "doc_request_at": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Doc Request At"
+  },
+  "filed_on": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Filed On"
+  },
+  "interview_at": {
+   "anyOf": [
+    {
+     "format": "date-time",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Interview At"
+  },
+  "interview_missed": {
+   "default": false,
+   "title": "Interview Missed",
+   "type": "boolean"
+  },
+  "recert_due": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Recert Due"
+  },
+  "sar7_due": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Sar7 Due"
+  }
+ },
+ "title": "Tracking",
+ "type": "object"
+}

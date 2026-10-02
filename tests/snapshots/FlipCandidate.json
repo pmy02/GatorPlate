@@ -1,0 +1,143 @@
+{
+ "$defs": {
+  "FlipOutcome": {
+   "additionalProperties": false,
+   "properties": {
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "monthly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Monthly"
+    },
+    "tier": {
+     "$ref": "#/$defs/Tier"
+    },
+    "value": {
+     "title": "Value",
+     "type": "string"
+    }
+   },
+   "required": [
+    "value",
+    "tier",
+    "monthly",
+    "label"
+   ],
+   "title": "FlipOutcome",
+   "type": "object"
+  },
+  "SlotName": {
+   "enum": [
+    "consent",
+    "level",
+    "units",
+    "half_time",
+    "grad_exemption",
+    "age",
+    "lives_with_parent",
+    "roommates",
+    "dorm_on_campus",
+    "meals_per_week",
+    "dorm_meals_over_10",
+    "household_food",
+    "spouse",
+    "spouse_student",
+    "children_count",
+    "youngest_child_age",
+    "boarder",
+    "homeless",
+    "homeless_shelter_cost_monthly",
+    "earned_monthly",
+    "work_study_monthly",
+    "gig_monthly",
+    "ta_ra",
+    "unearned_monthly",
+    "other_cash_monthly",
+    "dependent_care_monthly",
+    "rent_share",
+    "rent_paid_by_others_to_landlord",
+    "heat_cool",
+    "other_utils",
+    "cash_on_hand",
+    "volunteered_status",
+    "elderly_or_disabled",
+    "already_receiving",
+    "applied_waiting_interview",
+    "previously_denied",
+    "income_changing_soon",
+    "roommates_count"
+   ],
+   "title": "SlotName",
+   "type": "string"
+  },
+  "Tier": {
+   "enum": [
+    "likely",
+    "coordinator",
+    "other_help"
+   ],
+   "title": "Tier",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "decision": {
+   "enum": [
+    "ask",
+    "assume_default",
+    "assume_conservative",
+    "no_effect",
+    "coordinator"
+   ],
+   "title": "Decision",
+   "type": "string"
+  },
+  "default_value": {
+   "title": "Default Value",
+   "type": "string"
+  },
+  "outcomes": {
+   "items": {
+    "$ref": "#/$defs/FlipOutcome"
+   },
+   "title": "Outcomes",
+   "type": "array"
+  },
+  "reason": {
+   "title": "Reason",
+   "type": "string"
+  },
+  "slot": {
+   "$ref": "#/$defs/SlotName"
+  },
+  "spread_usd": {
+   "title": "Spread Usd",
+   "type": "integer"
+  },
+  "tier_changes": {
+   "title": "Tier Changes",
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "slot",
+  "default_value",
+  "outcomes",
+  "tier_changes",
+  "spread_usd",
+  "decision",
+  "reason"
+ ],
+ "title": "FlipCandidate",
+ "type": "object"
+}

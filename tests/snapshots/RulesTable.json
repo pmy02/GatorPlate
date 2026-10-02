@@ -1,0 +1,1948 @@
+{
+ "$defs": {
+  "Abawd": {
+   "additionalProperties": false,
+   "properties": {
+    "age": {
+     "maxItems": 2,
+     "minItems": 2,
+     "prefixItems": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "integer"
+      }
+     ],
+     "title": "Age",
+     "type": "array"
+    },
+    "ca_effective": {
+     "format": "date",
+     "title": "Ca Effective",
+     "type": "string"
+    },
+    "child_exempt_under": {
+     "title": "Child Exempt Under",
+     "type": "integer"
+    },
+    "earnings_basis": {
+     "title": "Earnings Basis",
+     "type": "string"
+    },
+    "earnings_exempt_monthly": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Earnings Exempt Monthly"
+    },
+    "half_time_student_exempt": {
+     "title": "Half Time Student Exempt",
+     "type": "boolean"
+    },
+    "sf_waiver": {
+     "title": "Sf Waiver",
+     "type": "boolean"
+    },
+    "unemployment_exempt": {
+     "title": "Unemployment Exempt",
+     "type": "boolean"
+    },
+    "work_requirement_hours_month": {
+     "title": "Work Requirement Hours Month",
+     "type": "integer"
+    },
+    "yellow_code": {
+     "title": "Yellow Code",
+     "type": "string"
+    },
+    "yellow_text": {
+     "title": "Yellow Text",
+     "type": "string"
+    },
+    "yellow_when": {
+     "title": "Yellow When",
+     "type": "string"
+    }
+   },
+   "required": [
+    "age",
+    "child_exempt_under",
+    "earnings_exempt_monthly",
+    "earnings_basis",
+    "work_requirement_hours_month",
+    "unemployment_exempt",
+    "half_time_student_exempt",
+    "ca_effective",
+    "sf_waiver",
+    "yellow_code",
+    "yellow_when",
+    "yellow_text"
+   ],
+   "title": "Abawd",
+   "type": "object"
+  },
+  "AgeCoordinator": {
+   "additionalProperties": false,
+   "properties": {
+    "at_or_over": {
+     "title": "At Or Over",
+     "type": "integer"
+    },
+    "under": {
+     "title": "Under",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "under",
+    "at_or_over"
+   ],
+   "title": "AgeCoordinator",
+   "type": "object"
+  },
+  "Conversion": {
+   "additionalProperties": false,
+   "properties": {
+    "examples": {
+     "items": {
+      "$ref": "#/$defs/ConversionExample"
+     },
+     "title": "Examples",
+     "type": "array"
+    },
+    "freq_alias": {
+     "$ref": "#/$defs/FreqAlias"
+    },
+    "hour": {
+     "title": "Hour",
+     "type": "string"
+    },
+    "multipliers": {
+     "$ref": "#/$defs/ConversionMultipliers"
+    },
+    "round": {
+     "title": "Round",
+     "type": "string"
+    },
+    "year_divisor": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Year Divisor"
+    }
+   },
+   "required": [
+    "multipliers",
+    "hour",
+    "year_divisor",
+    "freq_alias",
+    "round",
+    "examples"
+   ],
+   "title": "Conversion",
+   "type": "object"
+  },
+  "ConversionExample": {
+   "additionalProperties": false,
+   "properties": {
+    "basis": {
+     "$ref": "#/$defs/MoneyBasisExample"
+    },
+    "monthly": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Monthly"
+    }
+   },
+   "required": [
+    "basis",
+    "monthly"
+   ],
+   "title": "ConversionExample",
+   "type": "object"
+  },
+  "ConversionMultipliers": {
+   "additionalProperties": false,
+   "properties": {
+    "biweek": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Biweek"
+    },
+    "month": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Month"
+    },
+    "semimonth": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Semimonth"
+    },
+    "week": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Week"
+    }
+   },
+   "required": [
+    "month",
+    "week",
+    "biweek",
+    "semimonth"
+   ],
+   "title": "ConversionMultipliers",
+   "type": "object"
+  },
+  "Deadlines": {
+   "additionalProperties": false,
+   "properties": {
+    "decision_days": {
+     "title": "Decision Days",
+     "type": "integer"
+    },
+    "doc_request_days": {
+     "title": "Doc Request Days",
+     "type": "integer"
+    },
+    "irt_report_days": {
+     "title": "Irt Report Days",
+     "type": "integer"
+    },
+    "note": {
+     "title": "Note",
+     "type": "string"
+    },
+    "recert_month": {
+     "title": "Recert Month",
+     "type": "integer"
+    },
+    "sar7_due_day": {
+     "title": "Sar7 Due Day",
+     "type": "integer"
+    },
+    "sar7_late_day": {
+     "title": "Sar7 Late Day",
+     "type": "integer"
+    },
+    "sar7_month": {
+     "title": "Sar7 Month",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "decision_days",
+    "doc_request_days",
+    "irt_report_days",
+    "sar7_month",
+    "sar7_due_day",
+    "sar7_late_day",
+    "recert_month",
+    "note"
+   ],
+   "title": "Deadlines",
+   "type": "object"
+  },
+  "DecisionStep": {
+   "additionalProperties": false,
+   "properties": {
+    "rule": {
+     "title": "Rule",
+     "type": "string"
+    },
+    "step": {
+     "title": "Step",
+     "type": "string"
+    }
+   },
+   "required": [
+    "step",
+    "rule"
+   ],
+   "title": "DecisionStep",
+   "type": "object"
+  },
+  "ElderlyDisabled": {
+   "additionalProperties": false,
+   "properties": {
+    "age_at_or_over": {
+     "title": "Age At Or Over",
+     "type": "integer"
+    },
+    "asked": {
+     "title": "Asked",
+     "type": "boolean"
+    },
+    "route": {
+     "title": "Route",
+     "type": "string"
+    },
+    "rule": {
+     "title": "Rule",
+     "type": "string"
+    },
+    "signals": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Signals",
+     "type": "array"
+    },
+    "stored": {
+     "title": "Stored",
+     "type": "string"
+    }
+   },
+   "required": [
+    "age_at_or_over",
+    "signals",
+    "route",
+    "asked",
+    "stored",
+    "rule"
+   ],
+   "title": "ElderlyDisabled",
+   "type": "object"
+  },
+  "Expedited": {
+   "additionalProperties": false,
+   "properties": {
+    "ask_cash_when": {
+     "title": "Ask Cash When",
+     "type": "string"
+    },
+    "days": {
+     "title": "Days",
+     "type": "integer"
+    },
+    "income_lt": {
+     "title": "Income Lt",
+     "type": "integer"
+    },
+    "is_flip_question": {
+     "title": "Is Flip Question",
+     "type": "boolean"
+    },
+    "liquid_le": {
+     "title": "Liquid Le",
+     "type": "integer"
+    },
+    "outlook": {
+     "$ref": "#/$defs/ExpeditedOutlookText"
+    },
+    "rule": {
+     "title": "Rule",
+     "type": "string"
+    },
+    "shelter_test": {
+     "title": "Shelter Test",
+     "type": "string"
+    }
+   },
+   "required": [
+    "income_lt",
+    "liquid_le",
+    "shelter_test",
+    "rule",
+    "days",
+    "ask_cash_when",
+    "outlook",
+    "is_flip_question"
+   ],
+   "title": "Expedited",
+   "type": "object"
+  },
+  "ExpeditedOutlookText": {
+   "additionalProperties": false,
+   "properties": {
+    "maybe": {
+     "title": "Maybe",
+     "type": "string"
+    },
+    "no": {
+     "title": "No",
+     "type": "string"
+    },
+    "yes": {
+     "title": "Yes",
+     "type": "string"
+    }
+   },
+   "required": [
+    "yes",
+    "maybe",
+    "no"
+   ],
+   "title": "ExpeditedOutlookText",
+   "type": "object"
+  },
+  "FilingDateEstimate": {
+   "additionalProperties": false,
+   "properties": {
+    "cutoff_local": {
+     "title": "Cutoff Local",
+     "type": "string"
+    },
+    "examples": {
+     "items": {
+      "$ref": "#/$defs/FilingExample"
+     },
+     "title": "Examples",
+     "type": "array"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "note": {
+     "title": "Note",
+     "type": "string"
+    },
+    "rule": {
+     "title": "Rule",
+     "type": "string"
+    }
+   },
+   "required": [
+    "cutoff_local",
+    "rule",
+    "label",
+    "examples",
+    "note"
+   ],
+   "title": "FilingDateEstimate",
+   "type": "object"
+  },
+  "FilingExample": {
+   "additionalProperties": false,
+   "properties": {
+    "filed_on": {
+     "format": "date",
+     "title": "Filed On",
+     "type": "string"
+    },
+    "first_month_for_306": {
+     "title": "First Month For 306",
+     "type": "integer"
+    },
+    "now": {
+     "title": "Now",
+     "type": "string"
+    }
+   },
+   "required": [
+    "now",
+    "filed_on",
+    "first_month_for_306"
+   ],
+   "title": "FilingExample",
+   "type": "object"
+  },
+  "FreqAlias": {
+   "additionalProperties": false,
+   "properties": {
+    "biweekly": {
+     "title": "Biweekly",
+     "type": "string"
+    },
+    "monthly": {
+     "title": "Monthly",
+     "type": "string"
+    },
+    "semimonthly": {
+     "title": "Semimonthly",
+     "type": "string"
+    },
+    "weekly": {
+     "title": "Weekly",
+     "type": "string"
+    },
+    "yearly": {
+     "title": "Yearly",
+     "type": "string"
+    }
+   },
+   "required": [
+    "monthly",
+    "weekly",
+    "biweekly",
+    "semimonthly",
+    "yearly"
+   ],
+   "title": "FreqAlias",
+   "type": "object"
+  },
+  "Grad": {
+   "additionalProperties": false,
+   "properties": {
+    "child_no_care_under": {
+     "title": "Child No Care Under",
+     "type": "integer"
+    },
+    "child_under": {
+     "title": "Child Under",
+     "type": "integer"
+    },
+    "exemption_labels": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Exemption Labels",
+     "type": "object"
+    },
+    "exemption_sources": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Exemption Sources",
+     "type": "object"
+    },
+    "exemptions": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Exemptions",
+     "type": "array"
+    },
+    "rule": {
+     "title": "Rule",
+     "type": "string"
+    },
+    "single_parent_child_under": {
+     "title": "Single Parent Child Under",
+     "type": "integer"
+    },
+    "work_hours_month": {
+     "title": "Work Hours Month",
+     "type": "integer"
+    },
+    "work_hours_week": {
+     "title": "Work Hours Week",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "work_hours_week",
+    "work_hours_month",
+    "child_under",
+    "child_no_care_under",
+    "single_parent_child_under",
+    "exemptions",
+    "exemption_labels",
+    "exemption_sources",
+    "rule"
+   ],
+   "title": "Grad",
+   "type": "object"
+  },
+  "HalfTime": {
+   "additionalProperties": false,
+   "properties": {
+    "affects": {
+     "title": "Affects",
+     "type": "string"
+    },
+    "basis": {
+     "title": "Basis",
+     "type": "string"
+    },
+    "grad": {
+     "title": "Grad",
+     "type": "string"
+    },
+    "note": {
+     "title": "Note",
+     "type": "string"
+    },
+    "undergrad_units_at_least": {
+     "title": "Undergrad Units At Least",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "undergrad_units_at_least",
+    "basis",
+    "affects",
+    "grad",
+    "note"
+   ],
+   "title": "HalfTime",
+   "type": "object"
+  },
+  "HomelessRules": {
+   "additionalProperties": false,
+   "properties": {
+    "definition": {
+     "title": "Definition",
+     "type": "string"
+    },
+    "direct_if_cost": {
+     "title": "Direct If Cost",
+     "type": "string"
+    },
+    "excess_formula": {
+     "title": "Excess Formula",
+     "type": "string"
+    }
+   },
+   "required": [
+    "definition",
+    "direct_if_cost",
+    "excess_formula"
+   ],
+   "title": "HomelessRules",
+   "type": "object"
+  },
+  "IncomeBand": {
+   "additionalProperties": false,
+   "properties": {
+    "edges_1_person": {
+     "items": {
+      "type": "integer"
+     },
+     "title": "Edges 1 Person",
+     "type": "array"
+    },
+    "fractions_of_gross_limit": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+        "type": "string"
+       }
+      ]
+     },
+     "title": "Fractions Of Gross Limit",
+     "type": "array"
+    },
+    "round_to_usd": {
+     "title": "Round To Usd",
+     "type": "integer"
+    },
+    "split_rule": {
+     "title": "Split Rule",
+     "type": "string"
+    },
+    "stop": {
+     "title": "Stop",
+     "type": "string"
+    }
+   },
+   "required": [
+    "fractions_of_gross_limit",
+    "round_to_usd",
+    "edges_1_person",
+    "split_rule",
+    "stop"
+   ],
+   "title": "IncomeBand",
+   "type": "object"
+  },
+  "IncomeExcluded": {
+   "additionalProperties": false,
+   "properties": {
+    "higher_education_aid": {
+     "title": "Higher Education Aid",
+     "type": "string"
+    },
+    "vendor_payment": {
+     "title": "Vendor Payment",
+     "type": "string"
+    },
+    "work_study": {
+     "title": "Work Study",
+     "type": "string"
+    }
+   },
+   "required": [
+    "work_study",
+    "higher_education_aid",
+    "vendor_payment"
+   ],
+   "title": "IncomeExcluded",
+   "type": "object"
+  },
+  "IncomeRules": {
+   "additionalProperties": false,
+   "properties": {
+    "counted_family_cash": {
+     "title": "Counted Family Cash",
+     "type": "string"
+    },
+    "earned_deduction_applies_to": {
+     "title": "Earned Deduction Applies To",
+     "type": "string"
+    },
+    "excluded": {
+     "$ref": "#/$defs/IncomeExcluded"
+    },
+    "self_employment": {
+     "title": "Self Employment",
+     "type": "string"
+    },
+    "unearned_examples": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Unearned Examples",
+     "type": "array"
+    }
+   },
+   "required": [
+    "excluded",
+    "counted_family_cash",
+    "earned_deduction_applies_to",
+    "unearned_examples",
+    "self_employment"
+   ],
+   "title": "IncomeRules",
+   "type": "object"
+  },
+  "MoneyBasisExample": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Amount"
+    },
+    "hours_per_week": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Hours Per Week"
+    },
+    "period": {
+     "enum": [
+      "hour",
+      "week",
+      "biweek",
+      "semimonth",
+      "month",
+      "year",
+      "once"
+     ],
+     "title": "Period",
+     "type": "string"
+    }
+   },
+   "required": [
+    "amount",
+    "period",
+    "hours_per_week"
+   ],
+   "title": "MoneyBasisExample",
+   "type": "object"
+  },
+  "Proration": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "title": "Amount",
+     "type": "string"
+    },
+    "applies_to_minimum_benefit": {
+     "title": "Applies To Minimum Benefit",
+     "type": "boolean"
+    },
+    "below_min_issue": {
+     "title": "Below Min Issue",
+     "type": "string"
+    },
+    "days_counted": {
+     "title": "Days Counted",
+     "type": "string"
+    },
+    "note": {
+     "title": "Note",
+     "type": "string"
+    }
+   },
+   "required": [
+    "days_counted",
+    "amount",
+    "below_min_issue",
+    "applies_to_minimum_benefit",
+    "note"
+   ],
+   "title": "Proration",
+   "type": "object"
+  },
+  "Rates": {
+   "additionalProperties": false,
+   "properties": {
+    "benefit_reduction": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Benefit Reduction"
+    },
+    "earned_income_deduction": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Earned Income Deduction"
+    },
+    "shelter_income_share": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Shelter Income Share"
+    }
+   },
+   "required": [
+    "earned_income_deduction",
+    "shelter_income_share",
+    "benefit_reduction"
+   ],
+   "title": "Rates",
+   "type": "object"
+  },
+  "RequiredResult": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "title": "Amount",
+     "type": "integer"
+    },
+    "answers": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Answers",
+     "type": "object"
+    },
+    "asked": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Asked",
+     "type": "array"
+    },
+    "below_threshold": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Below Threshold",
+     "type": "array"
+    },
+    "case": {
+     "title": "Case",
+     "type": "string"
+    },
+    "no_effect": {
+     "items": {
+      "type": "string"
+     },
+     "title": "No Effect",
+     "type": "array"
+    },
+    "yellow": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Yellow",
+     "type": "array"
+    },
+    "yellow_could_be_up_to": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Could Be Up To"
+    }
+   },
+   "required": [
+    "case",
+    "asked",
+    "amount"
+   ],
+   "title": "RequiredResult",
+   "type": "object"
+  },
+  "Rounding": {
+   "additionalProperties": false,
+   "properties": {
+    "after_conversion": {
+     "title": "After Conversion",
+     "type": "string"
+    },
+    "benefit_reduction": {
+     "title": "Benefit Reduction",
+     "type": "string"
+    },
+    "benefit_reduction_integer_formula": {
+     "title": "Benefit Reduction Integer Formula",
+     "type": "string"
+    },
+    "builtin_round_allowed": {
+     "title": "Builtin Round Allowed",
+     "type": "boolean"
+    },
+    "float_allowed": {
+     "title": "Float Allowed",
+     "type": "boolean"
+    },
+    "income_conversion": {
+     "title": "Income Conversion",
+     "type": "string"
+    },
+    "net_income": {
+     "title": "Net Income",
+     "type": "string"
+    },
+    "proration": {
+     "title": "Proration",
+     "type": "string"
+    }
+   },
+   "required": [
+    "income_conversion",
+    "after_conversion",
+    "net_income",
+    "benefit_reduction",
+    "benefit_reduction_integer_formula",
+    "proration",
+    "float_allowed",
+    "builtin_round_allowed"
+   ],
+   "title": "Rounding",
+   "type": "object"
+  },
+  "Routes": {
+   "additionalProperties": false,
+   "properties": {
+    "age_outside_student_rule": {
+     "title": "Age Outside Student Rule",
+     "type": "string"
+    },
+    "already_receiving": {
+     "title": "Already Receiving",
+     "type": "string"
+    },
+    "boarder": {
+     "title": "Boarder",
+     "type": "string"
+    },
+    "dorm_meal_plan": {
+     "title": "Dorm Meal Plan",
+     "type": "string"
+    },
+    "elderly_or_disabled": {
+     "title": "Elderly Or Disabled",
+     "type": "string"
+    },
+    "grad_no_exemption": {
+     "title": "Grad No Exemption",
+     "type": "string"
+    },
+    "interview_waiting": {
+     "title": "Interview Waiting",
+     "type": "string"
+    },
+    "not_degree": {
+     "title": "Not Degree",
+     "type": "string"
+    },
+    "not_sfsu": {
+     "title": "Not Sfsu",
+     "type": "string"
+    },
+    "over_gross_limit": {
+     "title": "Over Gross Limit",
+     "type": "string"
+    },
+    "self_employment_income": {
+     "title": "Self Employment Income",
+     "type": "string"
+    },
+    "shared_food": {
+     "title": "Shared Food",
+     "type": "string"
+    },
+    "spouse_student": {
+     "title": "Spouse Student",
+     "type": "string"
+    },
+    "under_22_with_parent": {
+     "title": "Under 22 With Parent",
+     "type": "string"
+    },
+    "unresolved_tier": {
+     "title": "Unresolved Tier",
+     "type": "string"
+    },
+    "volunteered_status_coordinator": {
+     "title": "Volunteered Status Coordinator",
+     "type": "string"
+    },
+    "volunteered_status_other_help": {
+     "title": "Volunteered Status Other Help",
+     "type": "string"
+    },
+    "zero_benefit_3_plus": {
+     "title": "Zero Benefit 3 Plus",
+     "type": "string"
+    }
+   },
+   "required": [
+    "volunteered_status_other_help",
+    "volunteered_status_coordinator",
+    "elderly_or_disabled",
+    "not_sfsu",
+    "age_outside_student_rule",
+    "not_degree",
+    "grad_no_exemption",
+    "under_22_with_parent",
+    "shared_food",
+    "boarder",
+    "spouse_student",
+    "dorm_meal_plan",
+    "self_employment_income",
+    "over_gross_limit",
+    "zero_benefit_3_plus",
+    "unresolved_tier",
+    "already_receiving",
+    "interview_waiting"
+   ],
+   "title": "Routes",
+   "type": "object"
+  },
+  "SourceRef": {
+   "additionalProperties": false,
+   "properties": {
+    "date": {
+     "title": "Date",
+     "type": "string"
+    },
+    "grade": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Grade"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "title": {
+     "title": "Title",
+     "type": "string"
+    },
+    "url": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Url"
+    }
+   },
+   "required": [
+    "id",
+    "title",
+    "date"
+   ],
+   "title": "SourceRef",
+   "type": "object"
+  },
+  "StatusRouting": {
+   "additionalProperties": false,
+   "properties": {
+    "asked": {
+     "title": "Asked",
+     "type": "boolean"
+    },
+    "coordinator": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Coordinator",
+     "type": "array"
+    },
+    "other_help": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Other Help",
+     "type": "array"
+    },
+    "rule": {
+     "title": "Rule",
+     "type": "string"
+    },
+    "stored": {
+     "title": "Stored",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "other_help",
+    "coordinator",
+    "asked",
+    "stored",
+    "rule"
+   ],
+   "title": "StatusRouting",
+   "type": "object"
+  },
+  "UtilityAllowance": {
+   "additionalProperties": false,
+   "properties": {
+    "heat_cool": {
+     "title": "Heat Cool",
+     "type": "integer"
+    },
+    "none": {
+     "title": "None",
+     "type": "integer"
+    },
+    "phone_only": {
+     "title": "Phone Only",
+     "type": "integer"
+    },
+    "two_other": {
+     "title": "Two Other",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "heat_cool",
+    "two_other",
+    "phone_only",
+    "none"
+   ],
+   "title": "UtilityAllowance",
+   "type": "object"
+  },
+  "UtilityNames": {
+   "additionalProperties": false,
+   "properties": {
+    "heat_cool": {
+     "title": "Heat Cool",
+     "type": "string"
+    },
+    "none": {
+     "title": "None",
+     "type": "string"
+    },
+    "phone_only": {
+     "title": "Phone Only",
+     "type": "string"
+    },
+    "two_other": {
+     "title": "Two Other",
+     "type": "string"
+    }
+   },
+   "required": [
+    "heat_cool",
+    "two_other",
+    "phone_only",
+    "none"
+   ],
+   "title": "UtilityNames",
+   "type": "object"
+  },
+  "UtilityRules": {
+   "additionalProperties": false,
+   "properties": {
+    "from_slots": {
+     "title": "From Slots",
+     "type": "string"
+    },
+    "heat_cool": {
+     "title": "Heat Cool",
+     "type": "string"
+    },
+    "lua_utilities": {
+     "title": "Lua Utilities",
+     "type": "string"
+    },
+    "names": {
+     "$ref": "#/$defs/UtilityNames"
+    },
+    "one_per_household": {
+     "title": "One Per Household",
+     "type": "string"
+    },
+    "shared_bills": {
+     "title": "Shared Bills",
+     "type": "string"
+    }
+   },
+   "required": [
+    "names",
+    "from_slots",
+    "heat_cool",
+    "lua_utilities",
+    "one_per_household",
+    "shared_bills"
+   ],
+   "title": "UtilityRules",
+   "type": "object"
+  },
+  "Voi": {
+   "additionalProperties": false,
+   "properties": {
+    "conservative_value": {
+     "title": "Conservative Value",
+     "type": "string"
+    },
+    "default_mode": {
+     "enum": [
+      "natural",
+      "conservative"
+     ],
+     "title": "Default Mode",
+     "type": "string"
+    },
+    "default_mode_values": {
+     "$ref": "#/$defs/VoiDefaultModes"
+    },
+    "estimate_range": {
+     "$ref": "#/$defs/VoiEstimateRange"
+    },
+    "estimate_spoken": {
+     "title": "Estimate Spoken",
+     "type": "string"
+    },
+    "expedited_never_flips": {
+     "title": "Expedited Never Flips",
+     "type": "boolean"
+    },
+    "flip_reason_text": {
+     "title": "Flip Reason Text",
+     "type": "string"
+    },
+    "flip_threshold_usd": {
+     "title": "Flip Threshold Usd",
+     "type": "integer"
+    },
+    "income_band": {
+     "$ref": "#/$defs/IncomeBand"
+    },
+    "max_questions": {
+     "title": "Max Questions",
+     "type": "integer"
+    },
+    "measure": {
+     "title": "Measure",
+     "type": "string"
+    },
+    "not_asked": {
+     "$ref": "#/$defs/VoiNotAsked"
+    },
+    "order": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Order",
+     "type": "array"
+    },
+    "other_cash_band_usd": {
+     "items": {
+      "type": "integer"
+     },
+     "title": "Other Cash Band Usd",
+     "type": "array"
+    },
+    "priority": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Priority",
+     "type": "array"
+    },
+    "replan_after_each_answer": {
+     "title": "Replan After Each Answer",
+     "type": "boolean"
+    },
+    "required_results": {
+     "items": {
+      "$ref": "#/$defs/RequiredResult"
+     },
+     "title": "Required Results",
+     "type": "array"
+    },
+    "slots": {
+     "additionalProperties": {
+      "$ref": "#/$defs/VoiSlot"
+     },
+     "title": "Slots",
+     "type": "object"
+    },
+    "threshold_rule": {
+     "title": "Threshold Rule",
+     "type": "string"
+    },
+    "unclear_answer_value": {
+     "title": "Unclear Answer Value",
+     "type": "string"
+    },
+    "unknown_income_value": {
+     "title": "Unknown Income Value",
+     "type": "string"
+    }
+   },
+   "required": [
+    "default_mode",
+    "default_mode_values",
+    "flip_threshold_usd",
+    "threshold_rule",
+    "max_questions",
+    "order",
+    "priority",
+    "replan_after_each_answer",
+    "measure",
+    "conservative_value",
+    "unclear_answer_value",
+    "unknown_income_value",
+    "slots",
+    "not_asked",
+    "estimate_spoken",
+    "estimate_range",
+    "flip_reason_text",
+    "income_band",
+    "other_cash_band_usd",
+    "expedited_never_flips",
+    "required_results"
+   ],
+   "title": "Voi",
+   "type": "object"
+  },
+  "VoiDefaultModes": {
+   "additionalProperties": false,
+   "properties": {
+    "conservative": {
+     "title": "Conservative",
+     "type": "string"
+    },
+    "natural": {
+     "title": "Natural",
+     "type": "string"
+    }
+   },
+   "required": [
+    "natural",
+    "conservative"
+   ],
+   "title": "VoiDefaultModes",
+   "type": "object"
+  },
+  "VoiEstimateRange": {
+   "additionalProperties": false,
+   "properties": {
+    "lo_hi": {
+     "title": "Lo Hi",
+     "type": "string"
+    },
+    "settled": {
+     "title": "Settled",
+     "type": "string"
+    }
+   },
+   "required": [
+    "lo_hi",
+    "settled"
+   ],
+   "title": "VoiEstimateRange",
+   "type": "object"
+  },
+  "VoiNotAsked": {
+   "additionalProperties": false,
+   "properties": {
+    "left_by_cap_spread_over_threshold": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "left_by_cap_tier_change": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "spread_up_to_threshold": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "spread_zero": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    },
+    "unclear_never_resolved": {
+     "$ref": "#/$defs/VoiNotAskedRule"
+    }
+   },
+   "required": [
+    "spread_zero",
+    "spread_up_to_threshold",
+    "left_by_cap_spread_over_threshold",
+    "left_by_cap_tier_change",
+    "unclear_never_resolved"
+   ],
+   "title": "VoiNotAsked",
+   "type": "object"
+  },
+  "VoiNotAskedRule": {
+   "additionalProperties": false,
+   "properties": {
+    "line": {
+     "title": "Line",
+     "type": "string"
+    },
+    "route": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Route"
+    },
+    "skipped_reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Skipped Reason"
+    },
+    "value": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    },
+    "yellow_text": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Text"
+    },
+    "yellow_text_when_default_is_highest": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Text When Default Is Highest"
+    }
+   },
+   "required": [
+    "line"
+   ],
+   "title": "VoiNotAskedRule",
+   "type": "object"
+  },
+  "VoiSlot": {
+   "additionalProperties": false,
+   "properties": {
+    "ask_key": {
+     "title": "Ask Key",
+     "type": "string"
+    },
+    "candidates": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      {
+       "type": "string"
+      }
+     ],
+     "title": "Candidates"
+    },
+    "default": {
+     "title": "Default",
+     "type": "string"
+    },
+    "follow_up_key": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Follow Up Key"
+    },
+    "follow_up_when": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Follow Up When"
+    },
+    "only_if": {
+     "anyOf": [
+      {
+       "additionalProperties": {
+        "type": "boolean"
+       },
+       "type": "object"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Only If"
+    }
+   },
+   "required": [
+    "candidates",
+    "default",
+    "ask_key"
+   ],
+   "title": "VoiSlot",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "description": "data/rules/ca_fy2027.json, key for key. Household-size tables keep their keys as strings (\"1\"..\"8\",\n\"each_over_8\", \"18_plus\", \"6_plus\").",
+ "properties": {
+  "abawd": {
+   "$ref": "#/$defs/Abawd"
+  },
+  "about": {
+   "title": "About",
+   "type": "string"
+  },
+  "age_coordinator": {
+   "$ref": "#/$defs/AgeCoordinator"
+  },
+  "checked": {
+   "format": "date",
+   "title": "Checked",
+   "type": "string"
+  },
+  "conversion": {
+   "$ref": "#/$defs/Conversion"
+  },
+  "deadlines": {
+   "$ref": "#/$defs/Deadlines"
+  },
+  "decision_order": {
+   "items": {
+    "$ref": "#/$defs/DecisionStep"
+   },
+   "title": "Decision Order",
+   "type": "array"
+  },
+  "dorm_meals_per_week_max_eligible": {
+   "title": "Dorm Meals Per Week Max Eligible",
+   "type": "integer"
+  },
+  "effective": {
+   "maxItems": 2,
+   "minItems": 2,
+   "prefixItems": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "format": "date",
+     "type": "string"
+    }
+   ],
+   "title": "Effective",
+   "type": "array"
+  },
+  "elderly_disabled": {
+   "$ref": "#/$defs/ElderlyDisabled"
+  },
+  "excess_shelter_cap_non_elderly_disabled": {
+   "title": "Excess Shelter Cap Non Elderly Disabled",
+   "type": "integer"
+  },
+  "expedited": {
+   "$ref": "#/$defs/Expedited"
+  },
+  "filing_date_estimate": {
+   "$ref": "#/$defs/FilingDateEstimate"
+  },
+  "fy": {
+   "title": "Fy",
+   "type": "string"
+  },
+  "grad": {
+   "$ref": "#/$defs/Grad"
+  },
+  "gross_limit_200": {
+   "additionalProperties": {
+    "type": "integer"
+   },
+   "title": "Gross Limit 200",
+   "type": "object"
+  },
+  "half_time": {
+   "$ref": "#/$defs/HalfTime"
+  },
+  "homeless_deduction_mode": {
+   "enum": [
+    "direct_if_cost",
+    "excess_formula"
+   ],
+   "title": "Homeless Deduction Mode",
+   "type": "string"
+  },
+  "homeless_rules": {
+   "$ref": "#/$defs/HomelessRules"
+  },
+  "homeless_shelter_deduction": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Homeless Shelter Deduction"
+  },
+  "homeless_temp_stay_max_days": {
+   "title": "Homeless Temp Stay Max Days",
+   "type": "integer"
+  },
+  "household_size_lookup": {
+   "title": "Household Size Lookup",
+   "type": "string"
+  },
+  "id": {
+   "title": "Id",
+   "type": "string"
+  },
+  "income_rules": {
+   "$ref": "#/$defs/IncomeRules"
+  },
+  "irt_130": {
+   "additionalProperties": {
+    "type": "integer"
+   },
+   "title": "Irt 130",
+   "type": "object"
+  },
+  "irt_card_rule": {
+   "title": "Irt Card Rule",
+   "type": "string"
+  },
+  "label": {
+   "title": "Label",
+   "type": "string"
+  },
+  "max_allotment": {
+   "additionalProperties": {
+    "type": "integer"
+   },
+   "title": "Max Allotment",
+   "type": "object"
+  },
+  "min_benefit_1_2_persons": {
+   "title": "Min Benefit 1 2 Persons",
+   "type": "integer"
+  },
+  "min_benefit_rule": {
+   "title": "Min Benefit Rule",
+   "type": "string"
+  },
+  "notes": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Notes",
+   "type": "array"
+  },
+  "parent_household_age_under": {
+   "title": "Parent Household Age Under",
+   "type": "integer"
+  },
+  "parent_household_console_text": {
+   "title": "Parent Household Console Text",
+   "type": "string"
+  },
+  "parent_household_exceptions": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Parent Household Exceptions",
+   "type": "array"
+  },
+  "proration": {
+   "$ref": "#/$defs/Proration"
+  },
+  "proration_min_issue": {
+   "title": "Proration Min Issue",
+   "type": "integer"
+  },
+  "rates": {
+   "$ref": "#/$defs/Rates"
+  },
+  "rounding": {
+   "$ref": "#/$defs/Rounding"
+  },
+  "routes": {
+   "$ref": "#/$defs/Routes"
+  },
+  "sfsu_half_time_units_undergrad": {
+   "title": "Sfsu Half Time Units Undergrad",
+   "type": "integer"
+  },
+  "source_notes": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Source Notes",
+   "type": "object"
+  },
+  "sources": {
+   "items": {
+    "$ref": "#/$defs/SourceRef"
+   },
+   "title": "Sources",
+   "type": "array"
+  },
+  "standard_deduction": {
+   "additionalProperties": {
+    "type": "integer"
+   },
+   "title": "Standard Deduction",
+   "type": "object"
+  },
+  "status": {
+   "$ref": "#/$defs/StatusRouting"
+  },
+  "student_rule_age": {
+   "maxItems": 2,
+   "minItems": 2,
+   "prefixItems": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "integer"
+    }
+   ],
+   "title": "Student Rule Age",
+   "type": "array"
+  },
+  "timezone": {
+   "title": "Timezone",
+   "type": "string"
+  },
+  "utility_allowance": {
+   "$ref": "#/$defs/UtilityAllowance"
+  },
+  "utility_rules": {
+   "$ref": "#/$defs/UtilityRules"
+  },
+  "value_sources": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Value Sources",
+   "type": "object"
+  },
+  "version": {
+   "title": "Version",
+   "type": "string"
+  },
+  "voi": {
+   "$ref": "#/$defs/Voi"
+  },
+  "zero_benefit_3_plus_route": {
+   "title": "Zero Benefit 3 Plus Route",
+   "type": "string"
+  },
+  "zero_benefit_rule": {
+   "title": "Zero Benefit Rule",
+   "type": "string"
+  }
+ },
+ "required": [
+  "id",
+  "label",
+  "fy",
+  "version",
+  "checked",
+  "effective",
+  "timezone",
+  "about",
+  "sources",
+  "source_notes",
+  "value_sources",
+  "household_size_lookup",
+  "max_allotment",
+  "standard_deduction",
+  "gross_limit_200",
+  "irt_130",
+  "min_benefit_1_2_persons",
+  "min_benefit_rule",
+  "zero_benefit_3_plus_route",
+  "zero_benefit_rule",
+  "excess_shelter_cap_non_elderly_disabled",
+  "homeless_shelter_deduction",
+  "homeless_deduction_mode",
+  "homeless_temp_stay_max_days",
+  "homeless_rules",
+  "utility_allowance",
+  "utility_rules",
+  "rates",
+  "conversion",
+  "rounding",
+  "proration_min_issue",
+  "proration",
+  "expedited",
+  "irt_card_rule",
+  "student_rule_age",
+  "age_coordinator",
+  "parent_household_age_under",
+  "parent_household_exceptions",
+  "parent_household_console_text",
+  "dorm_meals_per_week_max_eligible",
+  "sfsu_half_time_units_undergrad",
+  "half_time",
+  "abawd",
+  "grad",
+  "status",
+  "elderly_disabled",
+  "income_rules",
+  "routes",
+  "decision_order",
+  "deadlines",
+  "filing_date_estimate",
+  "voi",
+  "notes"
+ ],
+ "title": "RulesTable",
+ "type": "object"
+}

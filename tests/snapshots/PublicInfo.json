@@ -1,0 +1,33 @@
+{
+ "additionalProperties": false,
+ "description": "GET /api/public/info (no auth): landing and talk page.",
+ "properties": {
+  "demo_phone_display": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Demo Phone Display"
+  },
+  "effective_from": {
+   "format": "date",
+   "title": "Effective From",
+   "type": "string"
+  },
+  "rules_label": {
+   "title": "Rules Label",
+   "type": "string"
+  }
+ },
+ "required": [
+  "demo_phone_display",
+  "rules_label",
+  "effective_from"
+ ],
+ "title": "PublicInfo",
+ "type": "object"
+}

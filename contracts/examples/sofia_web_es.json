@@ -1,0 +1,291 @@
+{
+  "example": "sofia_web_es",
+  "description": "Spanish web call on the talk page for golden case G3: a 19-year-old undergrad living with her parents is routed to the SF State CalFresh coordinator. Shows the web session, display, choices and card_url. Spanish text needs native review; replies are illustrative.",
+  "api": "brain_api.v1",
+  "illustrative_text": true,
+  "native_review": true,
+  "scenarios": [
+    {
+      "id": "sofia_web_es",
+      "title": "Sofia, web, Spanish: coordinator (parent household), card ready",
+      "channel": "web",
+      "lang": "es",
+      "call_id": "0b000000000000000000000000000001",
+      "exchanges": [
+        {
+          "step": "web_session",
+          "request": {
+            "method": "POST",
+            "path": "/api/web/sessions",
+            "auth": "none",
+            "body": {
+              "lang": "es"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "call_id": "0b000000000000000000000000000001",
+              "token": "example-web-token-sofia-0000000001",
+              "expires_at": "2026-10-02T17:30:00Z"
+            }
+          },
+          "note": "Issued at 2026-10-02T17:00:00Z; the token is bound to this call_id for 30 minutes."
+        },
+        {
+          "step": "start",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0b000000000000000000000000000001/start",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-sofia-0000000001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "channel": "web",
+              "lang": "es",
+              "test": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio.",
+              "ask": "¿Te parece bien?",
+              "end": false,
+              "end_reason": null,
+              "lang": "es",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio. ¿Te parece bien?",
+              "choices": [
+                "Sí",
+                "No"
+              ],
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "consent.ask"
+          ]
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0b000000000000000000000000000001/turn",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-sofia-0000000001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "es",
+              "event": "utterance",
+              "text": "Sí, está bien.",
+              "masked": false,
+              "confidence": 0.91,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Gracias.",
+              "ask": "¿Estudias una licenciatura o un posgrado en SF State, y cuántas unidades tomas este semestre?",
+              "end": false,
+              "end_reason": null,
+              "lang": "es",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": "Gracias. ¿Estudias una licenciatura o un posgrado en SF State, y cuántas unidades tomas este semestre?",
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.level_units"
+          ]
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0b000000000000000000000000000001/turn",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-sofia-0000000001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "es",
+              "event": "utterance",
+              "text": "Estudio una licenciatura en SF State y tomo doce unidades.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Perfecto.",
+              "ask": "¿Cuántos años tienes y con quién vives?",
+              "end": false,
+              "end_reason": null,
+              "lang": "es",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": "Perfecto. ¿Cuántos años tienes y con quién vives?",
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.age_parent"
+          ]
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0b000000000000000000000000000001/turn",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-sofia-0000000001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 3,
+              "lang": "es",
+              "event": "utterance",
+              "text": "Tengo diecinueve años y vivo con mis papás.",
+              "masked": false,
+              "confidence": 0.92,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Como tienes menos de 22 años y vives con tu mamá o tu papá, para CalFresh tú y tu familia son un solo hogar. La coordinación de CalFresh de SF State te puede ayudar a hacer la solicitud en familia. Tus respuestas quedan guardadas para la coordinación. Tu tarjeta de GatorPlate está lista. Ábrela para ver tus próximos pasos. Si quieres hablar con una persona, la coordinación de CalFresh de SF State atiende en el cuatro uno cinco, tres tres ocho, uno dos cero tres.",
+              "ask": "¿Algo más?",
+              "end": false,
+              "end_reason": null,
+              "lang": "es",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": "Como tienes menos de 22 años y vives con tu mamá o tu papá, para CalFresh tú y tu familia son un solo hogar. La coordinación de CalFresh de SF State te puede ayudar a hacer la solicitud en familia. Tus respuestas quedan guardadas para la coordinación. Tu tarjeta de GatorPlate está lista. Ábrela para ver tus próximos pasos. Si quieres hablar con una persona, la coordinación de CalFresh de SF State atiende en el (415) 338-1203. ¿Algo más?",
+              "choices": [
+                "No, gracias"
+              ],
+              "card_url": "/c/example-card-token-sofia-0001",
+              "debug": null
+            }
+          },
+          "keys": [
+            "result.coordinator.parent_household",
+            "card.web",
+            "close.anything_else"
+          ],
+          "note": "Under 22 and living with a parent: routed to the coordinator; no amount is said and no apply-today line (she applies as her parents' household and talks to the coordinator first). The talk page shows an 'open my card' button for card_url."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0b000000000000000000000000000001/turn",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-sofia-0000000001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 4,
+              "lang": "es",
+              "event": "utterance",
+              "text": "No, gracias.",
+              "masked": false,
+              "confidence": 0.94,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "¡Gracias por usar GatorPlate! Mucha suerte.",
+              "ask": null,
+              "end": true,
+              "end_reason": "completed",
+              "lang": "es",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": "¡Gracias por usar GatorPlate! Mucha suerte.",
+              "choices": null,
+              "card_url": "/c/example-card-token-sofia-0001",
+              "debug": null
+            }
+          },
+          "keys": [
+            "close.goodbye"
+          ]
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0b000000000000000000000000000001/end",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-sofia-0000000001"
+            },
+            "body": {
+              "v": 1,
+              "reason": "completed",
+              "turns": 4,
+              "duration_ms": 96000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {}
+          }
+        }
+      ],
+      "expect_final": {
+        "note": "Outcome the brain must reach (checked by the brain's own end-to-end tests; names are descriptive, not part of this API).",
+        "golden_case": "G3",
+        "tier": "coordinator",
+        "reason_code": "coordinator.parent_household",
+        "estimate_monthly": null,
+        "amount_said": false,
+        "card_created": true,
+        "console_reason_text": "Under 22 and living with a parent — the parent's household is counted together. Confirm, then help with a household application.",
+        "student_turns": 4
+      }
+    }
+  ]
+}

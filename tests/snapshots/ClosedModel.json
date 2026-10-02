@@ -1,0 +1,7 @@
+{
+ "additionalProperties": false,
+ "description": "Replies: exactly the schema's properties.",
+ "properties": {},
+ "title": "ClosedModel",
+ "type": "object"
+}

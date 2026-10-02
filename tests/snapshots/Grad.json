@@ -1,0 +1,63 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "child_no_care_under": {
+   "title": "Child No Care Under",
+   "type": "integer"
+  },
+  "child_under": {
+   "title": "Child Under",
+   "type": "integer"
+  },
+  "exemption_labels": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Exemption Labels",
+   "type": "object"
+  },
+  "exemption_sources": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Exemption Sources",
+   "type": "object"
+  },
+  "exemptions": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Exemptions",
+   "type": "array"
+  },
+  "rule": {
+   "title": "Rule",
+   "type": "string"
+  },
+  "single_parent_child_under": {
+   "title": "Single Parent Child Under",
+   "type": "integer"
+  },
+  "work_hours_month": {
+   "title": "Work Hours Month",
+   "type": "integer"
+  },
+  "work_hours_week": {
+   "title": "Work Hours Week",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "work_hours_week",
+  "work_hours_month",
+  "child_under",
+  "child_no_care_under",
+  "single_parent_child_under",
+  "exemptions",
+  "exemption_labels",
+  "exemption_sources",
+  "rule"
+ ],
+ "title": "Grad",
+ "type": "object"
+}

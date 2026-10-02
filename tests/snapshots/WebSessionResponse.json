@@ -1,0 +1,27 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "call_id": {
+   "pattern": "^[a-f0-9]{32}$",
+   "title": "Call Id",
+   "type": "string"
+  },
+  "expires_at": {
+   "format": "date-time",
+   "title": "Expires At",
+   "type": "string"
+  },
+  "token": {
+   "pattern": "^[A-Za-z0-9_-]{22,128}$",
+   "title": "Token",
+   "type": "string"
+  }
+ },
+ "required": [
+  "call_id",
+  "token",
+  "expires_at"
+ ],
+ "title": "WebSessionResponse",
+ "type": "object"
+}

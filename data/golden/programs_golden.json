@@ -1,0 +1,1701 @@
+{
+  "version": "2026-10-01",
+  "table_id": "GP-Programs-2026",
+  "table": "data/rules/programs_2026.json (other programs on the card; effective 2026-10-01 to 2027-09-30)",
+  "conventions": "Whole dollars as integers; fact money as exact decimal strings (Decimal, never float; no round()). Each line value is floored to the dollar; display_yearly floors it to $10; found_display is the sum of the counted lines' display values; share_display floors found_display to $100.",
+  "defaults": "Unless a case says otherwise: today 2026-10-02, no progress, work_study_monthly 0, unearned_monthly 0, no children, not living with a parent, housed off campus. Slots the call never set take these ProgramFacts values: dorm_on_campus false, homeless false, roommates false, roommates_count 2 when roommates is true (else 0), children_count 0, youngest_child_age null, heat_cool false and other_utils 'none' (the CalFresh natural defaults, SPEC 5.6). An income the call never asked (it ended before the income phase) stays null, and so do magi_monthly and earned_annual.",
+  "constants": "Muni $2.85 / START $1.40, passes $86 / $43, BART average $5.18 x 0.50 = $2.59, 17 break weeks, 52 weeks / 12 months, LifeLine $19.00 a month (ceiling), CARE 0.35 x 0.70 + 0.20 x 0.30 = 0.305 of the bill, Medi-Cal 138% size 1 $1,836 / size 2 $2,489, children 266% size 1 $3,538.",
+  "how_to_check": "Load `facts` into ProgramFacts (every field is present; the derived fields magi_monthly, earned_annual, bill_split and people_in_home are given so the case loads directly, and a test that builds ProgramFacts from slots must get the same values, except `half_time`, which is the `half_time` slot when the call set it, else null (the demo cases do not set it, so their facts test skips that key)), take the CalFresh result from `calfresh`, the card answers from `answers` (question id -> choice, source card) and `progress` (program id -> {applied, at}), and evaluate on `today`. `base` names the CalFresh golden case the facts start from (PG7 changes its age and household, PG10 and PG11 its day; PG13 has no base); `calfresh` is the CalFresh result to use as given. `expected.result: null` means the programs result must be None (mode none, or the table not effective). Otherwise compare every key present in `expected`; null means the value must be null. `lines` holds, in full mode, `calfresh` plus every program that is not hidden, and in list_only mode only the programs that are not hidden; `hidden` lists the programs that must be absent. Per line: `value_yearly` is the value model's floored result; it is 0 for zero and for coverage_only; null for note lines, in list_only mode, for a check line with a range (then range_lo / range_hi hold value(lo_choice) / value(hi_choice)), and for a line that became check because a row it needs is not valid today. range_lo / range_hi appear only on the line that has a range and must be null on every other line. `display_yearly` floors value_yearly to $10. `counted` is true only for likely lines in full mode (CalFresh included). `apply_by` is computed for lines in the plan (likely, maybe, check, coverage) in full mode; otherwise null. `note_keys` = the matched status rule's notes, then each note_rules key whose condition holds (file order), then notes_always; a line that became check because a row is not valid today drops the status rule's notes. `question_spreads` lists every unanswered question whose ask_when holds, with spread = max - min of found_yearly over its choices (answered questions keep their answers, other unanswered ones stay unanswered); `open_questions` = those with spread > 50 (ask_rule), by spread desc then ask_rule.priority; `next_question` = the first. `console_notes` = console_note_rules keys whose condition holds. `plan` = for each stage, the ids of lines whose status is in plan.include, CalFresh first in 'today', then by apply_by (earliest first, null last), value_yearly desc (null counts as 0; a range line uses range_hi), program priority. `claimed_display` = sum of display_yearly over counted lines marked applied.",
+  "demo_sequence": {
+    "about": "Required ask-order check on PG2's facts: answer the next question each time with Maria's tap and re-plan.",
+    "start": {
+      "found_yearly": 3672,
+      "found_display": 3670,
+      "next_question": "break_transit"
+    },
+    "steps": [
+      {
+        "answer": {
+          "break_transit": "weekdays_muni"
+        },
+        "found_yearly": 3840,
+        "found_display": 3830,
+        "next_question": "tax_dependent",
+        "question_spreads": {
+          "tax_dependent": 228,
+          "pge_bill": 170
+        }
+      },
+      {
+        "answer": {
+          "tax_dependent": "no"
+        },
+        "found_yearly": 4068,
+        "found_display": 4050,
+        "next_question": "pge_bill",
+        "question_spreads": {
+          "pge_bill": 170
+        }
+      },
+      {
+        "answer": {
+          "pge_bill": "own_roommate"
+        },
+        "found_yearly": 4238,
+        "found_display": 4220,
+        "next_question": null,
+        "question_spreads": {}
+      }
+    ],
+    "hand_calc": "3,672 + 168 = 3,840 (display 3,670 + 160 = 3,830); + 228 = 4,068 (display + 220 = 4,050); + 170 = 4,238 (display + 170 = 4,220). After 'no', pge_bill: own_mine 170 (likely now), own_roommate 170, in_rent 0, not_sure 0 -> spread 170."
+  },
+  "hand_calc_note": "Every expected value was calculated by hand first (hand_calc) and then re-derived from the table by an independent re-implementation of the value model with Decimal (zero mismatches on 2026-10-01).",
+  "count": 14,
+  "cases": [
+    {
+      "id": "PG1",
+      "title": "Maria (demo persona) answers all three card questions: most weekdays (Muni), not a tax dependent, PG&E bill in a roommate's name",
+      "base": "G1",
+      "facts": {
+        "route": "likely",
+        "age": 20,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": true,
+        "roommates_count": 2,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "900",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "900",
+        "earned_annual": "10800",
+        "bill_split": 3,
+        "people_in_home": 3
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "break_transit": "weekdays_muni",
+        "tax_dependent": "no",
+        "pge_bill": "own_roommate"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 4238,
+        "found_display": 4220,
+        "share_display": 4200,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "likely",
+            "value_yearly": 168,
+            "display_yearly": 160,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": "2026-11-19",
+            "note_keys": [
+              "clipper.two_cards"
+            ],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "likely",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.federal_extra",
+              "lifeline.family_plan"
+            ],
+            "applied": false
+          },
+          "care": {
+            "status": "likely",
+            "value_yearly": 170,
+            "display_yearly": 170,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.roommate_applies"
+            ],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "maybe",
+            "value_yearly": 204,
+            "display_yearly": 200,
+            "counted": false,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [
+          "care.utility_conflict"
+        ],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "clipper_start",
+            "lifeline",
+            "care"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "CalFresh 306 x 12 = 3,672 -> display 3,670. Medi-Cal: age 20, MAGI 900 + 0 + 0 = 900 <= 1,836 (138%, size 1) -> coverage, $0; tax_dependent 'no' -> no 'if claimed' note. Clipper START, 10 rides a week (Muni): weekly full fare min(10 x 2.85 = 28.50, 86 x 12 / 52 = 19.846) = 19.846; weekly START min(10 x 1.40 = 14.00, 43 x 12 / 52 = 9.923) = 9.923; (19.846 - 9.923) x 17 = 516 / 52 x 17 = 168.69 -> 168 -> display 160. Apply by: first gap 2026-12-19 minus 30 days = 2026-11-19 (>= 2026-10-02). LifeLine (ceiling): 19.00 x 12 = 228 -> display 220. CARE: 1 + 2 roommates = 3 people -> $140 assumed bill; 12 x (0.35 x 0.70 + 0.20 x 0.30) x 140 = 12 x 0.305 x 140 = 512.40 for the home; / 3 = 170.80 -> 170 (the roommate on the bill applies and can't be someone's tax dependent). Tax credits: E = 12 x 900 = 10,800; age 20 < 24 -> maybe (no_child): CalEITC 2025 anchor 10,800 -> 204 (a credit, not a refund; federal no-child EITC starts at 25) -> display 200, not counted. found_yearly 3,672 + 168 + 228 + 170 = 4,238; found_display 3,670 + 160 + 220 + 170 = 4,220; share floor100(4,220) = 4,200. Console: the card says the home has its own PG&E bill, the call world has no heating/AC bill and other_utils 'none' -> gray note care.utility_conflict (CalFresh is already the maximum $306, so it changes nothing)."
+    },
+    {
+      "id": "PG1-b",
+      "title": "PG1 after the student marks CalFresh and Clipper START as applied",
+      "base": "G1",
+      "facts": {
+        "route": "likely",
+        "age": 20,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": true,
+        "roommates_count": 2,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "900",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "900",
+        "earned_annual": "10800",
+        "bill_split": 3,
+        "people_in_home": 3
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "break_transit": "weekdays_muni",
+        "tax_dependent": "no",
+        "pge_bill": "own_roommate"
+      },
+      "progress": {
+        "calfresh": {
+          "applied": true,
+          "at": "2026-10-02T16:20:00-07:00"
+        },
+        "clipper_start": {
+          "applied": true,
+          "at": "2026-10-02T16:21:00-07:00"
+        }
+      },
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 4238,
+        "found_display": 4220,
+        "share_display": 4200,
+        "claimed_display": 3830,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": true
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "likely",
+            "value_yearly": 168,
+            "display_yearly": 160,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": "2026-11-19",
+            "note_keys": [
+              "clipper.two_cards"
+            ],
+            "applied": true
+          },
+          "lifeline": {
+            "status": "likely",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.federal_extra",
+              "lifeline.family_plan"
+            ],
+            "applied": false
+          },
+          "care": {
+            "status": "likely",
+            "value_yearly": 170,
+            "display_yearly": 170,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.roommate_applies"
+            ],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "maybe",
+            "value_yearly": 204,
+            "display_yearly": 200,
+            "counted": false,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [
+          "care.utility_conflict"
+        ],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "clipper_start",
+            "lifeline",
+            "care"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "As PG1. claimed_display = display values of counted lines marked applied: CalFresh 3,670 + Clipper START 160 = 3,830. found is unchanged (4,238 / 4,220)."
+    },
+    {
+      "id": "PG2",
+      "title": "Maria (demo persona) before any card answer: three questions, highest spread first",
+      "base": "G1",
+      "facts": {
+        "route": "likely",
+        "age": 20,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": true,
+        "roommates_count": 2,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "900",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "900",
+        "earned_annual": "10800",
+        "bill_split": 3,
+        "people_in_home": 3
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {},
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 3672,
+        "found_display": 3670,
+        "share_display": 3600,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [
+              "medi_cal.if_claimed"
+            ],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "check",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": "2026-11-19",
+            "note_keys": [],
+            "applied": false,
+            "range_lo": 98,
+            "range_hi": 440
+          },
+          "lifeline": {
+            "status": "check",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "care": {
+            "status": "check",
+            "value_yearly": 170,
+            "display_yearly": 170,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "maybe",
+            "value_yearly": 204,
+            "display_yearly": 200,
+            "counted": false,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [
+          "break_transit",
+          "tax_dependent",
+          "pge_bill"
+        ],
+        "question_spreads": {
+          "break_transit": 440,
+          "tax_dependent": 228,
+          "pge_bill": 170
+        },
+        "next_question": "break_transit",
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "clipper_start",
+            "lifeline",
+            "care"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "Unanswered: Clipper START check with range lo = two_days: 4 rides, full min(11.40, 19.846) = 11.40, START min(5.60, 9.923) = 5.60, 5.80 x 17 = 98.60 -> 98; hi = weekdays_bart: 10 x 5.18 x 0.50 x 17 = 440.30 -> 440. LifeLine check 228 (if no one claims you). CARE check 170 (value as PG1, not counted). Medi-Cal coverage + medi_cal.if_claimed (tax_dependent not 'no'). Tax maybe 204. found 3,672 -> display 3,670 -> share 3,600. Spreads (found_yearly, others unanswered): break_transit none 3,672 / two_days 3,770 / weekdays_muni 3,840 / weekdays_bart 4,112 -> 440; tax_dependent no 3,900 (LifeLine 228) / yes 3,672 / not_sure 3,672 -> 228; pge_bill own_roommate 3,842 (CARE 170) / own_mine 3,672 (maybe while tax_dependent is unanswered) / in_rent 3,672 / not_sure 3,672 -> 170. All > 50 -> order by spread: break_transit, tax_dependent, pge_bill. Plan after_approval: Clipper START first (apply-by 2026-11-19), then value desc: LifeLine 228, CARE 170."
+    },
+    {
+      "id": "PG3",
+      "title": "Maria (demo persona) answers: tax dependent yes, PG&E bill in her name, no rides over breaks",
+      "base": "G1",
+      "facts": {
+        "route": "likely",
+        "age": 20,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": true,
+        "roommates_count": 2,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "900",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "900",
+        "earned_annual": "10800",
+        "bill_split": 3,
+        "people_in_home": 3
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "tax_dependent": "yes",
+        "pge_bill": "own_mine",
+        "break_transit": "none"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 3672,
+        "found_display": 3670,
+        "share_display": 3600,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "check",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [
+              "medi_cal.family_income",
+              "medi_cal.if_claimed"
+            ],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "zero",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "note",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.dependent"
+            ],
+            "applied": false
+          },
+          "care": {
+            "status": "maybe",
+            "value_yearly": 170,
+            "display_yearly": 170,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.applicant_not_dependent"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [
+          "tax_credits"
+        ],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [
+          "care.utility_conflict"
+        ],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "care"
+          ],
+          "tax_time": []
+        }
+      },
+      "hand_calc": "tax_dependent yes: Medi-Cal check (family income; coverage_only value 0, not counted) with medi_cal.if_claimed; LifeLine note (for people no one claims). CARE own_mine with tax_dependent not 'no' -> maybe 170 (the person on the bill can't be a tax dependent), not counted. Clipper START zero (no rides). No children + dependent -> tax credits hidden. found 3,672 -> 3,670 -> share 3,600. Console: own PG&E bill vs no utility bills in the call -> care.utility_conflict."
+    },
+    {
+      "id": "PG4",
+      "title": "Jamal (demo persona): couch-surfing, no income; not a tax dependent, rides 1-2 days a week over breaks",
+      "base": "G4",
+      "facts": {
+        "route": "likely",
+        "age": 24,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": false,
+        "homeless": true,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "0",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "0",
+        "earned_annual": "0",
+        "bill_split": 1,
+        "people_in_home": 1
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "tax_dependent": "no",
+        "break_transit": "two_days"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 3998,
+        "found_display": 3980,
+        "share_display": 3900,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "likely",
+            "value_yearly": 98,
+            "display_yearly": 90,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": "2026-11-19",
+            "note_keys": [
+              "clipper.two_cards"
+            ],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "likely",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.federal_extra",
+              "lifeline.family_plan"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [
+          "care",
+          "tax_credits"
+        ],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "clipper_start",
+            "lifeline"
+          ],
+          "tax_time": []
+        }
+      },
+      "hand_calc": "Medi-Cal: age 24, MAGI 0 <= 1,836 -> coverage. Clipper START two_days: 4 rides, (11.40 - 5.60) x 17 = 98.60 -> 98 -> display 90; apply by 2026-11-19. LifeLine 228 -> 220. CARE hidden (homeless; the PG&E question is not asked). Tax credits hidden (no earnings). found 3,672 + 98 + 228 = 3,998; display 3,670 + 90 + 220 = 3,980; share 3,900."
+    },
+    {
+      "id": "PG5",
+      "title": "Sofia (demo persona): 19, lives with her parents -> coordinator.parent_household (list only)",
+      "base": "G3",
+      "facts": {
+        "route": "coordinator.parent_household",
+        "age": 19,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": true,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": null,
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": null,
+        "magi_monthly": null,
+        "earned_annual": null,
+        "bill_split": 1,
+        "people_in_home": 1
+      },
+      "calfresh": {
+        "route": "coordinator.parent_household",
+        "monthly": null
+      },
+      "answers": {},
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "list_only",
+        "calfresh_yearly": null,
+        "found_yearly": null,
+        "found_display": null,
+        "share_display": null,
+        "claimed_display": 0,
+        "lines": {
+          "medi_cal": {
+            "status": "check",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [
+              "medi_cal.family_income",
+              "medi_cal.if_claimed"
+            ],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "check",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          }
+        },
+        "hidden": [
+          "lifeline",
+          "care",
+          "tax_credits"
+        ],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "medi_cal"
+          ],
+          "after_approval": [
+            "clipper_start"
+          ],
+          "tax_time": []
+        }
+      },
+      "hand_calc": "Route coordinator.* -> list_only: first matching status rule; hidden stays hidden, anything else becomes check with no amount; no questions (route is not likely). Medi-Cal: lives with a parent -> check (family income). Clipper START: age 19, no answer -> check. LifeLine and CARE: lives with a parent -> hidden (a family benefit). Tax credits: income never asked (null), no children, with a parent, age 19 < 24 -> hidden. No CalFresh line, found / share null."
+    },
+    {
+      "id": "PG6",
+      "title": "Dorm freshman, 18, no income: tax dependent 'not sure'",
+      "base": "N8",
+      "facts": {
+        "route": "likely",
+        "age": 18,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": true,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "0",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "0",
+        "earned_annual": "0",
+        "bill_split": 1,
+        "people_in_home": 1
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "tax_dependent": "not_sure"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 3672,
+        "found_display": 3670,
+        "share_display": 3600,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [
+              "medi_cal.if_claimed"
+            ],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "note",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "clipper.youth_free_muni"
+            ],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "check",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          }
+        },
+        "hidden": [
+          "care",
+          "tax_credits"
+        ],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "lifeline"
+          ],
+          "tax_time": []
+        }
+      },
+      "hand_calc": "Age 18 < 19: Medi-Cal uses the children's 266% row: MAGI 0 <= 3,538 -> coverage, + medi_cal.if_claimed ('not sure'). Clipper START note (Muni free 18 and under; break_transit not asked, age outside 19-64). Dorm -> pge_bill not asked, CARE hidden. LifeLine: 'not sure' -> check 228 (not counted). Tax hidden (no earnings). found 3,672 -> 3,670 -> share 3,600. Only tax_dependent was askable and it is answered -> open []."
+    },
+    {
+      "id": "PG7",
+      "title": "G1 facts at age 25, living alone: tax credits counted (24+, not a dependent)",
+      "base": "G1",
+      "facts": {
+        "route": "likely",
+        "age": 25,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "900",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "900",
+        "earned_annual": "10800",
+        "bill_split": 1,
+        "people_in_home": 1
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "tax_dependent": "no",
+        "pge_bill": "in_rent",
+        "break_transit": "none"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 4768,
+        "found_display": 4750,
+        "share_display": 4700,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "zero",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "likely",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.federal_extra",
+              "lifeline.family_plan"
+            ],
+            "applied": false
+          },
+          "care": {
+            "status": "note",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.in_rent"
+            ],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "likely",
+            "value_yearly": 868,
+            "display_yearly": 860,
+            "counted": true,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "lifeline"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "Tax credits likely (no_child; age 25 >= 24, tax_dependent no). E = 10,800. CalEITC 2025 anchor 10,800 -> 204. Federal 2026, no child (age 25-64): min(0.0765 x 10,800 = 826.20, 664) = 664; 10,800 < 10,860 -> no phase-out -> 664. Total 868 -> display 860. CARE note (in rent). Clipper zero. found 3,672 + 228 + 868 = 4,768; display 3,670 + 220 + 860 = 4,750; share 4,700."
+    },
+    {
+      "id": "PG8",
+      "title": "21, lives alone, $1,200 a month, heating bill: own PG&E bill, most weekdays with BART",
+      "base": "N3-d",
+      "facts": {
+        "route": "likely",
+        "age": 21,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "1200",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": true,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "1200",
+        "earned_annual": "14400",
+        "bill_split": 1,
+        "people_in_home": 1
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "tax_dependent": "no",
+        "pge_bill": "own_mine",
+        "break_transit": "weekdays_bart"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 4706,
+        "found_display": 4690,
+        "share_display": 4600,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "likely",
+            "value_yearly": 440,
+            "display_yearly": 440,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": "2026-11-19",
+            "note_keys": [
+              "clipper.two_cards"
+            ],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "likely",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.federal_extra",
+              "lifeline.family_plan"
+            ],
+            "applied": false
+          },
+          "care": {
+            "status": "likely",
+            "value_yearly": 366,
+            "display_yearly": 360,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.you_apply"
+            ],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "maybe",
+            "value_yearly": 171,
+            "display_yearly": 170,
+            "counted": false,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "clipper_start",
+            "care",
+            "lifeline"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "Medi-Cal: 1,200 <= 1,836 -> coverage. Clipper BART: 10 x 5.18 x 0.50 x 17 = 440.30 -> 440. CARE own_mine + not a dependent -> likely; 1 person -> $100 assumed bill; 12 x 0.305 x 100 = 366.00 / 1 -> 366 -> display 360. Tax maybe (age 21): E = 14,400 -> anchor 14,400 -> 171 -> display 170, not counted. found 3,672 + 440 + 228 + 366 = 4,706; display 3,670 + 440 + 220 + 360 = 4,690; share floor100 of the display = 4,600 (not 4,700 from found_yearly). heat_cool true -> no utility-conflict note. Plan after_approval: Clipper START (apply-by) first, then CARE 366 before LifeLine 228 (value desc)."
+    },
+    {
+      "id": "PG9",
+      "title": "Single parent, 26, child 4, $2,200 a month: tax credits counted (parent variant)",
+      "base": "N2",
+      "facts": {
+        "route": "likely",
+        "age": 26,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 2,
+        "children_count": 1,
+        "youngest_child_age": 4,
+        "earned_monthly": "2200",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "two_plus",
+        "calfresh_monthly": 415,
+        "magi_monthly": "2200",
+        "earned_annual": "26400",
+        "bill_split": 1,
+        "people_in_home": 2
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 415
+      },
+      "answers": {
+        "tax_dependent": "no",
+        "pge_bill": "in_rent",
+        "break_transit": "none"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 4980,
+        "found_yearly": 10422,
+        "found_display": 10410,
+        "share_display": 10400,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 4980,
+            "display_yearly": 4980,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [
+              "medi_cal.child_too"
+            ],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "zero",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "likely",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.federal_extra",
+              "lifeline.family_plan"
+            ],
+            "applied": false
+          },
+          "care": {
+            "status": "note",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.in_rent"
+            ],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "likely",
+            "value_yearly": 5214,
+            "display_yearly": 5210,
+            "counted": true,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "lifeline"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "CalFresh 415 x 12 = 4,980. Medi-Cal household 2: 2,200 <= 2,489 -> coverage + medi_cal.child_too. Tax credits likely (parent variant: child, age 26 >= 24, not with a parent, tax_dependent no). E = 26,400. Federal, 1 child: min(0.34 x 26,400 = 8,976, 4,427) = 4,427; phase-out 0.1598 x (26,400 - 23,890 = 2,510) = 401.098; 4,427 - 401.098 = 4,025.902 -> 4,025. YCTC: child 4 < 6; 26,400 <= 27,425 -> 1,189. CalEITC with a child: text only. Total 5,214 -> display 5,210. found 4,980 + 228 + 5,214 = 10,422; display 4,980 + 220 + 5,210 = 10,410; share 10,400."
+    },
+    {
+      "id": "PG10",
+      "title": "PG1 on 2027-01-15: the Medi-Cal limit row and the LifeLine row have expired",
+      "base": "G1",
+      "facts": {
+        "route": "likely",
+        "age": 20,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": true,
+        "roommates_count": 2,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "900",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": 306,
+        "magi_monthly": "900",
+        "earned_annual": "10800",
+        "bill_split": 3,
+        "people_in_home": 3
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 306
+      },
+      "answers": {
+        "break_transit": "weekdays_muni",
+        "tax_dependent": "no",
+        "pge_bill": "own_roommate"
+      },
+      "progress": {},
+      "today": "2027-01-15",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 3672,
+        "found_yearly": 4010,
+        "found_display": 4000,
+        "share_display": 4000,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 3672,
+            "display_yearly": 3670,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "check",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "likely",
+            "value_yearly": 168,
+            "display_yearly": 160,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": "2027-04-22",
+            "note_keys": [
+              "clipper.two_cards"
+            ],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "check",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "care": {
+            "status": "likely",
+            "value_yearly": 170,
+            "display_yearly": 170,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.roommate_applies"
+            ],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "maybe",
+            "value_yearly": 204,
+            "display_yearly": 200,
+            "counted": false,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [
+          "care.utility_conflict"
+        ],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "clipper_start",
+            "care",
+            "lifeline"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "medi_cal.limit_138 is valid to 2026-12-31 -> the lte_row condition stops the rules -> Medi-Cal check, no dollars (null). lifeline.state is valid to 2026-12-31 -> the likely line becomes check, no dollars (null), no status-rule notes. Clipper START 168 as PG1; apply-by: 2026-12-19 - 30 = 2026-11-19 < 2027-01-15, next gap 2027-05-22 - 30 = 2027-04-22. CARE 170 (care.rates valid to 2027-05-31). Tax maybe 204. found 3,672 + 168 + 170 = 4,010; display 3,670 + 160 + 170 = 4,000; share 4,000. Plan after_approval: Clipper START (apply-by), CARE 170, LifeLine (no value, counts as 0)."
+    },
+    {
+      "id": "PG11",
+      "title": "Maria (demo persona) facts on 2027-10-01: the programs table is not effective",
+      "base": "N33",
+      "facts": {
+        "route": "coordinator.unresolved",
+        "age": 20,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": true,
+        "roommates_count": 2,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": "900",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": null,
+        "magi_monthly": "900",
+        "earned_annual": "10800",
+        "bill_split": 3,
+        "people_in_home": 3
+      },
+      "calfresh": {
+        "route": "coordinator.unresolved",
+        "monthly": null
+      },
+      "answers": {},
+      "progress": {},
+      "today": "2027-10-01",
+      "expected": {
+        "result": null
+      },
+      "hand_calc": "2027-10-01 is after the table's effective dates (2026-10-01 to 2027-09-30) -> no programs part at all (the route alone would have given list_only)."
+    },
+    {
+      "id": "PG12",
+      "title": "Volunteers an F-1 visa -> other_help.status: no programs part",
+      "base": "G5",
+      "facts": {
+        "route": "other_help.status",
+        "age": 20,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 1,
+        "children_count": 0,
+        "youngest_child_age": null,
+        "earned_monthly": null,
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "none",
+        "calfresh_monthly": null,
+        "magi_monthly": null,
+        "earned_annual": null,
+        "bill_split": 1,
+        "people_in_home": 1
+      },
+      "calfresh": {
+        "route": "other_help.status",
+        "monthly": null
+      },
+      "answers": {},
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "result": null
+      },
+      "hand_calc": "other_help.* -> mode none -> the programs result is null and the card shows no programs part."
+    },
+    {
+      "id": "PG13",
+      "title": "PG9 facts at age 22: a student parent under 24 is never counted for tax credits",
+      "base": null,
+      "facts": {
+        "route": "likely",
+        "age": 22,
+        "level": "undergrad",
+        "half_time": true,
+        "lives_with_parent": false,
+        "roommates": false,
+        "roommates_count": 0,
+        "dorm_on_campus": false,
+        "homeless": false,
+        "household_size": 2,
+        "children_count": 1,
+        "youngest_child_age": 4,
+        "earned_monthly": "2200",
+        "work_study_monthly": "0",
+        "unearned_monthly": "0",
+        "heat_cool": false,
+        "other_utils": "two_plus",
+        "calfresh_monthly": 415,
+        "magi_monthly": "2200",
+        "earned_annual": "26400",
+        "bill_split": 1,
+        "people_in_home": 2
+      },
+      "calfresh": {
+        "route": "likely",
+        "monthly": 415
+      },
+      "answers": {
+        "tax_dependent": "no",
+        "pge_bill": "in_rent",
+        "break_transit": "none"
+      },
+      "progress": {},
+      "today": "2026-10-02",
+      "expected": {
+        "mode": "full",
+        "calfresh_yearly": 4980,
+        "found_yearly": 5208,
+        "found_display": 5200,
+        "share_display": 5200,
+        "claimed_display": 0,
+        "lines": {
+          "calfresh": {
+            "status": "likely",
+            "value_yearly": 4980,
+            "display_yearly": 4980,
+            "counted": true,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "medi_cal": {
+            "status": "coverage",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "today",
+            "apply_by": null,
+            "note_keys": [
+              "medi_cal.child_too"
+            ],
+            "applied": false
+          },
+          "clipper_start": {
+            "status": "zero",
+            "value_yearly": 0,
+            "display_yearly": 0,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [],
+            "applied": false
+          },
+          "lifeline": {
+            "status": "likely",
+            "value_yearly": 228,
+            "display_yearly": 220,
+            "counted": true,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "lifeline.federal_extra",
+              "lifeline.family_plan"
+            ],
+            "applied": false
+          },
+          "care": {
+            "status": "note",
+            "value_yearly": null,
+            "display_yearly": null,
+            "counted": false,
+            "stage": "after_approval",
+            "apply_by": null,
+            "note_keys": [
+              "care.in_rent"
+            ],
+            "applied": false
+          },
+          "tax_credits": {
+            "status": "maybe",
+            "value_yearly": 5214,
+            "display_yearly": 5210,
+            "counted": false,
+            "stage": "tax_time",
+            "apply_by": null,
+            "note_keys": [
+              "tax.id_note",
+              "tax.unfiled_2025"
+            ],
+            "applied": false
+          }
+        },
+        "hidden": [],
+        "open_questions": [],
+        "question_spreads": {},
+        "next_question": null,
+        "console_notes": [],
+        "plan": {
+          "today": [
+            "calfresh",
+            "medi_cal"
+          ],
+          "after_approval": [
+            "lifeline"
+          ],
+          "tax_time": [
+            "tax_credits"
+          ]
+        }
+      },
+      "hand_calc": "Under 24 a full-time student may still be a parent's qualifying child (school counts as a temporary absence), so a student parent under 24 is maybe (parent variant), not counted. Value as PG9: 4,025 + 1,189 = 5,214 -> display 5,210. found 4,980 + 228 = 5,208; display 4,980 + 220 = 5,200; share 5,200. The CalFresh input ($415, likely) is given, not taken from a CalFresh golden case."
+    }
+  ]
+}

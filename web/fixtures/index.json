@@ -1,0 +1,59 @@
+{
+ "about": "Fixture mode (?fixtures=1): web/shared/api.js answers each request from the file mapped here. Keys are 'METHOD /path' with {name} matching one path segment; a literal segment wins over {name}; a key with a query part matches only that exact query. A value is a file name, or {en, es} chosen by the request's lang query, else the page's language. A file holding a JSON array is served one element per request, in order, with one counter per file (the last element repeats). A file {\"__status\": n, \"error\": {...}} answers as that error. The live replay is maria_live_events.json ({delay_ms, event, detail?}). Hand-built for the build's first stage; regenerated from the real engine at integration.",
+ "routes": {
+  "POST /api/console/login": "ok.json",
+  "POST /api/console/logout": "ok.json",
+  "GET /api/meta": "meta.json",
+  "GET /api/cases": "cases.json",
+  "GET /api/cases/c_maria2demo": "case_maria.json",
+  "GET /api/cases/c_sofia2demo": "case_sofia.json",
+  "GET /api/cases/c_jamal2demo": "case_jamal.json",
+  "GET /api/cases/c_gradta2dem": "case_grad_ta.json",
+  "GET /api/cases/c_dorm22demo": "case_dorm.json",
+  "GET /api/cases/c_bound2demo": "case_boundary.json",
+  "GET /api/cases/{id}": "error_not_found.json",
+  "GET /api/cases/c_maria2demo/live": "live_maria.json",
+  "GET /api/cases/{id}/live": "error_not_found.json",
+  "POST /api/cases/c_sofia2demo/yellow/{yid}": "case_sofia_confirmed.json",
+  "POST /api/cases/c_sofia2demo/status": "case_sofia_reviewed.json",
+  "POST /api/cases/c_maria2demo/status": "case_maria_reviewed.json",
+  "POST /api/cases/{id}/status": "error_locked.json",
+  "PUT /api/cases/c_sofia2demo/slots/{slot}": "case_sofia_confirmed.json",
+  "PATCH /api/cases/c_jamal2demo/tracking": "case_jamal.json",
+  "DELETE /api/cases/{id}": "empty.json",
+  "POST /api/demo/seed": "demo_seed.json",
+  "POST /api/demo/reset": "demo_reset.json",
+  "POST /api/demo/inject": "case_maria.json",
+  "GET /api/public/info": "public_info.json",
+  "GET /api/card/{token}": {
+   "en": "card_maria_en.json",
+   "es": "card_maria_es.json"
+  },
+  "GET /api/card/{token}?lang=en": "card_maria_en.json",
+  "GET /api/card/{token}?lang=es": "card_maria_es.json",
+  "GET /api/card/{token}/status": "card_status_maria.json",
+  "DELETE /api/card/{token}": "empty.json",
+  "POST /api/card/{token}/answers": {
+   "en": "unlocked_maria_steps.json",
+   "es": "unlocked_maria_steps_es.json"
+  },
+  "POST /api/card/{token}/progress": {
+   "en": "unlocked_maria_progress.json",
+   "es": "unlocked_maria_progress_es.json"
+  },
+  "POST /api/card/lookup": "card_lookup.json",
+  "POST /api/web/sessions": {
+   "en": "web_session_en.json",
+   "es": "web_session_es.json"
+  },
+  "POST /v1/calls/{call_id}/start": {
+   "en": "talk_maria_en.json",
+   "es": "talk_sofia_es.json"
+  },
+  "POST /v1/calls/{call_id}/turn": {
+   "en": "talk_maria_en.json",
+   "es": "talk_sofia_es.json"
+  },
+  "POST /v1/calls/{call_id}/end": "empty.json"
+ }
+}

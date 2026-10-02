@@ -1,0 +1,220 @@
+{
+  "version": "2026-10-01",
+  "id": "jamal_g4",
+  "title": "Jamal: couch-surfing, no income, likely about $306 and 3-day service likely; interview missed",
+  "about": "Demo case. seed=true: created by POST /api/demo/seed; every case can also be created by POST /api/demo/inject. Build a Case (seeded, live false, persona and code as given, created minutes_ago before now, ended_reason as given), set each slot from `slots` with state clear, source seed, heard / heard_en / turn from the maps below and confirmed for the listed slots; copy the `asked` entries as given when the file has them (AskedQuestion, in order; `turn` = the student turn whose reply asked the question; never a second entry for a key already listed); run the rules, create the card, then apply status (and tracking dates). Every time and date is relative to the seed time (now) in America/Los_Angeles and never falls before not_before, the first morning of the FY2027 table: a computed time earlier than not_before is raised to it, but never later than now (created_at = min(now, max(now - minutes_ago, not_before)); reviewed_at and tracking dates likewise), and the order created_at <= tracking dates <= reviewed_at <= now is kept. `expect` is what the rules must produce for this case.",
+  "golden_case": "G4",
+  "golden_dialogue": "jamal_g4",
+  "persona": "Jamal (demo persona)",
+  "code": "P2X-6TC",
+  "channel": "phone",
+  "lang": "en",
+  "seed": true,
+  "not_before": "2026-10-01T08:00:00-07:00",
+  "minutes_ago": 4380,
+  "call_seconds": 109,
+  "ended_reason": "completed",
+  "status": "follow_up",
+  "tracking": {
+    "applied_days_ago": 3,
+    "interview_days_ago": 1,
+    "interview_local_time": "10:00",
+    "interview_missed": true,
+    "note": "Filed 3 days before the seed day; the county's interview call was missed the day before the seed day. Dates are the seed day in America/Los_Angeles minus these days, raised to the not_before day (2026-10-01) when earlier: applied_on = max(seed day - applied_days_ago, 2026-10-01); the interview is on max(seed day - interview_days_ago, applied_on) at interview_local_time, never later than the seed time. Seeded on Fri 2026-10-02: applied Thu Oct 1, interview Thu Oct 1 at 10:00 (missed); from Sun Oct 4 on the dates are exactly 3 days and 1 day back."
+  },
+  "slots": {
+    "consent": "true",
+    "level": "undergrad",
+    "units": "12",
+    "age": "24",
+    "lives_with_parent": "false",
+    "homeless": "true",
+    "household_food": "separate",
+    "earned_monthly": "0.00",
+    "other_cash_monthly": "0.00",
+    "homeless_shelter_cost_monthly": "0.00",
+    "cash_on_hand": "40.00"
+  },
+  "heard": {
+    "consent": "Yeah, sure",
+    "level": "I'm a senior at SF State",
+    "units": "twelve units",
+    "age": "I'm 24",
+    "lives_with_parent": "I don't live with my parents",
+    "homeless": "I've been sleeping on a friend's couch since August",
+    "household_food": "I buy my own food",
+    "earned_monthly": "I don't have a job right now",
+    "other_cash_monthly": "nobody gives me money",
+    "homeless_shelter_cost_monthly": "No, nothing",
+    "cash_on_hand": "forty bucks"
+  },
+  "heard_en": {},
+  "turns": {
+    "consent": 1,
+    "level": 2,
+    "units": 2,
+    "age": 3,
+    "lives_with_parent": 3,
+    "homeless": 3,
+    "household_food": 3,
+    "earned_monthly": 4,
+    "other_cash_monthly": 4,
+    "homeless_shelter_cost_monthly": 5,
+    "cash_on_hand": 6
+  },
+  "confirmed": [],
+  "asked": [
+    {
+      "turn": 1,
+      "key": "ask.level_units",
+      "slots": [
+        "level",
+        "units"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 2,
+      "key": "ask.age_parent",
+      "slots": [
+        "age",
+        "lives_with_parent"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 3,
+      "key": "ask.income",
+      "slots": [
+        "earned_monthly",
+        "other_cash_monthly"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 4,
+      "key": "ask.homeless_cost",
+      "slots": [
+        "homeless_shelter_cost_monthly"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 5,
+      "key": "expedited.intro_cash",
+      "slots": [
+        "cash_on_hand"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    }
+  ],
+  "program_answers": {
+    "tax_dependent": "no",
+    "break_transit": "two_days"
+  },
+  "program_answers_note": "Card answers seeded with the case (ProgramAnswer source 'seed'; at = created_at + call_seconds, never later than now; the file stores choice ids only, and the seed builds each ProgramAnswer from them), so the seeded case list shows 'Found about $3,980/yr'. They are never asked on the call and never change a CalFresh slot or the estimate. pge_bill is not asked (Jamal is homeless). Maria's and Sofia's demo cases have no seeded answers: the judge taps them on the card.",
+  "native_review": false,
+  "expect": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306,
+    "estimate_is_floor": false,
+    "expedited_possible": "yes",
+    "irt_applies": true,
+    "yellow_open": 0,
+    "programs": {
+      "golden": "PG4 (data/golden/programs_golden.json is the authority; these values must match it)",
+      "today": "2026-10-02",
+      "mode": "full",
+      "lines": {
+        "medi_cal": {
+          "status": "coverage",
+          "value_yearly": 0,
+          "display_yearly": 0,
+          "counted": false
+        },
+        "clipper_start": {
+          "status": "likely",
+          "value_yearly": 98,
+          "display_yearly": 90,
+          "counted": true,
+          "apply_by": "2026-11-19"
+        },
+        "lifeline": {
+          "status": "likely",
+          "value_yearly": 228,
+          "display_yearly": 220,
+          "counted": true
+        }
+      },
+      "hidden": [
+        "care",
+        "tax_credits"
+      ],
+      "calfresh_yearly": 3672,
+      "found_yearly": 3998,
+      "found_display": 3980,
+      "share_display": 3900,
+      "claimed_display": 0,
+      "open_questions": [],
+      "plan": {
+        "today": [
+          "calfresh",
+          "medi_cal"
+        ],
+        "after_approval": [
+          "clipper_start",
+          "lifeline"
+        ],
+        "tax_time": []
+      },
+      "list_text": "Found about $3,980/yr",
+      "hand_calc": "CalFresh 306 x 12 = 3,672. Clipper START, 1-2 days a week = 4 rides: full fare min(4 x 2.85 = 11.40, 86 x 12 / 52 = 19.846) = 11.40; START min(4 x 1.40 = 5.60, 43 x 12 / 52 = 9.923) = 5.60; (11.40 - 5.60) x 17 break weeks = 98.60 -> 98. California LifeLine 19 x 12 = 228 (a ceiling). Found 3,672 + 98 + 228 = 3,998; display 3,670 + 90 + 220 = 3,980; share 3,900. Medi-Cal: coverage (no income, at or under the 138% line); CARE hidden (homeless, no PG&E question); tax credits hidden (no earnings). Apply-by on 2026-10-02: the first break gap (2026-12-19) minus 30 mail days = 2026-11-19."
+    },
+    "tracking": {
+      "deadline_30d": "filed_on + 30 days; filed_on = applied_on when it is a weekday, otherwise the next weekday",
+      "examples": [
+        {
+          "seed_at": "2026-10-02T10:00:00-07:00",
+          "applied_on": "2026-10-01",
+          "interview_at": "2026-10-01T10:00:00-07:00",
+          "filed_on": "2026-10-01",
+          "deadline_30d": "2026-10-31",
+          "days_left_on_seed_day": 29
+        },
+        {
+          "seed_at": "2026-10-07T10:00:00-07:00",
+          "applied_on": "2026-10-04",
+          "interview_at": "2026-10-06T10:00:00-07:00",
+          "filed_on": "2026-10-05",
+          "deadline_30d": "2026-11-04",
+          "days_left_on_seed_day": 28
+        },
+        {
+          "seed_at": "2026-10-08T10:00:00-07:00",
+          "applied_on": "2026-10-05",
+          "interview_at": "2026-10-07T10:00:00-07:00",
+          "filed_on": "2026-10-05",
+          "deadline_30d": "2026-11-04",
+          "days_left_on_seed_day": 27
+        }
+      ],
+      "note": "No seeded date falls before 2026-10-01, so the first month and every deadline use the FY2027 table. The first example is the test clock (Fri 2026-10-02 10:00 PT)."
+    }
+  }
+}

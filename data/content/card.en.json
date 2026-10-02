@@ -1,0 +1,1631 @@
+{
+  "lang": "en",
+  "version": "2026-10-01",
+  "native_review": false,
+  "format": {
+    "summary": "Student card text. Code fills {placeholders} with display values (digits and symbols) and shows a block or item only when its `when` is true. The rules engine decides every number; the card only formats them.",
+    "order": "File order = the order on every card, for every tier and route (docs/SPEC.md, student card blocks): today_action, expedited, why, answer_sheet, documents, interview, after_approval, food_today, contact. The card builder sends, in this order, each block whose `when` is true and that has at least one item or row. Route table (check_content.py checks it): likely -> all nine (expedited only for an outlook of yes or maybe); every coordinator route except coordinator.parent_household -> today_action, why, answer_sheet, documents, interview, food_today, contact; coordinator.parent_household -> why, food_today, contact (that student applies as the parents' household, so the card says to talk to the coordinator first); other_help.* -> why, food_today, contact; info.already_receiving -> why, after_approval, contact; info.interview_waiting -> why, interview, contact. Block conditions use reason codes, so an info route shows the same blocks whatever its tier.",
+    "block": "{id, tone, collapsed, when, title, title_by_tier?, title_by_reason?, intro?, columns?, items[] | rows[], sources[], verify?}. tone is one of default, accent, warning, muted (CardBlock.tone). collapsed is the block's starting state (CardBlock.collapsed): documents, interview and after_approval start collapsed, every other block starts open (docs/SPEC.md, student card blocks). Title: title_by_reason for the case's reason code, else title_by_tier for its tier, else title. items: {when, text}. rows (answer_sheet): {when, screen, question, answer}; screen stays in English in every language.",
+    "when": "AND of the keys below; {} is always true. An OR is written with not: {\"not\": [{\"not\": [A, B]}]} means A or B. A case with no reason code yet (the call ended before a result) shows only the blocks whose `when` does not need one (food_today, contact).",
+    "renamed": "items are the card's paragraphs (each item has its own when). The first-month line is the today_action item that uses {filed_on}, {first_month} and {month_label} (FirstMonth fields). irt_applies may be null when there is no estimate; then neither IRT item shows.",
+    "headline": "headline and subhead: one per tier, plus likely_floor (the estimate is a floor), incomplete (the call ended before a result), and one per info route (keys info.already_receiving and info.interview_waiting), used when the case's reason code is an info route, whatever its tier.",
+    "verify": "verify names an entry of unverified[]: the line avoids exact dates where its source is not confirmed, and the source is re-checked before a real pilot.",
+    "ui": "Strings for the card page's own controls, the same as docs/UI_SPEC.md (card UI strings). ui.calendar = the 3 .ics events (days after the estimated filing day), as in docs/SPEC.md; they are calendar entries the student downloads, and GatorPlate sends nothing."
+  },
+  "when_keys": {
+    "tier": "list of tiers: likely, coordinator, other_help",
+    "reason": "list of reason codes (the frozen list in docs/SPEC.md); true if the case's reason code is in it",
+    "expedited": "list of expedited outlooks: yes, maybe, no",
+    "level": "list of slot level values",
+    "homeless": "true or false (slot homeless)",
+    "irt_applies": "true or false: gross income at the estimate is at or under the 130% line (the rules table's irt_card_rule)",
+    "at_max": "true or false: the estimate equals the maximum amount for the household size",
+    "flag": "list of policy flags (e.g. abawd_possible, ta_ra_income_type); true if any is set",
+    "has": "slot name (or list): the slot has a value, from the student or a default",
+    "answered": "slot name (or list): the student gave this value (not assumed)",
+    "positive": "slot name (or list): value > 0, true, or not 'none'",
+    "zero": "slot name (or list): value is 0, false or 'none'",
+    "slot": "{slot: [canonical values]}: the slot's value is one of them",
+    "not": "list of conditions; true if none of them is true",
+    "lang": "ignored"
+  },
+  "placeholders": {
+    "estimate": {
+      "type": "money",
+      "fill": "Case estimate (monthly), e.g. $306"
+    },
+    "first_month": {
+      "type": "money",
+      "fill": "FirstMonth.amount, e.g. $296"
+    },
+    "filed_on": {
+      "type": "date",
+      "fill": "FirstMonth.filed_on (estimated filing day), e.g. Fri, Oct 2"
+    },
+    "month_label": {
+      "type": "text",
+      "fill": "FirstMonth.month_label, e.g. October / octubre"
+    },
+    "irt": {
+      "type": "money",
+      "fill": "130% line for the household size (rules table irt_130), e.g. $1,729"
+    },
+    "earned_monthly": {
+      "type": "money",
+      "fill": "slot earned_monthly"
+    },
+    "gig_monthly": {
+      "type": "money",
+      "fill": "slot gig_monthly"
+    },
+    "unearned_monthly": {
+      "type": "money",
+      "fill": "slot unearned_monthly"
+    },
+    "other_cash_monthly": {
+      "type": "money",
+      "fill": "slot other_cash_monthly"
+    },
+    "rent_share": {
+      "type": "money",
+      "fill": "slot rent_share"
+    },
+    "rent_paid_by_others_to_landlord": {
+      "type": "money",
+      "fill": "slot rent_paid_by_others_to_landlord"
+    },
+    "homeless_shelter_cost_monthly": {
+      "type": "money",
+      "fill": "slot homeless_shelter_cost_monthly"
+    },
+    "cash_on_hand": {
+      "type": "money",
+      "fill": "slot cash_on_hand"
+    },
+    "case_code": {
+      "type": "code",
+      "fill": "Case.code, e.g. K7Q-2FM"
+    },
+    "reviewed_at": {
+      "type": "date",
+      "fill": "time the coordinator marked the case reviewed, e.g. 5:03 PM"
+    },
+    "coordinator_phone": {
+      "type": "phone",
+      "fill": "contacts.json coordinator.display"
+    },
+    "coordinator_email": {
+      "type": "text",
+      "fill": "contacts.json coordinator.email"
+    },
+    "coordinator_place": {
+      "type": "text",
+      "fill": "contacts.json coordinator.place.<lang>"
+    },
+    "coordinator_hours": {
+      "type": "hours",
+      "fill": "contacts.json coordinator.hours.text.<lang>"
+    },
+    "county_phone": {
+      "type": "phone",
+      "fill": "contacts.json county.display"
+    },
+    "county_hours": {
+      "type": "hours",
+      "fill": "contacts.json county.hours.text.<lang>"
+    },
+    "ebt_phone": {
+      "type": "phone",
+      "fill": "contacts.json ebt_lost.display"
+    },
+    "pantry_url": {
+      "type": "url",
+      "fill": "contacts.json food[0].url"
+    },
+    "meals_url": {
+      "type": "url",
+      "fill": "contacts.json emergency_meals.url"
+    }
+  },
+  "headline": {
+    "likely": "You may get about {estimate} a month for groceries.",
+    "likely_floor": "You may get about {estimate} a month or more for groceries.",
+    "coordinator": "One detail needs a person to check.",
+    "other_help": "Food help is still here for you.",
+    "incomplete": "We didn't finish your check.",
+    "info.already_receiving": "You already get CalFresh.",
+    "info.interview_waiting": "Get ready for your phone interview."
+  },
+  "subhead": {
+    "likely": "This is an estimate. The county decides.",
+    "likely_floor": "This is an estimate. The county decides.",
+    "coordinator": "Your answers are saved for the SF State CalFresh coordinator.",
+    "other_help": "CalFresh rules for your situation are complicated, so we won't guess.",
+    "incomplete": "Start again on the web, or talk to the SF State CalFresh coordinator.",
+    "info.already_receiving": "Keep it going: send your SAR 7 report and renew on time.",
+    "info.interview_waiting": "The county will call you. Answer calls from unknown numbers."
+  },
+  "blocks": [
+    {
+      "id": "today_action",
+      "tone": "accent",
+      "collapsed": false,
+      "when": {
+        "reason": [
+          "likely",
+          "coordinator.shared_household",
+          "coordinator.grad_no_exemption",
+          "coordinator.not_degree",
+          "coordinator.age_outside_student_rule",
+          "coordinator.gig_income",
+          "coordinator.boarder",
+          "coordinator.spouse_student",
+          "coordinator.status_complex",
+          "coordinator.elderly_disabled",
+          "coordinator.unresolved"
+        ]
+      },
+      "title": "Do this today",
+      "sources": [
+        "7-CFR-273.2",
+        "7-CFR-273.10",
+        "BENEFITSCAL-GUIDES",
+        "FILING-TIME"
+      ],
+      "items": [
+        {
+          "when": {},
+          "text": "Apply on BenefitsCal. To send your application today, you only need your name, where you live and your signature. The rest can come later.",
+          "verify": "benefitscal_screens"
+        },
+        {
+          "when": {},
+          "text": "How: fill in “Your Information”, then sign and submit. You can leave the other sections for later.",
+          "verify": "benefitscal_screens"
+        },
+        {
+          "when": {},
+          "text": "Why today? Your first month counts from the day the county gets your application. Our estimate: an application sent on a weekday before 5 PM counts that same day."
+        },
+        {
+          "when": {
+            "reason": [
+              "likely"
+            ],
+            "has": "first_month"
+          },
+          "text": "Our estimate: if you send it now, it counts from {filed_on}, and your first month may be about {first_month} for {month_label}."
+        }
+      ]
+    },
+    {
+      "id": "expedited",
+      "tone": "accent",
+      "collapsed": false,
+      "when": {
+        "reason": [
+          "likely"
+        ],
+        "expedited": [
+          "yes",
+          "maybe"
+        ]
+      },
+      "title": "Help within 3 days",
+      "sources": [
+        "7-CFR-273.2",
+        "MPP-63-301"
+      ],
+      "items": [
+        {
+          "when": {
+            "expedited": [
+              "yes"
+            ]
+          },
+          "text": "You may get CalFresh within 3 days. The county checks this when you apply."
+        },
+        {
+          "when": {
+            "expedited": [
+              "maybe"
+            ]
+          },
+          "text": "You might get CalFresh within 3 days. The county checks this when you apply."
+        },
+        {
+          "when": {},
+          "text": "Answer the emergency questions on BenefitsCal honestly. For this fast help, the county first needs to check who you are, so have your ID ready."
+        }
+      ]
+    },
+    {
+      "id": "why",
+      "tone": "default",
+      "collapsed": false,
+      "when": {
+        "reason": [
+          "likely",
+          "coordinator.parent_household",
+          "coordinator.shared_household",
+          "coordinator.grad_no_exemption",
+          "coordinator.not_degree",
+          "coordinator.age_outside_student_rule",
+          "coordinator.gig_income",
+          "coordinator.boarder",
+          "coordinator.spouse_student",
+          "coordinator.status_complex",
+          "coordinator.elderly_disabled",
+          "coordinator.unresolved",
+          "other_help.status",
+          "other_help.over_gross_limit",
+          "other_help.dorm_meal_plan",
+          "other_help.not_sfsu",
+          "other_help.zero_benefit",
+          "info.already_receiving",
+          "info.interview_waiting"
+        ]
+      },
+      "title": "Why this result",
+      "title_by_tier": {
+        "likely": "Why you may qualify",
+        "coordinator": "Why a person needs to check",
+        "other_help": "Why we won't guess"
+      },
+      "title_by_reason": {
+        "info.already_receiving": "What to keep up with",
+        "info.interview_waiting": "What comes next"
+      },
+      "sources": [
+        "ACL-26-25",
+        "ACL-24-31",
+        "ACL-26-16",
+        "ACL-25-93",
+        "ACL-25-92",
+        "ACIN-I-40-26"
+      ],
+      "items": [
+        {
+          "when": {
+            "level": [
+              "undergrad"
+            ],
+            "slot": {
+              "half_time": [
+                "true"
+              ]
+            }
+          },
+          "text": "Since June 2026, SF State bachelor's students taking 8 or more units meet CalFresh's student rule. Just say you're in a bachelor's program."
+        },
+        {
+          "when": {
+            "level": [
+              "undergrad"
+            ],
+            "slot": {
+              "half_time": [
+                "false"
+              ]
+            }
+          },
+          "text": "With fewer than 8 units, CalFresh's student rule doesn't apply to you."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "half_time": [
+                "false"
+              ]
+            }
+          },
+          "text": "With fewer units than half-time, CalFresh's student rule doesn't apply to you."
+        },
+        {
+          "when": {
+            "flag": [
+              "abawd_possible"
+            ]
+          },
+          "text": "A work rule may apply: CalFresh may stop after 3 months in 3 years unless you work, volunteer or train at least 80 hours a month. The coordinator can check this with you."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "campus_job"
+              ]
+            }
+          },
+          "text": "As a grad student with a campus job, you meet CalFresh's student rule."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "ta_ra"
+              ]
+            }
+          },
+          "text": "As a grad student with a TA or RA job, you meet CalFresh's student rule."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "work_study"
+              ]
+            }
+          },
+          "text": "As a grad student with work-study, you meet CalFresh's student rule."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "work20h"
+              ]
+            }
+          },
+          "text": "As a grad student who works 20 or more hours a week, you meet CalFresh's student rule."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "child_under_6"
+              ]
+            }
+          },
+          "text": "As a grad student caring for a child under 6, you meet CalFresh's student rule."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "has": "grad_exemption",
+            "not": [
+              {
+                "slot": {
+                  "grad_exemption": [
+                    "campus_job",
+                    "ta_ra",
+                    "work_study",
+                    "work20h",
+                    "child_under_6",
+                    "none",
+                    "under_half_time"
+                  ]
+                }
+              }
+            ]
+          },
+          "text": "As a grad student, you told us about a situation that meets CalFresh's student rule. The county will check it."
+        },
+        {
+          "when": {
+            "flag": [
+              "ta_ra_income_type"
+            ]
+          },
+          "text": "TA or RA pay counts as income when it is a wage. A fellowship or stipend may not count. The coordinator can check."
+        },
+        {
+          "when": {
+            "reason": [
+              "likely",
+              "coordinator.shared_household",
+              "coordinator.grad_no_exemption",
+              "coordinator.not_degree",
+              "coordinator.age_outside_student_rule",
+              "coordinator.gig_income",
+              "coordinator.boarder",
+              "coordinator.spouse_student",
+              "coordinator.status_complex",
+              "coordinator.elderly_disabled",
+              "coordinator.unresolved"
+            ]
+          },
+          "text": "Financial aid, scholarships and student loans don't count as income."
+        },
+        {
+          "when": {
+            "positive": "other_cash_monthly"
+          },
+          "text": "Money from family or friends counts as income, even if it's for school."
+        },
+        {
+          "when": {
+            "positive": "work_study_monthly"
+          },
+          "text": "Work-study pay doesn't count as income."
+        },
+        {
+          "when": {
+            "positive": "rent_paid_by_others_to_landlord"
+          },
+          "text": "Rent that someone else pays to your landlord isn't income for you, but you can't count that part as your own cost."
+        },
+        {
+          "when": {
+            "homeless": true,
+            "positive": "homeless_shelter_cost_monthly"
+          },
+          "text": "You pay something for a place to stay, so the county can count a housing cost for you."
+        },
+        {
+          "when": {
+            "reason": [
+              "likely"
+            ],
+            "at_max": true,
+            "positive": "rent_share"
+          },
+          "text": "Your rent is high compared to your income, so your estimate is the highest amount for your household size."
+        },
+        {
+          "when": {
+            "reason": [
+              "likely"
+            ],
+            "at_max": true,
+            "not": [
+              {
+                "positive": "earned_monthly"
+              },
+              {
+                "positive": "other_cash_monthly"
+              }
+            ]
+          },
+          "text": "With little or no income, your estimate is the highest amount for your household size."
+        },
+        {
+          "when": {
+            "reason": [
+              "info.already_receiving"
+            ]
+          },
+          "text": "You already get CalFresh, so your key dates are your SAR 7 report and your renewal (see “After approval”)."
+        },
+        {
+          "when": {
+            "reason": [
+              "info.interview_waiting"
+            ]
+          },
+          "text": "You already applied, so get ready for the county's phone interview (see “Your phone interview”)."
+        },
+        {
+          "when": {
+            "slot": {
+              "previously_denied": [
+                "true"
+              ]
+            }
+          },
+          "text": "If you applied before without getting CalFresh, the rules changed this year, so it's worth applying again."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.parent_household"
+            ]
+          },
+          "text": "You're under 22 and live with a parent, so CalFresh counts you and your family as one household. Talk to the SF State CalFresh coordinator first: they can help you apply together with your family."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.shared_household"
+            ]
+          },
+          "text": "You buy and cook food with others, so CalFresh may count them with you. A person needs to check who is in your household."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.grad_no_exemption"
+            ]
+          },
+          "text": "Grad students need to meet extra CalFresh student rules. A person needs to check which one fits you."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.not_degree"
+            ]
+          },
+          "text": "For programs that aren't a degree, like a credential or a certificate, a person needs to check CalFresh's student rules."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.age_outside_student_rule"
+            ]
+          },
+          "text": "At your age, different CalFresh student rules apply. A person needs to check them with you."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.gig_income"
+            ]
+          },
+          "text": "Gig and self-employed pay is counted in a special way. A person needs to check it with you."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.boarder"
+            ]
+          },
+          "text": "When you pay someone for both a room and meals, special CalFresh rules apply. A person needs to check them."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.spouse_student"
+            ]
+          },
+          "text": "Your spouse is also a student, so a person needs to check how CalFresh counts your household."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.status_complex"
+            ]
+          },
+          "text": "CalFresh rules for your situation changed this year, so a person needs to check. We didn't save what you told us about it."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.elderly_disabled"
+            ]
+          },
+          "text": "With a disability benefit, or at age 60 or older, different CalFresh rules apply. A person needs to check them."
+        },
+        {
+          "when": {
+            "reason": [
+              "coordinator.unresolved"
+            ]
+          },
+          "text": "One answer could change your result, so a person needs to check it before giving a number."
+        },
+        {
+          "when": {
+            "reason": [
+              "other_help.status"
+            ]
+          },
+          "text": "CalFresh rules for your situation are complicated, so we won't guess. We didn't save what you told us about your status."
+        },
+        {
+          "when": {
+            "reason": [
+              "other_help.over_gross_limit"
+            ]
+          },
+          "text": "Your income may be over the CalFresh limit for your household. The county decides."
+        },
+        {
+          "when": {
+            "reason": [
+              "other_help.dorm_meal_plan"
+            ]
+          },
+          "text": "With a campus meal plan of more than 10 meals a week, CalFresh works differently. If your meal plan changes, check again."
+        },
+        {
+          "when": {
+            "reason": [
+              "other_help.not_sfsu"
+            ]
+          },
+          "text": "GatorPlate is built for SF State students. Your county's CalFresh office can help you."
+        },
+        {
+          "when": {
+            "reason": [
+              "other_help.zero_benefit"
+            ]
+          },
+          "text": "For a household your size, our estimate may come out very low or at zero. The county decides."
+        }
+      ]
+    },
+    {
+      "id": "answer_sheet",
+      "tone": "default",
+      "collapsed": false,
+      "when": {
+        "reason": [
+          "likely",
+          "coordinator.shared_household",
+          "coordinator.grad_no_exemption",
+          "coordinator.not_degree",
+          "coordinator.age_outside_student_rule",
+          "coordinator.gig_income",
+          "coordinator.boarder",
+          "coordinator.spouse_student",
+          "coordinator.status_complex",
+          "coordinator.elderly_disabled",
+          "coordinator.unresolved"
+        ]
+      },
+      "title": "Your answers for BenefitsCal",
+      "intro": "BenefitsCal screen names are in English. Here is what to answer on each one, based on what you told us.",
+      "columns": {
+        "screen": "Screen",
+        "question": "Question",
+        "answer": "Your answer"
+      },
+      "verify": "benefitscal_screens",
+      "sources": [
+        "BENEFITSCAL-GUIDES",
+        "ACL-26-25",
+        "ACL-26-16",
+        "ACL-24-31"
+      ],
+      "rows": [
+        {
+          "when": {},
+          "screen": "Your Information",
+          "question": "Are you a college student?",
+          "answer": "Yes. Type your Social Security number and citizenship information yourself. GatorPlate never collects them."
+        },
+        {
+          "when": {
+            "slot": {
+              "household_food": [
+                "alone"
+              ]
+            },
+            "not": [
+              {
+                "positive": "spouse"
+              },
+              {
+                "positive": "children_count"
+              }
+            ]
+          },
+          "screen": "People",
+          "question": "Who do you buy and cook food with?",
+          "answer": "Just me."
+        },
+        {
+          "when": {
+            "slot": {
+              "household_food": [
+                "separate"
+              ]
+            },
+            "not": [
+              {
+                "positive": "spouse"
+              },
+              {
+                "positive": "children_count"
+              }
+            ]
+          },
+          "screen": "People",
+          "question": "Who do you buy and cook food with?",
+          "answer": "Just me. The people I live with buy and cook food separately."
+        },
+        {
+          "when": {
+            "positive": "spouse"
+          },
+          "screen": "People",
+          "question": "Who do you buy and cook food with?",
+          "answer": "Me, my spouse, and any of my children who live with me."
+        },
+        {
+          "when": {
+            "positive": "children_count",
+            "not": [
+              {
+                "positive": "spouse"
+              }
+            ]
+          },
+          "screen": "People",
+          "question": "Who do you buy and cook food with?",
+          "answer": "Me and my children who live with me."
+        },
+        {
+          "when": {
+            "slot": {
+              "household_food": [
+                "shared"
+              ]
+            }
+          },
+          "screen": "People",
+          "question": "Who do you buy and cook food with?",
+          "answer": "List everyone you buy and cook food with. The coordinator can help you check who to include."
+        },
+        {
+          "when": {
+            "slot": {
+              "half_time": [
+                "true"
+              ]
+            }
+          },
+          "screen": "Household Details",
+          "question": "In college? Which school? At least half-time?",
+          "answer": "Yes · San Francisco State University · Yes"
+        },
+        {
+          "when": {
+            "slot": {
+              "half_time": [
+                "false"
+              ]
+            }
+          },
+          "screen": "Household Details",
+          "question": "In college? Which school? At least half-time?",
+          "answer": "Yes · San Francisco State University · No"
+        },
+        {
+          "when": {
+            "level": [
+              "undergrad"
+            ],
+            "slot": {
+              "half_time": [
+                "true"
+              ]
+            }
+          },
+          "screen": "Household Details — student situations",
+          "question": "Which one fits you?",
+          "answer": "I'm in a bachelor's program. If it's not on the list, say in your interview: “I'm in a bachelor's program at SF State.”"
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "campus_job"
+              ]
+            }
+          },
+          "screen": "Household Details — student situations",
+          "question": "Which one fits you?",
+          "answer": "I have a job on campus."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "ta_ra"
+              ]
+            }
+          },
+          "screen": "Household Details — student situations",
+          "question": "Which one fits you?",
+          "answer": "I have a TA or RA job."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "work_study"
+              ]
+            }
+          },
+          "screen": "Household Details — student situations",
+          "question": "Which one fits you?",
+          "answer": "I have work-study."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "work20h"
+              ]
+            }
+          },
+          "screen": "Household Details — student situations",
+          "question": "Which one fits you?",
+          "answer": "I work 20 or more hours a week."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "slot": {
+              "grad_exemption": [
+                "child_under_6"
+              ]
+            }
+          },
+          "screen": "Household Details — student situations",
+          "question": "Which one fits you?",
+          "answer": "I care for my child under 6."
+        },
+        {
+          "when": {
+            "level": [
+              "grad"
+            ],
+            "has": "grad_exemption",
+            "not": [
+              {
+                "slot": {
+                  "grad_exemption": [
+                    "campus_job",
+                    "ta_ra",
+                    "work_study",
+                    "work20h",
+                    "child_under_6",
+                    "none",
+                    "under_half_time"
+                  ]
+                }
+              }
+            ]
+          },
+          "screen": "Household Details — student situations",
+          "question": "Which one fits you?",
+          "answer": "Pick the one that fits you. The coordinator can help you choose."
+        },
+        {
+          "when": {
+            "positive": "earned_monthly"
+          },
+          "screen": "Job and Income",
+          "question": "Jobs and pay",
+          "answer": "My job pays about {earned_monthly} a month before taxes."
+        },
+        {
+          "when": {
+            "zero": "earned_monthly",
+            "not": [
+              {
+                "positive": "gig_monthly"
+              }
+            ]
+          },
+          "screen": "Job and Income",
+          "question": "Jobs and pay",
+          "answer": "I don't have a job right now."
+        },
+        {
+          "when": {
+            "positive": "gig_monthly"
+          },
+          "screen": "Job and Income",
+          "question": "Gig or self-employed work",
+          "answer": "About {gig_monthly} a month. Keep records of what you earn and spend."
+        },
+        {
+          "when": {
+            "positive": "work_study_monthly"
+          },
+          "screen": "Job and Income",
+          "question": "Work-study",
+          "answer": "List it if asked. It doesn't count as income."
+        },
+        {
+          "when": {},
+          "screen": "Job and Income",
+          "question": "Financial aid",
+          "answer": "List it if asked. It doesn't count as income."
+        },
+        {
+          "when": {
+            "positive": "other_cash_monthly"
+          },
+          "screen": "Job and Income",
+          "question": "Money from others",
+          "answer": "Family or friends give me about {other_cash_monthly} a month."
+        },
+        {
+          "when": {
+            "positive": "unearned_monthly"
+          },
+          "screen": "Job and Income",
+          "question": "Other money, like unemployment",
+          "answer": "About {unearned_monthly} a month."
+        },
+        {
+          "when": {
+            "positive": "rent_share"
+          },
+          "screen": "Expenses",
+          "question": "Rent",
+          "answer": "My share of the rent: {rent_share} a month."
+        },
+        {
+          "when": {
+            "zero": "rent_share",
+            "not": [
+              {
+                "homeless": true
+              }
+            ]
+          },
+          "screen": "Expenses",
+          "question": "Rent",
+          "answer": "I don't pay rent."
+        },
+        {
+          "when": {
+            "positive": "rent_paid_by_others_to_landlord"
+          },
+          "screen": "Expenses",
+          "question": "Rent paid by someone else",
+          "answer": "Someone else pays {rent_paid_by_others_to_landlord} a month of my rent straight to the landlord."
+        },
+        {
+          "when": {
+            "homeless": true,
+            "positive": "homeless_shelter_cost_monthly"
+          },
+          "screen": "Expenses",
+          "question": "Housing",
+          "answer": "I don't have a fixed home. I pay about {homeless_shelter_cost_monthly} a month to stay where I sleep."
+        },
+        {
+          "when": {
+            "homeless": true,
+            "not": [
+              {
+                "positive": "homeless_shelter_cost_monthly"
+              }
+            ]
+          },
+          "screen": "Expenses",
+          "question": "Housing",
+          "answer": "I don't have a fixed home, and I don't pay to stay where I sleep."
+        },
+        {
+          "when": {
+            "answered": "heat_cool",
+            "slot": {
+              "heat_cool": [
+                "true"
+              ]
+            }
+          },
+          "screen": "Expenses",
+          "question": "Heating or cooling bill apart from rent",
+          "answer": "Yes."
+        },
+        {
+          "when": {
+            "answered": "heat_cool",
+            "slot": {
+              "heat_cool": [
+                "false"
+              ]
+            }
+          },
+          "screen": "Expenses",
+          "question": "Heating or cooling bill apart from rent",
+          "answer": "No."
+        },
+        {
+          "when": {
+            "not": [
+              {
+                "answered": "heat_cool"
+              },
+              {
+                "homeless": true
+              }
+            ]
+          },
+          "screen": "Expenses",
+          "question": "Heating or cooling bill apart from rent",
+          "answer": "Answer yes if you pay one."
+        },
+        {
+          "when": {
+            "answered": "other_utils",
+            "slot": {
+              "other_utils": [
+                "two_plus"
+              ]
+            }
+          },
+          "screen": "Expenses",
+          "question": "Other bills (water, trash, electric, phone)",
+          "answer": "I pay two or more of these."
+        },
+        {
+          "when": {
+            "answered": "other_utils",
+            "slot": {
+              "other_utils": [
+                "phone_only"
+              ]
+            }
+          },
+          "screen": "Expenses",
+          "question": "Other bills (water, trash, electric, phone)",
+          "answer": "Only a phone bill."
+        },
+        {
+          "when": {
+            "answered": "other_utils",
+            "slot": {
+              "other_utils": [
+                "none"
+              ]
+            }
+          },
+          "screen": "Expenses",
+          "question": "Other bills (water, trash, electric, phone)",
+          "answer": "None."
+        },
+        {
+          "when": {
+            "not": [
+              {
+                "answered": "other_utils"
+              },
+              {
+                "homeless": true
+              },
+              {
+                "slot": {
+                  "heat_cool": [
+                    "true"
+                  ]
+                }
+              }
+            ]
+          },
+          "screen": "Expenses",
+          "question": "Other bills (water, trash, electric, phone)",
+          "answer": "List the ones you pay yourself. Internet doesn't count."
+        },
+        {
+          "when": {
+            "has": "cash_on_hand"
+          },
+          "screen": "Assets",
+          "question": "Money in cash and in the bank",
+          "answer": "About {cash_on_hand}."
+        },
+        {
+          "when": {
+            "not": [
+              {
+                "has": "cash_on_hand"
+              }
+            ]
+          },
+          "screen": "Assets",
+          "question": "Money in cash and in the bank",
+          "answer": "Write what you have today."
+        },
+        {
+          "when": {},
+          "screen": "Review and Submit",
+          "question": "Last steps",
+          "answer": "Answer the 3-day (emergency) questions honestly. Pick the county where you live. Save your application number."
+        }
+      ]
+    },
+    {
+      "id": "documents",
+      "tone": "default",
+      "collapsed": true,
+      "when": {
+        "reason": [
+          "likely",
+          "coordinator.shared_household",
+          "coordinator.grad_no_exemption",
+          "coordinator.not_degree",
+          "coordinator.age_outside_student_rule",
+          "coordinator.gig_income",
+          "coordinator.boarder",
+          "coordinator.spouse_student",
+          "coordinator.status_complex",
+          "coordinator.elderly_disabled",
+          "coordinator.unresolved"
+        ]
+      },
+      "title": "What to have ready",
+      "sources": [
+        "7-CFR-273.2",
+        "SFSU-CLINIC",
+        "ACL-26-25"
+      ],
+      "items": [
+        {
+          "when": {},
+          "text": "A photo ID. Your student ID works."
+        },
+        {
+          "when": {
+            "homeless": false
+          },
+          "text": "Proof of your address, like a lease or a bill."
+        },
+        {
+          "when": {
+            "homeless": true
+          },
+          "text": "No proof of address is needed if you don't have a fixed home."
+        },
+        {
+          "when": {
+            "positive": "earned_monthly"
+          },
+          "text": "Pay stubs from the last 30 days, or a letter from your boss."
+        },
+        {
+          "when": {
+            "positive": "gig_monthly"
+          },
+          "text": "Records of what you earned from gig or self-employed work."
+        },
+        {
+          "when": {},
+          "text": "Usually not needed — keep them handy in case the county asks: your class schedule and your financial aid papers."
+        },
+        {
+          "when": {},
+          "text": "You don't need papers to apply. When the county asks, upload them in BenefitsCal. A clear phone photo works. Save the upload receipt."
+        },
+        {
+          "when": {},
+          "text": "Not sure how to send them? Call the county: {county_phone}."
+        }
+      ],
+      "verify": "documents_list"
+    },
+    {
+      "id": "interview",
+      "tone": "default",
+      "collapsed": true,
+      "when": {
+        "reason": [
+          "likely",
+          "coordinator.shared_household",
+          "coordinator.grad_no_exemption",
+          "coordinator.not_degree",
+          "coordinator.age_outside_student_rule",
+          "coordinator.gig_income",
+          "coordinator.boarder",
+          "coordinator.spouse_student",
+          "coordinator.status_complex",
+          "coordinator.elderly_disabled",
+          "coordinator.unresolved",
+          "info.interview_waiting"
+        ]
+      },
+      "title": "Your phone interview",
+      "sources": [
+        "SFSU-CLINIC",
+        "7-CFR-273.2",
+        "CF-386"
+      ],
+      "items": [
+        {
+          "when": {},
+          "text": "After you apply, the county sets up your interview. You can choose phone or in person. Plan for about an hour. A call may show up as “Unknown” or “Spam Likely.” Answer it.",
+          "verify": "interview_rights"
+        },
+        {
+          "when": {},
+          "text": "No call yet? Call the county at {county_phone}, or talk to the SF State CalFresh coordinator."
+        },
+        {
+          "when": {},
+          "text": "Got a letter or a BenefitsCal message asking you to call? Call {county_phone} ({county_hours}) before the deadline."
+        },
+        {
+          "when": {},
+          "text": "They will ask about: who you live and eat with, your job and other money, your rent and bills, your classes and financial aid, and anything that changed."
+        },
+        {
+          "when": {
+            "positive": "earned_monthly"
+          },
+          "text": "From today's answers: work pays about {earned_monthly} a month."
+        },
+        {
+          "when": {
+            "positive": "other_cash_monthly"
+          },
+          "text": "From today's answers: others give you about {other_cash_monthly} a month."
+        },
+        {
+          "when": {
+            "positive": "rent_share"
+          },
+          "text": "From today's answers: your rent share is {rent_share} a month."
+        },
+        {
+          "when": {},
+          "text": "Your rights: a free interpreter, an in-person interview if you ask, bringing anyone you want, a decision within 30 days, and at least 10 days to send papers.",
+          "verify": "interview_rights"
+        },
+        {
+          "when": {},
+          "text": "Missed the call? You'll get a letter called “Notice of Missed Interview” (CF 386). Call {county_phone} right away to set a new time. If you wait too long, you may have to apply again.",
+          "verify": "interview_rights"
+        },
+        {
+          "when": {},
+          "text": "Asked for papers after the interview? Send them by the date on the request. You get at least 10 days.",
+          "verify": "interview_rights"
+        },
+        {
+          "when": {},
+          "text": "Live outside San Francisco? Your own county handles your case. The phone numbers here are for San Francisco."
+        }
+      ]
+    },
+    {
+      "id": "after_approval",
+      "tone": "default",
+      "collapsed": true,
+      "when": {
+        "reason": [
+          "likely",
+          "info.already_receiving"
+        ]
+      },
+      "title": "After approval",
+      "sources": [
+        "SFSU-CLINIC",
+        "ACL-24-31",
+        "ACL-15-42",
+        "ACIN-I-40-26",
+        "CDSS-SHD-280"
+      ],
+      "items": [
+        {
+          "when": {},
+          "text": "Your EBT card comes in the mail. Activate it before you use it."
+        },
+        {
+          "when": {},
+          "text": "Lost card? Call {ebt_phone}."
+        },
+        {
+          "when": {},
+          "text": "About 6 months in, the county sends a short report form called SAR 7. Fill it out and send it back by the date on the form."
+        },
+        {
+          "when": {},
+          "text": "About 12 months in, you renew with a form and an interview."
+        },
+        {
+          "when": {
+            "irt_applies": true
+          },
+          "text": "If your household's total income goes over {irt} a month, tell the county within 10 days.",
+          "rule": "IRT"
+        },
+        {
+          "when": {
+            "irt_applies": false
+          },
+          "text": "You don't need to report income changes between reports. Report all your income on your SAR 7.",
+          "rule": "IRT"
+        },
+        {
+          "when": {},
+          "text": "If you move, tell the county your new address so you get your letters."
+        }
+      ]
+    },
+    {
+      "id": "food_today",
+      "tone": "muted",
+      "collapsed": false,
+      "when": {
+        "not": [
+          {
+            "reason": [
+              "info.already_receiving",
+              "info.interview_waiting"
+            ]
+          }
+        ]
+      },
+      "title": "Food today",
+      "sources": [
+        "SFSU-PANTRY",
+        "SFSU-MEALS"
+      ],
+      "items": [
+        {
+          "when": {},
+          "text": "Gator Groceries and the AS Food Pantry give free food to all SF State students, every week."
+        },
+        {
+          "when": {},
+          "text": "Where: Cesar Chavez Student Center, bottom floor (Rec and Dining Level). Hours change. See {pantry_url}."
+        },
+        {
+          "when": {},
+          "text": "Need meals now? SF State Basic Needs has emergency meal cards. See {meals_url}."
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "tone": "default",
+      "collapsed": false,
+      "when": {},
+      "title": "Talk to a person",
+      "sources": [
+        "SFSU-BASIC-NEEDS",
+        "SFSU-CLINIC"
+      ],
+      "items": [
+        {
+          "when": {},
+          "text": "SF State CalFresh coordinator (CalFresh Help Clinic, Basic Needs), {coordinator_place}."
+        },
+        {
+          "when": {},
+          "text": "Email {coordinator_email} to book a time, or call {coordinator_phone}. Hours: {coordinator_hours}."
+        },
+        {
+          "when": {
+            "has": "case_code"
+          },
+          "text": "Your case code: {case_code}. Share it so they can find your answers."
+        },
+        {
+          "when": {},
+          "text": "San Francisco CalFresh (county): {county_phone}, {county_hours}."
+        },
+        {
+          "when": {},
+          "text": "In crisis? Call 988 anytime. In an emergency, call 911."
+        }
+      ]
+    }
+  ],
+  "footer": [
+    "GatorPlate never stores audio. We keep your answers, not the conversation.",
+    "We don't collect Social Security numbers, and we never ask about immigration status.",
+    "Student-built prototype — not an official SF State, county, or CalFresh service.",
+    "You apply yourself on BenefitsCal. The county decides.",
+    "Rules: CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027). Sources are listed below."
+  ],
+  "ui": {
+    "lang_toggle": [
+      {
+        "lang": "en",
+        "label": "English"
+      },
+      {
+        "lang": "es",
+        "label": "Español"
+      }
+    ],
+    "estimate_label": "Estimate",
+    "tier_chip": {
+      "likely": "Good chance",
+      "coordinator": "A person will check",
+      "other_help": "Other help"
+    },
+    "status_reviewed": "Checked by a coordinator · {reviewed_at}",
+    "open_benefitscal": "Open BenefitsCal",
+    "add_calendar": "Add 3 dates to my calendar",
+    "call_coordinator": "Call the clinic",
+    "email_coordinator": "Email the clinic",
+    "call_county": "Call the county",
+    "print": "Print or save PDF",
+    "delete": "Delete my info",
+    "delete_confirm_title": "Delete your information?",
+    "delete_confirm_body": "This deletes your answers and this card for good. The coordinator won't see them anymore.",
+    "delete_confirm_yes": "Delete",
+    "delete_confirm_no": "Keep it",
+    "deleted": "Your information was deleted.",
+    "bad_link": "This card link doesn't work. It may have expired or been deleted.",
+    "talk_link": "Talk to GatorPlate",
+    "case_code_label": "Case code",
+    "demo_badge": "Demo — sample data, deleted at the end of the day",
+    "calendar": [
+      {
+        "day": 3,
+        "title": "CalFresh: check BenefitsCal and answer calls from unknown numbers"
+      },
+      {
+        "day": 10,
+        "title": "CalFresh: no interview call yet? Call {county_phone}"
+      },
+      {
+        "day": 28,
+        "title": "CalFresh: last days to finish your interview. No call yet? Call {county_phone}"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "ACIN-I-40-26",
+      "title": "CDSS ACIN I-40-26, FY2027 CalFresh amounts (Attachment I)",
+      "date": "2026-09-10",
+      "checked": "2026-10-01",
+      "used_for": "maximum amounts, the 130% income line (IRT) by household size"
+    },
+    {
+      "id": "ACL-26-25",
+      "title": "CDSS ACL 26-25, student eligibility (CSU bachelor's programs, half-time or more)",
+      "date": "2026-04-13",
+      "checked": "2026-10-01",
+      "used_for": "student rule since June 2026"
+    },
+    {
+      "id": "ACL-26-16",
+      "title": "CDSS ACL 26-16, AB 42 (financial aid is not income)",
+      "date": "2026-03-19",
+      "checked": "2026-10-01",
+      "used_for": "financial aid not counted; cash from family or friends counted"
+    },
+    {
+      "id": "ACL-24-31",
+      "title": "CDSS ACL 24-31, CalFresh Student Eligibility Handbook 2.0",
+      "date": "2024-05-03",
+      "checked": "2026-10-01",
+      "used_for": "half-time, work-study not counted, rent paid by others, 12-month certification with a SAR 7 report"
+    },
+    {
+      "id": "ACL-15-42",
+      "title": "CDSS ACL 15-42, income reporting threshold (IRT) for semi-annual reporting",
+      "date": "2015-04-15",
+      "checked": "2026-10-01",
+      "used_for": "report within 10 days only when certified at or under 130%; otherwise report all income on the SAR 7"
+    },
+    {
+      "id": "CDSS-SHD-280",
+      "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 280 Budgeting (MPP 63-503, 63-509)",
+      "date": "2016-07-09",
+      "checked": "2026-10-01",
+      "used_for": "SAR 7 timing: the county sends the form at the end of the data month, no later than the first day of the submit month (about 6 months in)"
+    },
+    {
+      "id": "ACL-25-93",
+      "title": "CDSS ACL 25-93, ABAWD time limit (3 months in 36; 80 hours a month)",
+      "date": "2025-12-31",
+      "checked": "2026-10-01",
+      "used_for": "work rule note for students under half-time"
+    },
+    {
+      "id": "ACL-25-92",
+      "title": "CDSS ACL 25-92, noncitizen eligibility changes",
+      "date": "2025-12-31",
+      "checked": "2026-10-01",
+      "used_for": "why some situations go to a person"
+    },
+    {
+      "id": "7-CFR-273.2",
+      "title": "7 CFR 273.2 (filing with name, address and signature; interview; 30-day decision; at least 10 days for papers; expedited service)",
+      "date": "current",
+      "checked": "not re-read on 2026-10-01",
+      "used_for": "today action, interview rights, documents"
+    },
+    {
+      "id": "7-CFR-273.10",
+      "title": "7 CFR 273.10(a) (first month counted from the application date)",
+      "date": "current",
+      "checked": "2026-10-01 (via rules verification)",
+      "used_for": "why apply today"
+    },
+    {
+      "id": "MPP-63-301",
+      "title": "CDSS MPP 63-301.5 (expedited service within 3 days), as summarized by a legal-aid CalFresh guide",
+      "date": "current",
+      "checked": "2026-10-01 (secondary source)",
+      "used_for": "help within 3 days"
+    },
+    {
+      "id": "CF-386",
+      "title": "CDSS form CF 386, Notice of Missed Interview",
+      "date": "current",
+      "checked": "not re-read on 2026-10-01",
+      "used_for": "missed interview steps"
+    },
+    {
+      "id": "FILING-TIME",
+      "title": "County practice: applications after business hours count from the next business day (LA County DPSS CalFresh policy page)",
+      "date": "current",
+      "checked": "2026-10-01 (secondary source)",
+      "used_for": "estimated filing day (always labeled an estimate)"
+    },
+    {
+      "id": "BENEFITSCAL-GUIDES",
+      "title": "BenefitsCal live application pages (2021-2022 how-to guides for the rest)",
+      "date": "2026-10-01",
+      "checked": "2026-10-01 on the live site (application overview, tips, section list); the button that skips to submit was not opened",
+      "used_for": "answer sheet screen names, the minimum to submit, documents not needed to apply, interview by phone or in person",
+      "url": "https://benefitscal.com/StudentCenter/Home?lang=en"
+    },
+    {
+      "id": "SFSU-CLINIC",
+      "title": "SF State Basic Needs, CalFresh Help Clinic page",
+      "date": "page as saved 2026-10-01",
+      "checked": "2026-10-01",
+      "used_for": "the interview call and what to do when no call comes, papers after the interview, EBT card in the mail and activation, appointments by email",
+      "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic"
+    },
+    {
+      "id": "SFSU-BASIC-NEEDS",
+      "title": "SF State Basic Needs, About page (contact and office hours)",
+      "date": "page as saved 2026-10-01",
+      "checked": "2026-10-01",
+      "used_for": "coordinator phone, room, hours",
+      "url": "https://basicneeds.sfsu.edu/basic-needs"
+    },
+    {
+      "id": "SFSU-PANTRY",
+      "title": "SF State Basic Needs, AS Food Pantry & Gator Groceries page",
+      "date": "page as saved 2026-10-01",
+      "checked": "2026-10-01",
+      "used_for": "free weekly food, location, hours on the AS site",
+      "url": "https://basicneeds.sfsu.edu/associated-students-gator-groceries"
+    },
+    {
+      "id": "SFSU-MEALS",
+      "title": "SF State Basic Needs, Emergency Meals page",
+      "date": "page as saved 2026-10-01",
+      "checked": "2026-10-01",
+      "used_for": "emergency meal cards",
+      "url": "https://basicneeds.sfsu.edu/emergency-meals"
+    }
+  ],
+  "unverified": [
+    {
+      "id": "benefitscal_screens",
+      "what": "Checked on the live BenefitsCal site on 2026-10-01: the application sections and their order (Your Information, People, Household Details, Income, Expenses, Assets, Other Situations, Document Upload, Review & Submit) and the minimum to submit (name, where you live and a signature; date of birth only for cash aid; 'after that, you can submit your application at any time'). Not checked, because it needs typed answers: the exact button that skips to submit and the student-situation choices inside Household Details. The card does not name that button."
+    },
+    {
+      "id": "interview_rights",
+      "what": "The interview call timing, the interview rights line, the missed-interview letter name (CF 386) and the papers line follow 7 CFR 273.2 and the CF 386 notice as summarized in the project research; the regulation text was not re-read on 2026-10-01. Until it is, the card gives no day count for the interview call, and the missed-call and papers lines give no deadline beyond 'right away' and 'at least 10 days'. BenefitsCal's application overview (live, 2026-10-01): for CalFresh you can choose a phone or in-person interview; plan for about an hour."
+    },
+    {
+      "id": "documents_list",
+      "what": "The documents list follows 7 CFR 273.2 (identity, address, income) and the SF State CalFresh Help Clinic page, which says the county may ask for a class schedule, financial aid letters and pay stubs after the interview. The county's own request decides what is needed; the list was not checked against a county checklist. BenefitsCal's application overview (live, 2026-10-01) lists proof of identity (a student ID works), proof of income and proof of expenses, and says documents are not needed to apply and can be uploaded later."
+    }
+  ]
+}

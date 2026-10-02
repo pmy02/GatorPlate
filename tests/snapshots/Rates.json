@@ -1,0 +1,48 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "benefit_reduction": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Benefit Reduction"
+  },
+  "earned_income_deduction": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Earned Income Deduction"
+  },
+  "shelter_income_share": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Shelter Income Share"
+  }
+ },
+ "required": [
+  "earned_income_deduction",
+  "shelter_income_share",
+  "benefit_reduction"
+ ],
+ "title": "Rates",
+ "type": "object"
+}

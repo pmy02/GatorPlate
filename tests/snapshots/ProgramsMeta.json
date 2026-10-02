@@ -1,0 +1,128 @@
+{
+ "$defs": {
+  "SourceRef": {
+   "additionalProperties": false,
+   "properties": {
+    "date": {
+     "title": "Date",
+     "type": "string"
+    },
+    "grade": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Grade"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "title": {
+     "title": "Title",
+     "type": "string"
+    },
+    "url": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Url"
+    }
+   },
+   "required": [
+    "id",
+    "title",
+    "date"
+   ],
+   "title": "SourceRef",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "description": "ProgramsPort.meta() -> ConsoleMeta.programs.",
+ "properties": {
+  "checked": {
+   "format": "date",
+   "title": "Checked",
+   "type": "string"
+  },
+  "console_texts": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Console Texts",
+   "type": "object"
+  },
+  "effective_from": {
+   "format": "date",
+   "title": "Effective From",
+   "type": "string"
+  },
+  "effective_to": {
+   "format": "date",
+   "title": "Effective To",
+   "type": "string"
+  },
+  "label": {
+   "title": "Label",
+   "type": "string"
+  },
+  "names": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Names",
+   "type": "object"
+  },
+  "programs": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Programs",
+   "type": "array"
+  },
+  "questions": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Questions",
+   "type": "array"
+  },
+  "sources": {
+   "items": {
+    "$ref": "#/$defs/SourceRef"
+   },
+   "title": "Sources",
+   "type": "array"
+  },
+  "table_id": {
+   "title": "Table Id",
+   "type": "string"
+  }
+ },
+ "required": [
+  "table_id",
+  "label",
+  "checked",
+  "effective_from",
+  "effective_to",
+  "programs",
+  "names",
+  "console_texts",
+  "questions",
+  "sources"
+ ],
+ "title": "ProgramsMeta",
+ "type": "object"
+}

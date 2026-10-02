@@ -1,0 +1,62 @@
+{
+ "$defs": {
+  "IncomeExcluded": {
+   "additionalProperties": false,
+   "properties": {
+    "higher_education_aid": {
+     "title": "Higher Education Aid",
+     "type": "string"
+    },
+    "vendor_payment": {
+     "title": "Vendor Payment",
+     "type": "string"
+    },
+    "work_study": {
+     "title": "Work Study",
+     "type": "string"
+    }
+   },
+   "required": [
+    "work_study",
+    "higher_education_aid",
+    "vendor_payment"
+   ],
+   "title": "IncomeExcluded",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "counted_family_cash": {
+   "title": "Counted Family Cash",
+   "type": "string"
+  },
+  "earned_deduction_applies_to": {
+   "title": "Earned Deduction Applies To",
+   "type": "string"
+  },
+  "excluded": {
+   "$ref": "#/$defs/IncomeExcluded"
+  },
+  "self_employment": {
+   "title": "Self Employment",
+   "type": "string"
+  },
+  "unearned_examples": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Unearned Examples",
+   "type": "array"
+  }
+ },
+ "required": [
+  "excluded",
+  "counted_family_cash",
+  "earned_deduction_applies_to",
+  "unearned_examples",
+  "self_employment"
+ ],
+ "title": "IncomeRules",
+ "type": "object"
+}

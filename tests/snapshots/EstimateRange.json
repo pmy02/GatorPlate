@@ -1,0 +1,25 @@
+{
+ "additionalProperties": false,
+ "description": "docs/SPEC.md §5.6: exactly {lo, hi, settled}.",
+ "properties": {
+  "hi": {
+   "title": "Hi",
+   "type": "integer"
+  },
+  "lo": {
+   "title": "Lo",
+   "type": "integer"
+  },
+  "settled": {
+   "title": "Settled",
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "lo",
+  "hi",
+  "settled"
+ ],
+ "title": "EstimateRange",
+ "type": "object"
+}

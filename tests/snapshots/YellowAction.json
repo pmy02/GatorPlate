@@ -1,0 +1,54 @@
+{
+ "$defs": {
+  "YellowResolution": {
+   "description": "A coordinator resolves a yellow line by confirming it or by editing the value; nothing else.",
+   "enum": [
+    "confirm",
+    "edit"
+   ],
+   "title": "YellowResolution",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "action": {
+   "$ref": "#/$defs/YellowResolution"
+  },
+  "expected_version": {
+   "title": "Expected Version",
+   "type": "integer"
+  },
+  "note": {
+   "anyOf": [
+    {
+     "maxLength": 200,
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Note"
+  },
+  "value": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Value"
+  }
+ },
+ "required": [
+  "action",
+  "expected_version"
+ ],
+ "title": "YellowAction",
+ "type": "object"
+}

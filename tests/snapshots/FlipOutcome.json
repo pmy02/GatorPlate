@@ -1,0 +1,46 @@
+{
+ "$defs": {
+  "Tier": {
+   "enum": [
+    "likely",
+    "coordinator",
+    "other_help"
+   ],
+   "title": "Tier",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "label": {
+   "title": "Label",
+   "type": "string"
+  },
+  "monthly": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Monthly"
+  },
+  "tier": {
+   "$ref": "#/$defs/Tier"
+  },
+  "value": {
+   "title": "Value",
+   "type": "string"
+  }
+ },
+ "required": [
+  "value",
+  "tier",
+  "monthly",
+  "label"
+ ],
+ "title": "FlipOutcome",
+ "type": "object"
+}

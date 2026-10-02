@@ -1,0 +1,74 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "line": {
+   "title": "Line",
+   "type": "string"
+  },
+  "route": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Route"
+  },
+  "skipped_reason": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Skipped Reason"
+  },
+  "value": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Value"
+  },
+  "yellow_text": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Yellow Text"
+  },
+  "yellow_text_when_default_is_highest": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Yellow Text When Default Is Highest"
+  }
+ },
+ "required": [
+  "line"
+ ],
+ "title": "VoiNotAskedRule",
+ "type": "object"
+}

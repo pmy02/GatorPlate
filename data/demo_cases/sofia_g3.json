@@ -1,0 +1,89 @@
+{
+  "version": "2026-10-01",
+  "id": "sofia_g3",
+  "title": "Sofia: 19, lives with her parents, Spanish web call (coordinator check, one open yellow line)",
+  "about": "Demo case. seed=true: created by POST /api/demo/seed; every case can also be created by POST /api/demo/inject. Build a Case (seeded, live false, persona and code as given, created minutes_ago before now, ended_reason as given), set each slot from `slots` with state clear, source seed, heard / heard_en / turn from the maps below and confirmed for the listed slots; copy the `asked` entries as given when the file has them (AskedQuestion, in order; `turn` = the student turn whose reply asked the question; never a second entry for a key already listed); run the rules, create the card, then apply status (and tracking dates). Every time and date is relative to the seed time (now) in America/Los_Angeles and never falls before not_before, the first morning of the FY2027 table: a computed time earlier than not_before is raised to it, but never later than now (created_at = min(now, max(now - minutes_ago, not_before)); reviewed_at and tracking dates likewise), and the order created_at <= tracking dates <= reviewed_at <= now is kept. `expect` is what the rules must produce for this case.",
+  "golden_case": "G3",
+  "golden_dialogue": "sofia_g3",
+  "persona": "Sofia (demo persona)",
+  "code": "R8W-3ND",
+  "channel": "web",
+  "lang": "es",
+  "seed": true,
+  "not_before": "2026-10-01T08:00:00-07:00",
+  "minutes_ago": 25,
+  "call_seconds": 96,
+  "ended_reason": "completed",
+  "status": "new",
+  "slots": {
+    "consent": "true",
+    "level": "undergrad",
+    "units": "12",
+    "age": "19",
+    "lives_with_parent": "true"
+  },
+  "heard": {
+    "consent": "Sí, está bien",
+    "level": "Estudio una licenciatura en SF State",
+    "units": "tomo doce unidades",
+    "age": "Tengo diecinueve años",
+    "lives_with_parent": "vivo con mis papás"
+  },
+  "heard_en": {
+    "consent": "Yes, that's fine",
+    "level": "I'm working on a bachelor's degree at SF State",
+    "units": "I'm taking twelve units",
+    "age": "I'm nineteen",
+    "lives_with_parent": "I live with my parents"
+  },
+  "turns": {
+    "consent": 1,
+    "level": 2,
+    "units": 2,
+    "age": 3,
+    "lives_with_parent": 3
+  },
+  "confirmed": [],
+  "asked": [
+    {
+      "turn": 1,
+      "key": "ask.level_units",
+      "slots": [
+        "level",
+        "units"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 2,
+      "key": "ask.age_parent",
+      "slots": [
+        "age",
+        "lives_with_parent"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    }
+  ],
+  "native_review": true,
+  "expect": {
+    "tier": "coordinator",
+    "reason_code": "coordinator.parent_household",
+    "estimate_monthly": null,
+    "yellow_open": 1,
+    "yellow": [
+      {
+        "kind": "policy",
+        "code": "coordinator.parent_household",
+        "slot": "lives_with_parent",
+        "reason": "Under 22 and living with a parent — the parent's household is counted together. Confirm, then help with a household application."
+      }
+    ],
+    "can_review": false
+  }
+}

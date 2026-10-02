@@ -1,0 +1,58 @@
+{
+ "$defs": {
+  "UnlockedChoice": {
+   "additionalProperties": false,
+   "properties": {
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "value": {
+     "title": "Value",
+     "type": "string"
+    }
+   },
+   "required": [
+    "value",
+    "label"
+   ],
+   "title": "UnlockedChoice",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "choices": {
+   "items": {
+    "$ref": "#/$defs/UnlockedChoice"
+   },
+   "title": "Choices",
+   "type": "array"
+  },
+  "id": {
+   "title": "Id",
+   "type": "string"
+  },
+  "index": {
+   "title": "Index",
+   "type": "integer"
+  },
+  "text": {
+   "title": "Text",
+   "type": "string"
+  },
+  "total": {
+   "title": "Total",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "id",
+  "text",
+  "choices",
+  "index",
+  "total"
+ ],
+ "title": "UnlockedQuestion",
+ "type": "object"
+}

@@ -1,0 +1,273 @@
+{
+  "id": "sofia_g3",
+  "version": "2026-10-01",
+  "title": "Sofia, web, Spanish: coordinator check (under 22, lives with a parent)",
+  "golden_case": "G3",
+  "demo_case": "sofia_g3",
+  "contract_example": "contracts/examples/sofia_web_es.json",
+  "channel": "web",
+  "lang": "es",
+  "fake_llm_ok": true,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "screen",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "matching": {
+    "env": "The server environment this script needs (GP_CARD_DELIVERY always). The E2E runner never mixes card-delivery modes in one server run: it starts one server per declared environment. Contract examples keep their own `settings` block; scripts use only `env`.",
+    "expect_keys": "debug.keys of the reply (GP_DEBUG_KEYS=1) must equal this list exactly, in order.",
+    "reply": "These BrainReply fields must match exactly. ask/card_url/choices/display: 'present' = non-null, 'null' = null. Reply wording is owned by the sentence bank and is not compared.",
+    "budget": "Phone word budget class of the reply (opening <= 40, question <= 25, result <= 45 words, say + ask).",
+    "fake_llm": "The ExtractionResult the fake LLM returns for this exact utterance. With a live LLM it is the expected understanding: compare slot, value and period; quotes may differ.",
+    "case": "Checked on the stored case after this turn (console API): slots use canonical encodings (money as monthly 2-decimal strings); estimate_range and asked_last only where given.",
+    "final": "Checked on the stored case after /end. 'skipped' entries must be present (other skipped entries with reason hard_stop or not_applicable are allowed); 'asked_flip' must match exactly."
+  },
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "present",
+        "card_url": "null",
+        "choices": "present",
+        "display": "present"
+      }
+    },
+    {
+      "user": "Sí, está bien.",
+      "confidence": 0.91,
+      "expect_keys": [
+        "ack.short",
+        "ask.level_units"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "card_url": "null",
+        "display": "present",
+        "choices": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "consent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Sí, está bien",
+            "quote_en": "Yes, that's fine"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "consent": "true"
+        }
+      }
+    },
+    {
+      "user": "Estudio una licenciatura en SF State y tomo doce unidades.",
+      "confidence": 0.9,
+      "expect_keys": [
+        "ack.short",
+        "ask.age_parent"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "card_url": "null",
+        "display": "present",
+        "choices": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "level",
+            "value": "undergrad",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Estudio una licenciatura en SF State",
+            "quote_en": "I'm working on a bachelor's degree at SF State"
+          },
+          {
+            "slot": "units",
+            "value": "12",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "tomo doce unidades",
+            "quote_en": "I'm taking twelve units"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "level": "undergrad",
+          "units": "12"
+        }
+      }
+    },
+    {
+      "user": "Tengo diecinueve años y vivo con mis papás.",
+      "confidence": 0.92,
+      "expect_keys": [
+        "result.coordinator.parent_household",
+        "card.web",
+        "close.anything_else"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "present",
+        "card_url": "present",
+        "choices": "present",
+        "display": "present"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "age",
+            "value": "19",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Tengo diecinueve años",
+            "quote_en": "I'm nineteen"
+          },
+          {
+            "slot": "lives_with_parent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "vivo con mis papás",
+            "quote_en": "I live with my parents"
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "age": "19",
+          "lives_with_parent": "true"
+        },
+        "tier": "coordinator",
+        "reason_code": "coordinator.parent_household",
+        "estimate_monthly": null
+      },
+      "note": "Under 22 and living with a parent: routed to the coordinator. No amount is said."
+    },
+    {
+      "user": "No, gracias.",
+      "confidence": 0.94,
+      "expect_keys": [
+        "close.goodbye"
+      ],
+      "reply": {
+        "end": true,
+        "end_reason": "completed",
+        "lang": "es",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "null",
+        "card_url": "present",
+        "display": "present",
+        "choices": "null"
+      },
+      "fake_llm": {
+        "observations": [],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "es",
+        "side_question": null,
+        "requested_language": null
+      },
+      "expect_end": true
+    }
+  ],
+  "end": {
+    "reason": "completed",
+    "turns": 4,
+    "duration_ms": 96000
+  },
+  "final": {
+    "golden_case": "G3",
+    "tier": "coordinator",
+    "reason_code": "coordinator.parent_household",
+    "estimate_monthly": null,
+    "amount_said": false,
+    "slots": {
+      "consent": "true",
+      "level": "undergrad",
+      "units": "12",
+      "age": "19",
+      "lives_with_parent": "true"
+    },
+    "heard_en_present": [
+      "level",
+      "units",
+      "age",
+      "lives_with_parent"
+    ],
+    "asked_flip": [],
+    "skipped": [],
+    "yellow_open": 1,
+    "yellow": [
+      {
+        "kind": "policy",
+        "code": "coordinator.parent_household",
+        "slot": "lives_with_parent",
+        "reason": "Under 22 and living with a parent — the parent's household is counted together. Confirm, then help with a household application."
+      }
+    ],
+    "card_created": true,
+    "lang": "es",
+    "student_turns": 4,
+    "max_student_turns": 6,
+    "privacy_events": [],
+    "ended_reason": "completed",
+    "live": false
+  }
+}

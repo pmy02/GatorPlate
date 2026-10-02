@@ -1,0 +1,202 @@
+{
+ "$defs": {
+  "MoneyBasis": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Amount"
+    },
+    "hours_per_week": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Hours Per Week"
+    },
+    "period": {
+     "enum": [
+      "hour",
+      "week",
+      "biweek",
+      "semimonth",
+      "month",
+      "year",
+      "once"
+     ],
+     "title": "Period",
+     "type": "string"
+    }
+   },
+   "required": [
+    "amount",
+    "period"
+   ],
+   "title": "MoneyBasis",
+   "type": "object"
+  },
+  "SlotSource": {
+   "description": "Where a slot value came from (docs/UI_SPEC.md A3.5 source icons).",
+   "enum": [
+    "llm",
+    "parser",
+    "keypad",
+    "coordinator",
+    "default",
+    "seed"
+   ],
+   "title": "SlotSource",
+   "type": "string"
+  },
+  "SlotState": {
+   "enum": [
+    "clear",
+    "assumed",
+    "unclear",
+    "missing"
+   ],
+   "title": "SlotState",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "basis": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/MoneyBasis"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "changed_from": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Changed From"
+  },
+  "confirmed": {
+   "default": false,
+   "title": "Confirmed",
+   "type": "boolean"
+  },
+  "display": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Display"
+  },
+  "heard": {
+   "anyOf": [
+    {
+     "maxLength": 80,
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Heard"
+  },
+  "heard_en": {
+   "anyOf": [
+    {
+     "maxLength": 120,
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Heard En"
+  },
+  "source": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/SlotSource"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "state": {
+   "$ref": "#/$defs/SlotState",
+   "default": "missing"
+  },
+  "turn": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Turn"
+  },
+  "updated_at": {
+   "anyOf": [
+    {
+     "format": "date-time",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Updated At"
+  },
+  "value": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Value"
+  }
+ },
+ "title": "Slot",
+ "type": "object"
+}

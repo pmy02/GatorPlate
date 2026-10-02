@@ -1,0 +1,223 @@
+{
+ "$defs": {
+  "ConversionExample": {
+   "additionalProperties": false,
+   "properties": {
+    "basis": {
+     "$ref": "#/$defs/MoneyBasisExample"
+    },
+    "monthly": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Monthly"
+    }
+   },
+   "required": [
+    "basis",
+    "monthly"
+   ],
+   "title": "ConversionExample",
+   "type": "object"
+  },
+  "ConversionMultipliers": {
+   "additionalProperties": false,
+   "properties": {
+    "biweek": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Biweek"
+    },
+    "month": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Month"
+    },
+    "semimonth": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Semimonth"
+    },
+    "week": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Week"
+    }
+   },
+   "required": [
+    "month",
+    "week",
+    "biweek",
+    "semimonth"
+   ],
+   "title": "ConversionMultipliers",
+   "type": "object"
+  },
+  "FreqAlias": {
+   "additionalProperties": false,
+   "properties": {
+    "biweekly": {
+     "title": "Biweekly",
+     "type": "string"
+    },
+    "monthly": {
+     "title": "Monthly",
+     "type": "string"
+    },
+    "semimonthly": {
+     "title": "Semimonthly",
+     "type": "string"
+    },
+    "weekly": {
+     "title": "Weekly",
+     "type": "string"
+    },
+    "yearly": {
+     "title": "Yearly",
+     "type": "string"
+    }
+   },
+   "required": [
+    "monthly",
+    "weekly",
+    "biweekly",
+    "semimonthly",
+    "yearly"
+   ],
+   "title": "FreqAlias",
+   "type": "object"
+  },
+  "MoneyBasisExample": {
+   "additionalProperties": false,
+   "properties": {
+    "amount": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      }
+     ],
+     "title": "Amount"
+    },
+    "hours_per_week": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Hours Per Week"
+    },
+    "period": {
+     "enum": [
+      "hour",
+      "week",
+      "biweek",
+      "semimonth",
+      "month",
+      "year",
+      "once"
+     ],
+     "title": "Period",
+     "type": "string"
+    }
+   },
+   "required": [
+    "amount",
+    "period",
+    "hours_per_week"
+   ],
+   "title": "MoneyBasisExample",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "examples": {
+   "items": {
+    "$ref": "#/$defs/ConversionExample"
+   },
+   "title": "Examples",
+   "type": "array"
+  },
+  "freq_alias": {
+   "$ref": "#/$defs/FreqAlias"
+  },
+  "hour": {
+   "title": "Hour",
+   "type": "string"
+  },
+  "multipliers": {
+   "$ref": "#/$defs/ConversionMultipliers"
+  },
+  "round": {
+   "title": "Round",
+   "type": "string"
+  },
+  "year_divisor": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    }
+   ],
+   "title": "Year Divisor"
+  }
+ },
+ "required": [
+  "multipliers",
+  "hour",
+  "year_divisor",
+  "freq_alias",
+  "round",
+  "examples"
+ ],
+ "title": "Conversion",
+ "type": "object"
+}

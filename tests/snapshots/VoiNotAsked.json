@@ -1,0 +1,105 @@
+{
+ "$defs": {
+  "VoiNotAskedRule": {
+   "additionalProperties": false,
+   "properties": {
+    "line": {
+     "title": "Line",
+     "type": "string"
+    },
+    "route": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Route"
+    },
+    "skipped_reason": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Skipped Reason"
+    },
+    "value": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Value"
+    },
+    "yellow_text": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Text"
+    },
+    "yellow_text_when_default_is_highest": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Yellow Text When Default Is Highest"
+    }
+   },
+   "required": [
+    "line"
+   ],
+   "title": "VoiNotAskedRule",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "left_by_cap_spread_over_threshold": {
+   "$ref": "#/$defs/VoiNotAskedRule"
+  },
+  "left_by_cap_tier_change": {
+   "$ref": "#/$defs/VoiNotAskedRule"
+  },
+  "spread_up_to_threshold": {
+   "$ref": "#/$defs/VoiNotAskedRule"
+  },
+  "spread_zero": {
+   "$ref": "#/$defs/VoiNotAskedRule"
+  },
+  "unclear_never_resolved": {
+   "$ref": "#/$defs/VoiNotAskedRule"
+  }
+ },
+ "required": [
+  "spread_zero",
+  "spread_up_to_threshold",
+  "left_by_cap_spread_over_threshold",
+  "left_by_cap_tier_change",
+  "unclear_never_resolved"
+ ],
+ "title": "VoiNotAsked",
+ "type": "object"
+}

@@ -1,0 +1,40 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "asked": {
+   "title": "Asked",
+   "type": "boolean"
+  },
+  "coordinator": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Coordinator",
+   "type": "array"
+  },
+  "other_help": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Other Help",
+   "type": "array"
+  },
+  "rule": {
+   "title": "Rule",
+   "type": "string"
+  },
+  "stored": {
+   "title": "Stored",
+   "type": "boolean"
+  }
+ },
+ "required": [
+  "other_help",
+  "coordinator",
+  "asked",
+  "stored",
+  "rule"
+ ],
+ "title": "StatusRouting",
+ "type": "object"
+}

@@ -1,0 +1,49 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "decision_days": {
+   "title": "Decision Days",
+   "type": "integer"
+  },
+  "doc_request_days": {
+   "title": "Doc Request Days",
+   "type": "integer"
+  },
+  "irt_report_days": {
+   "title": "Irt Report Days",
+   "type": "integer"
+  },
+  "note": {
+   "title": "Note",
+   "type": "string"
+  },
+  "recert_month": {
+   "title": "Recert Month",
+   "type": "integer"
+  },
+  "sar7_due_day": {
+   "title": "Sar7 Due Day",
+   "type": "integer"
+  },
+  "sar7_late_day": {
+   "title": "Sar7 Late Day",
+   "type": "integer"
+  },
+  "sar7_month": {
+   "title": "Sar7 Month",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "decision_days",
+  "doc_request_days",
+  "irt_report_days",
+  "sar7_month",
+  "sar7_due_day",
+  "sar7_late_day",
+  "recert_month",
+  "note"
+ ],
+ "title": "Deadlines",
+ "type": "object"
+}

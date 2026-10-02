@@ -1,0 +1,20 @@
+{
+ "$defs": {
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  }
+ },
+ "properties": {
+  "lang": {
+   "$ref": "#/$defs/Lang",
+   "default": "en"
+  }
+ },
+ "title": "WebSessionRequest",
+ "type": "object"
+}

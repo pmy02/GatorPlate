@@ -1,0 +1,34 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "affects": {
+   "title": "Affects",
+   "type": "string"
+  },
+  "basis": {
+   "title": "Basis",
+   "type": "string"
+  },
+  "grad": {
+   "title": "Grad",
+   "type": "string"
+  },
+  "note": {
+   "title": "Note",
+   "type": "string"
+  },
+  "undergrad_units_at_least": {
+   "title": "Undergrad Units At Least",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "undergrad_units_at_least",
+  "basis",
+  "affects",
+  "grad",
+  "note"
+ ],
+ "title": "HalfTime",
+ "type": "object"
+}

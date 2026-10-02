@@ -1,0 +1,43 @@
+[project]
+name = "gatorplate"
+version = "0.1.0"
+description = "Student-built CalFresh pre-screen for SF State students: a phone and web conversation, a student card and a coordinator console."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi==0.142.2",
+    "uvicorn==0.54.0",
+    "pydantic==2.13.5",
+    "pydantic-settings==2.15.0",
+    "itsdangerous==2.2.0",
+    "segno==1.6.6",
+    "anthropic==1.11.0",
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.0",
+    "httpx==0.28.1",
+    "ruff==0.16.9",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".build", ".venv", "var", "web"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["E501"]
+"tools/check_contrast.py" = ["E501"]  # prepared checker, kept byte-for-byte
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--import-mode=importlib"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "live: needs the real language model key; runs only through make test-live",
+]

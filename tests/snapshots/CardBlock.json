@@ -1,0 +1,83 @@
+{
+ "$defs": {
+  "CardRow": {
+   "additionalProperties": false,
+   "description": "One row of a form helper table: the official screen name, its question and the student's answer.\n\nDefined here (and re-exported by card_api) so that programs.py can use it without an import cycle.",
+   "properties": {
+    "answer": {
+     "title": "Answer",
+     "type": "string"
+    },
+    "question": {
+     "title": "Question",
+     "type": "string"
+    },
+    "screen": {
+     "title": "Screen",
+     "type": "string"
+    }
+   },
+   "required": [
+    "screen",
+    "question",
+    "answer"
+   ],
+   "title": "CardRow",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "bullets": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Bullets",
+   "type": "array"
+  },
+  "collapsed": {
+   "default": false,
+   "title": "Collapsed",
+   "type": "boolean"
+  },
+  "id": {
+   "title": "Id",
+   "type": "string"
+  },
+  "paragraphs": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Paragraphs",
+   "type": "array"
+  },
+  "rows": {
+   "items": {
+    "$ref": "#/$defs/CardRow"
+   },
+   "title": "Rows",
+   "type": "array"
+  },
+  "title": {
+   "title": "Title",
+   "type": "string"
+  },
+  "tone": {
+   "default": "default",
+   "enum": [
+    "default",
+    "accent",
+    "warning",
+    "muted"
+   ],
+   "title": "Tone",
+   "type": "string"
+  }
+ },
+ "required": [
+  "id",
+  "title"
+ ],
+ "title": "CardBlock",
+ "type": "object"
+}

@@ -1,0 +1,34 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "amount": {
+   "title": "Amount",
+   "type": "string"
+  },
+  "applies_to_minimum_benefit": {
+   "title": "Applies To Minimum Benefit",
+   "type": "boolean"
+  },
+  "below_min_issue": {
+   "title": "Below Min Issue",
+   "type": "string"
+  },
+  "days_counted": {
+   "title": "Days Counted",
+   "type": "string"
+  },
+  "note": {
+   "title": "Note",
+   "type": "string"
+  }
+ },
+ "required": [
+  "days_counted",
+  "amount",
+  "below_min_issue",
+  "applies_to_minimum_benefit",
+  "note"
+ ],
+ "title": "Proration",
+ "type": "object"
+}

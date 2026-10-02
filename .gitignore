@@ -1,0 +1,14 @@
+.venv/
+var/
+*.db
+*.sqlite*
+.env
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+.build/
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md

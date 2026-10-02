@@ -1,0 +1,317 @@
+{
+  "example": "hmac_vectors",
+  "description": "Gateway request signing test vectors. The secret below is a public test value: never use it for a real deployment.",
+  "api": "brain_api.v1",
+  "algorithm": "HMAC-SHA256",
+  "secret": "test-secret-do-not-use",
+  "key": "UTF-8 bytes of the secret string",
+  "signing_string": "{ts}.{METHOD}.{path}.{sha256_hex(body)}",
+  "signature_format": "v1=<lowercase hex>",
+  "window_s": 120,
+  "vectors": [
+    {
+      "name": "start_phone",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/start",
+      "timestamp": "1790960400",
+      "body": "{\"v\":1,\"seq\":0,\"channel\":\"phone\",\"lang\":\"en\",\"test\":false}",
+      "body_sha256": "0537071db36a8a8cf6ef94df2b3b971f94630eda4b9dd3b412eb504ab2ffeeb6",
+      "signing_string": "1790960400.POST./v1/calls/0d000000000000000000000000000001/start.0537071db36a8a8cf6ef94df2b3b971f94630eda4b9dd3b412eb504ab2ffeeb6",
+      "headers": {
+        "X-GP-Timestamp": "1790960400",
+        "X-GP-Signature": "v1=e3bf80de5330c2b6e6554b99293e43ce4ed3ac62cb48bbb900dd07cb7a8cb6b3"
+      }
+    },
+    {
+      "name": "turn_utterance",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "timestamp": "1790960404",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes, that's fine.\",\"masked\":false,\"confidence\":0.95,\"interrupted\":false,\"typed\":false}",
+      "body_sha256": "5d6a9a0bd6c5205ee1ea889c6a6f51891b8db2419c716bb51431975007aab79a",
+      "signing_string": "1790960404.POST./v1/calls/0d000000000000000000000000000001/turn.5d6a9a0bd6c5205ee1ea889c6a6f51891b8db2419c716bb51431975007aab79a",
+      "headers": {
+        "X-GP-Timestamp": "1790960404",
+        "X-GP-Signature": "v1=2423f99fc111d6839eb50908d5fce8f0701df390fce706d6bf6fde66d558f525"
+      }
+    },
+    {
+      "name": "turn_dtmf",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "timestamp": "1790960409",
+      "body": "{\"v\":1,\"seq\":2,\"lang\":\"en\",\"event\":\"dtmf\",\"dtmf\":\"1\"}",
+      "body_sha256": "321ada1a457b0c68cee22d2cfaf77cf885f2dffee5f4df73aca5387c86d7d0a0",
+      "signing_string": "1790960409.POST./v1/calls/0d000000000000000000000000000001/turn.321ada1a457b0c68cee22d2cfaf77cf885f2dffee5f4df73aca5387c86d7d0a0",
+      "headers": {
+        "X-GP-Timestamp": "1790960409",
+        "X-GP-Signature": "v1=3b6d3337933feffa25bb8f6f111c5717b50fc1721db3e1357cc4f21dbe830b27"
+      }
+    },
+    {
+      "name": "turn_silence",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "timestamp": "1790960420",
+      "body": "{\"v\":1,\"seq\":3,\"lang\":\"en\",\"event\":\"silence\",\"silence_n\":1,\"silence_ms\":5000}",
+      "body_sha256": "6eaa76aeaf69ccfddc68febbb6eed621e13484ce5bf91376b68ca7b41df06ec7",
+      "signing_string": "1790960420.POST./v1/calls/0d000000000000000000000000000001/turn.6eaa76aeaf69ccfddc68febbb6eed621e13484ce5bf91376b68ca7b41df06ec7",
+      "headers": {
+        "X-GP-Timestamp": "1790960420",
+        "X-GP-Signature": "v1=6724849ea04af741a02c7cad5feb643f7d680821373e846fe95f12fb002d392a"
+      }
+    },
+    {
+      "name": "turn_masked_digits",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "timestamp": "1790960431",
+      "body": "{\"v\":1,\"seq\":4,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Do you need my social? It's #########.\",\"masked\":true,\"confidence\":0.86,\"interrupted\":false,\"typed\":false}",
+      "body_sha256": "1727961882cf9488e5d1bf448676dc3e7bcc2a989cc7a362f3f2bb377b119ffa",
+      "signing_string": "1790960431.POST./v1/calls/0d000000000000000000000000000001/turn.1727961882cf9488e5d1bf448676dc3e7bcc2a989cc7a362f3f2bb377b119ffa",
+      "headers": {
+        "X-GP-Timestamp": "1790960431",
+        "X-GP-Signature": "v1=7436b8e52afd1ebf8296cea15184f7f998454a985f1ecb174da946008274d69b"
+      },
+      "note": "The gateway already replaced a long digit run with '#'."
+    },
+    {
+      "name": "turn_utf8_raw",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "timestamp": "1790960440",
+      "body": "{\"v\":1,\"seq\":5,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"I work at a café, about 600 a month.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "body_sha256": "d5f466348086943f01359c4c119c9cbc54dafe411f06206112453b9cc3ad3f93",
+      "signing_string": "1790960440.POST./v1/calls/0d000000000000000000000000000001/turn.d5f466348086943f01359c4c119c9cbc54dafe411f06206112453b9cc3ad3f93",
+      "headers": {
+        "X-GP-Timestamp": "1790960440",
+        "X-GP-Signature": "v1=b4dd86cd00a2b17881dc408a1934be2ac65bb5a10c13b3ba37d301c7484fda07"
+      },
+      "note": "Body sent as raw UTF-8 (the e-acute is two bytes)."
+    },
+    {
+      "name": "turn_utf8_escaped",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "timestamp": "1790960440",
+      "body": "{\"v\":1,\"seq\":5,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"I work at a caf\\u00e9, about 600 a month.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "body_sha256": "540221a169242a076c57299dadbc31d29f4ea1fdcc94a75af84061576255c44c",
+      "signing_string": "1790960440.POST./v1/calls/0d000000000000000000000000000001/turn.540221a169242a076c57299dadbc31d29f4ea1fdcc94a75af84061576255c44c",
+      "headers": {
+        "X-GP-Timestamp": "1790960440",
+        "X-GP-Signature": "v1=9ae01d3cf42518d23ee1279db552c51636e794caf93ac0ddd39b3eb19b94d808"
+      },
+      "note": "Same JSON value as turn_utf8_raw but ASCII-escaped: different bytes, different signature. Both are valid; the brain hashes the bytes it received."
+    },
+    {
+      "name": "start_pretty_printed",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/start",
+      "timestamp": "1790960400",
+      "body": "{\n  \"v\": 1,\n  \"seq\": 0,\n  \"channel\": \"phone\",\n  \"lang\": \"en\",\n  \"test\": false\n}",
+      "body_sha256": "a184077085bcf50018ecbd979705828f512767b44d7b42b393bbbeee81339cf5",
+      "signing_string": "1790960400.POST./v1/calls/0d000000000000000000000000000001/start.a184077085bcf50018ecbd979705828f512767b44d7b42b393bbbeee81339cf5",
+      "headers": {
+        "X-GP-Timestamp": "1790960400",
+        "X-GP-Signature": "v1=ce2e811b97dd196e9c63f5c2726d2dff8c6660db46cc3e6a7b75c95faebf5421"
+      },
+      "note": "Same JSON value as start_phone with different whitespace: different signature, also valid."
+    },
+    {
+      "name": "end_completed",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/end",
+      "timestamp": "1790960518",
+      "body": "{\"v\":1,\"reason\":\"completed\",\"turns\":9,\"duration_ms\":118000}",
+      "body_sha256": "056dfba439c13c87c1c0418568adaa654975ba5cd515f6bdf50099ec88f2be7e",
+      "signing_string": "1790960518.POST./v1/calls/0d000000000000000000000000000001/end.056dfba439c13c87c1c0418568adaa654975ba5cd515f6bdf50099ec88f2be7e",
+      "headers": {
+        "X-GP-Timestamp": "1790960518",
+        "X-GP-Signature": "v1=0b727c743dedb2350cd97603157c2a403b092a16471a63d082e9ea910366242c"
+      }
+    },
+    {
+      "name": "lines_get",
+      "method": "GET",
+      "path": "/v1/lines",
+      "query": "lang=en",
+      "timestamp": "1790956800",
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signing_string": "1790956800.GET./v1/lines.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "headers": {
+        "X-GP-Timestamp": "1790956800",
+        "X-GP-Signature": "v1=86dde685e576bb40f35c767ce2fcf7864eb16718e7f427669a51f728b3952016"
+      },
+      "note": "GET: empty body; the query string is not part of the signed path."
+    }
+  ],
+  "checks": [
+    {
+      "name": "valid",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961000",
+        "X-GP-Signature": "v1=0db1636a0e5f5d86adfacaccb6a23a82ea9264a42acad382490cf7da052be1b2"
+      },
+      "server_now": 1790961000,
+      "expect": "ok",
+      "note": "Correct signature, timestamp equal to the server clock."
+    },
+    {
+      "name": "query_in_signed_path",
+      "method": "GET",
+      "path": "/v1/lines",
+      "body": "",
+      "headers": {
+        "X-GP-Timestamp": "1790961000",
+        "X-GP-Signature": "v1=ba5dd3cd07049fa24ac7b8565f8082778e33cf580f695cbb48b1197b3b5c9ad0"
+      },
+      "server_now": 1790961000,
+      "expect": "bad_signature",
+      "note": "The signer included '?lang=en' in the path."
+    },
+    {
+      "name": "uppercase_hex",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961000",
+        "X-GP-Signature": "v1=0DB1636A0E5F5D86ADFACACCB6A23A82EA9264A42ACAD382490CF7DA052BE1B2"
+      },
+      "server_now": 1790961000,
+      "expect": "bad_signature",
+      "note": "Hex must be lowercase."
+    },
+    {
+      "name": "missing_v1_prefix",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961000",
+        "X-GP-Signature": "0db1636a0e5f5d86adfacaccb6a23a82ea9264a42acad382490cf7da052be1b2"
+      },
+      "server_now": 1790961000,
+      "expect": "bad_signature",
+      "note": "The value must start with 'v1='."
+    },
+    {
+      "name": "lowercase_method_signed",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961000",
+        "X-GP-Signature": "v1=9e62d0f9c72f92d85479694a48377a8aef29a9729ad73e07f657ab9186ffd184"
+      },
+      "server_now": 1790961000,
+      "expect": "bad_signature",
+      "note": "The signer used 'post'; METHOD is upper case."
+    },
+    {
+      "name": "other_secret",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961000",
+        "X-GP-Signature": "v1=fad024df661a794c640ff411634dd98c63d6d4e67fb6069a6fdb7c2590e1c714"
+      },
+      "server_now": 1790961000,
+      "expect": "bad_signature",
+      "note": "Signed with a different secret."
+    },
+    {
+      "name": "body_reserialized_after_signing",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\": 1, \"seq\": 1, \"lang\": \"en\", \"event\": \"utterance\", \"text\": \"Yes.\", \"masked\": false, \"confidence\": 0.9, \"interrupted\": false, \"typed\": false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961000",
+        "X-GP-Signature": "v1=0db1636a0e5f5d86adfacaccb6a23a82ea9264a42acad382490cf7da052be1b2"
+      },
+      "server_now": 1790961000,
+      "expect": "bad_signature",
+      "note": "Signature made over the compact body, but different bytes were sent."
+    },
+    {
+      "name": "fractional_timestamp",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961000.5",
+        "X-GP-Signature": "v1=511b1f38d9abacc9e10c048686b56c5b3915ebb78252bdb8db9555c9633561c8"
+      },
+      "server_now": 1790961000,
+      "expect": "bad_signature",
+      "note": "The timestamp must be whole seconds (digits only)."
+    },
+    {
+      "name": "missing_headers",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {},
+      "server_now": 1790961000,
+      "expect": "unauthorized",
+      "note": "No signature headers and no bearer token."
+    },
+    {
+      "name": "window_edge_past",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790960880",
+        "X-GP-Signature": "v1=70148364bc2902e1a2e6912852940a96cc86bad6b16c60cba7edd894dd83e8e5"
+      },
+      "server_now": 1790961000,
+      "expect": "ok",
+      "note": "Exactly 120 s old: accepted."
+    },
+    {
+      "name": "window_edge_future",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961120",
+        "X-GP-Signature": "v1=eba0acfe40e491683df599feed24ceeeb13741e6226ed512d6702247bc8b305b"
+      },
+      "server_now": 1790961000,
+      "expect": "ok",
+      "note": "Exactly 120 s ahead: accepted."
+    },
+    {
+      "name": "stale_past",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790960879",
+        "X-GP-Signature": "v1=9072aca8eef56a3bf9521354ae580d04eeb61e1af82c554351b4a226808a6ef3"
+      },
+      "server_now": 1790961000,
+      "expect": "stale_timestamp",
+      "note": "121 s old: rejected even though the signature is correct."
+    },
+    {
+      "name": "stale_future",
+      "method": "POST",
+      "path": "/v1/calls/0d000000000000000000000000000001/turn",
+      "body": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}",
+      "headers": {
+        "X-GP-Timestamp": "1790961121",
+        "X-GP-Signature": "v1=6c6ce42633a88d505afdff679955d911448901a36bb835d32e5e2cfb01a5cd0e"
+      },
+      "server_now": 1790961000,
+      "expect": "stale_timestamp",
+      "note": "121 s ahead: rejected."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "conservative": {
+   "title": "Conservative",
+   "type": "string"
+  },
+  "natural": {
+   "title": "Natural",
+   "type": "string"
+  }
+ },
+ "required": [
+  "natural",
+  "conservative"
+ ],
+ "title": "VoiDefaultModes",
+ "type": "object"
+}

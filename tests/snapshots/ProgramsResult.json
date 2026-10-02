@@ -1,0 +1,270 @@
+{
+ "$defs": {
+  "ProgramLine": {
+   "additionalProperties": false,
+   "description": "Engine output, language-free (console section 6b and the view builder).",
+   "properties": {
+    "applied": {
+     "default": false,
+     "title": "Applied",
+     "type": "boolean"
+    },
+    "apply_by": {
+     "anyOf": [
+      {
+       "format": "date",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Apply By"
+    },
+    "basis": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Basis",
+     "type": "array"
+    },
+    "counted": {
+     "title": "Counted",
+     "type": "boolean"
+    },
+    "display_yearly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Display Yearly"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "note_keys": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Note Keys",
+     "type": "array"
+    },
+    "order": {
+     "title": "Order",
+     "type": "integer"
+    },
+    "range_hi": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Range Hi"
+    },
+    "range_lo": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Range Lo"
+    },
+    "source_ids": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Source Ids",
+     "type": "array"
+    },
+    "stage": {
+     "enum": [
+      "today",
+      "after_approval",
+      "tax_time"
+     ],
+     "title": "Stage",
+     "type": "string"
+    },
+    "status": {
+     "enum": [
+      "likely",
+      "maybe",
+      "check",
+      "coverage",
+      "zero",
+      "note"
+     ],
+     "title": "Status",
+     "type": "string"
+    },
+    "value_yearly": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Value Yearly"
+    },
+    "vars": {
+     "additionalProperties": {
+      "type": "string"
+     },
+     "title": "Vars",
+     "type": "object"
+    }
+   },
+   "required": [
+    "id",
+    "status",
+    "value_yearly",
+    "display_yearly",
+    "counted",
+    "stage",
+    "order"
+   ],
+   "title": "ProgramLine",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "calfresh_yearly": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Calfresh Yearly"
+  },
+  "checked": {
+   "format": "date",
+   "title": "Checked",
+   "type": "string"
+  },
+  "claimed_display": {
+   "title": "Claimed Display",
+   "type": "integer"
+  },
+  "console_notes": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Console Notes",
+   "type": "array"
+  },
+  "found_display": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Found Display"
+  },
+  "found_yearly": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Found Yearly"
+  },
+  "lines": {
+   "items": {
+    "$ref": "#/$defs/ProgramLine"
+   },
+   "title": "Lines",
+   "type": "array"
+  },
+  "mode": {
+   "enum": [
+    "full",
+    "list_only"
+   ],
+   "title": "Mode",
+   "type": "string"
+  },
+  "next_question": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Next Question"
+  },
+  "open_questions": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Open Questions",
+   "type": "array"
+  },
+  "question_spreads": {
+   "additionalProperties": {
+    "type": "integer"
+   },
+   "title": "Question Spreads",
+   "type": "object"
+  },
+  "share_display": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Share Display"
+  },
+  "table_id": {
+   "title": "Table Id",
+   "type": "string"
+  }
+ },
+ "required": [
+  "table_id",
+  "checked",
+  "mode",
+  "calfresh_yearly",
+  "found_yearly",
+  "found_display",
+  "share_display",
+  "claimed_display",
+  "lines",
+  "open_questions",
+  "next_question",
+  "question_spreads",
+  "console_notes"
+ ],
+ "title": "ProgramsResult",
+ "type": "object"
+}

@@ -1,0 +1,7 @@
+{
+ "additionalProperties": false,
+ "description": "{} — the body returned by /end.",
+ "properties": {},
+ "title": "EndResponse",
+ "type": "object"
+}

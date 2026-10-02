@@ -1,0 +1,217 @@
+{
+ "$defs": {
+  "SlotName": {
+   "enum": [
+    "consent",
+    "level",
+    "units",
+    "half_time",
+    "grad_exemption",
+    "age",
+    "lives_with_parent",
+    "roommates",
+    "dorm_on_campus",
+    "meals_per_week",
+    "dorm_meals_over_10",
+    "household_food",
+    "spouse",
+    "spouse_student",
+    "children_count",
+    "youngest_child_age",
+    "boarder",
+    "homeless",
+    "homeless_shelter_cost_monthly",
+    "earned_monthly",
+    "work_study_monthly",
+    "gig_monthly",
+    "ta_ra",
+    "unearned_monthly",
+    "other_cash_monthly",
+    "dependent_care_monthly",
+    "rent_share",
+    "rent_paid_by_others_to_landlord",
+    "heat_cool",
+    "other_utils",
+    "cash_on_hand",
+    "volunteered_status",
+    "elderly_or_disabled",
+    "already_receiving",
+    "applied_waiting_interview",
+    "previously_denied",
+    "income_changing_soon",
+    "roommates_count"
+   ],
+   "title": "SlotName",
+   "type": "string"
+  },
+  "YellowEffect": {
+   "additionalProperties": false,
+   "properties": {
+    "delta_usd": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Delta Usd"
+    },
+    "kind": {
+     "enum": [
+      "amount",
+      "tier",
+      "expedited"
+     ],
+     "title": "Kind",
+     "type": "string"
+    }
+   },
+   "required": [
+    "kind"
+   ],
+   "title": "YellowEffect",
+   "type": "object"
+  },
+  "YellowKind": {
+   "enum": [
+    "unclear",
+    "conflict",
+    "policy",
+    "assumed",
+    "student_question",
+    "incomplete"
+   ],
+   "title": "YellowKind",
+   "type": "string"
+  },
+  "YellowResolution": {
+   "description": "A coordinator resolves a yellow line by confirming it or by editing the value; nothing else.",
+   "enum": [
+    "confirm",
+    "edit"
+   ],
+   "title": "YellowResolution",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "assumed": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Assumed"
+  },
+  "code": {
+   "title": "Code",
+   "type": "string"
+  },
+  "created_at": {
+   "format": "date-time",
+   "title": "Created At",
+   "type": "string"
+  },
+  "effect": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/YellowEffect"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "heard": {
+   "anyOf": [
+    {
+     "maxLength": 80,
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Heard"
+  },
+  "id": {
+   "title": "Id",
+   "type": "string"
+  },
+  "kind": {
+   "$ref": "#/$defs/YellowKind"
+  },
+  "reason": {
+   "maxLength": 240,
+   "title": "Reason",
+   "type": "string"
+  },
+  "resolved": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/YellowResolution"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "resolved_at": {
+   "anyOf": [
+    {
+     "format": "date-time",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Resolved At"
+  },
+  "resolved_note": {
+   "anyOf": [
+    {
+     "maxLength": 200,
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Resolved Note"
+  },
+  "slot": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/SlotName"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  }
+ },
+ "required": [
+  "id",
+  "kind",
+  "code",
+  "reason",
+  "created_at"
+ ],
+ "title": "YellowLine",
+ "type": "object"
+}

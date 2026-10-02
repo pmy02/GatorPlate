@@ -1,0 +1,99 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "age_outside_student_rule": {
+   "title": "Age Outside Student Rule",
+   "type": "string"
+  },
+  "already_receiving": {
+   "title": "Already Receiving",
+   "type": "string"
+  },
+  "boarder": {
+   "title": "Boarder",
+   "type": "string"
+  },
+  "dorm_meal_plan": {
+   "title": "Dorm Meal Plan",
+   "type": "string"
+  },
+  "elderly_or_disabled": {
+   "title": "Elderly Or Disabled",
+   "type": "string"
+  },
+  "grad_no_exemption": {
+   "title": "Grad No Exemption",
+   "type": "string"
+  },
+  "interview_waiting": {
+   "title": "Interview Waiting",
+   "type": "string"
+  },
+  "not_degree": {
+   "title": "Not Degree",
+   "type": "string"
+  },
+  "not_sfsu": {
+   "title": "Not Sfsu",
+   "type": "string"
+  },
+  "over_gross_limit": {
+   "title": "Over Gross Limit",
+   "type": "string"
+  },
+  "self_employment_income": {
+   "title": "Self Employment Income",
+   "type": "string"
+  },
+  "shared_food": {
+   "title": "Shared Food",
+   "type": "string"
+  },
+  "spouse_student": {
+   "title": "Spouse Student",
+   "type": "string"
+  },
+  "under_22_with_parent": {
+   "title": "Under 22 With Parent",
+   "type": "string"
+  },
+  "unresolved_tier": {
+   "title": "Unresolved Tier",
+   "type": "string"
+  },
+  "volunteered_status_coordinator": {
+   "title": "Volunteered Status Coordinator",
+   "type": "string"
+  },
+  "volunteered_status_other_help": {
+   "title": "Volunteered Status Other Help",
+   "type": "string"
+  },
+  "zero_benefit_3_plus": {
+   "title": "Zero Benefit 3 Plus",
+   "type": "string"
+  }
+ },
+ "required": [
+  "volunteered_status_other_help",
+  "volunteered_status_coordinator",
+  "elderly_or_disabled",
+  "not_sfsu",
+  "age_outside_student_rule",
+  "not_degree",
+  "grad_no_exemption",
+  "under_22_with_parent",
+  "shared_food",
+  "boarder",
+  "spouse_student",
+  "dorm_meal_plan",
+  "self_employment_income",
+  "over_gross_limit",
+  "zero_benefit_3_plus",
+  "unresolved_tier",
+  "already_receiving",
+  "interview_waiting"
+ ],
+ "title": "Routes",
+ "type": "object"
+}

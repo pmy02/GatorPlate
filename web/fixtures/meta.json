@@ -1,0 +1,907 @@
+{
+ "rules": {
+  "table_id": "CA-CalFresh-FFY2027",
+  "label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
+  "effective_from": "2026-10-01",
+  "effective_to": "2027-09-30",
+  "sources": [
+   {
+    "id": "ACIN-I-40-26",
+    "title": "CDSS All County Information Notice I-40-26: CalFresh cost-of-living adjustments effective October 1, 2026 (Attachment I and notice CF 11 (9/26))",
+    "date": "2026-09-10",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "USDA-FNS-FY2027-COLA",
+    "title": "USDA SNAP fiscal year 2027 cost-of-living adjustments memo (2026-08-21)",
+    "date": "2026-08-21",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "ACL-24-31",
+    "title": "CDSS All County Letter 24-31: CalFresh Student Eligibility Handbook v2.0",
+    "date": "2024-05-03",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-25",
+    "title": "CDSS All County Letter 26-25: associate and bachelor's degree programs at CCC, CSU and UC qualify as local programs that increase employability (from 2026-06-01)",
+    "date": "2026-04-13",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-16",
+    "title": "CDSS All County Letter 26-16: AB 42 (Chapter 430, Statutes of 2025), aid for higher education not counted as income (from 2026-03-01)",
+    "date": "2026-03-19",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-93",
+    "title": "CDSS All County Letter 25-93: ABAWD time-limit changes under H.R. 1 (from 2026-06-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-79",
+    "title": "CDSS All County Letter 25-79: ABAWD waiver only for Colusa, Imperial and Tulare counties (2025-11-01 to 2026-10-31)",
+    "date": "2025-11-07",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-29",
+    "title": "CDSS All County Letter 26-29: CalFresh ABAWD Time Limit Handbook v3.0",
+    "date": "2026-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-92",
+    "title": "CDSS All County Letter 25-92: noncitizen eligibility changes under H.R. 1 (from 2026-04-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-15-42",
+    "title": "CDSS All County Letter 15-42: income reporting threshold (IRT) under semi-annual reporting",
+    "date": "2015-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-13-35",
+    "title": "CDSS All County Letter 13-35: Heat and Eat program (homeless households keep the deduction that does not lower benefits)",
+    "date": "2013-04-24",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-270",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 270 Deductions (MPP 63-502)",
+    "date": "2016-02-13",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-280",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 280 Budgeting (MPP 63-503, 63-509)",
+    "date": "2016-07-09",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-273",
+    "title": "7 CFR Part 273 (SNAP certification): 273.1(b)(1)(ii) children under 22 living with a parent; 273.2(g) 30-day processing; 273.10(a)(1)(ii) first-month proration; 273.10(e)(2)(ii)(A) 30 percent reduction rounded up",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-271-2",
+    "title": "7 CFR 271.2: definition of a homeless individual (includes a temporary stay of up to 90 days in another person's home)",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MPP-63-301",
+    "title": "CDSS Manual of Policies and Procedures 63-301.5 and 7 CFR 273.2(i): expedited service",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MT-SNAP-201-1",
+    "title": "Montana DPHHS SNAP Manual 201-1, Household Composition: a child under 22 living with a parent is in the parent's household even with their own spouse or child",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "LA-DPSS-CALFRESH-APPLICATION",
+    "title": "Los Angeles County DPSS ePolicy, CalFresh application process: applications received after business hours, on weekends or on holidays are dated the next business day",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://my.dpss.lacounty.gov"
+   },
+   {
+    "id": "SFSU-CALFRESH-CLINIC",
+    "title": "SF State Basic Needs: CalFresh Help Clinic page",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic"
+   },
+   {
+    "id": "GP-PROJECT",
+    "title": "GatorPlate project rule (docs/SPEC.md, rules section): a deterministic convention or routing choice, not a CDSS rule",
+    "date": "2026-10-01",
+    "grade": "project",
+    "url": null
+   },
+   {
+    "id": "UNVERIFIED",
+    "title": "Common county practice not yet checked against a CDSS letter for this table: show dates from it as approximate",
+    "date": "2026-10-01",
+    "grade": "unverified",
+    "url": null
+   }
+  ]
+ },
+ "rules_valid_today": true,
+ "slot_specs": {
+  "consent": {
+   "type": "bool",
+   "label": "Consent",
+   "short": "consent",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "level": {
+   "type": "enum",
+   "label": "Student level",
+   "short": "student level",
+   "choices": [
+    "undergrad",
+    "grad",
+    "not_degree",
+    "not_sfsu"
+   ],
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "units": {
+   "type": "int",
+   "label": "Units this term",
+   "short": "units this term",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": "0",
+   "max": "30"
+  },
+  "half_time": {
+   "type": "bool",
+   "label": "Half-time or more",
+   "short": "half-time or more",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "grad_exemption": {
+   "type": "enum",
+   "label": "Grad student exemption",
+   "short": "grad student exemption",
+   "choices": [
+    "campus_job",
+    "ta_ra",
+    "work_study",
+    "work20h",
+    "child_under_6",
+    "child_6_to_11_no_care",
+    "single_parent_full_time_child_under_12",
+    "calworks",
+    "dor_wioa",
+    "final_term",
+    "under_half_time",
+    "none"
+   ],
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "age": {
+   "type": "int",
+   "label": "Age",
+   "short": "age",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": "13",
+   "max": "99"
+  },
+  "lives_with_parent": {
+   "type": "bool",
+   "label": "Lives with a parent",
+   "short": "living with a parent",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "roommates": {
+   "type": "bool",
+   "label": "Lives with roommates",
+   "short": "roommates",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "dorm_on_campus": {
+   "type": "bool",
+   "label": "Lives in a campus dorm",
+   "short": "campus dorm",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "meals_per_week": {
+   "type": "int",
+   "label": "Meal plan, meals a week",
+   "short": "meal plan",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": "0",
+   "max": "21"
+  },
+  "dorm_meals_over_10": {
+   "type": "bool",
+   "label": "Meal plan over 10 meals a week",
+   "short": "meal plan over 10 meals a week",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "household_food": {
+   "type": "enum",
+   "label": "Buys and cooks food",
+   "short": "who buys and cooks food",
+   "choices": [
+    "alone",
+    "separate",
+    "shared"
+   ],
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "spouse": {
+   "type": "bool",
+   "label": "Spouse or partner",
+   "short": "spouse or partner",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "spouse_student": {
+   "type": "bool",
+   "label": "Spouse is a student",
+   "short": "spouse in school",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "children_count": {
+   "type": "int",
+   "label": "Children",
+   "short": "children",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": "0",
+   "max": "10"
+  },
+  "youngest_child_age": {
+   "type": "int",
+   "label": "Youngest child's age",
+   "short": "youngest child's age",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": "0",
+   "max": "25"
+  },
+  "boarder": {
+   "type": "bool",
+   "label": "Pays for room and meals",
+   "short": "room and meals",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "homeless": {
+   "type": "bool",
+   "label": "No regular place to stay",
+   "short": "no regular place to stay",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "homeless_shelter_cost_monthly": {
+   "type": "money",
+   "label": "Pays to stay",
+   "short": "cost to stay",
+   "choices": null,
+   "critical": false,
+   "periodic": true,
+   "min": "0",
+   "max": "5000"
+  },
+  "earned_monthly": {
+   "type": "money",
+   "label": "Work income",
+   "short": "work income",
+   "choices": null,
+   "critical": true,
+   "periodic": true,
+   "min": "0",
+   "max": "20000"
+  },
+  "work_study_monthly": {
+   "type": "money",
+   "label": "Work-study",
+   "short": "work-study pay",
+   "choices": null,
+   "critical": false,
+   "periodic": true,
+   "min": "0",
+   "max": "5000"
+  },
+  "gig_monthly": {
+   "type": "money",
+   "label": "Self-employment",
+   "short": "self-employment income",
+   "choices": null,
+   "critical": false,
+   "periodic": true,
+   "min": "0",
+   "max": "20000"
+  },
+  "ta_ra": {
+   "type": "bool",
+   "label": "TA or RA job",
+   "short": "TA or RA job",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "unearned_monthly": {
+   "type": "money",
+   "label": "Other income",
+   "short": "other income",
+   "choices": null,
+   "critical": false,
+   "periodic": true,
+   "min": "0",
+   "max": "20000"
+  },
+  "other_cash_monthly": {
+   "type": "money",
+   "label": "Cash from family or friends",
+   "short": "cash from family or friends",
+   "choices": null,
+   "critical": true,
+   "periodic": true,
+   "min": "0",
+   "max": "10000"
+  },
+  "dependent_care_monthly": {
+   "type": "money",
+   "label": "Child or dependent care",
+   "short": "child or dependent care",
+   "choices": null,
+   "critical": false,
+   "periodic": true,
+   "min": "0",
+   "max": "5000"
+  },
+  "rent_share": {
+   "type": "money",
+   "label": "Rent share",
+   "short": "rent share",
+   "choices": null,
+   "critical": true,
+   "periodic": true,
+   "min": "0",
+   "max": "10000"
+  },
+  "rent_paid_by_others_to_landlord": {
+   "type": "money",
+   "label": "Rent paid by someone else",
+   "short": "rent paid by someone else",
+   "choices": null,
+   "critical": true,
+   "periodic": true,
+   "min": "0",
+   "max": "10000"
+  },
+  "heat_cool": {
+   "type": "bool",
+   "label": "Heating or cooling bill",
+   "short": "heating or cooling bill",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "other_utils": {
+   "type": "enum",
+   "label": "Other utility bills",
+   "short": "other utility bills",
+   "choices": [
+    "none",
+    "phone_only",
+    "two_plus"
+   ],
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "cash_on_hand": {
+   "type": "money",
+   "label": "Money on hand now",
+   "short": "money on hand",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": "0",
+   "max": "100000"
+  },
+  "volunteered_status": {
+   "type": "enum",
+   "label": "Status (routing only, never stored)",
+   "short": "status",
+   "choices": [
+    "F-1",
+    "J-1",
+    "DACA",
+    "TPS",
+    "undocumented",
+    "LPR",
+    "refugee_asylee",
+    "parolee",
+    "other"
+   ],
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "elderly_or_disabled": {
+   "type": "bool",
+   "label": "Disability benefits or 60+ (routing only, never stored)",
+   "short": "disability benefits or age 60+",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "already_receiving": {
+   "type": "bool",
+   "label": "Already gets CalFresh",
+   "short": "already gets CalFresh",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "applied_waiting_interview": {
+   "type": "bool",
+   "label": "Applied, waiting for the interview",
+   "short": "waiting for the interview",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "previously_denied": {
+   "type": "bool",
+   "label": "Applied before",
+   "short": "applied before",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "income_changing_soon": {
+   "type": "bool",
+   "label": "Income changing soon",
+   "short": "income changing soon",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": null,
+   "max": null
+  },
+  "roommates_count": {
+   "type": "int",
+   "label": "Number of roommates",
+   "short": "number of roommates",
+   "choices": null,
+   "critical": false,
+   "periodic": false,
+   "min": "0",
+   "max": "10"
+  }
+ },
+ "demo_mode": true,
+ "live_transcript": true,
+ "card_delivery": "screen",
+ "app_version": "0.1.0",
+ "demo_phone_display": null,
+ "programs": {
+  "table_id": "GP-Programs-2026",
+  "label": "Other money for SF State students (rules checked 2026-10-01)",
+  "checked": "2026-10-01",
+  "effective_from": "2026-10-01",
+  "effective_to": "2027-09-30",
+  "programs": [
+   "medi_cal",
+   "clipper_start",
+   "lifeline",
+   "care",
+   "tax_credits"
+  ],
+  "names": {
+   "calfresh": "CalFresh",
+   "medi_cal": "Medi-Cal",
+   "clipper_start": "Clipper START",
+   "lifeline": "California LifeLine",
+   "care": "PG&E CARE",
+   "tax_credits": "Tax credits (CalEITC, EITC)"
+  },
+  "console_texts": {
+   "care.utility_conflict": "Card: the home has its own PG&E bill. Call: no utility bills. Check the utility questions (no change when the estimate is already the maximum)."
+  },
+  "questions": [
+   "break_transit",
+   "tax_dependent",
+   "pge_bill"
+  ],
+  "sources": [
+   {
+    "id": "CA-FY2027",
+    "title": "CalFresh FY2027 table (existing): data/rules/ca_fy2027.json, from CDSS ACIN I-40-26",
+    "date": "2026-09-10",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "HHS-POVERTY-2026",
+    "title": "HHS 2026 poverty guidelines ($15,960; +$5,680; 48 states). Gives no Medi-Cal effective date and no 138% values",
+    "date": "published about 2026-01-15 (re-read 2026-10-01)",
+    "grade": "A",
+    "url": "https://aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines"
+   },
+   {
+    "id": "DHCS-ACWDL-26-01",
+    "title": "DHCS ACWDL 26-01: 2026 FPL for MAGI effective Jan 1, 2026",
+    "date": "2026-01-21",
+    "grade": "A",
+    "url": "https://www.dhcs.ca.gov/wp-content/uploads/2026/04/26-01.pdf"
+   },
+   {
+    "id": "DHCS-FPL-CHART-2026",
+    "title": "DHCS 2026 FPL monthly chart, Enclosure 1 (size 1 at 138% = $1,836; seen in a search snippet, the page blocks automated reads)",
+    "date": "2026",
+    "grade": "B",
+    "url": "https://www.dhcs.ca.gov/services/medi-cal-resources/medi-cal-eligibility-division/all-county-welfare-directors-medi-cal-eligibility-division-information-letters/2026-fpl-calculation-chart-monthly-values-enclosure-1/"
+   },
+   {
+    "id": "DHCS-CHILD-266",
+    "title": "DHCS FPL chart (children 266%)",
+    "date": "2025",
+    "grade": "B",
+    "url": "https://www.dhcs.ca.gov/wp-content/uploads/2025/10/HACCP-FPL-Chart.pdf"
+   },
+   {
+    "id": "ECFR-42-435-603",
+    "title": "42 CFR 435.603: MAGI household and income rules",
+    "date": "current 2026-10-01",
+    "grade": "A",
+    "url": "https://www.ecfr.gov/current/title-42/section-435.603"
+   },
+   {
+    "id": "DHCS-HR1-PLAN",
+    "title": "DHCS H.R. 1 implementation plan (work rule, retro, copays from 2028-10-01 pp. 15-16; says nothing on premiums)",
+    "date": "2026-01-29",
+    "grade": "A",
+    "url": "https://www.dhcs.ca.gov/wp-content/uploads/2026/05/DHCS-HR1-Implementation-Plan.pdf"
+   },
+   {
+    "id": "DHCS-BUDGET-2026-27",
+    "title": "DHCS FY 2026-27 Budget Act highlights",
+    "date": "2026-07-01",
+    "grade": "A",
+    "url": "https://www.dhcs.ca.gov/wp-content/uploads/2026/07/DHCS-FY-2026-27-Budget-Act-Highlights.pdf"
+   },
+   {
+    "id": "DHCS-SPA-22-0045",
+    "title": "DHCS public notice, SPA 22-0045: Medi-Cal copayments eliminated from 2022-07-01",
+    "date": "2022",
+    "grade": "B",
+    "url": "https://dhcs.ca.gov/formsandpubs/laws/Documents/SPA-22-0045-Public-Notice.pdf"
+   },
+   {
+    "id": "DHCS-ACWDL-25-33",
+    "title": "DHCS ACWDL 25-33: $30 monthly premium from 2027-07-01 for adults 19-59 with UIS, NQI under the 5-year bar, or PRUCOL",
+    "date": "2025-12-30",
+    "grade": "B",
+    "url": "https://www.dhcs.ca.gov/services/medi-cal/eligibility/letters/Documents/25-33.pdf"
+   },
+   {
+    "id": "SAWS-1",
+    "title": "SAWS 1: one application for CalFresh, cash aid, Medi-Cal",
+    "date": "rev 8/13",
+    "grade": "A",
+    "url": "https://www.cdss.ca.gov/cdssweb/entres/forms/english/saws_1.pdf"
+   },
+   {
+    "id": "SFSU-SHS-INSURANCE",
+    "title": "SF State Student Health Services, health insurance",
+    "date": "accessed 2026-10-01",
+    "grade": "A",
+    "url": "https://health.sfsu.edu/content/health-insurance"
+   },
+   {
+    "id": "CLIPPER-START-FAQ",
+    "title": "Clipper START FAQ (ages 19-64, CalFresh qualifies automatically, 30-day mail)",
+    "date": "viewed 2026-10-01",
+    "grade": "A",
+    "url": "https://www.clipperstartcard.com/s/faqs"
+   },
+   {
+    "id": "CLIPPER-START-APP",
+    "title": "Clipper START application",
+    "date": "viewed 2026-10-01",
+    "grade": "A",
+    "url": "https://www.clipperstartcard.com/s/application"
+   },
+   {
+    "id": "MTC-CALFRESH-VERIFY",
+    "title": "MTC: instant CalFresh verification for Clipper START",
+    "date": "2026-03-16",
+    "grade": "A",
+    "url": "https://www.mtc.ca.gov/news/new-clipperr-start-partnership-automates-simplifies-verification-process"
+   },
+   {
+    "id": "SFMTA-FARES",
+    "title": "Muni fares ($2.85 adult Clipper, $1.40 discount, $86 M pass)",
+    "date": "re-read 2026-10-01",
+    "grade": "A",
+    "url": "https://www.sfmta.com/fares"
+   },
+   {
+    "id": "SFMTA-LIFELINE",
+    "title": "SFMTA Lifeline pass $43; part of Clipper START from 2027-01-01",
+    "date": "re-read 2026-10-01",
+    "grade": "A",
+    "url": "https://www.sfmta.com/fares/lifeline-pass"
+   },
+   {
+    "id": "SFMTA-BUDGET-2027",
+    "title": "SFMTA approved budget FY 2026-27 and FY 2027-28: Clipper discount eliminated in Year 1 (2027-01-04); daily fare cap after two rides targeted for summer 2027. The $3.00 adult fare and the $90 pass are from the SFMTA proposal table and press, not this page",
+    "date": "approved 2026-04-21",
+    "grade": "A (dates) / B ($3.00, $90)",
+    "url": "https://www.sfmta.com/project-updates/sfmta-approved-budget-fy-2026-27-and-fy-2027-28"
+   },
+   {
+    "id": "BART-FARES-2026",
+    "title": "BART fares +6.2% on 2026-01-01; average $5.18",
+    "date": "2025-11-20",
+    "grade": "A",
+    "url": "https://www.bart.gov/news/articles/2025/news20251120"
+   },
+   {
+    "id": "SFSU-GATOR-PASS",
+    "title": "SF State Gator Pass (Clipper BayPass): fall/spring only",
+    "date": "viewed 2026-10-01",
+    "grade": "A",
+    "url": "https://onecard.sfsu.edu/clipper-card-transit-benefits"
+   },
+   {
+    "id": "SFSU-ACAD-CAL",
+    "title": "SF State calendar: finals end 2026-12-18; spring begins 2027-01-20; finals end 2027-05-21",
+    "date": "viewed 2026-10-01",
+    "grade": "A",
+    "url": "https://webapps.sfsu.edu/public/webcalendar/acad/cal/today/week/20273"
+   },
+   {
+    "id": "SFSU-BURSAR-FEES",
+    "title": "SF State Gator Pass fee $130 a semester, 2026-27",
+    "date": "AY 2026-27",
+    "grade": "A",
+    "url": "https://bursar.sfsu.edu/students/upcoming-academic-year"
+   },
+   {
+    "id": "PGE-CARE",
+    "title": "PG&E CARE page (\"20% or more on gas and 35% or more on electricity\"; base services charge discounted to $6.00 a month)",
+    "date": "accessed 2026-10-01",
+    "grade": "A",
+    "url": "https://www.pge.com/en/account/billing-and-assistance/financial-assistance/california-alternate-rates-for-energy-program.html"
+   },
+   {
+    "id": "PGE-FORM-01-9077",
+    "title": "PG&E CARE/FERA application form 01-9077, Section 2A CalFresh box",
+    "date": "Rev 6.26, eff. 2026-06-01",
+    "grade": "A",
+    "url": "https://www.pge.com/tariffs/assets/pdf/tariffbook/ELEC_FORMS_01-9077.pdf"
+   },
+   {
+    "id": "PGE-RULE-19-1",
+    "title": "PG&E Electric Rule 19.1 (CARE)",
+    "date": "eff. 2026-06-01",
+    "grade": "A",
+    "url": "https://www.pge.com/tariffs/assets/pdf/tariffbook/ELEC_RULES_19.1.pdf"
+   },
+   {
+    "id": "PGE-ELEC-ADVISORY-0326",
+    "title": "PG&E electric rate advisory: non-CARE average 40.60 cents/kWh; 500 kWh bill $203.54 non-CARE vs $117.42 CARE (~42%). Electric only, nothing on gas, no $140 bill",
+    "date": "eff. 2026-03-01",
+    "grade": "A",
+    "url": "https://www.pge.com/assets/pge/docs/account/rate-plans/electric-rate-advisory-0326.pdf"
+   },
+   {
+    "id": "PGE-GAS-ADVISORY-0326",
+    "title": "PG&E gas rate advisory: CARE $2.211 vs non-CARE $2.792 a therm (~20%); typical non-CARE bill $86.54 at 31 therms; Advice Letter 5184-G marked pending CPUC approval",
+    "date": "eff. 2026-03-01",
+    "grade": "A",
+    "url": "https://www.pge.com/assets/pge/docs/account/rate-plans/gas-rate-advisory-0326.pdf"
+   },
+   {
+    "id": "CPUC-CARE-FERA",
+    "title": "CPUC CARE/FERA (30-35% electric, 20% gas; CalFresh/SNAP and Medi-Cal categorical; 200% FPL, income guidelines 2026-06-01 to 2027-05-31)",
+    "date": "no page date; accessed 2026-10-01",
+    "grade": "A",
+    "url": "https://www.cpuc.ca.gov/industries-and-topics/electrical-energy/electric-costs/care-fera-program"
+   },
+   {
+    "id": "SFSU-HOUSING-FEES",
+    "title": "SF State housing fees include utilities",
+    "date": "accessed 2026-10-01",
+    "grade": "A",
+    "url": "https://housing.sfsu.edu/housing-fees"
+   },
+   {
+    "id": "CPUC-LIFELINE-2026",
+    "title": "CPUC: California LifeLine vs federal Lifeline ($19 + $9.25)",
+    "date": "2026-02-18 (re-read 2026-10-01)",
+    "grade": "A",
+    "url": "https://www.cpuc.ca.gov/news-and-updates/all-news/california-lifeline-vs-federal-lifeline"
+   },
+   {
+    "id": "CPUC-LIFELINE-ELIG",
+    "title": "CPUC: California LifeLine eligibility (CalFresh, Medi-Cal; tax-dependent bar)",
+    "date": "fetched 2026-10-01",
+    "grade": "A",
+    "url": "https://www.cpuc.ca.gov/CA-lifeline-eligibility"
+   },
+   {
+    "id": "CPUC-LIFELINE-PD-2026",
+    "title": "CPUC proposed decision in R.25-11-005: wireless SSA $20.00 (Tiers 1-3), wireline $19.00 cap; effective on a date set by a Communications Division letter; Table 1 (unfrozen formula $27.50 for 2027), Table 2 (Basic $12.85, Standard/Family $19.00). No legal effect until voted; adoption not confirmed",
+    "date": "mailed 2026-09-04",
+    "grade": "A",
+    "url": "https://docs.cpuc.ca.gov/PublishedDocs/Efile/G000/M617/K559/617559020.PDF"
+   },
+   {
+    "id": "ECFR-47-54-403",
+    "title": "47 CFR 54.403: federal Lifeline support $9.25",
+    "date": "current 2026-09-30",
+    "grade": "A",
+    "url": "https://www.ecfr.gov/current/title-47/chapter-I/subchapter-B/part-54/subpart-E/section-54.403"
+   },
+   {
+    "id": "FTB-CALEITC",
+    "title": "FTB: CalEITC eligibility and credit information",
+    "date": "2026-04-16",
+    "grade": "A",
+    "url": "https://www.ftb.ca.gov/file/personal/credits/caleitc/eligibility-and-credit-information.html"
+   },
+   {
+    "id": "FTB-3514-2025",
+    "title": "FTB 2025 Form 3514 instructions and EITC table (row $10,751-$10,800, 0 children = $204; tax year 2025 only)",
+    "date": "2025",
+    "grade": "A",
+    "url": "https://www.ftb.ca.gov/forms/2025/2025-3514-booklet.html"
+   },
+   {
+    "id": "FTB-YCTC",
+    "title": "FTB: Young Child Tax Credit",
+    "date": "2026-04-16",
+    "grade": "A",
+    "url": "https://www.ftb.ca.gov/file/personal/credits/young-child-tax-credit.html"
+   },
+   {
+    "id": "IRS-RP-2025-32",
+    "title": "IRS Rev. Proc. 2025-32 (tax year 2026 EITC amounts)",
+    "date": "2025-10-09",
+    "grade": "A",
+    "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf"
+   },
+   {
+    "id": "IRS-EITC-WHO",
+    "title": "IRS: Who qualifies for the EITC",
+    "date": "reviewed 2026-10-01",
+    "grade": "A",
+    "url": "https://www.irs.gov/credits-deductions/individuals/earned-income-tax-credit/who-qualifies-for-the-earned-income-tax-credit-eitc"
+   },
+   {
+    "id": "IRS-PUB-596",
+    "title": "IRS Publication 596 (no-child EITC age 25-64; qualifying child under 24 and a full-time student; school attendance is a temporary absence; a qualifying child of another taxpayer can't claim the EIC)",
+    "date": "2025",
+    "grade": "A",
+    "url": "https://www.irs.gov/publications/p596"
+   },
+   {
+    "id": "SFSU-VITA",
+    "title": "SF State VITA (free tax help; 2026 season Jan 29-Apr 15; 2027 dates not published)",
+    "date": "no page date; 2026 season",
+    "grade": "A",
+    "url": "https://cob.sfsu.edu/VITA"
+   },
+   {
+    "id": "CDSS-ACIN-I-87-22",
+    "title": "CDSS ACIN I-87-22: EITC not counted as CalFresh income",
+    "date": "2022-12-29",
+    "grade": "A",
+    "url": "https://cdss.ca.gov/Portals/9/Additional-Resources/Letters-and-Notices/ACINs/2022/I-87_22.pdf"
+   },
+   {
+    "id": "GP-PROJECT",
+    "title": "GatorPlate conventions (rounding, defaults, the yearly $50 card ask rule, the 24+ tax counting rule, the $140/$100 default bills)",
+    "date": "2026-10-01",
+    "grade": "C",
+    "url": null
+   }
+  ]
+ }
+}

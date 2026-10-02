@@ -1,0 +1,44 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "at": {
+   "anyOf": [
+    {
+     "format": "date-time",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "At"
+  },
+  "disclosure_key": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Disclosure Key"
+  },
+  "given": {
+   "anyOf": [
+    {
+     "type": "boolean"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Given"
+  }
+ },
+ "title": "Consent",
+ "type": "object"
+}

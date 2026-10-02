@@ -1,0 +1,711 @@
+{
+ "case": {
+  "id": "c_jamal2demo",
+  "code": "P2X-6TC",
+  "version": 12,
+  "created_at": "2026-10-01T08:00:00-07:00",
+  "updated_at": "2026-10-01T08:01:49-07:00",
+  "lang": "en",
+  "channel": "phone",
+  "test": false,
+  "live": false,
+  "status": "follow_up",
+  "seeded": true,
+  "persona": "Jamal (demo persona)",
+  "phase": "end",
+  "turn_count": 7,
+  "ended_reason": "completed",
+  "ended_early": false,
+  "tier": "likely",
+  "reason_code": "likely",
+  "route_override": null,
+  "estimate_monthly": 306,
+  "estimate_is_floor": false,
+  "estimate_range": {
+   "lo": 306,
+   "hi": 306,
+   "settled": true
+  },
+  "expedited_possible": "yes",
+  "first_month": {
+   "apply_date": "2026-10-01",
+   "filed_on": "2026-10-01",
+   "amount": 306,
+   "days_counted": 31,
+   "month_label": "October",
+   "estimate": true
+  },
+  "summary": "Undergrad · 1 person · no fixed home",
+  "slots": {
+   "consent": {
+    "value": "true",
+    "display": "Yes",
+    "state": "clear",
+    "heard": "Yeah, sure",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 1,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "level": {
+    "value": "undergrad",
+    "display": "Undergrad",
+    "state": "clear",
+    "heard": "I'm a senior at SF State",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 2,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "units": {
+    "value": "12",
+    "display": "12",
+    "state": "clear",
+    "heard": "twelve units",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 2,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "age": {
+    "value": "24",
+    "display": "24",
+    "state": "clear",
+    "heard": "I'm 24",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "lives_with_parent": {
+    "value": "false",
+    "display": "No",
+    "state": "clear",
+    "heard": "I don't live with my parents",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "homeless": {
+    "value": "true",
+    "display": "Yes",
+    "state": "clear",
+    "heard": "I've been sleeping on a friend's couch since August",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "household_food": {
+    "value": "separate",
+    "display": "Separately",
+    "state": "clear",
+    "heard": "I buy my own food",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "earned_monthly": {
+    "value": "0.00",
+    "display": "$0/mo",
+    "state": "clear",
+    "heard": "I don't have a job right now",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 4,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "other_cash_monthly": {
+    "value": "0.00",
+    "display": "$0/mo",
+    "state": "clear",
+    "heard": "nobody gives me money",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 4,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "homeless_shelter_cost_monthly": {
+    "value": "0.00",
+    "display": "$0/mo",
+    "state": "clear",
+    "heard": "No, nothing",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 5,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   },
+   "cash_on_hand": {
+    "value": "40.00",
+    "display": "$40",
+    "state": "clear",
+    "heard": "forty bucks",
+    "heard_en": null,
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 6,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-01T08:01:49-07:00"
+   }
+  },
+  "yellow_lines": [],
+  "flags": [],
+  "asked": [
+   {
+    "turn": 1,
+    "key": "ask.level_units",
+    "slots": [
+     "level",
+     "units"
+    ],
+    "kind": "standard",
+    "reason": null,
+    "delta_usd": null,
+    "outcomes": []
+   },
+   {
+    "turn": 2,
+    "key": "ask.age_parent",
+    "slots": [
+     "age",
+     "lives_with_parent"
+    ],
+    "kind": "standard",
+    "reason": null,
+    "delta_usd": null,
+    "outcomes": []
+   },
+   {
+    "turn": 3,
+    "key": "ask.income",
+    "slots": [
+     "earned_monthly",
+     "other_cash_monthly"
+    ],
+    "kind": "standard",
+    "reason": null,
+    "delta_usd": null,
+    "outcomes": []
+   },
+   {
+    "turn": 4,
+    "key": "ask.homeless_cost",
+    "slots": [
+     "homeless_shelter_cost_monthly"
+    ],
+    "kind": "standard",
+    "reason": null,
+    "delta_usd": null,
+    "outcomes": []
+   },
+   {
+    "turn": 5,
+    "key": "expedited.intro_cash",
+    "slots": [
+     "cash_on_hand"
+    ],
+    "kind": "standard",
+    "reason": null,
+    "delta_usd": null,
+    "outcomes": []
+   }
+  ],
+  "skipped": [],
+  "timeline": [
+   {
+    "turn": 1,
+    "at": "2026-10-01T08:00:14-07:00",
+    "slots": [
+     "consent"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 2,
+    "at": "2026-10-01T08:00:28-07:00",
+    "slots": [
+     "level",
+     "units"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 3,
+    "at": "2026-10-01T08:00:42-07:00",
+    "slots": [
+     "age",
+     "lives_with_parent",
+     "homeless",
+     "household_food"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 4,
+    "at": "2026-10-01T08:00:56-07:00",
+    "slots": [
+     "earned_monthly",
+     "other_cash_monthly"
+    ],
+    "lo": 306,
+    "hi": 306
+   },
+   {
+    "turn": 5,
+    "at": "2026-10-01T08:01:10-07:00",
+    "slots": [
+     "homeless_shelter_cost_monthly"
+    ],
+    "lo": 306,
+    "hi": 306
+   },
+   {
+    "turn": 6,
+    "at": "2026-10-01T08:01:24-07:00",
+    "slots": [
+     "cash_on_hand"
+    ],
+    "lo": 306,
+    "hi": 306
+   }
+  ],
+  "rule_trace": [
+   {
+    "step": "student_rule",
+    "result": "SF State undergrad, at least half-time, bachelor's program → student rule met",
+    "source": "ACL-26-25",
+    "value": null
+   },
+   {
+    "step": "household",
+    "result": "No fixed place to stay, buys food on his own → 1 person",
+    "source": "7-CFR-271-2",
+    "value": "1"
+   },
+   {
+    "step": "gross_income_test",
+    "result": "Gross $0 ≤ $2,660 (200% limit, 1 person)",
+    "source": "ACIN-I-40-26",
+    "value": "0.00"
+   },
+   {
+    "step": "adjusted_income",
+    "result": "$0 − $217 standard deduction → $0",
+    "source": "ACIN-I-40-26",
+    "value": "0"
+   },
+   {
+    "step": "shelter",
+    "result": "Pays nothing to stay → no homeless shelter deduction",
+    "source": "CDSS-SHD-270",
+    "value": "0"
+   },
+   {
+    "step": "net_income",
+    "result": "$0",
+    "source": "CDSS-SHD-270",
+    "value": "0"
+   },
+   {
+    "step": "benefit",
+    "result": "$306 − 30% × $0 = $306",
+    "source": "ACIN-I-40-26",
+    "value": "306"
+   },
+   {
+    "step": "expedited",
+    "result": "Gross $0 < $150 and cash $40 ≤ $100 → 3-day service likely",
+    "source": "MPP-63-301",
+    "value": null
+   }
+  ],
+  "privacy_events": [],
+  "language_request": null,
+  "table_id": "CA-CalFresh-FFY2027",
+  "card": {
+   "token": "fixtureJamalCard000003",
+   "short_code": null,
+   "short_code_expires_at": null,
+   "created_at": "2026-10-01T08:01:49-07:00",
+   "expires_at": "2026-10-08T08:01:49-07:00"
+  },
+  "tracking": {
+   "applied_at": "2026-10-01",
+   "filed_on": "2026-10-01",
+   "deadline_30d": "2026-10-31",
+   "interview_at": "2026-10-01T17:00:00Z",
+   "interview_missed": true,
+   "doc_request_at": null,
+   "doc_due": null,
+   "approved_at": null,
+   "sar7_due": null,
+   "recert_due": null
+  },
+  "consent": {
+   "given": true,
+   "at": "2026-10-01T08:00:12-07:00",
+   "disclosure_key": "consent.ask"
+  },
+  "reviewed_at": null,
+  "program_answers": {
+   "tax_dependent": {
+    "value": "no",
+    "at": "2026-10-01T08:01:49-07:00",
+    "source": "seed"
+   },
+   "break_transit": {
+    "value": "two_days",
+    "at": "2026-10-01T08:01:49-07:00",
+    "source": "seed"
+   }
+  },
+  "program_progress": {}
+ },
+ "summary": {
+  "id": "c_jamal2demo",
+  "code": "P2X-6TC",
+  "version": 12,
+  "created_at": "2026-10-01T08:00:00-07:00",
+  "updated_at": "2026-10-01T08:01:49-07:00",
+  "label": "P2X-6TC",
+  "summary": "Undergrad · 1 person · no fixed home",
+  "lang": "en",
+  "channel": "phone",
+  "live": false,
+  "test": false,
+  "seeded": true,
+  "phase": "end",
+  "status": "follow_up",
+  "ended_early": false,
+  "tier": "likely",
+  "reason_code": "likely",
+  "estimate_monthly": 306,
+  "estimate_is_floor": false,
+  "expedited_possible": "yes",
+  "yellow_open": 0,
+  "yellow_total": 0,
+  "asked_count": 5,
+  "skipped_count": 0,
+  "next_deadline": "2026-10-31",
+  "found_display": 3980
+ },
+ "card_url": "/c/fixtureJamalCard000003",
+ "qr_svg_url": "/api/cases/c_jamal2demo/qr.svg",
+ "short_code": null,
+ "can_review": true,
+ "allowed_status": [
+  "reviewed",
+  "applied",
+  "interview_scheduled"
+ ],
+ "rules": {
+  "table_id": "CA-CalFresh-FFY2027",
+  "label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
+  "effective_from": "2026-10-01",
+  "effective_to": "2027-09-30",
+  "sources": [
+   {
+    "id": "ACIN-I-40-26",
+    "title": "CDSS All County Information Notice I-40-26: CalFresh cost-of-living adjustments effective October 1, 2026 (Attachment I and notice CF 11 (9/26))",
+    "date": "2026-09-10",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "USDA-FNS-FY2027-COLA",
+    "title": "USDA SNAP fiscal year 2027 cost-of-living adjustments memo (2026-08-21)",
+    "date": "2026-08-21",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "ACL-24-31",
+    "title": "CDSS All County Letter 24-31: CalFresh Student Eligibility Handbook v2.0",
+    "date": "2024-05-03",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-25",
+    "title": "CDSS All County Letter 26-25: associate and bachelor's degree programs at CCC, CSU and UC qualify as local programs that increase employability (from 2026-06-01)",
+    "date": "2026-04-13",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-16",
+    "title": "CDSS All County Letter 26-16: AB 42 (Chapter 430, Statutes of 2025), aid for higher education not counted as income (from 2026-03-01)",
+    "date": "2026-03-19",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-93",
+    "title": "CDSS All County Letter 25-93: ABAWD time-limit changes under H.R. 1 (from 2026-06-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-79",
+    "title": "CDSS All County Letter 25-79: ABAWD waiver only for Colusa, Imperial and Tulare counties (2025-11-01 to 2026-10-31)",
+    "date": "2025-11-07",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-29",
+    "title": "CDSS All County Letter 26-29: CalFresh ABAWD Time Limit Handbook v3.0",
+    "date": "2026-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-92",
+    "title": "CDSS All County Letter 25-92: noncitizen eligibility changes under H.R. 1 (from 2026-04-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-15-42",
+    "title": "CDSS All County Letter 15-42: income reporting threshold (IRT) under semi-annual reporting",
+    "date": "2015-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-13-35",
+    "title": "CDSS All County Letter 13-35: Heat and Eat program (homeless households keep the deduction that does not lower benefits)",
+    "date": "2013-04-24",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-270",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 270 Deductions (MPP 63-502)",
+    "date": "2016-02-13",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-280",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 280 Budgeting (MPP 63-503, 63-509)",
+    "date": "2016-07-09",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-273",
+    "title": "7 CFR Part 273 (SNAP certification): 273.1(b)(1)(ii) children under 22 living with a parent; 273.2(g) 30-day processing; 273.10(a)(1)(ii) first-month proration; 273.10(e)(2)(ii)(A) 30 percent reduction rounded up",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-271-2",
+    "title": "7 CFR 271.2: definition of a homeless individual (includes a temporary stay of up to 90 days in another person's home)",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MPP-63-301",
+    "title": "CDSS Manual of Policies and Procedures 63-301.5 and 7 CFR 273.2(i): expedited service",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MT-SNAP-201-1",
+    "title": "Montana DPHHS SNAP Manual 201-1, Household Composition: a child under 22 living with a parent is in the parent's household even with their own spouse or child",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "LA-DPSS-CALFRESH-APPLICATION",
+    "title": "Los Angeles County DPSS ePolicy, CalFresh application process: applications received after business hours, on weekends or on holidays are dated the next business day",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://my.dpss.lacounty.gov"
+   },
+   {
+    "id": "SFSU-CALFRESH-CLINIC",
+    "title": "SF State Basic Needs: CalFresh Help Clinic page",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic"
+   },
+   {
+    "id": "GP-PROJECT",
+    "title": "GatorPlate project rule (docs/SPEC.md, rules section): a deterministic convention or routing choice, not a CDSS rule",
+    "date": "2026-10-01",
+    "grade": "project",
+    "url": null
+   },
+   {
+    "id": "UNVERIFIED",
+    "title": "Common county practice not yet checked against a CDSS letter for this table: show dates from it as approximate",
+    "date": "2026-10-01",
+    "grade": "unverified",
+    "url": null
+   }
+  ]
+ },
+ "programs": {
+  "table_id": "GP-Programs-2026",
+  "checked": "2026-10-01",
+  "mode": "full",
+  "calfresh_yearly": 3672,
+  "found_yearly": 3998,
+  "found_display": 3980,
+  "share_display": 3900,
+  "claimed_display": 0,
+  "lines": [
+   {
+    "id": "calfresh",
+    "status": "likely",
+    "value_yearly": 3672,
+    "display_yearly": 3670,
+    "counted": true,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "today",
+    "order": 1,
+    "apply_by": null,
+    "vars": {
+     "value": "3672",
+     "calfresh_month": "306"
+    },
+    "note_keys": [],
+    "basis": [
+     "12 × $306 a month = $3,672 → display $3,670"
+    ],
+    "source_ids": [
+     "CA-FY2027"
+    ],
+    "applied": false
+   },
+   {
+    "id": "medi_cal",
+    "status": "coverage",
+    "value_yearly": 0,
+    "display_yearly": 0,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "today",
+    "order": 2,
+    "apply_by": null,
+    "vars": {},
+    "note_keys": [],
+    "basis": [
+     "No income ≤ $1,836 (138%, 1 person) → coverage, $0 cash"
+    ],
+    "source_ids": [
+     "DHCS-ACWDL-26-01",
+     "HHS-POVERTY-2026",
+     "SAWS-1"
+    ],
+    "applied": false
+   },
+   {
+    "id": "clipper_start",
+    "status": "likely",
+    "value_yearly": 98,
+    "display_yearly": 90,
+    "counted": true,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "after_approval",
+    "order": 3,
+    "apply_by": "2026-11-19",
+    "vars": {
+     "value": "98"
+    },
+    "note_keys": [
+     "clipper.two_cards"
+    ],
+    "basis": [
+     "4 rides/week × 17 break weeks: (4 × $2.85 − 4 × $1.40) = $5.80 a week → $98"
+    ],
+    "source_ids": [
+     "CLIPPER-START-FAQ",
+     "SFMTA-FARES",
+     "BART-FARES-2026",
+     "SFSU-GATOR-PASS"
+    ],
+    "applied": false
+   },
+   {
+    "id": "lifeline",
+    "status": "likely",
+    "value_yearly": 228,
+    "display_yearly": 220,
+    "counted": true,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "after_approval",
+    "order": 4,
+    "apply_by": null,
+    "vars": {
+     "value": "228",
+     "fed": "111"
+    },
+    "note_keys": [
+     "lifeline.federal_extra",
+     "lifeline.family_plan"
+    ],
+    "basis": [
+     "$19.00 a month × 12 = $228 (a ceiling; a cheaper plan saves less)"
+    ],
+    "source_ids": [
+     "CPUC-LIFELINE-2026",
+     "CPUC-LIFELINE-ELIG"
+    ],
+    "applied": false
+   }
+  ],
+  "open_questions": [],
+  "next_question": null,
+  "question_spreads": {},
+  "console_notes": []
+ }
+}

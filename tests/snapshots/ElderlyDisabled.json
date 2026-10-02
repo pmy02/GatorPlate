@@ -1,0 +1,42 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "age_at_or_over": {
+   "title": "Age At Or Over",
+   "type": "integer"
+  },
+  "asked": {
+   "title": "Asked",
+   "type": "boolean"
+  },
+  "route": {
+   "title": "Route",
+   "type": "string"
+  },
+  "rule": {
+   "title": "Rule",
+   "type": "string"
+  },
+  "signals": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Signals",
+   "type": "array"
+  },
+  "stored": {
+   "title": "Stored",
+   "type": "string"
+  }
+ },
+ "required": [
+  "age_at_or_over",
+  "signals",
+  "route",
+  "asked",
+  "stored",
+  "rule"
+ ],
+ "title": "ElderlyDisabled",
+ "type": "object"
+}

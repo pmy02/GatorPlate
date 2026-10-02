@@ -1,0 +1,70 @@
+{
+ "$defs": {
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "fatal": {
+   "minLength": 1,
+   "title": "Fatal",
+   "type": "string"
+  },
+  "fatal_start": {
+   "minLength": 1,
+   "title": "Fatal Start",
+   "type": "string"
+  },
+  "filler": {
+   "items": {
+    "minLength": 1,
+    "type": "string"
+   },
+   "maxItems": 3,
+   "minItems": 3,
+   "title": "Filler",
+   "type": "array"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang"
+  },
+  "line_unavailable": {
+   "minLength": 1,
+   "title": "Line Unavailable",
+   "type": "string"
+  },
+  "no_input_bye": {
+   "minLength": 1,
+   "title": "No Input Bye",
+   "type": "string"
+  },
+  "retry": {
+   "minLength": 1,
+   "title": "Retry",
+   "type": "string"
+  },
+  "time_limit": {
+   "minLength": 1,
+   "title": "Time Limit",
+   "type": "string"
+  }
+ },
+ "required": [
+  "lang",
+  "filler",
+  "retry",
+  "fatal",
+  "fatal_start",
+  "no_input_bye",
+  "time_limit",
+  "line_unavailable"
+ ],
+ "title": "GatewayLines",
+ "type": "object"
+}

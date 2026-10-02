@@ -1,0 +1,14 @@
+{
+  "lang": "en",
+  "filler": [
+    "One moment.",
+    "Let me check that.",
+    "Okay, one second."
+  ],
+  "retry": "Sorry, I didn't catch that.",
+  "fatal": "Sorry, something went wrong on our side. You can reach the SF State CalFresh coordinator at four one five, three three eight, one two zero three. Goodbye.",
+  "fatal_start": "Hi, this is GatorPlate, a student-built AI assistant. Sorry, it isn't working right now. You can reach the SF State CalFresh coordinator at four one five, three three eight, one two zero three. Goodbye.",
+  "no_input_bye": "I can't hear you, so I'll hang up now. You can call back anytime. Goodbye.",
+  "time_limit": "We've reached the time limit for this call. Your answers so far are saved for the coordinator. Goodbye.",
+  "line_unavailable": "Hi, this is GatorPlate, a student-built AI assistant for SF State students. The line isn't available right now. You can reach the SF State CalFresh coordinator at four one five, three three eight, one two zero three. Goodbye."
+}

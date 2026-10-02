@@ -1,0 +1,48 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "edges_1_person": {
+   "items": {
+    "type": "integer"
+   },
+   "title": "Edges 1 Person",
+   "type": "array"
+  },
+  "fractions_of_gross_limit": {
+   "items": {
+    "anyOf": [
+     {
+      "type": "number"
+     },
+     {
+      "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+      "type": "string"
+     }
+    ]
+   },
+   "title": "Fractions Of Gross Limit",
+   "type": "array"
+  },
+  "round_to_usd": {
+   "title": "Round To Usd",
+   "type": "integer"
+  },
+  "split_rule": {
+   "title": "Split Rule",
+   "type": "string"
+  },
+  "stop": {
+   "title": "Stop",
+   "type": "string"
+  }
+ },
+ "required": [
+  "fractions_of_gross_limit",
+  "round_to_usd",
+  "edges_1_person",
+  "split_rule",
+  "stop"
+ ],
+ "title": "IncomeBand",
+ "type": "object"
+}

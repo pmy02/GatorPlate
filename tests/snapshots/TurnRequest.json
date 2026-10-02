@@ -1,0 +1,97 @@
+{
+ "$defs": {
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  }
+ },
+ "properties": {
+  "confidence": {
+   "anyOf": [
+    {
+     "maximum": 1,
+     "minimum": 0,
+     "type": "number"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Confidence"
+  },
+  "dtmf": {
+   "default": null,
+   "pattern": "^[0-9*#]{1,20}$",
+   "title": "Dtmf",
+   "type": "string"
+  },
+  "event": {
+   "enum": [
+    "utterance",
+    "dtmf",
+    "silence"
+   ],
+   "title": "Event",
+   "type": "string"
+  },
+  "interrupted": {
+   "default": false,
+   "title": "Interrupted",
+   "type": "boolean"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang",
+   "default": null
+  },
+  "masked": {
+   "default": false,
+   "title": "Masked",
+   "type": "boolean"
+  },
+  "seq": {
+   "minimum": 1,
+   "title": "Seq",
+   "type": "integer"
+  },
+  "silence_ms": {
+   "default": null,
+   "minimum": 0,
+   "title": "Silence Ms",
+   "type": "integer"
+  },
+  "silence_n": {
+   "default": null,
+   "minimum": 1,
+   "title": "Silence N",
+   "type": "integer"
+  },
+  "text": {
+   "default": null,
+   "maxLength": 1000,
+   "title": "Text",
+   "type": "string"
+  },
+  "typed": {
+   "default": false,
+   "title": "Typed",
+   "type": "boolean"
+  },
+  "v": {
+   "const": 1,
+   "title": "V",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "v",
+  "seq",
+  "event"
+ ],
+ "title": "TurnRequest",
+ "type": "object"
+}

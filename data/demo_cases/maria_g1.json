@@ -1,0 +1,177 @@
+{
+  "version": "2026-10-01",
+  "id": "maria_g1",
+  "title": "Maria: SF State junior, likely about $306 a month (finished demo call)",
+  "about": "Demo case. seed=true: created by POST /api/demo/seed; every case can also be created by POST /api/demo/inject. Build a Case (seeded, live false, persona and code as given, created minutes_ago before now, ended_reason as given), set each slot from `slots` with state clear, source seed, heard / heard_en / turn from the maps below and confirmed for the listed slots; copy the `asked` entries as given when the file has them (AskedQuestion, in order; `turn` = the student turn whose reply asked the question; never a second entry for a key already listed); run the rules, create the card, then apply status (and tracking dates). Every time and date is relative to the seed time (now) in America/Los_Angeles and never falls before not_before, the first morning of the FY2027 table: a computed time earlier than not_before is raised to it, but never later than now (created_at = min(now, max(now - minutes_ago, not_before)); reviewed_at and tracking dates likewise), and the order created_at <= tracking dates <= reviewed_at <= now is kept. `expect` is what the rules must produce for this case.",
+  "golden_case": "G1",
+  "golden_dialogue": "maria_g1",
+  "persona": "Maria (demo persona)",
+  "code": "K7Q-2FM",
+  "channel": "phone",
+  "lang": "en",
+  "seed": false,
+  "not_before": "2026-10-01T08:00:00-07:00",
+  "minutes_ago": 3,
+  "call_seconds": 118,
+  "ended_reason": "completed",
+  "status": "new",
+  "slots": {
+    "consent": "true",
+    "level": "undergrad",
+    "units": "12",
+    "age": "20",
+    "lives_with_parent": "false",
+    "roommates": "true",
+    "roommates_count": "2",
+    "household_food": "separate",
+    "earned_monthly": "900.00",
+    "other_cash_monthly": "0.00",
+    "rent_share": "1100.00",
+    "rent_paid_by_others_to_landlord": "0.00",
+    "cash_on_hand": "1000.00"
+  },
+  "heard": {
+    "consent": "Yes, that's fine",
+    "level": "I'm an SF State undergrad, a junior",
+    "units": "I'm taking 12 units",
+    "age": "I'm 20",
+    "lives_with_parent": "I live with two roommates",
+    "roommates": "I live with two roommates",
+    "roommates_count": "two roommates",
+    "household_food": "Separately",
+    "earned_monthly": "about 900 a month",
+    "other_cash_monthly": "Nobody gives me cash",
+    "rent_share": "Eleven hundred",
+    "rent_paid_by_others_to_landlord": "No",
+    "cash_on_hand": "About a thousand"
+  },
+  "heard_en": {},
+  "turns": {
+    "consent": 1,
+    "level": 2,
+    "units": 2,
+    "age": 3,
+    "lives_with_parent": 3,
+    "roommates": 3,
+    "roommates_count": 3,
+    "household_food": 4,
+    "earned_monthly": 5,
+    "other_cash_monthly": 5,
+    "rent_share": 6,
+    "rent_paid_by_others_to_landlord": 7,
+    "cash_on_hand": 8
+  },
+  "confirmed": [],
+  "asked": [
+    {
+      "turn": 1,
+      "key": "ask.level_units",
+      "slots": [
+        "level",
+        "units"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 2,
+      "key": "ask.age_parent",
+      "slots": [
+        "age",
+        "lives_with_parent"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 3,
+      "key": "ask.household_food_roommates",
+      "slots": [
+        "household_food"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 4,
+      "key": "ask.income",
+      "slots": [
+        "earned_monthly",
+        "other_cash_monthly"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 5,
+      "key": "ask.rent",
+      "slots": [
+        "rent_share"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    },
+    {
+      "turn": 6,
+      "key": "flip.rent_paid_by_others",
+      "slots": [
+        "rent_paid_by_others_to_landlord"
+      ],
+      "kind": "flip",
+      "reason": "could change the estimate by $151: $155 or $306",
+      "delta_usd": 151,
+      "outcomes": [
+        "No → $306/mo",
+        "Yes → $155/mo"
+      ]
+    },
+    {
+      "turn": 7,
+      "key": "expedited.intro_cash",
+      "slots": [
+        "cash_on_hand"
+      ],
+      "kind": "standard",
+      "reason": null,
+      "delta_usd": null,
+      "outcomes": []
+    }
+  ],
+  "native_review": false,
+  "expect": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306,
+    "estimate_is_floor": false,
+    "expedited_possible": "no",
+    "irt_applies": true,
+    "yellow_open": 0,
+    "can_review": true,
+    "estimate_range": {
+      "lo": 306,
+      "hi": 306,
+      "settled": true
+    },
+    "skipped": [
+      {
+        "slot": "heat_cool",
+        "reason": "no_effect"
+      },
+      {
+        "slot": "other_utils",
+        "reason": "no_effect"
+      }
+    ],
+    "summary": "Undergrad · 1 person · work $900 · rent $1,100"
+  }
+}

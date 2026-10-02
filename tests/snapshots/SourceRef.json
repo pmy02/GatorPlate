@@ -1,0 +1,48 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "date": {
+   "title": "Date",
+   "type": "string"
+  },
+  "grade": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Grade"
+  },
+  "id": {
+   "title": "Id",
+   "type": "string"
+  },
+  "title": {
+   "title": "Title",
+   "type": "string"
+  },
+  "url": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Url"
+  }
+ },
+ "required": [
+  "id",
+  "title",
+  "date"
+ ],
+ "title": "SourceRef",
+ "type": "object"
+}

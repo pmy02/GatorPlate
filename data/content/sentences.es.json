@@ -1,0 +1,2680 @@
+{
+  "lang": "es",
+  "version": "2026-10-01",
+  "native_review": true,
+  "review_note": "Spanish text is a careful draft in neutral Latin American Spanish (tú). It needs review by a native speaker before real students use it.",
+  "format": {
+    "summary": "Same keys, vars, expect blocks and format as sentences.en.json. The format notes and the per-key usage notes live in the en bank."
+  },
+  "var_types": {
+    "money": "an amount; code verbalizes it on the phone and formats it ($306) on the web",
+    "int": "a whole number",
+    "phone": "a phone number from contacts.json",
+    "url": "a web address",
+    "code": "the 6-digit card code",
+    "date": "a date in America/Los_Angeles",
+    "text": "text rendered by code from this bank (a question) or from spoken.period",
+    "hours": "office hours from contacts.json"
+  },
+  "spoken": {
+    "money": "Dólares enteros en palabras. 306 -> 'trescientos seis dólares'; 900 -> 'novecientos dólares'; 1100 -> 'mil cien dólares'; 1975 -> 'mil novecientos setenta y cinco dólares'; 2000 -> 'dos mil dólares'. Por hora con centavos: 18.50 -> 'dieciocho dólares cincuenta'.",
+    "int": "En palabras: 12 -> 'doce'.",
+    "phone": "Dígito por dígito en grupos: 'cuatro uno cinco, tres tres ocho, uno dos cero tres' (contacts.json spoken.es).",
+    "code": "'cuatro ocho uno, dos cero seis'.",
+    "url": "short_url: 'gatorplate punto fly punto dev barra go'; talk_url: 'gatorplate punto fly punto dev barra talk'.",
+    "hours": "contacts.json coordinator.hours.spoken.es.",
+    "date": "'viernes 2 de octubre'.",
+    "period": {
+      "month": "al mes",
+      "week": "a la semana",
+      "biweek": "cada dos semanas",
+      "semimonth": "dos veces al mes",
+      "hour": "la hora",
+      "year": "al año"
+    },
+    "display": "Web: dinero '$306'; teléfono '(415) 338-1203'; horario contacts.json coordinator.hours.text.es; fecha 'vie 2 de oct'."
+  },
+  "messages": {
+    "consent.ask": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        {
+          "say": "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio.",
+          "ask": "¿Te parece bien?"
+        }
+      ],
+      "closed": {
+        "web": [
+          "¿Está bien empezar? Toca Sí o No."
+        ]
+      },
+      "short": {
+        "web": [
+          "¿Te parece bien?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "consent"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Sí",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "consent.reask": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Está bien empezar? Responde sí o no.",
+        "¿Empezamos? Responde sí o no."
+      ],
+      "closed": {
+        "web": [
+          "¿Está bien empezar? Toca Sí o No."
+        ]
+      },
+      "short": {
+        "all": [
+          "¿Empezamos?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "consent"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Sí",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "consent.declined": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "No hay problema. Si quieres ayuda de una persona, llama a la coordinación de CalFresh de SF State al {coordinator_phone}. Adiós.",
+        "Está bien, no hay problema. Para hablar con una persona, llama a la coordinación de CalFresh de SF State al {coordinator_phone}. Adiós."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ]
+    },
+    "answer.is_ai": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Sí, soy una IA hecha por estudiantes, no un servicio oficial de SF State.",
+        "Sí. Soy una IA creada por estudiantes, no un servicio oficial de SF State."
+      ],
+      "vars": []
+    },
+    "answer.is_recorded": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "No. GatorPlate nunca recibe tu voz, solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación.",
+        "No. Tu voz no nos llega: solo el texto que crea tu navegador. Guardamos tus respuestas, no la conversación."
+      ],
+      "vars": []
+    },
+    "language.offer_web": {
+      "group": "opening",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Esta línea es solo en inglés. Para hablar en español, usa GatorPlate en la web: {talk_url}."
+      ],
+      "vars": [
+        "talk_url:url"
+      ],
+      "notes": "Spoken on the phone with lang es: the only Spanish reply in a phone call."
+    },
+    "language.unsupported": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Lo siento, por ahora solo puedo ayudar en inglés o en español."
+      ],
+      "vars": []
+    },
+    "proxy.caller": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Es mejor que el o la estudiante conteste estas preguntas. Si está contigo, sigamos."
+      ],
+      "vars": []
+    },
+    "hold.ok": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Claro, tómate tu tiempo.",
+        "No hay problema, tómate tu tiempo.",
+        "Claro. Aquí espero."
+      ],
+      "vars": []
+    },
+    "abuse.warn": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Estoy aquí para ayudarte con CalFresh. Hablemos con respeto.",
+        "Quiero ayudarte, así que hablemos con respeto."
+      ],
+      "vars": []
+    },
+    "abuse.end": {
+      "group": "opening",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Voy a terminar la conversación. Si quieres ayuda después, llama a la coordinación de CalFresh de SF State al {coordinator_phone}. Adiós."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ]
+    },
+    "ask.level_units": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Estudias una licenciatura o un posgrado en SF State, y cuántas unidades tomas este semestre?",
+        "En SF State, ¿estudias licenciatura o posgrado, y cuántas unidades tomas este semestre?"
+      ],
+      "closed": {
+        "web": [
+          "En SF State, ¿estudias una licenciatura, un posgrado u otra cosa?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "level"
+          ],
+          "keypad": {
+            "1": {
+              "set": {
+                "level": "undergrad"
+              }
+            },
+            "2": {
+              "set": {
+                "level": "grad"
+              }
+            },
+            "3": {
+              "set": {
+                "level": "not_degree"
+              }
+            }
+          },
+          "choices": [
+            {
+              "label": "Licenciatura",
+              "set": {
+                "level": "undergrad"
+              }
+            },
+            {
+              "label": "Posgrado",
+              "set": {
+                "level": "grad"
+              }
+            },
+            {
+              "label": "Otra cosa",
+              "set": {
+                "level": "not_degree"
+              }
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "¿Licenciatura o posgrado, y cuántas unidades?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [
+          "level",
+          "units"
+        ],
+        "keypad": null,
+        "choices": null
+      },
+      "vars": []
+    },
+    "ask.units": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Cuántas unidades tomas este semestre?"
+      ],
+      "closed": {
+        "web": [
+          "¿Tomas 8 unidades o más este semestre?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "half_time"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "half_time": "true"
+            }
+          },
+          "no": {
+            "set": {
+              "half_time": "false"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Cuántas unidades este semestre?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "normal",
+        "slots": [
+          "units"
+        ],
+        "keypad": null,
+        "choices": null
+      },
+      "vars": []
+    },
+    "ask.grad_exemption": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "¿Tienes alguna de estas: un trabajo en el campus, un puesto de TA o RA, work-study, un trabajo de 20 horas o más a la semana, o una hija o un hijo menor de 6 años?"
+      ],
+      "closed": {
+        "web": [
+          "¿Cuál te aplica: trabajo en el campus (incluye TA o RA), work-study, o ninguna?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "grad_exemption"
+          ],
+          "keypad": {
+            "1": {
+              "set": {
+                "grad_exemption": "campus_job"
+              }
+            },
+            "2": {
+              "set": {
+                "grad_exemption": "work_study"
+              }
+            },
+            "3": {
+              "set": {
+                "grad_exemption": "none"
+              }
+            }
+          },
+          "choices": [
+            {
+              "label": "Trabajo en el campus, TA o RA",
+              "set": {
+                "grad_exemption": "campus_job"
+              }
+            },
+            {
+              "label": "Work-study",
+              "set": {
+                "grad_exemption": "work_study"
+              }
+            },
+            {
+              "label": "Ninguna",
+              "set": {
+                "grad_exemption": "none"
+              }
+            }
+          ]
+        }
+      },
+      "short": {
+        "web": [
+          "¿Te aplica alguna de estas?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "grad_exemption"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Trabajo en el campus",
+            "set": {
+              "grad_exemption": "campus_job"
+            }
+          },
+          {
+            "label": "Puesto de TA o RA",
+            "set": {
+              "grad_exemption": "ta_ra"
+            }
+          },
+          {
+            "label": "Work-study",
+            "set": {
+              "grad_exemption": "work_study"
+            }
+          },
+          {
+            "label": "Trabajo de 20+ horas a la semana",
+            "set": {
+              "grad_exemption": "work20h"
+            }
+          },
+          {
+            "label": "Hija o hijo menor de 6",
+            "set": {
+              "grad_exemption": "child_under_6"
+            }
+          },
+          {
+            "label": "Ninguna",
+            "set": {
+              "grad_exemption": "none"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.age_parent": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Cuántos años tienes y con quién vives?",
+        "¿Cuántos años tienes, y vives con tu mamá o tu papá, con otras personas o por tu cuenta?"
+      ],
+      "closed": {
+        "web": [
+          "¿Cuántos años tienes? Puedes escribir tu edad o elegir un rango."
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "age"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Menos de 22",
+              "band": "below_a"
+            },
+            {
+              "label": "De 22 a 49",
+              "band": "between"
+            },
+            {
+              "label": "50 o más",
+              "band": "above_b"
+            }
+          ],
+          "band_edges": {
+            "a": "22",
+            "b": "50"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Cuántos años tienes y con quién vives?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [
+          "age",
+          "lives_with_parent"
+        ],
+        "keypad": null,
+        "choices": null
+      },
+      "vars": []
+    },
+    "ask.meal_plan": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Tienes un plan de comidas del campus? Si es así, ¿cuántas comidas a la semana te da?"
+      ],
+      "closed": {
+        "web": [
+          "¿Tu plan de comidas del campus te da más de 10 comidas a la semana?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "dorm_meals_over_10"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "¿Cuántas comidas a la semana tiene tu plan?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "normal",
+        "slots": [
+          "meals_per_week",
+          "dorm_meals_over_10"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Sin plan de comidas",
+            "set": {
+              "meals_per_week": "0",
+              "dorm_meals_over_10": "false"
+            }
+          },
+          {
+            "label": "10 comidas a la semana o menos",
+            "set": {
+              "dorm_meals_over_10": "false"
+            }
+          },
+          {
+            "label": "11 comidas a la semana o más",
+            "set": {
+              "dorm_meals_over_10": "true"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.household": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Con quién vives? ¿Y compran y cocinan la comida juntos, o por separado?",
+        "¿Vives por tu cuenta o con otras personas? Si vives con otras personas, ¿compran y cocinan la comida juntos?"
+      ],
+      "closed": {
+        "web": [
+          "¿Compras y cocinas la comida con alguien con quien vives?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "household_food"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          "no": {
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Con quién vives, y comparten la comida?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [
+          "household_food",
+          "lives_with_parent",
+          "roommates",
+          "spouse",
+          "children_count"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Vivo por mi cuenta",
+            "set": {
+              "household_food": "alone",
+              "roommates": "false",
+              "lives_with_parent": "false"
+            }
+          },
+          {
+            "label": "Con compañeros, comida aparte",
+            "set": {
+              "household_food": "separate",
+              "roommates": "true"
+            }
+          },
+          {
+            "label": "Con compañeros, comida compartida",
+            "set": {
+              "household_food": "shared",
+              "roommates": "true"
+            }
+          },
+          {
+            "label": "Con mi mamá o mi papá",
+            "set": {
+              "lives_with_parent": "true"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.household_food_roommates": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Compras y cocinas la comida con tus compañeros de casa, o por separado?",
+        "¿Tú y tus compañeros de casa compran y cocinan la comida juntos, o por separado?"
+      ],
+      "closed": {
+        "web": [
+          "¿Compras y cocinas la comida con tus compañeros de casa?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "household_food"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          "no": {
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Compartes la comida con tus compañeros de casa?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "household_food"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Por separado",
+            "set": {
+              "household_food": "separate"
+            }
+          },
+          {
+            "label": "Juntos",
+            "set": {
+              "household_food": "shared"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.income": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Más o menos, ¿cuánto ganas al mes por tu trabajo, antes de impuestos? No cuentes la ayuda financiera. ¿Y alguien, como tu familia, te da dinero?",
+        "Antes de impuestos, ¿cuánto ganas más o menos al mes por tu trabajo? Deja fuera la ayuda financiera. ¿Alguien te da dinero?"
+      ],
+      "closed": {
+        "web": [
+          "¿Ganas dinero de un trabajo ahora?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "earned_monthly"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            },
+            {
+              "label": "No sé bien",
+              "intent": "dont_know"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed: ask ask.income_band next (spoken band choice)"
+          },
+          "no": {
+            "set": {
+              "earned_monthly": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Cuánto ganas al mes?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "earned_monthly",
+          "other_cash_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No tengo trabajo",
+            "set": {
+              "earned_monthly": "0"
+            }
+          },
+          {
+            "label": "No sé bien",
+            "intent": "dont_know"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.other_cash": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Alguien, como tu familia o tus amistades, te da dinero cada mes? ¿Cuánto?"
+      ],
+      "closed": {
+        "web": [
+          "¿Alguien, como tu familia, te da dinero cada mes?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "other_cash_monthly"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed: ask flip.other_cash_band next (spoken band choice)"
+          },
+          "no": {
+            "set": {
+              "other_cash_monthly": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Alguien te da dinero cada mes?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "other_cash_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Nadie",
+            "set": {
+              "other_cash_monthly": "0"
+            }
+          },
+          {
+            "label": "No sé bien",
+            "intent": "dont_know"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.income_band": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "No hay problema.",
+          "ask": "¿Es menos de {a} al mes, entre {a} y {b}, o más?"
+        }
+      ],
+      "closed": {
+        "web": [
+          "¿Tu pago al mes es menos de {a}, entre {a} y {b}, o más?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "earned_monthly"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Menos de {a}",
+              "band": "below_a"
+            },
+            {
+              "label": "De {a} a {b}",
+              "band": "between"
+            },
+            {
+              "label": "Más de {b}",
+              "band": "above_b"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "¿Menos de {a}, hasta {b}, o más?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "earned_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Menos de {a}",
+            "band": "below_a"
+          },
+          {
+            "label": "De {a} a {b}",
+            "band": "between"
+          },
+          {
+            "label": "Más de {b}",
+            "band": "above_b"
+          }
+        ]
+      },
+      "vars": [
+        "a:money",
+        "b:money"
+      ]
+    },
+    "ask.rent": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Cuánto es tu parte de la renta cada mes?",
+        "¿Cuánto pagas tú de renta al mes?"
+      ],
+      "closed": {
+        "web": [
+          "Más o menos, ¿cuánto es tu parte de la renta cada mes? Puedes escribirlo o elegir un rango."
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "long",
+          "slots": [
+            "rent_share"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Menos de $1,000",
+              "band": "below_a"
+            },
+            {
+              "label": "De $1,000 a $1,500",
+              "band": "between"
+            },
+            {
+              "label": "Más de $1,500",
+              "band": "above_b"
+            },
+            {
+              "label": "No pago renta",
+              "set": {
+                "rent_share": "0"
+              }
+            }
+          ],
+          "band_edges": {
+            "a": "1000.00",
+            "b": "1500.00"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Cuánto es tu parte de la renta?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "rent_share"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No pago renta",
+            "set": {
+              "rent_share": "0"
+            }
+          },
+          {
+            "label": "No tengo un lugar fijo",
+            "set": {
+              "homeless": "true"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ask.homeless_cost": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Pagas algo por quedarte donde duermes ahora?"
+      ],
+      "closed": {
+        "web": [
+          "¿Pagas algo por quedarte donde duermes ahora?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "homeless_shelter_cost_monthly"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed"
+          },
+          "no": {
+            "set": {
+              "homeless_shelter_cost_monthly": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Pagas algo por quedarte ahí?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "homeless_shelter_cost_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No, nada",
+            "set": {
+              "homeless_shelter_cost_monthly": "0"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "expedited.intro_cash": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Más o menos, ¿cuánto dinero tienes ahora, en efectivo y en el banco?"
+      ],
+      "closed": {
+        "web": [
+          "¿Cuánto dinero tienes ahora, en efectivo y en el banco? Puedes escribirlo o elegir un rango."
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "long",
+          "slots": [
+            "cash_on_hand"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Menos de $100",
+              "band": "below_a"
+            },
+            {
+              "label": "De $100 a $500",
+              "band": "between"
+            },
+            {
+              "label": "Más de $500",
+              "band": "above_b"
+            }
+          ],
+          "band_edges": {
+            "a": "100.00",
+            "b": "500.00"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Cuánto dinero tienes ahora?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "cash_on_hand"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No sé bien",
+            "intent": "dont_know"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.intro": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Una pregunta más.",
+        "Otra pregunta rápida."
+      ],
+      "closed": {
+        "all": [
+          "Una pregunta más."
+        ]
+      },
+      "vars": []
+    },
+    "flip.rent_paid_by_others": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Alguien, como tu mamá o tu papá, le paga parte de tu renta directamente al dueño?"
+      ],
+      "closed": {
+        "web": [
+          "¿Alguien le paga parte de tu renta al dueño por ti?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "rent_paid_by_others_to_landlord"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "note": "amount still needed: ask flip.rent_paid_by_others_amount"
+          },
+          "no": {
+            "set": {
+              "rent_paid_by_others_to_landlord": "0"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Alguien le paga parte de tu renta al dueño?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "rent_paid_by_others_to_landlord"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Sí",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          },
+          {
+            "label": "Sí, toda la renta",
+            "set": {
+              "rent_paid_by_others_to_landlord": "rent_share"
+            }
+          }
+        ],
+        "yes": {
+          "note": "amount still needed: ask flip.rent_paid_by_others_amount"
+        },
+        "no": {
+          "set": {
+            "rent_paid_by_others_to_landlord": "0"
+          }
+        }
+      },
+      "vars": []
+    },
+    "flip.rent_paid_by_others_amount": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Pagan toda la renta, o más o menos cuánto al mes?"
+      ],
+      "closed": {
+        "web": [
+          "¿Pagan toda tu renta?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "rent_paid_by_others_to_landlord"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "rent_paid_by_others_to_landlord": "rent_share"
+            }
+          },
+          "no": {
+            "note": "part of the rent: amount unknown, use the conservative value"
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Cuánto pagan al mes?"
+        ]
+      },
+      "expect": {
+        "expect": "number",
+        "listen": "long",
+        "slots": [
+          "rent_paid_by_others_to_landlord"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Toda la renta",
+            "set": {
+              "rent_paid_by_others_to_landlord": "rent_share"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.heat_cool": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Pagas aparte una factura de calefacción o de aire acondicionado, además de la renta?"
+      ],
+      "closed": {
+        "web": [
+          "¿Pagas calefacción o aire acondicionado aparte de la renta?"
+        ]
+      },
+      "short": {
+        "all": [
+          "¿Pagas calefacción o aire acondicionado aparte?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "heat_cool"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Sí",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.other_utils": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Además de la renta, ¿qué facturas pagas tú: ninguna, solo el teléfono, o dos o más (como agua, basura o luz)? El internet no cuenta."
+      ],
+      "closed": {
+        "web": [
+          "Otras facturas además de la renta: ¿ninguna, solo el teléfono, o dos o más?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "other_utils"
+          ],
+          "keypad": {
+            "1": {
+              "set": {
+                "other_utils": "none"
+              }
+            },
+            "2": {
+              "set": {
+                "other_utils": "phone_only"
+              }
+            },
+            "3": {
+              "set": {
+                "other_utils": "two_plus"
+              }
+            }
+          },
+          "choices": [
+            {
+              "label": "Ninguna",
+              "set": {
+                "other_utils": "none"
+              }
+            },
+            {
+              "label": "Solo el teléfono",
+              "set": {
+                "other_utils": "phone_only"
+              }
+            },
+            {
+              "label": "Dos o más",
+              "set": {
+                "other_utils": "two_plus"
+              }
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "¿Pagas otras facturas, como agua o teléfono?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "other_utils"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Ninguna",
+            "set": {
+              "other_utils": "none"
+            }
+          },
+          {
+            "label": "Solo el teléfono",
+            "set": {
+              "other_utils": "phone_only"
+            }
+          },
+          {
+            "label": "Dos o más",
+            "set": {
+              "other_utils": "two_plus"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.household_food": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Tú y tus compañeros de casa suelen comprar y cocinar la comida juntos, o por separado?"
+      ],
+      "closed": {
+        "web": [
+          "¿Suelen comprar y cocinar la comida juntos?"
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [
+            "household_food"
+          ],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ],
+          "yes": {
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          "no": {
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        }
+      },
+      "short": {
+        "all": [
+          "¿Suelen compartir la comida?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "household_food"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Juntos",
+            "set": {
+              "household_food": "shared"
+            }
+          },
+          {
+            "label": "Por separado",
+            "set": {
+              "household_food": "separate"
+            }
+          }
+        ]
+      },
+      "vars": []
+    },
+    "flip.other_cash_band": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Cuánto te dan otras personas al mes: menos de {a}, de {a} a {b}, o más?"
+      ],
+      "closed": {
+        "web": [
+          "Dinero de otras personas al mes: ¿menos de {a}, de {a} a {b}, o más?"
+        ],
+        "expect": {
+          "expect": "choice",
+          "listen": "normal",
+          "slots": [
+            "other_cash_monthly"
+          ],
+          "keypad": {
+            "1": {
+              "band": "below_a"
+            },
+            "2": {
+              "band": "between"
+            },
+            "3": {
+              "band": "above_b"
+            }
+          },
+          "choices": [
+            {
+              "label": "Menos de {a}",
+              "band": "below_a"
+            },
+            {
+              "label": "De {a} a {b}",
+              "band": "between"
+            },
+            {
+              "label": "Más de {b}",
+              "band": "above_b"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "¿Más o menos cuánto te dan al mes?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [
+          "other_cash_monthly"
+        ],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "Menos de {a}",
+            "band": "below_a"
+          },
+          {
+            "label": "De {a} a {b}",
+            "band": "between"
+          },
+          {
+            "label": "Más de {b}",
+            "band": "above_b"
+          }
+        ]
+      },
+      "vars": [
+        "a:money",
+        "b:money"
+      ]
+    },
+    "flip.earned_split": {
+      "group": "question",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Tu pago del trabajo es menos de {x} al mes?"
+      ],
+      "closed": {
+        "web": [
+          "¿Tu pago del trabajo es menos de {x} al mes? Responde sí o no."
+        ]
+      },
+      "short": {
+        "all": [
+          "¿Menos de {x} al mes del trabajo?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [
+          "earned_monthly"
+        ],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Sí",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ],
+        "yes": {
+          "band": "below_x"
+        },
+        "no": {
+          "band": "above_x"
+        }
+      },
+      "vars": [
+        "x:money"
+      ]
+    },
+    "ack.short": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Perfecto.",
+        "Gracias.",
+        "Entendido.",
+        "Muy bien."
+      ],
+      "vars": []
+    },
+    "readback.earned": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Entendido: unos {amount} al mes del trabajo.",
+        "Muy bien: unos {amount} al mes del trabajo."
+      ],
+      "vars": [
+        "amount:money"
+      ]
+    },
+    "readback.hourly": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Entendido: {rate} la hora, unas {hours} horas a la semana.",
+        "Muy bien: {rate} la hora, unas {hours} horas a la semana."
+      ],
+      "vars": [
+        "rate:money",
+        "hours:int"
+      ]
+    },
+    "readback.rent": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Entendido: {amount} al mes.",
+        "Muy bien: {amount} al mes."
+      ],
+      "vars": [
+        "amount:money"
+      ]
+    },
+    "readback.other_cash": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Entendido: {amount} al mes de otras personas.",
+        "Muy bien: {amount} al mes de tu familia o amistades."
+      ],
+      "vars": [
+        "amount:money"
+      ]
+    },
+    "readback.cash": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Muy bien, unos {amount}.",
+        "Entendido: unos {amount}."
+      ],
+      "vars": [
+        "amount:money"
+      ]
+    },
+    "confirm.money": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Para confirmar, ¿dijiste {amount} {period}?",
+        "¿Escuché bien: {amount} {period}?"
+      ],
+      "closed": {
+        "web": [
+          "¿Dijiste {amount} {period}? Responde sí o no."
+        ]
+      },
+      "short": {
+        "all": [
+          "¿Dijiste {amount} {period}?"
+        ]
+      },
+      "expect": {
+        "expect": "confirm",
+        "listen": "normal",
+        "slots": [],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Sí",
+            "answer": "yes"
+          },
+          {
+            "label": "No",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": [
+        "amount:money",
+        "period:text"
+      ]
+    },
+    "reprompt.silence_1": {
+      "group": "readback",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        {
+          "say": "¿Sigues ahí?",
+          "ask": "{question}"
+        },
+        {
+          "say": "Hola, ¿estás ahí?",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ]
+    },
+    "reprompt.silence_2": {
+      "group": "readback",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        {
+          "say": "¿Sigues ahí?",
+          "ask": "{question}"
+        },
+        {
+          "say": "¿Estás ahí?",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ]
+    },
+    "reprompt.unclear": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Perdón, no te entendí.",
+          "ask": "{question}"
+        },
+        {
+          "say": "Perdón, no escuché bien.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ]
+    },
+    "reprompt.after_interrupt": {
+      "group": "readback",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Perdón por eso.",
+          "ask": "{question}"
+        },
+        {
+          "say": "Perdón por interrumpirte.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ]
+    },
+    "result.likely": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Según lo que me dijiste, podrías recibir unos {amount} al mes. El condado toma la decisión final.",
+        "Con lo que me contaste, podrías recibir unos {amount} al mes. El condado toma la decisión final."
+      ],
+      "vars": [
+        "amount:money"
+      ]
+    },
+    "result.likely_floor": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Según lo que me dijiste, podrías recibir unos {amount} al mes, o tal vez más. El condado toma la decisión final."
+      ],
+      "vars": [
+        "amount:money"
+      ]
+    },
+    "result.note.abawd": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Como no llegas a medio tiempo (8 unidades si estudias una licenciatura en SF State), podría aplicarte una regla de trabajo de CalFresh: después de 3 meses en 3 años, tal vez necesites trabajar, hacer voluntariado o capacitarte al menos 80 horas al mes para seguir recibiendo CalFresh. La coordinación puede revisarlo contigo."
+      ],
+      "vars": []
+    },
+    "result.coordinator.generic": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Un detalle necesita que lo revise una persona, así que no voy a adivinar una cantidad. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.parent_household": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Como tienes menos de 22 años y vives con tu mamá o tu papá, para CalFresh tú y tu familia son un solo hogar. La coordinación de CalFresh de SF State te puede ayudar a hacer la solicitud en familia. Tus respuestas quedan guardadas para la coordinación."
+      ],
+      "vars": []
+    },
+    "result.coordinator.shared_household": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Como compras y cocinas la comida con otras personas, CalFresh podría contarlas contigo. Una persona tiene que revisar quién está en tu hogar. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.grad_no_exemption": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Para estudiantes de posgrado, CalFresh tiene reglas extra, así que una persona tiene que revisar tu caso. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.not_degree": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Para programas que no son un título, como una credencial o un certificado, una persona tiene que revisar las reglas de estudiantes de CalFresh. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.age_outside_student_rule": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "A tu edad aplican otras reglas de CalFresh para estudiantes, así que una persona tiene que revisarlas. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.gig_income": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "El dinero de trabajos independientes o por aplicación se cuenta de forma especial, así que una persona tiene que revisarlo. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.boarder": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Cuando le pagas a alguien por un cuarto y también por comidas, hay reglas especiales de CalFresh, así que una persona tiene que revisarlo. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.spouse_student": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Como tu esposo o esposa también estudia, una persona tiene que revisar cómo cuenta CalFresh tu hogar. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.status_complex": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Gracias por decírmelo. No guardo esa información. Las reglas de CalFresh para tu situación cambiaron este año, así que una persona tiene que revisarlo. Tus otras respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.elderly_disabled": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Con un beneficio por discapacidad, o con 60 años o más, aplican otras reglas de CalFresh, así que una persona tiene que revisarlo. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.coordinator.unresolved": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Una respuesta podría cambiar tu resultado, así que una persona tiene que revisarla antes de dar una cantidad. Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State."
+      ],
+      "vars": []
+    },
+    "result.other_help.generic": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Las reglas de CalFresh para tu situación son complicadas, así que no voy a adivinar. Gator Groceries y el AS Food Pantry están abiertos para todos los estudiantes de SF State."
+      ],
+      "vars": []
+    },
+    "result.other_help.status": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Gracias por decírmelo. No guardo esa información. Las reglas de CalFresh para tu situación son complicadas, así que no voy a adivinar. Gator Groceries y el AS Food Pantry están abiertos para todos los estudiantes de SF State. La coordinación de CalFresh de SF State puede hablar contigo sobre otras ayudas."
+      ],
+      "vars": []
+    },
+    "result.other_help.over_gross_limit": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Tu ingreso podría pasar el límite de CalFresh para tu hogar. El condado decide. Gator Groceries y el AS Food Pantry están abiertos para todos los estudiantes de SF State."
+      ],
+      "vars": []
+    },
+    "result.other_help.dorm_meal_plan": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Con un plan de más de 10 comidas a la semana en el campus, CalFresh funciona diferente, así que no voy a adivinar. Si tu plan de comidas cambia, revisa otra vez. Gator Groceries y el AS Food Pantry están abiertos para todos los estudiantes de SF State."
+      ],
+      "vars": []
+    },
+    "result.other_help.not_sfsu": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "GatorPlate está hecho para estudiantes de SF State. Para ayuda con CalFresh, puedes llamar a CalFresh de San Francisco al {county_phone}, o a la oficina de CalFresh de tu propio condado."
+      ],
+      "vars": [
+        "county_phone:phone"
+      ]
+    },
+    "result.other_help.zero_benefit": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Para un hogar de tu tamaño, mi cálculo podría salir muy bajo o en cero, así que no voy a adivinar. El condado decide. Gator Groceries y el AS Food Pantry están abiertos para todos los estudiantes de SF State."
+      ],
+      "vars": []
+    },
+    "result.info.already_receiving": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Como ya recibes CalFresh, pon atención a tu reporte SAR 7 cerca del mes 6, y renueva cada 12 meses. La coordinación de CalFresh de SF State te puede ayudar con las dos cosas."
+      ],
+      "vars": []
+    },
+    "result.info.interview_waiting": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Como ya hiciste tu solicitud, el condado te llamará para una entrevista. Puede salir como número desconocido o como spam, así que contesta. Si no alcanzas a contestar, llama al condado de inmediato."
+      ],
+      "vars": []
+    },
+    "expedited.yes": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Podrías recibir CalFresh en tres días. El condado lo revisa cuando haces tu solicitud.",
+        "Tal vez puedas recibir CalFresh en tres días. El condado lo revisa cuando haces tu solicitud."
+      ],
+      "vars": []
+    },
+    "expedited.maybe": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "El condado también revisa si puedes recibir CalFresh en tres días, así que contesta con honestidad las preguntas de emergencia."
+      ],
+      "vars": []
+    },
+    "first_month.apply_today": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Si puedes, haz tu solicitud hoy: tu primer mes cuenta desde la fecha de tu solicitud.",
+        "Trata de hacer tu solicitud hoy: tu primer mes cuenta desde el día en que la haces."
+      ],
+      "vars": []
+    },
+    "card.phone_screen": {
+      "group": "result",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Tu tarjeta de GatorPlate está lista: escanea el código QR en la pantalla."
+      ],
+      "vars": []
+    },
+    "card.phone_code": {
+      "group": "result",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Entra a {short_url} y escribe el código {code}."
+      ],
+      "vars": [
+        "short_url:url",
+        "code:code"
+      ]
+    },
+    "card.web": {
+      "group": "result",
+      "channels": [
+        "web"
+      ],
+      "web": [
+        "Tu tarjeta de GatorPlate está lista. Ábrela para ver tus próximos pasos."
+      ],
+      "vars": []
+    },
+    "close.anything_else": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        {
+          "say": "Para hablar con una persona, llama a la coordinación de CalFresh de SF State al {coordinator_phone}.",
+          "ask": "¿Algo más en lo que te pueda ayudar?"
+        },
+        {
+          "say": "Si quieres hablar con una persona, la coordinación de CalFresh de SF State atiende en el {coordinator_phone}.",
+          "ask": "¿Algo más?"
+        }
+      ],
+      "closed": {
+        "web": [
+          "¿Algo más? Puedes responder sí o no."
+        ],
+        "expect": {
+          "expect": "yes_no",
+          "listen": "normal",
+          "slots": [],
+          "keypad": "yes_no",
+          "choices": [
+            {
+              "label": "Sí",
+              "answer": "yes"
+            },
+            {
+              "label": "No",
+              "answer": "no"
+            }
+          ]
+        }
+      },
+      "short": {
+        "all": [
+          "¿Algo más?"
+        ]
+      },
+      "expect": {
+        "expect": "open",
+        "listen": "normal",
+        "slots": [],
+        "keypad": null,
+        "choices": [
+          {
+            "label": "No, gracias",
+            "answer": "no"
+          }
+        ]
+      },
+      "vars": [
+        "coordinator_phone:phone"
+      ]
+    },
+    "close.goodbye": {
+      "group": "result",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "¡Gracias por usar GatorPlate! Mucha suerte.",
+        "¡Gracias por usar GatorPlate! Cuídate."
+      ],
+      "vars": []
+    },
+    "close.silence": {
+      "group": "result",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Sigo sin escucharte, así que voy a terminar la llamada. Puedes llamar a la coordinación de CalFresh de SF State al {coordinator_phone}. Adiós."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ]
+    },
+    "crisis.resources": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Siento mucho que estés pasando por esto. Puedes llamar al 9-8-8 a cualquier hora, o al 9-1-1 en una emergencia.",
+        "Siento que estés pasando por esto. Llama al 9-8-8, la línea de crisis, a cualquier hora. En una emergencia, llama al 9-1-1."
+      ],
+      "vars": []
+    },
+    "crisis.continue_or_stop": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "¿Quieres seguir con la revisión de CalFresh, o parar aquí?"
+      ],
+      "closed": {
+        "web": [
+          "¿Quieres seguir, o parar aquí? Toca una opción."
+        ]
+      },
+      "short": {
+        "all": [
+          "¿Seguimos, o paramos aquí?"
+        ]
+      },
+      "expect": {
+        "expect": "choice",
+        "listen": "normal",
+        "slots": [],
+        "keypad": {
+          "1": {
+            "action": "resume"
+          },
+          "2": {
+            "intent": "stop"
+          }
+        },
+        "choices": [
+          {
+            "label": "Seguir",
+            "action": "resume"
+          },
+          {
+            "label": "Parar aquí",
+            "intent": "stop"
+          }
+        ]
+      },
+      "vars": []
+    },
+    "ssn.block": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Por favor, no compartas tu número de Seguro Social. GatorPlate no lo necesita.",
+          "ask": "{question}"
+        },
+        {
+          "say": "Por favor, no compartas tu Seguro Social ni otros números de identificación. GatorPlate no los necesita.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ]
+    },
+    "card_number.block": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        {
+          "say": "Por favor, no compartas números de tarjeta ni de cuenta bancaria. GatorPlate no los necesita.",
+          "ask": "{question}"
+        }
+      ],
+      "vars": [
+        "question:text"
+      ]
+    },
+    "human.request": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        {
+          "say": "No puedo pasar esta conversación a una persona, pero puedes llamar a la coordinación de CalFresh de SF State al {coordinator_phone}, {coordinator_hours}.",
+          "ask": "¿Quieres seguir conmigo por ahora?"
+        }
+      ],
+      "closed": {
+        "web": [
+          "¿Quieres seguir por ahora? Puedes responder sí o no."
+        ]
+      },
+      "short": {
+        "all": [
+          "¿Seguimos por ahora?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Seguir",
+            "answer": "yes"
+          },
+          {
+            "label": "Parar aquí",
+            "answer": "no"
+          }
+        ],
+        "yes": {
+          "action": "resume"
+        },
+        "no": {
+          "intent": "stop"
+        }
+      },
+      "vars": [
+        "coordinator_phone:phone",
+        "coordinator_hours:hours"
+      ]
+    },
+    "stop.goodbye": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Está bien, aquí paramos. Si necesitas ayuda después, llama a la coordinación de CalFresh de SF State al {coordinator_phone}. Adiós."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ]
+    },
+    "delete.confirm_ask": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "¿Quieres que borre todo lo que me dijiste en esta conversación?"
+      ],
+      "closed": {
+        "web": [
+          "¿Borro tus respuestas? Puedes responder sí o no."
+        ]
+      },
+      "short": {
+        "all": [
+          "¿Borro tus respuestas?"
+        ]
+      },
+      "expect": {
+        "expect": "yes_no",
+        "listen": "normal",
+        "slots": [],
+        "keypad": "yes_no",
+        "choices": [
+          {
+            "label": "Sí, bórralo",
+            "answer": "yes"
+          },
+          {
+            "label": "No, déjalo",
+            "answer": "no"
+          }
+        ],
+        "yes": {
+          "intent": "delete_data"
+        },
+        "no": {
+          "action": "delete.cancelled"
+        }
+      },
+      "vars": []
+    },
+    "delete.done": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Listo. Estoy borrando tus respuestas de esta conversación. Adiós."
+      ],
+      "vars": []
+    },
+    "delete.cancelled": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Está bien, no voy a borrar nada."
+      ],
+      "vars": []
+    },
+    "apply_for_me": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "No puedo firmar ni enviar nada por ti: tú haces la solicitud en BenefitsCal, y tu tarjeta te muestra los próximos pasos."
+      ],
+      "vars": []
+    },
+    "immigration.question": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "No puedo responder eso. La coordinación o una oficina de ayuda legal te pueden ayudar."
+      ],
+      "vars": []
+    },
+    "food_today": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "web": [
+        "Para comida hoy, Gator Groceries y el AS Food Pantry dan comida gratis a todos los estudiantes de SF State, cada semana. Están en el Cesar Chavez Student Center, en el piso de abajo."
+      ],
+      "vars": []
+    },
+    "side_question.noted": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "No puedo responder eso aquí, pero anoté tu pregunta para la coordinación."
+      ],
+      "vars": []
+    },
+    "info.previously_denied": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Las reglas cambiaron este año, así que vale la pena revisar otra vez.",
+        "Las reglas cambiaron este año, así que conviene revisar de nuevo."
+      ],
+      "vars": []
+    },
+    "error.generic": {
+      "group": "global",
+      "channels": [
+        "phone",
+        "web"
+      ],
+      "all": [
+        "Perdón, algo falló de mi lado. Si sigue pasando, puedes llamar a la coordinación de CalFresh de SF State al {coordinator_phone}."
+      ],
+      "vars": [
+        "coordinator_phone:phone"
+      ]
+    },
+    "line.filler": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Un momento.",
+        "Déjame revisar.",
+        "Bien, un segundo."
+      ],
+      "vars": []
+    },
+    "line.retry": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Perdón, no te entendí."
+      ],
+      "vars": []
+    },
+    "line.fatal": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Perdón, algo falló de nuestro lado. Puedes llamar a la coordinación de CalFresh de SF State al cuatro uno cinco, tres tres ocho, uno dos cero tres. Adiós."
+      ],
+      "vars": []
+    },
+    "line.fatal_start": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes. Perdón, no está funcionando ahora. Puedes llamar a la coordinación de CalFresh de SF State al cuatro uno cinco, tres tres ocho, uno dos cero tres. Adiós."
+      ],
+      "vars": []
+    },
+    "line.no_input_bye": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "No te escucho, así que voy a colgar. Puedes volver a llamar cuando quieras. Adiós."
+      ],
+      "vars": []
+    },
+    "line.time_limit": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Llegamos al tiempo máximo de esta llamada. Tus respuestas hasta ahora quedan guardadas para la coordinación. Adiós."
+      ],
+      "vars": []
+    },
+    "line.line_unavailable": {
+      "group": "line",
+      "channels": [
+        "phone"
+      ],
+      "phone": [
+        "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes para estudiantes de SF State. La línea no está disponible ahora. Puedes llamar a la coordinación de CalFresh de SF State al cuatro uno cinco, tres tres ocho, uno dos cero tres. Adiós."
+      ],
+      "vars": []
+    }
+  }
+}

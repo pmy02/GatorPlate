@@ -1,0 +1,484 @@
+{
+ "$defs": {
+  "BrainReply": {
+   "additionalProperties": false,
+   "description": "Every field is required; ask, display, choices, card_url, debug and end_reason are nullable.",
+   "properties": {
+    "ask": {
+     "anyOf": [
+      {
+       "maxLength": 300,
+       "minLength": 1,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Ask"
+    },
+    "card_url": {
+     "anyOf": [
+      {
+       "pattern": "^/c/[A-Za-z0-9_-]{22,64}$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Card Url"
+    },
+    "choices": {
+     "anyOf": [
+      {
+       "items": {
+        "maxLength": 60,
+        "minLength": 1,
+        "type": "string"
+       },
+       "maxItems": 6,
+       "minItems": 1,
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Choices"
+    },
+    "debug": {
+     "anyOf": [
+      {
+       "$ref": "#/$defs/ReplyDebug"
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "display": {
+     "anyOf": [
+      {
+       "maxLength": 1500,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "Display"
+    },
+    "end": {
+     "title": "End",
+     "type": "boolean"
+    },
+    "end_reason": {
+     "anyOf": [
+      {
+       "enum": [
+        "completed",
+        "no_input",
+        "declined"
+       ],
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "title": "End Reason"
+    },
+    "expect": {
+     "enum": [
+      "open",
+      "yes_no",
+      "confirm",
+      "number",
+      "choice"
+     ],
+     "title": "Expect",
+     "type": "string"
+    },
+    "hold_s": {
+     "maximum": 60,
+     "minimum": 0,
+     "title": "Hold S",
+     "type": "integer"
+    },
+    "interruptible": {
+     "title": "Interruptible",
+     "type": "boolean"
+    },
+    "lang": {
+     "$ref": "#/$defs/Lang"
+    },
+    "listen": {
+     "enum": [
+      "normal",
+      "long"
+     ],
+     "title": "Listen",
+     "type": "string"
+    },
+    "say": {
+     "maxLength": 1000,
+     "title": "Say",
+     "type": "string"
+    }
+   },
+   "required": [
+    "say",
+    "ask",
+    "end",
+    "end_reason",
+    "lang",
+    "listen",
+    "expect",
+    "interruptible",
+    "hold_s",
+    "display",
+    "choices",
+    "card_url",
+    "debug"
+   ],
+   "title": "BrainReply",
+   "type": "object"
+  },
+  "Channel": {
+   "enum": [
+    "phone",
+    "web"
+   ],
+   "title": "Channel",
+   "type": "string"
+  },
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  },
+  "PendingQuestion": {
+   "additionalProperties": false,
+   "properties": {
+    "choices": {
+     "anyOf": [
+      {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Choices"
+    },
+    "closed": {
+     "default": false,
+     "title": "Closed",
+     "type": "boolean"
+    },
+    "key": {
+     "title": "Key",
+     "type": "string"
+    },
+    "kind": {
+     "enum": [
+      "yes_no",
+      "confirm",
+      "number",
+      "choice",
+      "open"
+     ],
+     "title": "Kind",
+     "type": "string"
+    },
+    "slots": {
+     "items": {
+      "$ref": "#/$defs/SlotName"
+     },
+     "title": "Slots",
+     "type": "array"
+    }
+   },
+   "required": [
+    "key",
+    "slots",
+    "kind"
+   ],
+   "title": "PendingQuestion",
+   "type": "object"
+  },
+  "Phase": {
+   "description": "Conversation phases 0-10 plus end (docs/SPEC.md §3.2).",
+   "enum": [
+    "consent",
+    "student",
+    "age_home",
+    "household",
+    "income",
+    "housing",
+    "flip",
+    "result",
+    "expedited",
+    "card",
+    "close",
+    "end"
+   ],
+   "title": "Phase",
+   "type": "string"
+  },
+  "ReplyDebug": {
+   "additionalProperties": true,
+   "description": "Schema: an object whose two properties are optional and whose extra properties are allowed.",
+   "properties": {
+    "keys": {
+     "items": {
+      "minLength": 1,
+      "type": "string"
+     },
+     "title": "Keys",
+     "type": "array"
+    },
+    "phase": {
+     "default": "",
+     "title": "Phase",
+     "type": "string"
+    }
+   },
+   "title": "ReplyDebug",
+   "type": "object"
+  },
+  "SlotName": {
+   "enum": [
+    "consent",
+    "level",
+    "units",
+    "half_time",
+    "grad_exemption",
+    "age",
+    "lives_with_parent",
+    "roommates",
+    "dorm_on_campus",
+    "meals_per_week",
+    "dorm_meals_over_10",
+    "household_food",
+    "spouse",
+    "spouse_student",
+    "children_count",
+    "youngest_child_age",
+    "boarder",
+    "homeless",
+    "homeless_shelter_cost_monthly",
+    "earned_monthly",
+    "work_study_monthly",
+    "gig_monthly",
+    "ta_ra",
+    "unearned_monthly",
+    "other_cash_monthly",
+    "dependent_care_monthly",
+    "rent_share",
+    "rent_paid_by_others_to_landlord",
+    "heat_cool",
+    "other_utils",
+    "cash_on_hand",
+    "volunteered_status",
+    "elderly_or_disabled",
+    "already_receiving",
+    "applied_waiting_interview",
+    "previously_denied",
+    "income_changing_soon",
+    "roommates_count"
+   ],
+   "title": "SlotName",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "abuse_count": {
+   "default": 0,
+   "title": "Abuse Count",
+   "type": "integer"
+  },
+  "awaiting": {
+   "default": "none",
+   "enum": [
+    "none",
+    "delete_confirm",
+    "continue_or_stop",
+    "consent"
+   ],
+   "title": "Awaiting",
+   "type": "string"
+  },
+  "call_id": {
+   "title": "Call Id",
+   "type": "string"
+  },
+  "case_id": {
+   "title": "Case Id",
+   "type": "string"
+  },
+  "channel": {
+   "$ref": "#/$defs/Channel"
+  },
+  "close_loops": {
+   "default": 0,
+   "title": "Close Loops",
+   "type": "integer"
+  },
+  "closed_mode": {
+   "default": false,
+   "title": "Closed Mode",
+   "type": "boolean"
+  },
+  "confirms": {
+   "additionalProperties": {
+    "type": "integer"
+   },
+   "propertyNames": {
+    "$ref": "#/$defs/SlotName"
+   },
+   "title": "Confirms",
+   "type": "object"
+  },
+  "consent_reasks": {
+   "default": 0,
+   "title": "Consent Reasks",
+   "type": "integer"
+  },
+  "deferred_keys": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Deferred Keys",
+   "type": "array"
+  },
+  "ended": {
+   "default": false,
+   "title": "Ended",
+   "type": "boolean"
+  },
+  "ended_by_brain": {
+   "anyOf": [
+    {
+     "enum": [
+      "completed",
+      "no_input",
+      "declined"
+     ],
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Ended By Brain"
+  },
+  "first_reply": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/BrainReply"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "flips_asked": {
+   "default": 0,
+   "title": "Flips Asked",
+   "type": "integer"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang"
+  },
+  "last_activity_at": {
+   "format": "date-time",
+   "title": "Last Activity At",
+   "type": "string"
+  },
+  "last_keys": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Last Keys",
+   "type": "array"
+  },
+  "last_reply": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/BrainReply"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "last_seq": {
+   "default": 0,
+   "title": "Last Seq",
+   "type": "integer"
+  },
+  "llm_failures": {
+   "default": 0,
+   "title": "Llm Failures",
+   "type": "integer"
+  },
+  "pending": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/PendingQuestion"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "phase": {
+   "$ref": "#/$defs/Phase",
+   "default": "consent"
+  },
+  "silence_count": {
+   "default": 0,
+   "title": "Silence Count",
+   "type": "integer"
+  },
+  "started_at": {
+   "format": "date-time",
+   "title": "Started At",
+   "type": "string"
+  },
+  "test": {
+   "default": false,
+   "title": "Test",
+   "type": "boolean"
+  },
+  "turn_count": {
+   "default": 0,
+   "title": "Turn Count",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "call_id",
+  "case_id",
+  "channel",
+  "lang",
+  "started_at",
+  "last_activity_at"
+ ],
+ "title": "SessionState",
+ "type": "object"
+}

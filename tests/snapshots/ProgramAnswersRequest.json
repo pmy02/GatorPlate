@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "answers": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "maxProperties": 3,
+   "minProperties": 1,
+   "title": "Answers",
+   "type": "object"
+  }
+ },
+ "required": [
+  "answers"
+ ],
+ "title": "ProgramAnswersRequest",
+ "type": "object"
+}

@@ -1,0 +1,679 @@
+{
+  "lang": "en",
+  "version": "2026-10-01",
+  "native_review": false,
+  "format": {
+    "summary": "Card-side text for the 'money you may be missing' part of the student card (the fixed part `unlocked`, under the hero). The programs engine (data/rules/programs_2026.json) decides every status and every number; these templates only speak. Code fills each {placeholder} with a display value and never writes wording of its own. Nothing here is spoken on the phone: the call and its sentence keys do not change.",
+    "strings": "strings.<key> = one template. Keys are dotted names: ui.* (widget labels), share.text, q.<question> and q.<question>.<choice> (the card questions; choice ids as in the rules table), program.<id> (names), <program>.* (program lines and notes; the rules table names these keys in status_rules notes, note_rules, notes_always and calfresh_link.text_key), list_only.<id> (one line each in list_only mode, never with an amount), apply.* (button labels; urls in links), pf.* (prefill rows: screen names stay in English, as on the official forms) and care.utility_conflict (the gray console note). en and es have the same keys and the same {placeholders} in each key.",
+    "programs": "programs.<id> is the same in both languages. name: the name key. lines: status -> line key, or status -> {variant: key}. notes: every note key the program can show. UnlockedProgram.notes = the line's engine note_keys (golden order), then, in full mode for plan lines (likely, maybe, check, coverage), the table's calfresh_link.text_key, then calfresh.basis on the calfresh line and tax.basis on the tax_credits line; a key equal to the line is not repeated; list_only shows no notes. Engine note_keys (golden) stay as they are. list_only: the key used in list_only mode. value_text: status -> the short value text shown next to the name (null = none). chip: status -> chip key. apply: the button label key; the url is links[apply], opened in a new tab, except CalFresh: its label is apply.calfresh_steps and its link '#today_action' is the in-page link to the card's today_action block (same tab, no external icon; docs/UI_SPEC.md A4.2 row 2b). sources: display order; the first one is shown with ui.source.",
+    "variants": "care likely/maybe: 'alone' when bill_split is 1 (one person pays the bill), else 'shared' (the line names the split). tax_credits likely: variant no_child -> 'both' when the CalEITC anchor value and the federal no-child EITC are both above 0, 'state_only' when only CalEITC is, 'federal_only' when only the federal credit is; variant parent -> 'parent' when the Young Child Tax Credit is above 0, else 'parent_federal_only'. tax_credits maybe: 'any', or 'small' when the computed value is 0 (the table's downgrade). A note key that is also the line (status note) is not repeated under notes.",
+    "budgets": "Words per string, counted as in contracts/check_examples.py (a whitespace token with a letter or digit; a {placeholder} is one word): question 18, choice 5, line 30, note 25, share 30, footnote 25 (docs: the upgrade's card-side budgets), plus label 18 (ui.*), button 5 (apply.*), name 6 (program.*), prefill 18 (pf.*), console 30. check_content.py checks every string.",
+    "money": "Money placeholders get '$' and a thousands comma. found, calfresh_year, claimed, value, lo, hi, fed and household are display values floored to $10; share is floored to $100; calfresh_month, bill and amount are exact dollars (the monthly estimate, the assumed bill, a slot value). The sum of the counted display values is found, so the parts on screen add up to the headline.",
+    "honesty": "Every amount is worded 'about', 'up to' or 'maybe' (es: unos, hasta, quizá). A line that rests on an assumed input shows the assumption (CARE: the assumed bill and split). A ceiling says 'up to' (LifeLine: $19 a month is the most; a cheaper plan saves less). Medi-Cal is coverage, never cash, never '$0 premium' and never a dental or vision promise ('at no cost for most students today'). Tax credits are credits from the 2025 state tables, not refund amounts (tax.basis). The output guard (guards.json) blocks 'you will get', 'you'll save $', 'you're covered/enrolled', 'free money' and the rest; every string here passes it, filled and unfilled.",
+    "prefill": "pf rows: question_key + answer_key, or question_key + answer_from. answer_from 'answer:<question>' -> pf.answer.<question>.<choice>; 'fact:earned_monthly' -> pf.answer.earned_monthly; 'fact:household_food' -> pf.answer.household_food.<value>; 'fact:people_in_home' -> pf.answer.people_in_home; 'fact:half_time' -> pf.answer.half_time.<true|false>. A row whose answer is unknown (question unanswered, slot empty) is left out. Nothing asks for an SSN or immigration status.",
+    "chips": "Under the bar: ui.coverage_chip (Medi-Cal coverage), ui.maybe_chip (each maybe line with a value), ui.check_chip.<program> (a check line with a range). The bar text is ui.total + ' · ' + ui.claimed.",
+    "share": "share.text only in full mode with found > 0. {share} is floored to $100 and {site} is the public site origin. It never carries the card url, the token, the case code or any answer.",
+    "verify": "Screen and button names on the official sites were not all re-read on 2026-10-01: the BenefitsCal programs and tax screens, the Clipper START photo-ID list, the LifeLine household worksheet and the SF State VITA intake. They are worded loosely on purpose; the rules table lists them as unverified."
+  },
+  "budgets": {
+    "question": 18,
+    "choice": 5,
+    "line": 30,
+    "note": 25,
+    "share": 30,
+    "footnote": 25,
+    "label": 18,
+    "button": 5,
+    "name": 6,
+    "prefill": 18,
+    "console": 30
+  },
+  "placeholders": {
+    "found": {
+      "type": "money",
+      "fill": "ProgramsResult.found_display (floored to $10)",
+      "example": "$4,220"
+    },
+    "calfresh_year": {
+      "type": "money",
+      "fill": "12 x the monthly CalFresh estimate, floored to $10",
+      "example": "$3,670"
+    },
+    "calfresh_month": {
+      "type": "money_exact",
+      "fill": "the monthly CalFresh estimate",
+      "example": "$306"
+    },
+    "claimed": {
+      "type": "money",
+      "fill": "ProgramsResult.claimed_display",
+      "example": "$3,830"
+    },
+    "i": {
+      "type": "int",
+      "fill": "this question's number",
+      "example": "1"
+    },
+    "n": {
+      "type": "int",
+      "fill": "ui.question_count: number of questions; care.*: people splitting the bill (bill_split)",
+      "example": "3"
+    },
+    "checked": {
+      "type": "date",
+      "fill": "the rules table's checked date",
+      "example": "Oct 1, 2026"
+    },
+    "value": {
+      "type": "money",
+      "fill": "the line's display value (yearly, floored to $10)",
+      "example": "$160"
+    },
+    "lo": {
+      "type": "money",
+      "fill": "the low end of a check range (floored to $10)",
+      "example": "$90"
+    },
+    "hi": {
+      "type": "money",
+      "fill": "the high end of a check range (floored to $10)",
+      "example": "$440"
+    },
+    "fed": {
+      "type": "money",
+      "fill": "federal Lifeline, money.horizon_months x the row's monthly, floored to $10",
+      "example": "$110"
+    },
+    "household": {
+      "type": "money",
+      "fill": "the CARE saving for the whole home (floored to $10)",
+      "example": "$510"
+    },
+    "bill": {
+      "type": "money_exact",
+      "fill": "the assumed monthly PG&E bill (care.rates default)",
+      "example": "$140"
+    },
+    "date": {
+      "type": "date",
+      "fill": "ui.apply_by: server-formatted month and day, no weekday; ui.source: the source's date_text",
+      "example": "November 19"
+    },
+    "source": {
+      "type": "text",
+      "fill": "sources.<id>.name",
+      "example": "Clipper START FAQ"
+    },
+    "share": {
+      "type": "money",
+      "fill": "ProgramsResult.share_display (floored to $100)",
+      "example": "$4,200"
+    },
+    "site": {
+      "type": "url",
+      "fill": "the public site origin (never the card url)",
+      "example": "https://gatorplate.fly.dev"
+    },
+    "amount": {
+      "type": "money_exact",
+      "fill": "the slot value, exact dollars",
+      "example": "$900"
+    },
+    "count": {
+      "type": "int",
+      "fill": "fact people_in_home",
+      "example": "3"
+    }
+  },
+  "programs": {
+    "calfresh": {
+      "name": "program.calfresh",
+      "lines": {
+        "likely": "calfresh.today"
+      },
+      "notes": [
+        "calfresh.basis"
+      ],
+      "list_only": null,
+      "value_text": {
+        "likely": "ui.value.likely"
+      },
+      "chip": {},
+      "apply": "apply.calfresh_steps",
+      "sources": [
+        "CA-FY2027"
+      ]
+    },
+    "medi_cal": {
+      "name": "program.medi_cal",
+      "lines": {
+        "coverage": "medi_cal.coverage",
+        "check": "medi_cal.check"
+      },
+      "notes": [
+        "medi_cal.family_income",
+        "medi_cal.if_claimed",
+        "medi_cal.child_too",
+        "medi_cal.link"
+      ],
+      "list_only": "list_only.medi_cal",
+      "value_text": {
+        "coverage": "ui.value.coverage",
+        "check": null
+      },
+      "chip": {
+        "coverage": "ui.coverage_chip"
+      },
+      "apply": "apply.benefitscal",
+      "sources": [
+        "DHCS-ACWDL-26-01",
+        "HHS-POVERTY-2026",
+        "SAWS-1"
+      ]
+    },
+    "clipper_start": {
+      "name": "program.clipper_start",
+      "lines": {
+        "likely": "clipper.likely",
+        "check": "clipper.check",
+        "zero": "clipper.zero",
+        "note": "clipper.youth_free_muni"
+      },
+      "notes": [
+        "clipper.youth_free_muni",
+        "clipper.two_cards",
+        "clipper.link"
+      ],
+      "list_only": "list_only.clipper_start",
+      "value_text": {
+        "likely": "ui.value.likely",
+        "check": "ui.value.range",
+        "zero": null,
+        "note": null
+      },
+      "chip": {
+        "check": "ui.check_chip.clipper_start"
+      },
+      "apply": "apply.clipper",
+      "sources": [
+        "CLIPPER-START-FAQ",
+        "SFMTA-FARES",
+        "BART-FARES-2026",
+        "SFSU-GATOR-PASS"
+      ]
+    },
+    "lifeline": {
+      "name": "program.lifeline",
+      "lines": {
+        "likely": "lifeline.likely",
+        "check": "lifeline.check",
+        "note": "lifeline.dependent"
+      },
+      "notes": [
+        "lifeline.federal_extra",
+        "lifeline.family_plan",
+        "lifeline.dependent",
+        "lifeline.link"
+      ],
+      "list_only": "list_only.lifeline",
+      "value_text": {
+        "likely": "ui.value.ceiling",
+        "check": "ui.value.ceiling",
+        "note": null
+      },
+      "chip": {},
+      "apply": "apply.lifeline",
+      "sources": [
+        "CPUC-LIFELINE-2026",
+        "CPUC-LIFELINE-ELIG"
+      ]
+    },
+    "care": {
+      "name": "program.care",
+      "lines": {
+        "likely": {
+          "shared": "care.likely",
+          "alone": "care.likely_alone"
+        },
+        "maybe": {
+          "shared": "care.maybe",
+          "alone": "care.maybe_alone"
+        },
+        "check": "care.check",
+        "note": "care.in_rent"
+      },
+      "notes": [
+        "care.roommate_applies",
+        "care.you_apply",
+        "care.applicant_not_dependent",
+        "care.in_rent",
+        "care.link"
+      ],
+      "list_only": "list_only.care",
+      "value_text": {
+        "likely": "ui.value.likely",
+        "maybe": "ui.value.maybe",
+        "check": null,
+        "note": null
+      },
+      "chip": {
+        "maybe": "ui.maybe_chip"
+      },
+      "apply": "apply.care",
+      "sources": [
+        "CPUC-CARE-FERA",
+        "PGE-FORM-01-9077",
+        "PGE-CARE",
+        "GP-PROJECT"
+      ]
+    },
+    "tax_credits": {
+      "name": "program.tax_credits",
+      "lines": {
+        "likely": {
+          "both": "tax.likely_no_child",
+          "state_only": "tax.likely_state",
+          "federal_only": "tax.likely_federal",
+          "parent": "tax.likely_parent",
+          "parent_federal_only": "tax.likely_parent_federal"
+        },
+        "maybe": {
+          "any": "tax.maybe",
+          "small": "tax.small"
+        }
+      },
+      "notes": [
+        "tax.basis",
+        "tax.id_note",
+        "tax.unfiled_2025",
+        "tax.link"
+      ],
+      "list_only": "list_only.tax_credits",
+      "value_text": {
+        "likely": "ui.value.likely",
+        "maybe": "ui.value.maybe"
+      },
+      "chip": {
+        "maybe": "ui.maybe_chip"
+      },
+      "apply": "apply.vita",
+      "sources": [
+        "FTB-3514-2025",
+        "IRS-RP-2025-32",
+        "FTB-YCTC",
+        "SFSU-VITA"
+      ]
+    }
+  },
+  "console_keys": [
+    "care.utility_conflict"
+  ],
+  "links": {
+    "apply.calfresh_steps": "#today_action",
+    "apply.benefitscal": "https://benefitscal.com/",
+    "apply.clipper": "https://www.clipperstartcard.com/s/application",
+    "apply.lifeline": "https://www.californialifeline.com/",
+    "apply.care": "https://www.pge.com/en/account/billing-and-assistance/financial-assistance/california-alternate-rates-for-energy-program.html",
+    "apply.vita": "https://cob.sfsu.edu/VITA"
+  },
+  "strings": {
+    "ui.title": "Money you may be missing this year",
+    "ui.total": "About {found} a year",
+    "ui.calfresh_part": "CalFresh: about {calfresh_year} a year ({calfresh_month} a month)",
+    "ui.key_line": "CalFresh is the key. It opens the others.",
+    "ui.claimed": "You've started {claimed} of {found}",
+    "ui.question_count": "Question {i} of {n}",
+    "ui.footnote": "Estimates for the next 12 months from official rules, checked {checked}. Each agency decides. Not a promise.",
+    "ui.coverage_chip": "+ health coverage (Medi-Cal)",
+    "ui.maybe_chip": "maybe +{value}",
+    "ui.check_chip.clipper_start": "Riding over breaks? about {lo}–{hi}",
+    "ui.plan_title": "Your plan",
+    "ui.stage.today": "Today",
+    "ui.stage.after_approval": "When your CalFresh approval letter comes",
+    "ui.stage.tax_time": "At tax time (usually late January to April 15)",
+    "ui.apply_by": "Apply by about {date}",
+    "ui.mark_applied": "I applied",
+    "ui.undo": "Undo",
+    "ui.status.likely": "Likely",
+    "ui.status.maybe": "Maybe",
+    "ui.status.check": "Check",
+    "ui.status.coverage": "Coverage",
+    "ui.status.zero": "Not counted",
+    "ui.status.note": "Good to know",
+    "ui.value.likely": "about {value} a year",
+    "ui.value.ceiling": "up to {value} a year",
+    "ui.value.maybe": "maybe about {value} a year",
+    "ui.value.range": "about {lo}–{hi} a year",
+    "ui.value.coverage": "health coverage",
+    "ui.source": "Source: {source}, {date}",
+    "ui.answers_title": "Your answers for this form",
+    "ui.new_tab": "opens in a new tab",
+    "ui.list_only_title": "More help to check with the coordinator",
+    "ui.list_only_intro": "These may help you too. A person checks them with you, so no amounts yet.",
+    "ui.share_button": "Share",
+    "ui.copied": "Copied",
+    "share.text": "I found about {share} a year in aid I may be missing (estimates, not promises). Check yours in 2 minutes: {site}",
+    "q.break_transit": "During winter and summer break, will you ride Muni or BART in the Bay Area?",
+    "q.break_transit.none": "No, or I'll be away",
+    "q.break_transit.two_days": "1–2 days a week",
+    "q.break_transit.weekdays_muni": "Most weekdays (Muni)",
+    "q.break_transit.weekdays_bart": "Most weekdays (with BART)",
+    "q.tax_dependent": "Will a parent or anyone else claim you as a dependent on their 2026 taxes?",
+    "q.tax_dependent.no": "No",
+    "q.tax_dependent.yes": "Yes",
+    "q.tax_dependent.not_sure": "Not sure",
+    "q.pge_bill": "Does your place get its own PG&E bill?",
+    "q.pge_bill.own_mine": "Yes, in my name",
+    "q.pge_bill.own_roommate": "Yes, in a roommate's name",
+    "q.pge_bill.in_rent": "No, it's in my rent",
+    "q.pge_bill.not_sure": "Not sure",
+    "program.calfresh": "CalFresh",
+    "program.medi_cal": "Medi-Cal",
+    "program.clipper_start": "Clipper START",
+    "program.lifeline": "California LifeLine",
+    "program.care": "PG&E CARE",
+    "program.tax_credits": "Tax credits (CalEITC, EITC)",
+    "calfresh.today": "Apply for CalFresh on BenefitsCal today. The steps are at the top of this card.",
+    "calfresh.basis": "12 times the monthly estimate, if nothing changes. The first month is paid from the day you apply, so the total may be lower.",
+    "medi_cal.coverage": "Health coverage for doctor, hospital and prescriptions, at no cost for most students today. Check the health box on the same BenefitsCal application.",
+    "medi_cal.check": "Health coverage for doctor, hospital and prescriptions may still be possible on the same BenefitsCal application.",
+    "medi_cal.family_income": "Medi-Cal may count your family's income. The SF State CalFresh coordinator can check it with you.",
+    "medi_cal.if_claimed": "If a parent claims you on their taxes, Medi-Cal may count their income too.",
+    "medi_cal.child_too": "Your child may get Medi-Cal too.",
+    "medi_cal.link": "Same application as CalFresh. No second form.",
+    "clipper.likely": "Half-price Muni, BART and buses over winter and summer break: about {value} a year. Your Gator Pass already covers the semesters.",
+    "clipper.check": "Riding Muni or BART over breaks? Clipper START could save about {lo}–{hi} a year. Gator Pass covers the semesters.",
+    "clipper.zero": "Not counted: you said you won't ride over breaks.",
+    "clipper.youth_free_muni": "Muni is free for riders 18 and under. Clipper START starts at 19.",
+    "clipper.link": "With CalFresh you can choose \"Verify instantly through CalFresh\". The card comes by mail, usually within 30 days.",
+    "clipper.two_cards": "Use your OneCard in semesters and the Clipper START card on breaks.",
+    "lifeline.likely": "Phone discount: up to {value} a year with California LifeLine ($19 a month at most; less if your plan costs less).",
+    "lifeline.federal_extra": "Federal Lifeline may add up to {fed} a year more.",
+    "lifeline.check": "If no one claims you as a tax dependent, California LifeLine could take up to {value} a year off your phone bill.",
+    "lifeline.dependent": "California LifeLine is for people no one claims as a tax dependent.",
+    "lifeline.family_plan": "If your family pays your phone plan, the saving is theirs.",
+    "lifeline.link": "CalFresh or Medi-Cal counts as proof. Pick one LifeLine phone company and apply through it.",
+    "care.likely": "PG&E discount: about {value} a year as your share (about {household} for the home). Assumed bill: {bill} a month split {n} ways; yours may differ.",
+    "care.likely_alone": "PG&E discount: about {value} a year. Assumed bill: {bill} a month; yours may differ.",
+    "care.maybe": "PG&E discount: maybe about {value} a year as your share (about {household} for the home). Assumed bill: {bill} a month split {n} ways.",
+    "care.maybe_alone": "PG&E discount: maybe about {value} a year. Assumed bill: {bill} a month; yours may differ.",
+    "care.check": "Does your place have its own PG&E bill? The person on it could save roughly 30% once you get CalFresh.",
+    "care.roommate_applies": "Your roommate on the bill applies and ticks the CalFresh box once you get CalFresh. They can't be someone's tax dependent.",
+    "care.you_apply": "You apply as the person on the bill and tick the CalFresh box once you get CalFresh.",
+    "care.applicant_not_dependent": "The person on the PG&E bill can't be someone's tax dependent. A roommate on the bill could apply instead.",
+    "care.in_rent": "Electricity and gas are in your rent, so there's no PG&E bill of your own to discount.",
+    "care.link": "CalFresh opens it: tick the CalFresh box. No income papers needed to apply.",
+    "care.utility_conflict": "Card: the home has its own PG&E bill. Call: no utility bills. Check the utility questions (no change when the estimate is already the maximum).",
+    "tax.likely_no_child": "At tax time: about {value} in tax credits (CalEITC and federal EITC). Free help: SF State VITA, usually late January to April 15.",
+    "tax.likely_state": "At tax time: about {value} in tax credits (CalEITC, the state credit). Free help: SF State VITA, usually late January to April 15.",
+    "tax.likely_federal": "At tax time: about {value} in tax credits (federal EITC), plus maybe a small state credit. Free help: SF State VITA.",
+    "tax.likely_parent": "At tax time: about {value} in tax credits (federal EITC and Young Child Tax Credit), plus maybe CalEITC. A free tax volunteer at SF State VITA checks.",
+    "tax.likely_parent_federal": "At tax time: about {value} in tax credits (federal EITC), plus maybe CalEITC. A free tax volunteer at SF State VITA checks.",
+    "tax.maybe": "Maybe about {value} in tax credits at tax time. A free tax volunteer at SF State VITA checks whether you can claim it.",
+    "tax.small": "Maybe a small tax credit at tax time. A free tax volunteer at SF State VITA checks.",
+    "tax.basis": "Based on the 2025 state tables (2026 not out yet) and your monthly pay all year. A credit amount, not your refund.",
+    "tax.id_note": "The state credit works with an SSN or ITIN. The federal credit needs an SSN valid for work.",
+    "tax.unfiled_2025": "Haven't filed for 2025? You may still file and claim credits for free.",
+    "tax.link": "Tax credits like the EITC don't lower your CalFresh.",
+    "list_only.medi_cal": "Health coverage on the same BenefitsCal application. Medi-Cal may count your family's income, so check it with the coordinator.",
+    "list_only.clipper_start": "Half-price Muni, BART and buses for ages 19 to 64. Your Gator Pass already covers the semesters.",
+    "list_only.lifeline": "A phone bill discount for people no one claims as a tax dependent.",
+    "list_only.care": "A PG&E bill discount for the person whose name is on the bill.",
+    "list_only.tax_credits": "Tax credits at tax time. A free tax volunteer at SF State VITA checks.",
+    "apply.calfresh_steps": "See today's steps",
+    "apply.benefitscal": "Open BenefitsCal",
+    "apply.clipper": "Apply for Clipper START",
+    "apply.lifeline": "Find a LifeLine company",
+    "apply.care": "Apply for CARE",
+    "apply.vita": "Open SF State VITA",
+    "pf.yes": "Yes",
+    "pf.medi_cal.health": "Do you also want health coverage (Medi-Cal)?",
+    "pf.medi_cal.tax": "Will someone claim you as a tax dependent?",
+    "pf.income": "How much do you earn from work each month?",
+    "pf.clipper.verify": "Which proof will you use?",
+    "pf.clipper.verify_calfresh": "\"Verify instantly through CalFresh\"",
+    "pf.clipper.id": "Which photo ID will you upload?",
+    "pf.clipper.id_list": "A photo ID that shows your date of birth (the form lists which kinds count)",
+    "pf.clipper.mail": "Where should the card be mailed?",
+    "pf.clipper.mail_any": "Any address where you can get mail",
+    "pf.lifeline.program": "Which program do you get?",
+    "pf.calfresh_or_medi_cal": "CalFresh or Medi-Cal (after your approval letter comes)",
+    "pf.lifeline.household": "Do you share money with other adults where you live?",
+    "pf.lifeline.service": "Which service is the discount for?",
+    "pf.lifeline.phone": "My cell phone plan",
+    "pf.care.box": "Section 2A: which program does someone in your home get?",
+    "pf.care.box_calfresh": "CalFresh (tick this box)",
+    "pf.care.people": "How many people live in your home?",
+    "pf.care.holder": "Whose name is on the PG&E bill?",
+    "pf.tax.student": "Were you a student in 2026?",
+    "pf.tax.wages": "How much did you earn from work in 2026? Bring your W-2.",
+    "pf.tax.lived_with_parent": "Did you live with a parent? Time away at school can count.",
+    "pf.tax.tell_volunteer": "Tell the volunteer. It decides who can claim the credit.",
+    "pf.answer.tax_dependent.no": "No",
+    "pf.answer.tax_dependent.yes": "Yes, a parent or someone else",
+    "pf.answer.tax_dependent.not_sure": "Not sure yet (ask the coordinator)",
+    "pf.answer.pge_bill.own_mine": "Mine (I apply)",
+    "pf.answer.pge_bill.own_roommate": "My roommate's (they apply)",
+    "pf.answer.pge_bill.in_rent": "No bill: it's in my rent",
+    "pf.answer.pge_bill.not_sure": "Look at a recent bill",
+    "pf.answer.earned_monthly": "{amount} a month",
+    "pf.answer.household_food.alone": "No, just me",
+    "pf.answer.household_food.separate": "No, my roommates and I don't share money",
+    "pf.answer.household_food.shared": "Ask the coordinator",
+    "pf.answer.people_in_home": "{count}",
+    "pf.answer.half_time.true": "Yes, at least half-time. Tell them your units.",
+    "pf.answer.half_time.false": "Less than half-time"
+  },
+  "sources": {
+    "CA-FY2027": {
+      "date": "2026-09-10",
+      "name": "CalFresh FY2027 table (CDSS ACIN I-40-26)",
+      "date_text": "Sep 10, 2026"
+    },
+    "HHS-POVERTY-2026": {
+      "date": "2026-01-15",
+      "name": "HHS 2026 poverty guidelines",
+      "date_text": "Jan 2026"
+    },
+    "DHCS-ACWDL-26-01": {
+      "date": "2026-01-21",
+      "name": "DHCS letter ACWDL 26-01 (2026 income limits)",
+      "date_text": "Jan 21, 2026"
+    },
+    "DHCS-FPL-CHART-2026": {
+      "date": null,
+      "name": "DHCS 2026 monthly income chart",
+      "date_text": "2026"
+    },
+    "DHCS-CHILD-266": {
+      "date": null,
+      "name": "DHCS income chart for children",
+      "date_text": "2025"
+    },
+    "ECFR-42-435-603": {
+      "date": "2026-10-01",
+      "name": "Federal rule 42 CFR 435.603 (Medi-Cal household and income)",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "DHCS-HR1-PLAN": {
+      "date": "2026-01-29",
+      "name": "DHCS H.R. 1 implementation plan",
+      "date_text": "Jan 29, 2026"
+    },
+    "DHCS-BUDGET-2026-27": {
+      "date": "2026-07-01",
+      "name": "DHCS 2026-27 budget highlights",
+      "date_text": "Jul 1, 2026"
+    },
+    "DHCS-SPA-22-0045": {
+      "date": null,
+      "name": "DHCS notice SPA 22-0045 (Medi-Cal copays ended)",
+      "date_text": "2022"
+    },
+    "DHCS-ACWDL-25-33": {
+      "date": "2025-12-30",
+      "name": "DHCS letter ACWDL 25-33 (premiums for some adults from July 2027)",
+      "date_text": "Dec 30, 2025"
+    },
+    "SAWS-1": {
+      "date": null,
+      "name": "SAWS 1 application (CalFresh, cash aid, Medi-Cal)",
+      "date_text": "rev. Aug 2013"
+    },
+    "SFSU-SHS-INSURANCE": {
+      "date": "2026-10-01",
+      "name": "SF State Student Health Services, health insurance",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "CLIPPER-START-FAQ": {
+      "date": "2026-10-01",
+      "name": "Clipper START FAQ",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "CLIPPER-START-APP": {
+      "date": "2026-10-01",
+      "name": "Clipper START application",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "MTC-CALFRESH-VERIFY": {
+      "date": "2026-03-16",
+      "name": "MTC: instant CalFresh check for Clipper START",
+      "date_text": "Mar 16, 2026"
+    },
+    "SFMTA-FARES": {
+      "date": "2026-10-01",
+      "name": "SFMTA Muni fares",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "SFMTA-LIFELINE": {
+      "date": "2026-10-01",
+      "name": "SFMTA Lifeline pass",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "SFMTA-BUDGET-2027": {
+      "date": "2026-04-21",
+      "name": "SFMTA budget for 2026-27 and 2027-28",
+      "date_text": "Apr 21, 2026"
+    },
+    "BART-FARES-2026": {
+      "date": "2025-11-20",
+      "name": "BART fares from Jan 1, 2026",
+      "date_text": "Nov 20, 2025"
+    },
+    "SFSU-GATOR-PASS": {
+      "date": "2026-10-01",
+      "name": "SF State Gator Pass",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "SFSU-ACAD-CAL": {
+      "date": "2026-10-01",
+      "name": "SF State academic calendar",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "SFSU-BURSAR-FEES": {
+      "date": null,
+      "name": "SF State fees, 2026-27",
+      "date_text": "2026-27"
+    },
+    "PGE-CARE": {
+      "date": "2026-10-01",
+      "name": "PG&E CARE program",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "PGE-FORM-01-9077": {
+      "date": "2026-06-01",
+      "name": "PG&E CARE/FERA application (form 01-9077)",
+      "date_text": "Jun 1, 2026"
+    },
+    "PGE-RULE-19-1": {
+      "date": "2026-06-01",
+      "name": "PG&E Electric Rule 19.1 (CARE)",
+      "date_text": "Jun 1, 2026"
+    },
+    "PGE-ELEC-ADVISORY-0326": {
+      "date": "2026-03-01",
+      "name": "PG&E electric rate advisory",
+      "date_text": "Mar 1, 2026"
+    },
+    "PGE-GAS-ADVISORY-0326": {
+      "date": "2026-03-01",
+      "name": "PG&E gas rate advisory",
+      "date_text": "Mar 1, 2026"
+    },
+    "CPUC-CARE-FERA": {
+      "date": "2026-10-01",
+      "name": "CPUC: CARE and FERA programs",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "SFSU-HOUSING-FEES": {
+      "date": "2026-10-01",
+      "name": "SF State housing fees",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "CPUC-LIFELINE-2026": {
+      "date": "2026-02-18",
+      "name": "CPUC: California LifeLine and federal Lifeline",
+      "date_text": "Feb 18, 2026"
+    },
+    "CPUC-LIFELINE-ELIG": {
+      "date": "2026-10-01",
+      "name": "CPUC: California LifeLine eligibility",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "CPUC-LIFELINE-PD-2026": {
+      "date": "2026-09-04",
+      "name": "CPUC proposed decision, R.25-11-005 (adoption not confirmed)",
+      "date_text": "Sep 4, 2026"
+    },
+    "ECFR-47-54-403": {
+      "date": "2026-09-30",
+      "name": "Federal rule 47 CFR 54.403 (Lifeline support)",
+      "date_text": "checked Sep 30, 2026"
+    },
+    "FTB-CALEITC": {
+      "date": "2026-04-16",
+      "name": "FTB: CalEITC eligibility",
+      "date_text": "Apr 16, 2026"
+    },
+    "FTB-3514-2025": {
+      "date": null,
+      "name": "FTB 3514 instructions and table, tax year 2025",
+      "date_text": "2025"
+    },
+    "FTB-YCTC": {
+      "date": "2026-04-16",
+      "name": "FTB: Young Child Tax Credit",
+      "date_text": "Apr 16, 2026"
+    },
+    "IRS-RP-2025-32": {
+      "date": "2025-10-09",
+      "name": "IRS Rev. Proc. 2025-32 (tax year 2026 amounts)",
+      "date_text": "Oct 9, 2025"
+    },
+    "IRS-EITC-WHO": {
+      "date": "2026-10-01",
+      "name": "IRS: who qualifies for the EITC",
+      "date_text": "checked Oct 1, 2026"
+    },
+    "IRS-PUB-596": {
+      "date": null,
+      "name": "IRS Publication 596 (EITC)",
+      "date_text": "2025"
+    },
+    "SFSU-VITA": {
+      "date": null,
+      "name": "SF State VITA free tax help",
+      "date_text": "2026 season"
+    },
+    "CDSS-ACIN-I-87-22": {
+      "date": "2022-12-29",
+      "name": "CDSS ACIN I-87-22 (the EITC is not CalFresh income)",
+      "date_text": "Dec 29, 2022"
+    },
+    "GP-PROJECT": {
+      "date": "2026-10-01",
+      "name": "GatorPlate estimate rules (rounding, assumed bills)",
+      "date_text": "Oct 1, 2026"
+    }
+  }
+}

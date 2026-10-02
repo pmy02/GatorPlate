@@ -1,0 +1,25 @@
+{
+ "additionalProperties": false,
+ "description": "Content-free: only the kind and the time.",
+ "properties": {
+  "at": {
+   "format": "date-time",
+   "title": "At",
+   "type": "string"
+  },
+  "kind": {
+   "enum": [
+    "ssn_blocked",
+    "card_number_blocked"
+   ],
+   "title": "Kind",
+   "type": "string"
+  }
+ },
+ "required": [
+  "kind",
+  "at"
+ ],
+ "title": "PrivacyEvent",
+ "type": "object"
+}

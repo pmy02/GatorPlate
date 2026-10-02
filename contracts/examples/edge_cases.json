@@ -1,0 +1,1879 @@
+{
+  "example": "edge_cases",
+  "description": "Edge cases of the Brain API v1: keypad, consent declined, masked digits, silence, idempotency, auth failures, hold, Spanish on the phone, schema errors, web tokens, rate limit, turns after the end, health, brain-side redaction, explicit confirm, interruption, crisis. Replies are illustrative but follow the phone text rules and word budgets.",
+  "api": "brain_api.v1",
+  "illustrative_text": true,
+  "native_review": true,
+  "scenarios": [
+    {
+      "id": "dtmf_consent",
+      "title": "Consent by keypad 1 (test call, GP_DEBUG_KEYS=1)",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000001",
+      "settings": {
+        "GP_DEBUG_KEYS": "1"
+      },
+      "exchanges": [
+        {
+          "step": "start",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000001/start",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "channel": "phone",
+              "lang": "en",
+              "test": true
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.",
+              "ask": "Okay to start? Say yes, or press one.",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": {
+                "keys": [
+                  "consent.ask"
+                ],
+                "phase": "consent"
+              }
+            }
+          },
+          "keys": [
+            "consent.ask"
+          ],
+          "budget": "opening"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000001/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "en",
+              "event": "dtmf",
+              "dtmf": "1",
+              "x_client_note": "unknown request fields are ignored"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Great.",
+              "ask": "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": {
+                "keys": [
+                  "ack.short",
+                  "ask.level_units"
+                ],
+                "phase": "student"
+              }
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.level_units"
+          ],
+          "budget": "question",
+          "note": "Keypad 1 = yes. The extra request field is ignored (tolerant reader)."
+        }
+      ]
+    },
+    {
+      "id": "consent_declined_voice",
+      "title": "Consent declined by voice: coordinator number, then end",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000002",
+      "exchanges": [
+        {
+          "step": "start",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000002/start",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "channel": "phone",
+              "lang": "en",
+              "test": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.",
+              "ask": "Okay to start? Say yes, or press one.",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "consent.ask"
+          ],
+          "budget": "opening"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000002/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "en",
+              "event": "utterance",
+              "text": "No, I don't want to do this.",
+              "masked": false,
+              "confidence": 0.93,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "No problem. If you want help from a person, the SF State CalFresh coordinator is at four one five, three three eight, one two zero three. Goodbye.",
+              "ask": null,
+              "end": true,
+              "end_reason": "declined",
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "consent.declined"
+          ],
+          "budget": "result"
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000002/end",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "reason": "declined",
+              "turns": 1,
+              "duration_ms": 21000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "consent_declined_keypad",
+      "title": "Consent declined by keypad 2",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000003",
+      "given": {
+        "started": true,
+        "last_seq": 0,
+        "student_turns": 0,
+        "pending": "consent.ask"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000003/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "en",
+              "event": "dtmf",
+              "dtmf": "2"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "No problem. If you want help from a person, the SF State CalFresh coordinator is at four one five, three three eight, one two zero three. Goodbye.",
+              "ask": null,
+              "end": true,
+              "end_reason": "declined",
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "consent.declined"
+          ],
+          "budget": "result",
+          "note": "Keypad 2 = no."
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000003/end",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "reason": "declined",
+              "turns": 1,
+              "duration_ms": 19000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "masked_digits",
+      "title": "Masked digits: SSN guidance, then the pending question again",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000004",
+      "given": {
+        "started": true,
+        "last_seq": 5,
+        "pending": "ask.rent"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000004/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 6,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Do you need my social? It's #########.",
+              "masked": true,
+              "confidence": 0.86,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Please don't share your Social Security number. GatorPlate doesn't need it.",
+              "ask": "What's your share of the rent?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ssn.block",
+            "ask.rent"
+          ],
+          "budget": "question",
+          "note": "Nothing from this utterance is stored; the case records only a privacy event (ssn_blocked)."
+        }
+      ]
+    },
+    {
+      "id": "silence_three",
+      "title": "Three silences in a row end the call with no_input",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000005",
+      "given": {
+        "started": true,
+        "last_seq": 6,
+        "student_turns": 6,
+        "pending": "flip.rent_paid_by_others"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000005/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 7,
+              "lang": "en",
+              "event": "silence",
+              "silence_n": 1,
+              "silence_ms": 5000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Are you there?",
+              "ask": "Does anyone, like a parent, pay part of your rent straight to your landlord?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "reprompt.silence_1",
+            "flip.rent_paid_by_others"
+          ],
+          "budget": "question"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000005/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 8,
+              "lang": "en",
+              "event": "silence",
+              "silence_n": 2,
+              "silence_ms": 10000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Still there?",
+              "ask": "Does anyone pay part of your rent to your landlord for you? Press one for yes, two for no.",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "reprompt.silence_2",
+            "flip.rent_paid_by_others"
+          ],
+          "budget": "question",
+          "note": "Second silence: closed form with the keypad option."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000005/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 9,
+              "lang": "en",
+              "event": "silence",
+              "silence_n": 3,
+              "silence_ms": 15000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "I still can't hear you, so I'll end the call. The SF State CalFresh coordinator is at four one five, three three eight, one two zero three. Goodbye.",
+              "ask": null,
+              "end": true,
+              "end_reason": "no_input",
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "close.silence"
+          ],
+          "budget": "result"
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000005/end",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "reason": "no_input",
+              "turns": 6,
+              "duration_ms": 97000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "idempotent_seq",
+      "title": "Repeated start, repeated seq, gap, stale seq",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000006",
+      "exchanges": [
+        {
+          "step": "start",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000006/start",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "channel": "phone",
+              "lang": "en",
+              "test": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.",
+              "ask": "Okay to start? Say yes, or press one.",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "consent.ask"
+          ],
+          "budget": "opening",
+          "id": "s0"
+        },
+        {
+          "step": "start",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000006/start",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "channel": "phone",
+              "lang": "en",
+              "test": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.",
+              "ask": "Okay to start? Say yes, or press one.",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "yes_no",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "consent.ask"
+          ],
+          "budget": "opening",
+          "id": "s0_repeat",
+          "same_as": "s0",
+          "note": "A repeated /start returns the stored first reply."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000006/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Yes.",
+              "masked": false,
+              "confidence": 0.95,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Great.",
+              "ask": "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.level_units"
+          ],
+          "budget": "question",
+          "id": "t1"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000006/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Yes.",
+              "masked": false,
+              "confidence": 0.95,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Great.",
+              "ask": "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.level_units"
+          ],
+          "budget": "question",
+          "id": "t1_repeat",
+          "same_as": "t1",
+          "note": "Retry of seq 1: the stored reply comes back; the turn is not processed twice."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000006/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 3,
+              "lang": "en",
+              "event": "utterance",
+              "text": "I'm a junior, 12 units.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Thanks.",
+              "ask": "How old are you, and who do you live with?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.age_parent"
+          ],
+          "budget": "question",
+          "id": "t3",
+          "note": "seq 2 never arrived: a gap is accepted."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000006/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 3,
+              "lang": "en",
+              "event": "utterance",
+              "text": "I'm a junior with 12 units.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Thanks.",
+              "ask": "How old are you, and who do you live with?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.age_parent"
+          ],
+          "budget": "question",
+          "id": "t3_repeat",
+          "same_as": "t3",
+          "note": "Same seq with a different body: still the stored reply (bodies are not compared)."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000006/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Hello?",
+              "masked": false,
+              "confidence": 0.7,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 409,
+            "body": {
+              "error": {
+                "code": "stale_seq",
+                "message": "seq is older than the last accepted turn.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "seq 2 arrives late, after seq 3 was accepted."
+        }
+      ]
+    },
+    {
+      "id": "unknown_call",
+      "title": "Turn and end for a call that was never started",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000007",
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000007/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 1,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Yes.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 404,
+            "body": {
+              "error": {
+                "code": "unknown_call",
+                "message": "No such call.",
+                "retryable": false
+              }
+            }
+          }
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000007/end",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "reason": "caller_hangup",
+              "turns": 1,
+              "duration_ms": 4000
+            }
+          },
+          "response": {
+            "status": 404,
+            "body": {
+              "error": {
+                "code": "unknown_call",
+                "message": "No such call.",
+                "retryable": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "bad_signature",
+      "title": "Wrong signatures are rejected with 401 bad_signature",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000008",
+      "server_now": 1790960405,
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000008/turn",
+            "auth": "gateway",
+            "headers": {
+              "X-GP-Timestamp": "1790960400",
+              "X-GP-Signature": "v1=5df107dbca8dc6f5605492ea81e96e5d875b106e18178d03720c1d4259883c22"
+            },
+            "body_raw": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}"
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "bad_signature",
+                "message": "Signature check failed.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "The signature was made over a different body."
+        },
+        {
+          "step": "lines",
+          "request": {
+            "method": "GET",
+            "path": "/v1/lines",
+            "query": "lang=en",
+            "auth": "gateway",
+            "headers": {
+              "X-GP-Timestamp": "1790960400",
+              "X-GP-Signature": "v1=4036c98a4e8a885964529270ae5baac2f68f5c0d1c46982dd69dae06794bd9cb"
+            },
+            "body_raw": ""
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "bad_signature",
+                "message": "Signature check failed.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "The signer included the query string in the signed path."
+        }
+      ]
+    },
+    {
+      "id": "stale_timestamp",
+      "title": "Old timestamps are rejected; the 120 s edge is accepted",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000009",
+      "server_now": 1790960700,
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000009/turn",
+            "auth": "gateway",
+            "headers": {
+              "X-GP-Timestamp": "1790960400",
+              "X-GP-Signature": "v1=7b8caf866a89692be23f0237773fbb9b21e44db9ca9bf786d67eb4ae5986b283"
+            },
+            "body_raw": "{\"v\":1,\"seq\":1,\"lang\":\"en\",\"event\":\"utterance\",\"text\":\"Yes.\",\"masked\":false,\"confidence\":0.9,\"interrupted\":false,\"typed\":false}"
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "stale_timestamp",
+                "message": "Timestamp outside the allowed window.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "Correct signature, but the timestamp is 300 s old (window is 120 s)."
+        },
+        {
+          "step": "lines",
+          "request": {
+            "method": "GET",
+            "path": "/v1/lines",
+            "query": "lang=en",
+            "auth": "gateway",
+            "headers": {
+              "X-GP-Timestamp": "1790960580",
+              "X-GP-Signature": "v1=2eefec98ae6de54139809cee3dd1e63363478282e4944206777ee8fab43b02aa"
+            },
+            "body_raw": ""
+          },
+          "response": {
+            "status": 200,
+            "body_ref": "lines_en.json"
+          },
+          "note": "Exactly 120 s old: accepted."
+        }
+      ]
+    },
+    {
+      "id": "hold",
+      "title": "Student asks to wait: hold_s 30",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e00000000000000000000000000000a",
+      "given": {
+        "started": true,
+        "last_seq": 4,
+        "pending": "ask.income"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000a/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 5,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Hold on, let me check my pay stub.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Sure, take your time.",
+              "ask": null,
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 30,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "hold.ok"
+          ],
+          "budget": "question",
+          "note": "No silence event for 30 s; the student's next words arrive as a normal utterance."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000a/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 6,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Okay, it's about 900 a month, and nobody gives me cash.",
+              "masked": false,
+              "confidence": 0.91,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Got it — about nine hundred dollars a month from work.",
+              "ask": "How much is your share of the rent each month?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "readback.earned",
+            "ask.rent"
+          ],
+          "budget": "question"
+        }
+      ]
+    },
+    {
+      "id": "spanish_on_phone",
+      "title": "Spanish requested on the phone: one Spanish notice, then English",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e00000000000000000000000000000b",
+      "given": {
+        "started": true,
+        "last_seq": 1,
+        "pending": "ask.level_units"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000b/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Can we do this in Spanish? Español, por favor.",
+              "masked": false,
+              "confidence": 0.84,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Esta línea es solo en inglés. Para hablar en español, usa GatorPlate en la web: gatorplate punto fly punto dev barra talk.",
+              "ask": null,
+              "end": false,
+              "end_reason": null,
+              "lang": "es",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "language.offer_web"
+          ],
+          "budget": "question",
+          "note": "One reply with lang es (Spanish voice for this reply only). Listening stays English."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000b/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 3,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Okay, English is fine.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Great.",
+              "ask": "Are you an SF State undergrad or grad student, and how many units are you taking this term?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.level_units"
+          ],
+          "budget": "question",
+          "note": "Back to English."
+        }
+      ]
+    },
+    {
+      "id": "invalid_request",
+      "title": "Schema violations get 422 invalid_request",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e00000000000000000000000000000c",
+      "given": {
+        "started": true,
+        "last_seq": 1,
+        "pending": "ask.level_units"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000c/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "en",
+              "event": "utterance"
+            },
+            "valid": false
+          },
+          "response": {
+            "status": 422,
+            "body": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Request body does not match the schema.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "utterance without text; seq is not consumed"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000c/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "en",
+              "event": "silence",
+              "silence_ms": 5000
+            },
+            "valid": false
+          },
+          "response": {
+            "status": 422,
+            "body": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Request body does not match the schema.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "silence without silence_n; seq is not consumed"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000c/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "en",
+              "event": "dtmf",
+              "dtmf": "9x"
+            },
+            "valid": false
+          },
+          "response": {
+            "status": 422,
+            "body": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Request body does not match the schema.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "dtmf with a key that does not exist; seq is not consumed"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000c/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Yes."
+            },
+            "valid": false
+          },
+          "response": {
+            "status": 422,
+            "body": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Request body does not match the schema.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "turn seq must be 1 or more; seq is not consumed"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000c/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 2,
+              "seq": 2,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Yes."
+            },
+            "valid": false
+          },
+          "response": {
+            "status": 422,
+            "body": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Request body does not match the schema.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "unknown API version; seq is not consumed"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000c/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "fr",
+              "event": "utterance",
+              "text": "Oui."
+            },
+            "valid": false
+          },
+          "response": {
+            "status": 422,
+            "body": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Request body does not match the schema.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "unsupported lang; seq is not consumed"
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000c/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 2,
+              "lang": "en",
+              "event": "typing",
+              "text": "Yes."
+            },
+            "valid": false
+          },
+          "response": {
+            "status": 422,
+            "body": {
+              "error": {
+                "code": "invalid_request",
+                "message": "Request body does not match the schema.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "unknown event; seq is not consumed"
+        }
+      ]
+    },
+    {
+      "id": "web_unauthorized",
+      "title": "Web token bound to another call; web token starting a phone call",
+      "channel": "web",
+      "lang": "es",
+      "call_id": "0e00000000000000000000000000000d",
+      "given": {
+        "started": true,
+        "last_seq": 2
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000d/turn",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-other-call-0001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 3,
+              "lang": "es",
+              "event": "utterance",
+              "text": "Tengo diecinueve años.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "unauthorized",
+                "message": "Not allowed.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "The bearer token was issued for a different call_id."
+        },
+        {
+          "step": "start",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000d/start",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-own-call-00001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 0,
+              "channel": "phone",
+              "lang": "en",
+              "test": false
+            }
+          },
+          "response": {
+            "status": 401,
+            "body": {
+              "error": {
+                "code": "unauthorized",
+                "message": "Not allowed.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "A bearer token may only start a web call."
+        }
+      ]
+    },
+    {
+      "id": "web_session_rate_limited",
+      "title": "Web session limit: 429 rate_limited",
+      "channel": "web",
+      "lang": "en",
+      "exchanges": [
+        {
+          "step": "web_session",
+          "request": {
+            "method": "POST",
+            "path": "/api/web/sessions",
+            "auth": "none",
+            "body": {
+              "lang": "en"
+            }
+          },
+          "response": {
+            "status": 429,
+            "body": {
+              "error": {
+                "code": "rate_limited",
+                "message": "Too many sessions from this network. Try again later.",
+                "retryable": true
+              }
+            }
+          },
+          "note": "More than 20 sessions in an hour from one IP address."
+        }
+      ]
+    },
+    {
+      "id": "turn_after_end",
+      "title": "Turns after the end",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e00000000000000000000000000000f",
+      "given": {
+        "started": true,
+        "last_seq": 9,
+        "student_turns": 9,
+        "ended_by_brain": "completed"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000f/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 10,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Bye!",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "",
+              "ask": null,
+              "end": true,
+              "end_reason": "completed",
+              "lang": "en",
+              "listen": "normal",
+              "expect": "open",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [],
+          "budget": "question",
+          "note": "The brain already sent end true: nothing more to say, hang up."
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000f/end",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "reason": "completed",
+              "turns": 10,
+              "duration_ms": 131000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {}
+          }
+        },
+        {
+          "step": "end",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000f/end",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "reason": "completed",
+              "turns": 10,
+              "duration_ms": 131000
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {}
+          },
+          "note": "A second /end changes nothing."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e00000000000000000000000000000f/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 11,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Hello?",
+              "masked": false,
+              "confidence": 0.8,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 409,
+            "body": {
+              "error": {
+                "code": "conflict",
+                "message": "The call has ended.",
+                "retryable": false
+              }
+            }
+          },
+          "note": "Turn after /end."
+        }
+      ]
+    },
+    {
+      "id": "health",
+      "title": "Health check (no auth, no data)",
+      "channel": "phone",
+      "lang": "en",
+      "exchanges": [
+        {
+          "step": "health",
+          "request": {
+            "method": "GET",
+            "path": "/v1/health",
+            "auth": "none",
+            "body_raw": ""
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "ok": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "web_typed_digits_redacted",
+      "title": "Web typed SSN digits are redacted by the brain",
+      "channel": "web",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000011",
+      "given": {
+        "started": true,
+        "last_seq": 5,
+        "pending": "ask.rent"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000011/turn",
+            "auth": "bearer",
+            "headers": {
+              "Authorization": "Bearer example-web-token-typed-00000001"
+            },
+            "body": {
+              "v": 1,
+              "seq": 6,
+              "lang": "en",
+              "event": "utterance",
+              "text": "my social is one two three four five six seven eight nine, do you need it?",
+              "masked": false,
+              "confidence": null,
+              "interrupted": false,
+              "typed": true
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Please don't share your Social Security number. GatorPlate doesn't need it.",
+              "ask": "What's your share of the rent?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": "Please don't share your Social Security number. GatorPlate doesn't need it. What's your share of the rent?",
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ssn.block",
+            "ask.rent"
+          ],
+          "note": "The browser does not mask digits; the brain redacts spoken or written digit runs itself before anything else sees the text."
+        }
+      ]
+    },
+    {
+      "id": "teen_ty_confirm",
+      "title": "Explicit confirm for a teen/ty amount",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000012",
+      "given": {
+        "started": true,
+        "last_seq": 4,
+        "pending": "ask.income"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000012/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 5,
+              "lang": "en",
+              "event": "utterance",
+              "text": "I make fifteen hundred a month, and nobody gives me cash.",
+              "masked": false,
+              "confidence": 0.81,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "",
+              "ask": "Just to check, did you say fifteen hundred dollars a month?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "confirm",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "confirm.money"
+          ],
+          "budget": "question",
+          "note": "fifteen/fifty can be misheard: one explicit confirm."
+        },
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000012/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 6,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Yes, fifteen hundred.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Thanks.",
+              "ask": "How much is your share of the rent each month?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "ack.short",
+            "ask.rent"
+          ],
+          "budget": "question"
+        }
+      ]
+    },
+    {
+      "id": "interrupted",
+      "title": "Student spoke over the reply and did not answer",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000013",
+      "given": {
+        "started": true,
+        "last_seq": 5,
+        "pending": "ask.rent"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000013/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 6,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Wait, what?",
+              "masked": false,
+              "confidence": 0.8,
+              "interrupted": true,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "Sorry about that.",
+              "ask": "How much is your share of the rent each month?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "long",
+              "expect": "number",
+              "interruptible": true,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "reprompt.after_interrupt",
+            "ask.rent"
+          ],
+          "budget": "question"
+        }
+      ]
+    },
+    {
+      "id": "crisis",
+      "title": "Crisis words: 988 and 911 at once",
+      "channel": "phone",
+      "lang": "en",
+      "call_id": "0e000000000000000000000000000014",
+      "given": {
+        "started": true,
+        "last_seq": 5,
+        "pending": "ask.rent"
+      },
+      "exchanges": [
+        {
+          "step": "turn",
+          "request": {
+            "method": "POST",
+            "path": "/v1/calls/0e000000000000000000000000000014/turn",
+            "auth": "gateway",
+            "body": {
+              "v": 1,
+              "seq": 6,
+              "lang": "en",
+              "event": "utterance",
+              "text": "Honestly, sometimes I think about hurting myself.",
+              "masked": false,
+              "confidence": 0.9,
+              "interrupted": false,
+              "typed": false
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "say": "I'm really sorry you're going through this. You can call nine eight eight anytime, or call nine one one in an emergency.",
+              "ask": "Do you want to keep going with the CalFresh check, or stop here?",
+              "end": false,
+              "end_reason": null,
+              "lang": "en",
+              "listen": "normal",
+              "expect": "choice",
+              "interruptible": false,
+              "hold_s": 0,
+              "display": null,
+              "choices": null,
+              "card_url": null,
+              "debug": null
+            }
+          },
+          "keys": [
+            "crisis.resources",
+            "crisis.continue_or_stop"
+          ],
+          "budget": "result",
+          "note": "Crisis resources come first, in full (not interruptible)."
+        }
+      ]
+    }
+  ]
+}

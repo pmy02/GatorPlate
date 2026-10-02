@@ -1,0 +1,250 @@
+{
+ "$defs": {
+  "CaseStatus": {
+   "description": "Coordinator status of a case (docs/UI_SPEC.md A3.7). \"Live\", \"Ended early\" and \"Sample\" are badges.",
+   "enum": [
+    "new",
+    "reviewed",
+    "applied",
+    "interview_scheduled",
+    "approved",
+    "follow_up"
+   ],
+   "title": "CaseStatus",
+   "type": "string"
+  },
+  "Channel": {
+   "enum": [
+    "phone",
+    "web"
+   ],
+   "title": "Channel",
+   "type": "string"
+  },
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  },
+  "Phase": {
+   "description": "Conversation phases 0-10 plus end (docs/SPEC.md §3.2).",
+   "enum": [
+    "consent",
+    "student",
+    "age_home",
+    "household",
+    "income",
+    "housing",
+    "flip",
+    "result",
+    "expedited",
+    "card",
+    "close",
+    "end"
+   ],
+   "title": "Phase",
+   "type": "string"
+  },
+  "Tier": {
+   "enum": [
+    "likely",
+    "coordinator",
+    "other_help"
+   ],
+   "title": "Tier",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "asked_count": {
+   "title": "Asked Count",
+   "type": "integer"
+  },
+  "channel": {
+   "$ref": "#/$defs/Channel"
+  },
+  "code": {
+   "title": "Code",
+   "type": "string"
+  },
+  "created_at": {
+   "format": "date-time",
+   "title": "Created At",
+   "type": "string"
+  },
+  "ended_early": {
+   "title": "Ended Early",
+   "type": "boolean"
+  },
+  "estimate_is_floor": {
+   "title": "Estimate Is Floor",
+   "type": "boolean"
+  },
+  "estimate_monthly": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Estimate Monthly"
+  },
+  "expedited_possible": {
+   "anyOf": [
+    {
+     "enum": [
+      "yes",
+      "maybe",
+      "no"
+     ],
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Expedited Possible"
+  },
+  "found_display": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Found Display"
+  },
+  "id": {
+   "title": "Id",
+   "type": "string"
+  },
+  "label": {
+   "title": "Label",
+   "type": "string"
+  },
+  "lang": {
+   "$ref": "#/$defs/Lang"
+  },
+  "live": {
+   "title": "Live",
+   "type": "boolean"
+  },
+  "next_deadline": {
+   "anyOf": [
+    {
+     "format": "date",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Next Deadline"
+  },
+  "phase": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Phase"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "reason_code": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "title": "Reason Code"
+  },
+  "seeded": {
+   "title": "Seeded",
+   "type": "boolean"
+  },
+  "skipped_count": {
+   "title": "Skipped Count",
+   "type": "integer"
+  },
+  "status": {
+   "$ref": "#/$defs/CaseStatus"
+  },
+  "summary": {
+   "title": "Summary",
+   "type": "string"
+  },
+  "test": {
+   "title": "Test",
+   "type": "boolean"
+  },
+  "tier": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Tier"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "updated_at": {
+   "format": "date-time",
+   "title": "Updated At",
+   "type": "string"
+  },
+  "version": {
+   "title": "Version",
+   "type": "integer"
+  },
+  "yellow_open": {
+   "title": "Yellow Open",
+   "type": "integer"
+  },
+  "yellow_total": {
+   "title": "Yellow Total",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "id",
+  "code",
+  "version",
+  "created_at",
+  "updated_at",
+  "label",
+  "summary",
+  "lang",
+  "channel",
+  "live",
+  "test",
+  "seeded",
+  "phase",
+  "status",
+  "ended_early",
+  "tier",
+  "reason_code",
+  "estimate_monthly",
+  "estimate_is_floor",
+  "expedited_possible",
+  "yellow_open",
+  "yellow_total",
+  "asked_count",
+  "skipped_count",
+  "next_deadline"
+ ],
+ "title": "CaseSummary",
+ "type": "object"
+}

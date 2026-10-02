@@ -1,0 +1,87 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "choices": {
+   "anyOf": [
+    {
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Choices"
+  },
+  "critical": {
+   "default": false,
+   "title": "Critical",
+   "type": "boolean"
+  },
+  "label": {
+   "title": "Label",
+   "type": "string"
+  },
+  "max": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Max"
+  },
+  "min": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Min"
+  },
+  "periodic": {
+   "default": false,
+   "title": "Periodic",
+   "type": "boolean"
+  },
+  "short": {
+   "title": "Short",
+   "type": "string"
+  },
+  "type": {
+   "enum": [
+    "bool",
+    "int",
+    "money",
+    "enum"
+   ],
+   "title": "Type",
+   "type": "string"
+  }
+ },
+ "required": [
+  "type",
+  "label",
+  "short"
+ ],
+ "title": "SlotSpec",
+ "type": "object"
+}

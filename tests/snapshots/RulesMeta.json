@@ -1,0 +1,89 @@
+{
+ "$defs": {
+  "SourceRef": {
+   "additionalProperties": false,
+   "properties": {
+    "date": {
+     "title": "Date",
+     "type": "string"
+    },
+    "grade": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Grade"
+    },
+    "id": {
+     "title": "Id",
+     "type": "string"
+    },
+    "title": {
+     "title": "Title",
+     "type": "string"
+    },
+    "url": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Url"
+    }
+   },
+   "required": [
+    "id",
+    "title",
+    "date"
+   ],
+   "title": "SourceRef",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "effective_from": {
+   "format": "date",
+   "title": "Effective From",
+   "type": "string"
+  },
+  "effective_to": {
+   "format": "date",
+   "title": "Effective To",
+   "type": "string"
+  },
+  "label": {
+   "title": "Label",
+   "type": "string"
+  },
+  "sources": {
+   "items": {
+    "$ref": "#/$defs/SourceRef"
+   },
+   "title": "Sources",
+   "type": "array"
+  },
+  "table_id": {
+   "title": "Table Id",
+   "type": "string"
+  }
+ },
+ "required": [
+  "table_id",
+  "label",
+  "effective_from",
+  "effective_to",
+  "sources"
+ ],
+ "title": "RulesMeta",
+ "type": "object"
+}

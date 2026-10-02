@@ -1,0 +1,466 @@
+{
+ "case": {
+  "id": "c_sofia2demo",
+  "code": "R8W-3ND",
+  "version": 7,
+  "created_at": "2026-10-02T16:35:00Z",
+  "updated_at": "2026-10-02T16:36:36Z",
+  "lang": "es",
+  "channel": "web",
+  "test": false,
+  "live": false,
+  "status": "new",
+  "seeded": true,
+  "persona": "Sofia (demo persona)",
+  "phase": "end",
+  "turn_count": 4,
+  "ended_reason": "completed",
+  "ended_early": false,
+  "tier": "coordinator",
+  "reason_code": "coordinator.parent_household",
+  "route_override": null,
+  "estimate_monthly": null,
+  "estimate_is_floor": false,
+  "estimate_range": null,
+  "expedited_possible": null,
+  "first_month": null,
+  "summary": "Undergrad · 1 person",
+  "slots": {
+   "consent": {
+    "value": "true",
+    "display": "Yes",
+    "state": "clear",
+    "heard": "Sí, está bien",
+    "heard_en": "Yes, that's fine",
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 1,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T16:36:36Z"
+   },
+   "level": {
+    "value": "undergrad",
+    "display": "Undergrad",
+    "state": "clear",
+    "heard": "Estudio una licenciatura en SF State",
+    "heard_en": "I'm working on a bachelor's degree at SF State",
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 2,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T16:36:36Z"
+   },
+   "units": {
+    "value": "12",
+    "display": "12",
+    "state": "clear",
+    "heard": "tomo doce unidades",
+    "heard_en": "I'm taking twelve units",
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 2,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T16:36:36Z"
+   },
+   "age": {
+    "value": "19",
+    "display": "19",
+    "state": "clear",
+    "heard": "Tengo diecinueve años",
+    "heard_en": "I'm nineteen",
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T16:36:36Z"
+   },
+   "lives_with_parent": {
+    "value": "true",
+    "display": "Yes",
+    "state": "clear",
+    "heard": "vivo con mis papás",
+    "heard_en": "I live with my parents",
+    "confirmed": false,
+    "changed_from": null,
+    "turn": 3,
+    "source": "seed",
+    "basis": null,
+    "updated_at": "2026-10-02T16:36:36Z"
+   }
+  },
+  "yellow_lines": [
+   {
+    "id": "y1",
+    "slot": "lives_with_parent",
+    "kind": "policy",
+    "code": "coordinator.parent_household",
+    "reason": "Under 22 and living with a parent — the parent's household is counted together. Confirm, then help with a household application.",
+    "heard": "vivo con mis papás",
+    "assumed": null,
+    "effect": null,
+    "created_at": "2026-10-02T16:36:36Z",
+    "resolved": "confirm",
+    "resolved_at": "2026-10-02T17:01:00Z",
+    "resolved_note": "Confirmed with the student"
+   }
+  ],
+  "flags": [],
+  "asked": [
+   {
+    "turn": 1,
+    "key": "ask.level_units",
+    "slots": [
+     "level",
+     "units"
+    ],
+    "kind": "standard",
+    "reason": null,
+    "delta_usd": null,
+    "outcomes": []
+   },
+   {
+    "turn": 2,
+    "key": "ask.age_parent",
+    "slots": [
+     "age",
+     "lives_with_parent"
+    ],
+    "kind": "standard",
+    "reason": null,
+    "delta_usd": null,
+    "outcomes": []
+   }
+  ],
+  "skipped": [],
+  "timeline": [
+   {
+    "turn": 1,
+    "at": "2026-10-02T16:35:14Z",
+    "slots": [
+     "consent"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 2,
+    "at": "2026-10-02T16:35:28Z",
+    "slots": [
+     "level",
+     "units"
+    ],
+    "lo": null,
+    "hi": null
+   },
+   {
+    "turn": 3,
+    "at": "2026-10-02T16:35:42Z",
+    "slots": [
+     "age",
+     "lives_with_parent"
+    ],
+    "lo": null,
+    "hi": null
+   }
+  ],
+  "rule_trace": [
+   {
+    "step": "parent_household",
+    "result": "Age 19, lives with a parent → the parent's household is counted together (no estimate)",
+    "source": "7-CFR-273",
+    "value": null
+   }
+  ],
+  "privacy_events": [],
+  "language_request": null,
+  "table_id": "CA-CalFresh-FFY2027",
+  "card": {
+   "token": "fixtureSofiaCard000002",
+   "short_code": null,
+   "short_code_expires_at": null,
+   "created_at": "2026-10-02T16:36:36Z",
+   "expires_at": "2026-10-09T16:36:36Z"
+  },
+  "tracking": {
+   "applied_at": null,
+   "filed_on": null,
+   "deadline_30d": null,
+   "interview_at": null,
+   "interview_missed": false,
+   "doc_request_at": null,
+   "doc_due": null,
+   "approved_at": null,
+   "sar7_due": null,
+   "recert_due": null
+  },
+  "consent": {
+   "given": true,
+   "at": "2026-10-02T16:35:12Z",
+   "disclosure_key": "consent.ask"
+  },
+  "reviewed_at": null,
+  "program_answers": {},
+  "program_progress": {}
+ },
+ "summary": {
+  "id": "c_sofia2demo",
+  "code": "R8W-3ND",
+  "version": 7,
+  "created_at": "2026-10-02T16:35:00Z",
+  "updated_at": "2026-10-02T16:36:36Z",
+  "label": "R8W-3ND",
+  "summary": "Undergrad · 1 person",
+  "lang": "es",
+  "channel": "web",
+  "live": false,
+  "test": false,
+  "seeded": true,
+  "phase": "end",
+  "status": "new",
+  "ended_early": false,
+  "tier": "coordinator",
+  "reason_code": "coordinator.parent_household",
+  "estimate_monthly": null,
+  "estimate_is_floor": false,
+  "expedited_possible": null,
+  "yellow_open": 0,
+  "yellow_total": 1,
+  "asked_count": 2,
+  "skipped_count": 0,
+  "next_deadline": null,
+  "found_display": null
+ },
+ "card_url": "/c/fixtureSofiaCard000002",
+ "qr_svg_url": "/api/cases/c_sofia2demo/qr.svg",
+ "short_code": null,
+ "can_review": true,
+ "allowed_status": [
+  "reviewed",
+  "follow_up"
+ ],
+ "rules": {
+  "table_id": "CA-CalFresh-FFY2027",
+  "label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
+  "effective_from": "2026-10-01",
+  "effective_to": "2027-09-30",
+  "sources": [
+   {
+    "id": "ACIN-I-40-26",
+    "title": "CDSS All County Information Notice I-40-26: CalFresh cost-of-living adjustments effective October 1, 2026 (Attachment I and notice CF 11 (9/26))",
+    "date": "2026-09-10",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "USDA-FNS-FY2027-COLA",
+    "title": "USDA SNAP fiscal year 2027 cost-of-living adjustments memo (2026-08-21)",
+    "date": "2026-08-21",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "ACL-24-31",
+    "title": "CDSS All County Letter 24-31: CalFresh Student Eligibility Handbook v2.0",
+    "date": "2024-05-03",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-25",
+    "title": "CDSS All County Letter 26-25: associate and bachelor's degree programs at CCC, CSU and UC qualify as local programs that increase employability (from 2026-06-01)",
+    "date": "2026-04-13",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-16",
+    "title": "CDSS All County Letter 26-16: AB 42 (Chapter 430, Statutes of 2025), aid for higher education not counted as income (from 2026-03-01)",
+    "date": "2026-03-19",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-93",
+    "title": "CDSS All County Letter 25-93: ABAWD time-limit changes under H.R. 1 (from 2026-06-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-79",
+    "title": "CDSS All County Letter 25-79: ABAWD waiver only for Colusa, Imperial and Tulare counties (2025-11-01 to 2026-10-31)",
+    "date": "2025-11-07",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-26-29",
+    "title": "CDSS All County Letter 26-29: CalFresh ABAWD Time Limit Handbook v3.0",
+    "date": "2026-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-25-92",
+    "title": "CDSS All County Letter 25-92: noncitizen eligibility changes under H.R. 1 (from 2026-04-01)",
+    "date": "2025-12-31",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-15-42",
+    "title": "CDSS All County Letter 15-42: income reporting threshold (IRT) under semi-annual reporting",
+    "date": "2015-04-15",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "ACL-13-35",
+    "title": "CDSS All County Letter 13-35: Heat and Eat program (homeless households keep the deduction that does not lower benefits)",
+    "date": "2013-04-24",
+    "grade": "A",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-270",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 270 Deductions (MPP 63-502)",
+    "date": "2016-02-13",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "CDSS-SHD-280",
+    "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 280 Budgeting (MPP 63-503, 63-509)",
+    "date": "2016-07-09",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-273",
+    "title": "7 CFR Part 273 (SNAP certification): 273.1(b)(1)(ii) children under 22 living with a parent; 273.2(g) 30-day processing; 273.10(a)(1)(ii) first-month proration; 273.10(e)(2)(ii)(A) 30 percent reduction rounded up",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "7-CFR-271-2",
+    "title": "7 CFR 271.2: definition of a homeless individual (includes a temporary stay of up to 90 days in another person's home)",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MPP-63-301",
+    "title": "CDSS Manual of Policies and Procedures 63-301.5 and 7 CFR 273.2(i): expedited service",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "MT-SNAP-201-1",
+    "title": "Montana DPHHS SNAP Manual 201-1, Household Composition: a child under 22 living with a parent is in the parent's household even with their own spouse or child",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": null
+   },
+   {
+    "id": "LA-DPSS-CALFRESH-APPLICATION",
+    "title": "Los Angeles County DPSS ePolicy, CalFresh application process: applications received after business hours, on weekends or on holidays are dated the next business day",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://my.dpss.lacounty.gov"
+   },
+   {
+    "id": "SFSU-CALFRESH-CLINIC",
+    "title": "SF State Basic Needs: CalFresh Help Clinic page",
+    "date": "2026-10-01",
+    "grade": "B",
+    "url": "https://basicneeds.sfsu.edu/calfresh-help-clinic"
+   },
+   {
+    "id": "GP-PROJECT",
+    "title": "GatorPlate project rule (docs/SPEC.md, rules section): a deterministic convention or routing choice, not a CDSS rule",
+    "date": "2026-10-01",
+    "grade": "project",
+    "url": null
+   },
+   {
+    "id": "UNVERIFIED",
+    "title": "Common county practice not yet checked against a CDSS letter for this table: show dates from it as approximate",
+    "date": "2026-10-01",
+    "grade": "unverified",
+    "url": null
+   }
+  ]
+ },
+ "programs": {
+  "table_id": "GP-Programs-2026",
+  "checked": "2026-10-01",
+  "mode": "list_only",
+  "calfresh_yearly": null,
+  "found_yearly": null,
+  "found_display": null,
+  "share_display": null,
+  "claimed_display": 0,
+  "lines": [
+   {
+    "id": "medi_cal",
+    "status": "check",
+    "value_yearly": null,
+    "display_yearly": null,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "today",
+    "order": 1,
+    "apply_by": null,
+    "vars": {},
+    "note_keys": [
+     "medi_cal.family_income",
+     "medi_cal.if_claimed"
+    ],
+    "basis": [
+     "Lives with a parent: Medi-Cal may count the family's income (list only, no amount)"
+    ],
+    "source_ids": [
+     "DHCS-ACWDL-26-01",
+     "HHS-POVERTY-2026",
+     "SAWS-1"
+    ],
+    "applied": false
+   },
+   {
+    "id": "clipper_start",
+    "status": "check",
+    "value_yearly": null,
+    "display_yearly": null,
+    "counted": false,
+    "range_lo": null,
+    "range_hi": null,
+    "stage": "after_approval",
+    "order": 2,
+    "apply_by": null,
+    "vars": {},
+    "note_keys": [],
+    "basis": [
+     "Age 19: Clipper START is for ages 19 to 64 (list only, no amount)"
+    ],
+    "source_ids": [
+     "CLIPPER-START-FAQ",
+     "SFMTA-FARES",
+     "BART-FARES-2026",
+     "SFSU-GATOR-PASS"
+    ],
+    "applied": false
+   }
+  ],
+  "open_questions": [],
+  "next_question": null,
+  "question_spreads": {},
+  "console_notes": []
+ }
+}

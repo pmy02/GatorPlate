@@ -1,0 +1,469 @@
+{
+  "id": "jamal_g4",
+  "version": "2026-10-01",
+  "title": "Jamal, phone, English: likely $306 and 3-day service likely (couch-surfing, no income)",
+  "golden_case": "G4",
+  "demo_case": "jamal_g4",
+  "contract_example": "contracts/examples/jamal_phone_expedited.json",
+  "channel": "phone",
+  "lang": "en",
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "matching": {
+    "env": "The server environment this script needs (GP_CARD_DELIVERY always). The E2E runner never mixes card-delivery modes in one server run: it starts one server per declared environment. Contract examples keep their own `settings` block; scripts use only `env`.",
+    "expect_keys": "debug.keys of the reply (GP_DEBUG_KEYS=1) must equal this list exactly, in order.",
+    "reply": "These BrainReply fields must match exactly. ask/card_url/choices/display: 'present' = non-null, 'null' = null. Reply wording is owned by the sentence bank and is not compared.",
+    "budget": "Phone word budget class of the reply (opening <= 40, question <= 25, result <= 45 words, say + ask).",
+    "fake_llm": "The ExtractionResult the fake LLM returns for this exact utterance. With a live LLM it is the expected understanding: compare slot, value and period; quotes may differ.",
+    "case": "Checked on the stored case after this turn (console API): slots use canonical encodings (money as monthly 2-decimal strings); estimate_range and asked_last only where given.",
+    "final": "Checked on the stored case after /end. 'skipped' entries must be present (other skipped entries with reason hard_stop or not_applicable are allowed); 'asked_flip' must match exactly."
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "budget": "opening",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      }
+    },
+    {
+      "user": "Yeah, sure.",
+      "confidence": 0.94,
+      "expect_keys": [
+        "ack.short",
+        "ask.level_units"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "consent",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "Yeah, sure",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "consent": "true"
+        }
+      }
+    },
+    {
+      "user": "I'm a senior at SF State, twelve units.",
+      "confidence": 0.93,
+      "expect_keys": [
+        "ack.short",
+        "ask.age_parent"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "level",
+            "value": "undergrad",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm a senior at SF State",
+            "quote_en": null
+          },
+          {
+            "slot": "units",
+            "value": "12",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "twelve units",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "level": "undergrad",
+          "units": "12"
+        }
+      }
+    },
+    {
+      "user": "I'm 24. I don't live with my parents. I've been sleeping on a friend's couch since August, and I buy my own food.",
+      "confidence": 0.9,
+      "expect_keys": [
+        "ack.short",
+        "ask.income"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "number",
+        "listen": "long",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "age",
+            "value": "24",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I'm 24",
+            "quote_en": null
+          },
+          {
+            "slot": "lives_with_parent",
+            "value": "false",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I don't live with my parents",
+            "quote_en": null
+          },
+          {
+            "slot": "homeless",
+            "value": "true",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I've been sleeping on a friend's couch since August",
+            "quote_en": null
+          },
+          {
+            "slot": "household_food",
+            "value": "separate",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I buy my own food",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "age": "24",
+          "lives_with_parent": "false",
+          "homeless": "true",
+          "household_food": "separate"
+        }
+      },
+      "note": "One answer fills age, lives_with_parent, homeless and household_food, so those questions are skipped."
+    },
+    {
+      "user": "I don't have a job right now, and nobody gives me money.",
+      "confidence": 0.92,
+      "expect_keys": [
+        "ack.short",
+        "ask.homeless_cost"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "number",
+        "listen": "long",
+        "interruptible": true,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "earned_monthly",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "I don't have a job right now",
+            "quote_en": null
+          },
+          {
+            "slot": "other_cash_monthly",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "nobody gives me money",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "earned_monthly": "0.00",
+          "other_cash_monthly": "0.00"
+        }
+      }
+    },
+    {
+      "user": "No, nothing.",
+      "confidence": 0.95,
+      "expect_keys": [
+        "result.likely",
+        "expedited.intro_cash"
+      ],
+      "budget": "result",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "number",
+        "listen": "long",
+        "interruptible": false,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "homeless_shelter_cost_monthly",
+            "value": "0",
+            "period": "month",
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "No, nothing",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "homeless_shelter_cost_monthly": "0.00"
+        },
+        "tier": "likely",
+        "estimate_monthly": 306,
+        "estimate_range": {
+          "lo": 306,
+          "hi": 306,
+          "settled": true
+        }
+      },
+      "note": "Pays nothing to stay: no homeless shelter deduction; with no income the estimate is the maximum. Cash question: gross 0 < 150."
+    },
+    {
+      "user": "Like forty bucks.",
+      "confidence": 0.88,
+      "expect_keys": [
+        "expedited.yes",
+        "first_month.apply_today",
+        "card.phone_code"
+      ],
+      "budget": "result",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "null",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [
+          {
+            "slot": "cash_on_hand",
+            "value": "40",
+            "period": null,
+            "hours_per_week": null,
+            "state": "clear",
+            "quote": "forty bucks",
+            "quote_en": null
+          }
+        ],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "case": {
+        "slots": {
+          "cash_on_hand": "40.00"
+        },
+        "expedited_possible": "yes"
+      },
+      "note": "Gross 0 < 150 and cash 40 <= 100 in every world: expedited yes. GP_CARD_DELIVERY=code. No question in this reply, so the card code is the last thing heard."
+    },
+    {
+      "user": "Okay, got it.",
+      "confidence": 0.93,
+      "expect_keys": [
+        "close.anything_else"
+      ],
+      "budget": "result",
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "present",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [],
+        "intents": [],
+        "answered_pending": "no",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      }
+    },
+    {
+      "user": "No, that's all. Thanks.",
+      "confidence": 0.94,
+      "expect_keys": [
+        "close.goodbye"
+      ],
+      "budget": "question",
+      "reply": {
+        "end": true,
+        "end_reason": "completed",
+        "lang": "en",
+        "expect": "open",
+        "listen": "normal",
+        "interruptible": false,
+        "ask": "null",
+        "display": "null",
+        "choices": "null",
+        "card_url": "null"
+      },
+      "fake_llm": {
+        "observations": [],
+        "intents": [],
+        "answered_pending": "yes",
+        "lang": "en",
+        "side_question": null,
+        "requested_language": null
+      },
+      "expect_end": true
+    }
+  ],
+  "end": {
+    "reason": "completed",
+    "turns": 8,
+    "duration_ms": 109000
+  },
+  "final": {
+    "golden_case": "G4",
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306,
+    "estimate_is_floor": false,
+    "estimate_range": {
+      "lo": 306,
+      "hi": 306,
+      "settled": true
+    },
+    "expedited_possible": "yes",
+    "slots": {
+      "consent": "true",
+      "level": "undergrad",
+      "units": "12",
+      "age": "24",
+      "lives_with_parent": "false",
+      "homeless": "true",
+      "household_food": "separate",
+      "earned_monthly": "0.00",
+      "other_cash_monthly": "0.00",
+      "homeless_shelter_cost_monthly": "0.00",
+      "cash_on_hand": "40.00"
+    },
+    "asked_flip": [],
+    "skipped": [],
+    "yellow_open": 0,
+    "card_created": true,
+    "student_turns": 8,
+    "max_student_turns": 10,
+    "privacy_events": [],
+    "ended_reason": "completed",
+    "live": false
+  }
+}

@@ -1,0 +1,40 @@
+{
+ "properties": {
+  "duration_ms": {
+   "default": null,
+   "minimum": 0,
+   "title": "Duration Ms",
+   "type": "integer"
+  },
+  "reason": {
+   "enum": [
+    "completed",
+    "caller_hangup",
+    "no_input",
+    "timeout",
+    "max_duration",
+    "declined",
+    "error"
+   ],
+   "title": "Reason",
+   "type": "string"
+  },
+  "turns": {
+   "default": null,
+   "minimum": 0,
+   "title": "Turns",
+   "type": "integer"
+  },
+  "v": {
+   "const": 1,
+   "title": "V",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "v",
+  "reason"
+ ],
+ "title": "EndRequest",
+ "type": "object"
+}

@@ -1,0 +1,73 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "ask_key": {
+   "title": "Ask Key",
+   "type": "string"
+  },
+  "candidates": {
+   "anyOf": [
+    {
+     "items": {
+      "type": "string"
+     },
+     "type": "array"
+    },
+    {
+     "type": "string"
+    }
+   ],
+   "title": "Candidates"
+  },
+  "default": {
+   "title": "Default",
+   "type": "string"
+  },
+  "follow_up_key": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Follow Up Key"
+  },
+  "follow_up_when": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Follow Up When"
+  },
+  "only_if": {
+   "anyOf": [
+    {
+     "additionalProperties": {
+      "type": "boolean"
+     },
+     "type": "object"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Only If"
+  }
+ },
+ "required": [
+  "candidates",
+  "default",
+  "ask_key"
+ ],
+ "title": "VoiSlot",
+ "type": "object"
+}

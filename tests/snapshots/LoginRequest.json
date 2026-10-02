@@ -1,0 +1,14 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "passcode": {
+   "title": "Passcode",
+   "type": "string"
+  }
+ },
+ "required": [
+  "passcode"
+ ],
+ "title": "LoginRequest",
+ "type": "object"
+}

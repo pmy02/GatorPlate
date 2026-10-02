@@ -1,0 +1,19 @@
+{
+ "additionalProperties": false,
+ "properties": {
+  "replaced": {
+   "title": "Replaced",
+   "type": "integer"
+  },
+  "seeded": {
+   "title": "Seeded",
+   "type": "integer"
+  }
+ },
+ "required": [
+  "seeded",
+  "replaced"
+ ],
+ "title": "DemoSeedResponse",
+ "type": "object"
+}

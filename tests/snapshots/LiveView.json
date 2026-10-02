@@ -1,0 +1,113 @@
+{
+ "$defs": {
+  "Lang": {
+   "enum": [
+    "en",
+    "es"
+   ],
+   "title": "Lang",
+   "type": "string"
+  },
+  "LiveTurn": {
+   "additionalProperties": false,
+   "description": "One live transcript line (memory only).",
+   "properties": {
+    "at": {
+     "format": "date-time",
+     "title": "At",
+     "type": "string"
+    },
+    "case_id": {
+     "title": "Case Id",
+     "type": "string"
+    },
+    "lang": {
+     "$ref": "#/$defs/Lang"
+    },
+    "text": {
+     "title": "Text",
+     "type": "string"
+    },
+    "turn": {
+     "title": "Turn",
+     "type": "integer"
+    },
+    "who": {
+     "enum": [
+      "student",
+      "assistant"
+     ],
+     "title": "Who",
+     "type": "string"
+    }
+   },
+   "required": [
+    "case_id",
+    "turn",
+    "who",
+    "text",
+    "lang",
+    "at"
+   ],
+   "title": "LiveTurn",
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "description": "GET /api/cases/{id}/live: the lines so far (memory only).",
+ "properties": {
+  "asked_reason": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Asked Reason"
+  },
+  "case_id": {
+   "title": "Case Id",
+   "type": "string"
+  },
+  "lines": {
+   "items": {
+    "$ref": "#/$defs/LiveTurn"
+   },
+   "title": "Lines",
+   "type": "array"
+  },
+  "now_asking": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Now Asking"
+  },
+  "now_asking_text": {
+   "anyOf": [
+    {
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Now Asking Text"
+  }
+ },
+ "required": [
+  "case_id",
+  "lines"
+ ],
+ "title": "LiveView",
+ "type": "object"
+}

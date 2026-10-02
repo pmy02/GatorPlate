@@ -1,0 +1,599 @@
+{
+ "lang": "es",
+ "code": "K7Q-2FM",
+ "tier": "likely",
+ "reason_code": "likely",
+ "headline": "Podrías recibir unos $306 al mes para comprar comida.",
+ "subhead": "Es un cálculo. El condado decide.",
+ "estimate_monthly": 306,
+ "estimate_is_floor": false,
+ "expedited": "no",
+ "first_month": {
+  "apply_date": "2026-10-02",
+  "filed_on": "2026-10-02",
+  "amount": 296,
+  "days_counted": 30,
+  "month_label": "October",
+  "estimate": true
+ },
+ "blocks": [
+  {
+   "id": "today_action",
+   "title": "Haz esto hoy",
+   "paragraphs": [
+    "Haz tu solicitud en BenefitsCal. Para enviarla hoy, solo necesitas tu nombre, dónde vives y tu firma. Lo demás puede ir después.",
+    "Cómo: llena “Your Information”, luego firma y envía. Puedes dejar las otras secciones para después.",
+    "¿Por qué hoy? Tu primer mes cuenta desde el día en que el condado recibe tu solicitud. Nuestro cálculo: una solicitud enviada un día entre semana antes de las 5 p. m. cuenta ese mismo día.",
+    "Nuestro cálculo: si la envías ahora, cuenta desde el vie 2 de oct, y tu primer mes podría ser de unos $296 para octubre."
+   ],
+   "bullets": [],
+   "rows": [],
+   "tone": "accent",
+   "collapsed": false
+  },
+  {
+   "id": "why",
+   "title": "Por qué podrías calificar",
+   "paragraphs": [
+    "Desde junio de 2026, si estudias una licenciatura en SF State y tomas 8 unidades o más, cumples la regla de estudiantes de CalFresh. Solo di que estudias una licenciatura.",
+    "La ayuda financiera, las becas y los préstamos estudiantiles no cuentan como ingreso.",
+    "Tu renta es alta comparada con tu ingreso, así que tu cálculo es la cantidad más alta para el tamaño de tu hogar."
+   ],
+   "bullets": [],
+   "rows": [],
+   "tone": "default",
+   "collapsed": false
+  },
+  {
+   "id": "answer_sheet",
+   "title": "Tus respuestas para BenefitsCal",
+   "paragraphs": [
+    "Los nombres de las pantallas de BenefitsCal están en inglés. Aquí está qué contestar en cada una, según lo que nos dijiste."
+   ],
+   "bullets": [],
+   "rows": [
+    {
+     "screen": "Your Information",
+     "question": "¿Estudias en la universidad?",
+     "answer": "Sí. Tu número de Seguro Social y tu información de ciudadanía los escribes tú. GatorPlate nunca los pide."
+    },
+    {
+     "screen": "People",
+     "question": "¿Con quién compras y cocinas la comida?",
+     "answer": "Solo yo. Las personas con quienes vivo compran y cocinan aparte."
+    },
+    {
+     "screen": "Household Details",
+     "question": "¿En la universidad? ¿Cuál? ¿Al menos medio tiempo?",
+     "answer": "Sí · San Francisco State University · Sí"
+    },
+    {
+     "screen": "Household Details — student situations",
+     "question": "¿Cuál te aplica?",
+     "answer": "Estudio una licenciatura (bachelor's program). Si no está en la lista, di en tu entrevista: “Estudio una licenciatura en SF State” (en inglés: “I'm in a bachelor's program at SF State”)."
+    },
+    {
+     "screen": "Job and Income",
+     "question": "Trabajos y pago",
+     "answer": "Mi trabajo me paga unos $900 al mes antes de impuestos."
+    },
+    {
+     "screen": "Job and Income",
+     "question": "Ayuda financiera",
+     "answer": "Anótala si te la piden. No cuenta como ingreso."
+    },
+    {
+     "screen": "Expenses",
+     "question": "Renta",
+     "answer": "Mi parte de la renta: $1,100 al mes."
+    },
+    {
+     "screen": "Expenses",
+     "question": "Calefacción o aire acondicionado aparte de la renta",
+     "answer": "Responde sí si pagas una."
+    },
+    {
+     "screen": "Expenses",
+     "question": "Otras facturas (agua, basura, luz, teléfono)",
+     "answer": "Anota las que pagas tú. El internet no cuenta."
+    },
+    {
+     "screen": "Assets",
+     "question": "Dinero en efectivo y en el banco",
+     "answer": "Unos $1,000."
+    },
+    {
+     "screen": "Review and Submit",
+     "question": "Últimos pasos",
+     "answer": "Contesta con honestidad las preguntas de 3 días (emergencia). Elige el condado donde vives. Guarda tu número de solicitud."
+    }
+   ],
+   "tone": "default",
+   "collapsed": false
+  },
+  {
+   "id": "documents",
+   "title": "Qué tener listo",
+   "paragraphs": [
+    "Una identificación con foto. Tu credencial de estudiante sirve.",
+    "Un comprobante de tu dirección, como tu contrato de renta o una factura.",
+    "Talones de pago de los últimos 30 días, o una carta de tu jefe.",
+    "Normalmente no hacen falta, pero tenlos a mano por si el condado los pide: tu horario de clases y tus papeles de ayuda financiera.",
+    "No necesitas papeles para hacer tu solicitud. Cuando el condado te los pida, súbelos en BenefitsCal. Sirve una foto clara con tu celular. Guarda el recibo de lo que subas.",
+    "¿No sabes cómo enviarlos? Llama al condado: (855) 355-5757."
+   ],
+   "bullets": [],
+   "rows": [],
+   "tone": "default",
+   "collapsed": true
+  },
+  {
+   "id": "interview",
+   "title": "Tu entrevista por teléfono",
+   "paragraphs": [
+    "Después de tu solicitud, el condado programa tu entrevista. Puedes elegir por teléfono o en persona. Calcula una hora. La llamada puede salir como “Desconocido” o “Posible spam”. Contesta.",
+    "¿Todavía no te llaman? Llama al condado al (855) 355-5757, o habla con la coordinación de CalFresh de SF State.",
+    "¿Te llegó una carta o un mensaje en BenefitsCal para que llames? Llama al (855) 355-5757 (lunes a viernes, 8 a. m.–5 p. m.) antes de la fecha límite.",
+    "Te van a preguntar: con quién vives y comes, tu trabajo y otro dinero, tu renta y tus facturas, tus clases y tu ayuda financiera, y qué cambió.",
+    "De tus respuestas de hoy: tu trabajo paga unos $900 al mes.",
+    "De tus respuestas de hoy: tu parte de la renta es $1,100 al mes.",
+    "Tus derechos: un intérprete gratis, una entrevista en persona si la pides, llevar a quien quieras, una decisión en 30 días y al menos 10 días para enviar papeles.",
+    "¿No contestaste? Te llegará una carta llamada “Notice of Missed Interview” (aviso de entrevista perdida, CF 386). Llama de inmediato al (855) 355-5757 para pedir otra hora. Si esperas mucho, tal vez tengas que solicitar otra vez.",
+    "¿Te pidieron papeles después de la entrevista? Envíalos antes de la fecha límite que te den. Tienes al menos 10 días.",
+    "¿Vives fuera de San Francisco? Tu propio condado lleva tu caso. Los teléfonos de aquí son de San Francisco."
+   ],
+   "bullets": [],
+   "rows": [],
+   "tone": "default",
+   "collapsed": true
+  },
+  {
+   "id": "after_approval",
+   "title": "Después de la aprobación",
+   "paragraphs": [
+    "Tu tarjeta EBT llega por correo. Actívala antes de usarla.",
+    "¿Perdiste tu tarjeta? Llama al (877) 328-9677.",
+    "Más o menos a los 6 meses, el condado te manda un formulario corto llamado SAR 7. Llénalo y envíalo antes de la fecha que dice el formulario.",
+    "Más o menos a los 12 meses, renuevas con un formulario y una entrevista.",
+    "Si el ingreso total de tu hogar pasa de $1,729 al mes, avísale al condado en 10 días.",
+    "Si te mudas, dale al condado tu nueva dirección para que te lleguen las cartas."
+   ],
+   "bullets": [],
+   "rows": [],
+   "tone": "default",
+   "collapsed": true
+  },
+  {
+   "id": "food_today",
+   "title": "Comida para hoy",
+   "paragraphs": [
+    "Gator Groceries y el AS Food Pantry dan comida gratis a todos los estudiantes de SF State, cada semana.",
+    "Dónde: Cesar Chavez Student Center, en el piso de abajo (nivel Rec and Dining). El horario cambia. Míralo en https://asi.sfsu.edu/gator-groceries.",
+    "¿Necesitas comida ya? Basic Needs de SF State tiene tarjetas de comidas de emergencia. Mira https://basicneeds.sfsu.edu/emergency-meals."
+   ],
+   "bullets": [],
+   "rows": [],
+   "tone": "muted",
+   "collapsed": false
+  },
+  {
+   "id": "contact",
+   "title": "Hablar con una persona",
+   "paragraphs": [
+    "Coordinación de CalFresh de SF State (CalFresh Help Clinic, Basic Needs), Student Services Building, salón 301.",
+    "Escribe a calfresh@sfsu.edu para hacer una cita, o llama al (415) 338-1203. Horario: lun a jue 8:30 a. m.–5 p. m., vie 8:30 a. m.–4 p. m..",
+    "Tu código: K7Q-2FM. Compártelo para que encuentren tus respuestas.",
+    "CalFresh de San Francisco (condado): (855) 355-5757, lunes a viernes, 8 a. m.–5 p. m..",
+    "¿En crisis? Llama al 988 a cualquier hora. En una emergencia, llama al 911."
+   ],
+   "bullets": [],
+   "rows": [],
+   "tone": "default",
+   "collapsed": false
+  }
+ ],
+ "footer": [
+  "GatorPlate nunca guarda audio. Guardamos tus respuestas, no la conversación.",
+  "No recolectamos números de Seguro Social y nunca preguntamos por tu estatus migratorio.",
+  "Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh.",
+  "Tú haces tu solicitud en BenefitsCal. El condado decide.",
+  "Reglas: CalFresh año fiscal 2027 (1 oct 2026 – 30 sep 2027). Las fuentes están abajo."
+ ],
+ "sources": [
+  {
+   "id": "ACIN-I-40-26",
+   "title": "CDSS ACIN I-40-26, FY2027 CalFresh amounts (Attachment I)",
+   "date": "2026-09-10",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "ACL-26-25",
+   "title": "CDSS ACL 26-25, student eligibility (CSU bachelor's programs, half-time or more)",
+   "date": "2026-04-13",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "ACL-26-16",
+   "title": "CDSS ACL 26-16, AB 42 (financial aid is not income)",
+   "date": "2026-03-19",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "ACL-24-31",
+   "title": "CDSS ACL 24-31, CalFresh Student Eligibility Handbook 2.0",
+   "date": "2024-05-03",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "ACL-15-42",
+   "title": "CDSS ACL 15-42, income reporting threshold (IRT) for semi-annual reporting",
+   "date": "2015-04-15",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "CDSS-SHD-280",
+   "title": "CDSS State Hearings Division paraphrased regulations, CalFresh 280 Budgeting (MPP 63-503, 63-509)",
+   "date": "2016-07-09",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "ACL-25-93",
+   "title": "CDSS ACL 25-93, ABAWD time limit (3 months in 36; 80 hours a month)",
+   "date": "2025-12-31",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "ACL-25-92",
+   "title": "CDSS ACL 25-92, noncitizen eligibility changes",
+   "date": "2025-12-31",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "7-CFR-273.2",
+   "title": "7 CFR 273.2 (filing with name, address and signature; interview; 30-day decision; at least 10 days for papers; expedited service)",
+   "date": "current",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "7-CFR-273.10",
+   "title": "7 CFR 273.10(a) (first month counted from the application date)",
+   "date": "current",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "MPP-63-301",
+   "title": "CDSS MPP 63-301.5 (expedited service within 3 days), as summarized by a legal-aid CalFresh guide",
+   "date": "current",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "CF-386",
+   "title": "CDSS form CF 386, Notice of Missed Interview",
+   "date": "current",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "FILING-TIME",
+   "title": "County practice: applications after business hours count from the next business day (LA County DPSS CalFresh policy page)",
+   "date": "current",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "BENEFITSCAL-GUIDES",
+   "title": "BenefitsCal live application pages (2021-2022 how-to guides for the rest)",
+   "date": "2026-10-01",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "SFSU-CLINIC",
+   "title": "SF State Basic Needs, CalFresh Help Clinic page",
+   "date": "page as saved 2026-10-01",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "SFSU-BASIC-NEEDS",
+   "title": "SF State Basic Needs, About page (contact and office hours)",
+   "date": "page as saved 2026-10-01",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "SFSU-PANTRY",
+   "title": "SF State Basic Needs, AS Food Pantry & Gator Groceries page",
+   "date": "page as saved 2026-10-01",
+   "grade": null,
+   "url": null
+  },
+  {
+   "id": "SFSU-MEALS",
+   "title": "SF State Basic Needs, Emergency Meals page",
+   "date": "page as saved 2026-10-01",
+   "grade": null,
+   "url": null
+  }
+ ],
+ "rules_label": "CalFresh FY2027 (Oct 1, 2026 – Sep 30, 2027)",
+ "status": {
+  "status": "new",
+  "reviewed": false,
+  "reviewed_at": null,
+  "tier": "likely",
+  "estimate_monthly": 306
+ },
+ "generated_at": "2026-10-02T17:00:00Z",
+ "expires_at": "2026-10-09T16:58:58Z",
+ "reminders_url": "/api/card/fixtureMariaCard000001/reminders.ics?lang=es",
+ "delete_url": "/api/card/fixtureMariaCard000001",
+ "unlocked": {
+  "mode": "full",
+  "title": "Dinero que quizá te falta reclamar este año",
+  "total_text": "Unos $3,670 al año",
+  "found_display": 3670,
+  "claimed_display": 0,
+  "calfresh_display": 3670,
+  "segments": [
+   [
+    "calfresh",
+    3670
+   ]
+  ],
+  "question": {
+   "id": "break_transit",
+   "text": "En las vacaciones de invierno y verano, ¿usarás Muni o BART en el Área de la Bahía?",
+   "choices": [
+    {
+     "value": "none",
+     "label": "No, o no estaré aquí"
+    },
+    {
+     "value": "two_days",
+     "label": "1–2 días por semana"
+    },
+    {
+     "value": "weekdays_muni",
+     "label": "Casi a diario (Muni)"
+    },
+    {
+     "value": "weekdays_bart",
+     "label": "Casi a diario (con BART)"
+    }
+   ],
+   "index": 1,
+   "total": 3
+  },
+  "chips": [
+   "+ cobertura médica (Medi-Cal)",
+   "¿Usas transporte en vacaciones? unos $90–$440",
+   "quizá +$200"
+  ],
+  "programs": [
+   {
+    "id": "calfresh",
+    "name": "CalFresh",
+    "status": "likely",
+    "status_label": "Probable",
+    "value_text": "unos $3,670 al año",
+    "counted": true,
+    "line": "Solicita CalFresh hoy en BenefitsCal. Los pasos están arriba, en esta tarjeta.",
+    "notes": [
+     "12 veces el cálculo mensual, si nada cambia. El primer mes se paga desde el día en que solicitas; el total puede ser algo menor."
+    ],
+    "stage": "today",
+    "stage_label": "Hoy",
+    "apply_by_text": null,
+    "apply_url": "#today_action",
+    "apply_label": "Ver los pasos de hoy",
+    "applied": false,
+    "can_mark_applied": true,
+    "prefill": [],
+    "source_text": "Fuente: Tabla de CalFresh, año fiscal 2027 (CDSS ACIN I-40-26), 10 sep 2026"
+   },
+   {
+    "id": "medi_cal",
+    "name": "Medi-Cal",
+    "status": "coverage",
+    "status_label": "Cobertura",
+    "value_text": "cobertura médica",
+    "counted": false,
+    "line": "Cobertura médica para médico, hospital y medicinas, sin costo hoy para la mayoría de los estudiantes. Marca la casilla de salud en la misma solicitud de BenefitsCal.",
+    "notes": [
+     "Si tu mamá o tu papá te declara en sus impuestos, Medi-Cal podría contar también el ingreso de ellos.",
+     "Es la misma solicitud que CalFresh. No hay otro formulario."
+    ],
+    "stage": "today",
+    "stage_label": "Hoy",
+    "apply_by_text": null,
+    "apply_url": "https://benefitscal.com/",
+    "apply_label": "Abrir BenefitsCal",
+    "applied": false,
+    "can_mark_applied": true,
+    "prefill": [
+     {
+      "screen": "Programs",
+      "question": "¿También quieres cobertura médica (Medi-Cal)?",
+      "answer": "Sí"
+     },
+     {
+      "screen": "Income",
+      "question": "¿Cuánto ganas al mes por tu trabajo?",
+      "answer": "$900 al mes"
+     }
+    ],
+    "source_text": "Fuente: Carta ACWDL 26-01 de DHCS (límites de ingreso 2026), 21 ene 2026"
+   },
+   {
+    "id": "clipper_start",
+    "name": "Clipper START",
+    "status": "check",
+    "status_label": "Por revisar",
+    "value_text": "unos $90–$440 al año",
+    "counted": false,
+    "line": "¿Vas a usar Muni o BART en las vacaciones? Clipper START podría ahorrarte unos $90–$440 al año. El Gator Pass cubre los semestres.",
+    "notes": [
+     "Con CalFresh puedes elegir \"Verify instantly through CalFresh\". La tarjeta llega por correo, por lo general en 30 días."
+    ],
+    "stage": "after_approval",
+    "stage_label": "Cuando llegue tu carta de aprobación de CalFresh",
+    "apply_by_text": "Solicítalo antes del 19 de noviembre, más o menos",
+    "apply_url": "https://www.clipperstartcard.com/s/application",
+    "apply_label": "Solicitar Clipper START",
+    "applied": false,
+    "can_mark_applied": true,
+    "prefill": [
+     {
+      "screen": "Verification",
+      "question": "¿Qué prueba vas a usar?",
+      "answer": "\"Verify instantly through CalFresh\""
+     },
+     {
+      "screen": "Photo ID",
+      "question": "¿Qué identificación con foto vas a subir?",
+      "answer": "Una identificación con foto que muestre tu fecha de nacimiento (el formulario dice cuáles sirven)"
+     },
+     {
+      "screen": "Mailing address",
+      "question": "¿A qué dirección te envían la tarjeta?",
+      "answer": "Cualquier dirección donde recibas correo"
+     }
+    ],
+    "source_text": "Fuente: Preguntas frecuentes de Clipper START, revisado el 1 oct 2026"
+   },
+   {
+    "id": "lifeline",
+    "name": "California LifeLine",
+    "status": "check",
+    "status_label": "Por revisar",
+    "value_text": "hasta $220 al año",
+    "counted": false,
+    "line": "Si nadie te declara como dependiente, California LifeLine podría bajar tu factura de teléfono hasta $220 al año.",
+    "notes": [
+     "CalFresh o Medi-Cal sirven como prueba. Elige una compañía de LifeLine y solicita con ella."
+    ],
+    "stage": "after_approval",
+    "stage_label": "Cuando llegue tu carta de aprobación de CalFresh",
+    "apply_by_text": null,
+    "apply_url": "https://www.californialifeline.com/",
+    "apply_label": "Buscar una compañía de LifeLine",
+    "applied": false,
+    "can_mark_applied": true,
+    "prefill": [
+     {
+      "screen": "Qualifying program",
+      "question": "¿Qué programa recibes?",
+      "answer": "CalFresh o Medi-Cal (cuando llegue tu carta de aprobación)"
+     },
+     {
+      "screen": "Household",
+      "question": "¿Compartes dinero con otros adultos donde vives?",
+      "answer": "No, mis compañeros y yo no compartimos dinero"
+     },
+     {
+      "screen": "Service",
+      "question": "¿Para qué servicio es el descuento?",
+      "answer": "Mi plan de celular"
+     }
+    ],
+    "source_text": "Fuente: CPUC: California LifeLine y Lifeline federal, 18 feb 2026"
+   },
+   {
+    "id": "care",
+    "name": "PG&E CARE",
+    "status": "check",
+    "status_label": "Por revisar",
+    "value_text": null,
+    "counted": false,
+    "line": "¿Tu casa tiene su propia factura de PG&E? La persona a cuyo nombre está podría ahorrar cerca de un 30% cuando tengas CalFresh.",
+    "notes": [
+     "CalFresh lo abre: marca la casilla de CalFresh. No hacen falta papeles de ingresos para solicitarlo."
+    ],
+    "stage": "after_approval",
+    "stage_label": "Cuando llegue tu carta de aprobación de CalFresh",
+    "apply_by_text": null,
+    "apply_url": "https://www.pge.com/en/account/billing-and-assistance/financial-assistance/california-alternate-rates-for-energy-program.html",
+    "apply_label": "Solicitar CARE",
+    "applied": false,
+    "can_mark_applied": true,
+    "prefill": [
+     {
+      "screen": "Section 2A",
+      "question": "Sección 2A: ¿qué programa recibe alguien en tu casa?",
+      "answer": "CalFresh (marca esta casilla)"
+     },
+     {
+      "screen": "Section 1",
+      "question": "¿Cuántas personas viven en tu casa?",
+      "answer": "3"
+     }
+    ],
+    "source_text": "Fuente: CPUC: programas CARE y FERA, revisado el 1 oct 2026"
+   },
+   {
+    "id": "tax_credits",
+    "name": "Créditos fiscales (CalEITC, EITC)",
+    "status": "maybe",
+    "status_label": "Quizá",
+    "value_text": "quizá unos $200 al año",
+    "counted": false,
+    "line": "Quizá unos $200 en créditos fiscales en la temporada de impuestos. Un voluntario de SF State VITA revisa gratis si puedes pedirlos.",
+    "notes": [
+     "El crédito del estado funciona con SSN o ITIN. El federal necesita un SSN válido para trabajar.",
+     "¿No declaraste impuestos de 2025? Quizá todavía puedas declarar y pedir créditos gratis.",
+     "Los créditos fiscales como el EITC no bajan tu CalFresh.",
+     "Según las tablas estatales de 2025 (las de 2026 aún no salen) y tu pago mensual todo el año. Es un crédito, no tu reembolso."
+    ],
+    "stage": "tax_time",
+    "stage_label": "En la temporada de impuestos (por lo general, de fin de enero al 15 de abril)",
+    "apply_by_text": null,
+    "apply_url": "https://cob.sfsu.edu/VITA",
+    "apply_label": "Abrir SF State VITA",
+    "applied": false,
+    "can_mark_applied": true,
+    "prefill": [
+     {
+      "screen": "Intake form 13614-C",
+      "question": "¿Cuánto ganaste por tu trabajo en 2026? Lleva tu W-2.",
+      "answer": "$900 al mes"
+     },
+     {
+      "screen": "Intake form 13614-C",
+      "question": "¿Viviste con tu mamá o tu papá? El tiempo fuera por estudios puede contar.",
+      "answer": "Díselo al voluntario. Eso decide quién puede pedir el crédito."
+     }
+    ],
+    "source_text": "Fuente: Instrucciones y tabla FTB 3514, año fiscal 2025, 2025"
+   }
+  ],
+  "share_text": "Encontré unos $3,600 al año en ayudas que quizá no estoy recibiendo (son cálculos, no promesas). Revisa las tuyas en 2 minutos: https://gatorplate.fly.dev",
+  "footnote": "Cálculos para los próximos 12 meses con reglas oficiales, revisadas el 1 oct 2026. Cada agencia decide. No es una promesa.",
+  "labels": {
+   "ui.claimed": "Ya empezaste $0 de $3,670",
+   "ui.calfresh_part": "CalFresh: unos $3,670 al año ($306 al mes)",
+   "ui.key_line": "CalFresh es la llave. Abre las demás ayudas.",
+   "ui.question_count": "Pregunta {i} de {n}",
+   "ui.plan_title": "Tu plan",
+   "ui.answers_title": "Tus respuestas para este formulario",
+   "ui.new_tab": "se abre en otra pestaña",
+   "ui.mark_applied": "Ya lo solicité",
+   "ui.undo": "Deshacer",
+   "ui.share_button": "Compartir",
+   "ui.copied": "Copiado",
+   "ui.list_only_intro": "Esto también podría ayudarte. Una persona lo revisa contigo, por eso aún no hay cantidades."
+  },
+  "lang": "es"
+ }
+}
