@@ -344,11 +344,11 @@ for _lang in ("en", "es"):
     DISPLAY[_lang]["question"] = "{question}"
 
 # ------------------------------------------------------------------ 1. sentence banks
-FORMS = ("main", "closed", "short")
+FORMS = ("main", "closed", "short", "demo")  # demo: the live demo's short phone forms (DEMO_KEYS)
 
 
 def lists_of(msg, form):
-    """{field: [variants]} for one form of a message ('main', 'closed', 'short')."""
+    """{field: [variants]} for one form of a message ('main', 'closed', 'short', 'demo')."""
     node = msg if form == "main" else msg.get(form) or {}
     return {f: node[f] for f in ("phone", "web", "all") if isinstance(node.get(f), list)}
 
@@ -609,8 +609,17 @@ for key in ("line.fatal", "line.fatal_start", "line.line_unavailable"):
         for v in (msgs.get(key) or {}).get("phone", []):
             if spoken and spoken not in v:
                 fail(f"sentences.{lang}.json {key}", "must say the coordinator number exactly as contacts.json spoken")
-# opening
-_open = (MSG_EN.get("consent.ask") or {}).get("phone") or []
+DEMO_KEYS = ("consent.ask", "readback.earned", "readback.rent")  # the live demo's short phone forms (GP_DEMO_SHORTCUT)
+# opening (and the live demo's short phone opening, GP_DEMO_SHORTCUT: the same rules, phone only, shorter)
+for _lang, _msgs in (("en", MSG_EN), ("es", MSG_ES)):
+    for _key, _msg in _msgs.items():
+        if "demo" in _msg and (_key not in DEMO_KEYS or _lang != "en" or set(lists_of(_msg, "demo")) != {"phone"}):
+            fail(f"sentences.{_lang}.json {_key}", "a demo form exists only as an English phone line of " + ", ".join(sorted(DEMO_KEYS)))
+_demo_open = lists_of(MSG_EN.get("consent.ask") or {}, "demo").get("phone") or []
+_open = ((MSG_EN.get("consent.ask") or {}).get("phone") or []) + _demo_open
+for v in _demo_open:
+    if isinstance(v, dict) and count_words(f"{v.get('say')} {v.get('ask')}") > 34:
+        fail("sentences.en.json consent.ask demo", "the short demo opening must stay at most 34 words")
 for v in _open:
     if not isinstance(v, dict):
         fail("sentences.en.json consent.ask", "phone opening must be {say, ask}")
@@ -825,6 +834,7 @@ for q in ASK_KEYS:
 for g in ("answer.is_ai", "answer.is_recorded"):
     check_composition(f"{g} + consent.reask", [(g, "main"), ("consent.reask", "main")])
 check_composition("silence 1 + consent", [("reprompt.silence_1", "main", {"question": ("consent.ask", "short")})])
+check_composition("consent.ask demo", [("consent.ask", "demo")])
 # read-backs in phase order (long money values)
 for rb, nexts in (("readback.earned", ["ask.other_cash", "ask.rent", "ask.homeless_cost"]),
                   ("readback.hourly", ["ask.other_cash", "ask.rent", "ask.homeless_cost"]),

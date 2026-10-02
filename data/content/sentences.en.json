@@ -82,6 +82,14 @@
           "Is that okay?"
         ]
       },
+      "demo": {
+        "phone": [
+          {
+            "say": "Hi, this is GatorPlate, a student-built AI, not an official SF State service. An AI turns your words into text to check CalFresh; audio isn't recorded.",
+            "ask": "Okay to start? Say yes, or press one."
+          }
+        ]
+      },
       "expect": {
         "expect": "yes_no",
         "listen": "normal",
@@ -101,7 +109,7 @@
         ]
       },
       "vars": [],
-      "notes": "The /start reply. say is never interruptible. The phone wording keeps every required element of the opening (an AI; student-built; not an official SF State service; an AI turns what you say into text to check CalFresh; the call audio isn't recorded) and asks for consent with the keypad option, within the 40-word opening budget. Same text as contracts/examples."
+      "notes": "The /start reply. say is never interruptible. The phone wording keeps every required element of the opening (an AI; student-built; not an official SF State service; an AI turns what you say into text to check CalFresh; the call audio isn't recorded) and asks for consent with the keypad option, within the 40-word opening budget. Same text as contracts/examples. The demo form is the shorter phone opening of the live demo (GP_DEMO_SHORTCUT with GP_DEMO_MODE, phone only): the same required elements and the same consent question; the web opening has no demo form."
     },
     "consent.reask": {
       "group": "opening",
@@ -1861,10 +1869,15 @@
         "Got it — about {amount} a month from work.",
         "Okay — about {amount} a month from work."
       ],
+      "demo": {
+        "phone": [
+          "Got it."
+        ]
+      },
       "vars": [
         "amount:money"
       ],
-      "notes": "Implicit read-back: the amount with its period, before the next question."
+      "notes": "Implicit read-back: the amount with its period, before the next question. The demo form (GP_DEMO_SHORTCUT, phone only) is a plain thanks, without the amount, for the short live demo."
     },
     "readback.hourly": {
       "group": "readback",
@@ -1891,10 +1904,15 @@
         "Got it — {amount} a month.",
         "Okay — {amount} a month."
       ],
+      "demo": {
+        "phone": [
+          "Thanks."
+        ]
+      },
       "vars": [
         "amount:money"
       ],
-      "notes": "Short on purpose, so that readback.rent + flip.intro + a flip question fits the 25-word question budget (Maria: 7 + 3 + 14 = 24 words)."
+      "notes": "Short on purpose, so that readback.rent + flip.intro + a flip question fits the 25-word question budget (Maria: 7 + 3 + 14 = 24 words). The demo form (GP_DEMO_SHORTCUT, phone only) is a plain thanks, without the amount, for the short live demo."
     },
     "readback.other_cash": {
       "group": "readback",

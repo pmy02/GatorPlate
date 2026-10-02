@@ -19,7 +19,7 @@ from typing import Any
 
 from gatorplate.contracts.common import Channel, Lang
 
-FORMS = ("main", "closed", "short")
+FORMS = ("main", "closed", "short", "demo")  # demo: the short phone opening and two read-backs (GP_DEMO_SHORTCUT)
 Variant = str | dict
 
 

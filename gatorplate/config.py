@@ -35,6 +35,9 @@ class Settings(BaseSettings):
     public_base_url: str = "http://127.0.0.1:8000"
     db_path: Path = Path("var/gatorplate.db")
     demo_mode: bool = True
+    # Live demo only (needs demo_mode): phone calls get the short opening, and the demo script's answers the short demo
+    # call does not ask are filled in once consent is given (gatorplate/dialogue/policy.py DEMO_SHORTCUT_SLOTS).
+    demo_shortcut: bool = False
     daily_reset: bool = False
     debug_keys: bool | None = None  # None: True in dev and test, False in prod
     live_transcript: bool = False

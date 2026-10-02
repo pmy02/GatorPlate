@@ -71,6 +71,13 @@ AFTER_RESULT = frozenset({Phase.expedited, Phase.card, Phase.close})
 NO_UNCLEAR_LINE = frozenset({SlotName.consent, SlotName.roommates_count})
 # The understanding's answer to a yes/no about a value (confirm.money): "true" / "false" on the confirmed slot.
 POLAR = {"true": "yes", "yes": "yes", "false": "no", "no": "no"}
+# The live demo's shortcut (GP_DEMO_SHORTCUT with GP_DEMO_MODE, phone calls only): the demo script's answers that the
+# short demo call does not ask (tests/e2e/scripts/maria_g1.json final.slots), set once consent is given. Source "seed":
+# the console shows them as sample data, never as the caller's words; a value the caller says later wins.
+DEMO_SHORTCUT_SLOTS: dict[SlotName, str] = {
+    SlotName.age: "20", SlotName.lives_with_parent: "false", SlotName.roommates: "true", SlotName.roommates_count: "2",
+    SlotName.household_food: "separate", SlotName.cash_on_hand: "1000.00",
+}
 
 
 @dataclass
@@ -129,6 +136,16 @@ def forget_unconsented(case: Case) -> None:
     case.summary = ""
 
 
+DEMO_READBACK_KEYS = frozenset({"readback.earned", "readback.rent"})  # read back as a plain thanks in the demo
+
+
+def demo_shortcut(ctx: Ctx) -> bool:
+    """GP_DEMO_SHORTCUT: honoured only in demo mode and only on the phone (the web stays as it is)."""
+    settings = ctx.settings
+    return ctx.channel == Channel.phone and bool(getattr(settings, "demo_shortcut", False)) \
+        and bool(getattr(settings, "demo_mode", False))
+
+
 def known(case: Case, slot: SlotName) -> bool:
     item = case.slots.get(slot)
     return item is not None and item.state != SlotState.missing
@@ -167,7 +184,7 @@ class Dialogue:
     def start(self, ctx: Ctx) -> Plan:
         ctx.session.phase = Phase.consent
         ctx.session.awaiting = "consent"
-        return Plan([Step("consent.ask")])
+        return Plan([Step("consent.ask", "demo" if demo_shortcut(ctx) else "main")])
 
     def silence(self, ctx: Ctx, n: int) -> Plan:
         """The silence ladder (docs/SPEC.md §3.7): repeat, then the closed form, then end with no_input."""
@@ -436,6 +453,9 @@ class Dialogue:
         s.phase = Phase.student
         case.consent = Consent(given=True, at=ctx.now, disclosure_key="consent.ask")
         self._set(ctx, S.consent, "true", source=source or SlotSource.llm, heard=None)
+        if demo_shortcut(ctx):  # before the consenting utterance's own facts, which win
+            for slot, raw in DEMO_SHORTCUT_SLOTS.items():
+                self._set(ctx, slot, raw, source=SlotSource.seed, heard=None)
         if u is not None:  # facts said in the consenting utterance are kept
             self.apply_observations(ctx, u, skip={S.consent})
         self.refresh(ctx)
@@ -1248,7 +1268,10 @@ class Dialogue:
             item = ctx.case.slots[slot]
             if slot == S.earned_monthly and item.basis is not None and item.basis.period == "hour":
                 return [Step("readback.hourly")]
-            return [Step(machine.READBACK_KEYS[slot])]
+            key = machine.READBACK_KEYS[slot]
+            if demo_shortcut(ctx) and key in DEMO_READBACK_KEYS:  # the short demo call thanks without the amount
+                return [Step(key, "demo")]
+            return [Step(key)]
         return []
 
     # ======================================================================================== the rules
@@ -1394,7 +1417,14 @@ class Dialogue:
                 s.phase = Phase.card
                 continue
             if phase == Phase.card:
-                steps += self.card_steps(ctx)
+                card = self.card_steps(ctx)
+                if demo_shortcut(ctx) and case.tier == Tier.likely and case.reason_code == "likely" \
+                        and not any(st.key.startswith("expedited.") for st in steps):
+                    # the short demo call ends with the result reply: amount, card line, goodbye (result budget 45)
+                    card = [st for st in card if st.key != "first_month.apply_today"]
+                    return Plan(steps + card + [Step(self.routing.close_reply)], end_reason="completed",
+                                drop_from_memory=drop)
+                steps += card
                 s.phase = Phase.close
                 continue
             if phase == Phase.close:
