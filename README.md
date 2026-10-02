@@ -167,9 +167,9 @@ recognition. Silent errors are counted as k/n with the Wilson 95 % upper bound, 
 | End-to-end scripts / adversarial scripts / contract examples (local, fake model) | 28 / 38 / 8 | all pass; 9 more scripts need a live model and are run only with a key |
 | Replies checked against the output guard, word budgets and phone text rules (adversarial run, earlier build) | 4,042 | 0 problems |
 
-An earlier run of 4,000 random fact sets against an independent hand model found no differences; a larger re-run
-on October 2 found 48 differences in 12,000, all in one situation (a homeless student who pays no shelter cost but has
-a utility bill), which we are reviewing.
+On October 2 we also compared the engine with an independent hand model on random fact sets: a run of 4,000 early
+that day found no differences; a re-run of 12,000 later that day found 48, all in one situation (a homeless student
+who pays no shelter cost but has a utility bill), which we are reviewing.
 
 The live numbers were measured once, on an earlier build, before the last rounds of fixes; they have not been measured
 again since. The two amounts that differ in the scripted run come from one persona (on both channels): its call ends
