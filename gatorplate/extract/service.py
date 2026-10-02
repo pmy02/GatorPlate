@@ -2,8 +2,11 @@
 
 One turn: normalize -> redact digits -> keyword intents -> rule parser -> fast path? -> at most ONE model call within
 the turn deadline -> merge and grounding. A keypad turn never calls the model. The model is skipped in closed mode,
-when no client exists (no key: closed mode for the whole app), over the daily turn cap, and on the fast path (an
-utterance of three words or fewer that the parser maps confidently to the pending question, with no keyword intent).
+when no client exists (no key: closed mode for the whole app), over the daily turn cap, and on the fast path, which
+needs no keyword intent: an utterance of three words or fewer that the parser maps confidently to the pending question
+(for an open question, every one of its slots, clearly: "20, two roommates") and that says nothing beyond the answer,
+or a closing phrase that says nothing else while the close question is pending ("No, that's all. Thanks!"). A closing
+phrase followed by more ("That's all. Oh, I forgot, I'm a grad student.") still goes to the model.
 
 The deadline is an absolute value on the injected clock's monotonic scale (the dialogue computes it from the turn
 budget); the model gets min(GP_LLM_TIMEOUT_S, deadline - now - 0.15 s), and the turn returns within the deadline
@@ -143,7 +146,8 @@ class Understander:
             log.warning(json.dumps({"event": "parser_error", "error": type(exc).__name__}))
             parsed = Parsed()
         result = ExtractOutcome(status="skipped")
-        if utterance and self.llm is not None and not closed_mode \
+        closing = bool(utterance) and self._closing(utterance, keyword_intents, pending, session_lang)
+        if utterance and self.llm is not None and not closed_mode and not closing \
                 and not self._fast(utterance, parsed, keyword_intents, pending, session_lang) and self._take_turn():
             memory = [self.redactor.redact(normalize(r)).text for r in (recent or [])[-2:]]
             prompt = user_message(utterance=utterance, pending=pending, known=known, recent=memory,
@@ -154,7 +158,7 @@ class Understander:
         return Understanding(
             redacted_text=utterance, observations=merged.observations, intents=merged.intents,
             lang=merged.lang if utterance else Lang(session_lang),
-            answered_pending=merged.answered_pending,  # type: ignore[arg-type]
+            answered_pending="yes" if closing else merged.answered_pending,  # type: ignore[arg-type]
             side_question=merged.side_question, requested_language=merged.requested_language, llm=result,
             sources=merged.sources, redactions=list(redaction.kinds), keyword_intents=keyword_intents,
             teen_ty=merged.teen_ty)
@@ -180,7 +184,18 @@ class Understander:
             return False
         if word_count(utterance) > FAST_PATH_WORDS or guess_lang(utterance, default=session_lang) == "es":
             return False
+        if pending.kind == "open" and not pending.closed:
+            got = {o.slot: o.state for o in parsed.observations}
+            return bool(pending.slots) and all(got.get(s) == "clear" for s in pending.slots)
         return pending.kind in _CLOSED_KINDS or pending.closed or (pending.kind == "number" and len(pending.slots) == 1)
+
+    def _closing(self, utterance: str, keyword_intents: list[Intent], pending: PendingQuestion | None,
+                 session_lang: str) -> bool:
+        """A plain closing to the close question ("No, that's all. Thanks!"), every word a closing word: the
+        dialogue says goodbye, so no model call (and no wait) for the last turn of a call. Anything said after the
+        done phrase (a correction, a fact, a question, a crisis statement) is read by the model as usual."""
+        return pending is not None and pending.key == self.keywords.close_pending and not keyword_intents \
+            and self.keywords.is_only_done(utterance, session_lang)
 
     def _timeout(self, deadline: float) -> float:
         budget = float(self.settings.turn_budget_s)

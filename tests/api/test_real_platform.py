@@ -256,7 +256,7 @@ async def test_voice_delete_leaves_no_call_state(platform) -> None:
 def test_healthz_reads_the_real_understanding(platform) -> None:
     body = platform().client.get("/healthz").json()
     assert body["llm"]["provider"] == "fake" and body["llm"]["status"] in ("ready", "ok")
-    assert set(body["llm"]["usage"]) == {"calls", "input_tokens", "output_tokens"}
+    assert set(body["llm"]["usage"]) == {"calls", "input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"}
     assert body["programs"] == {"enabled": True, "table_id": "GP-Programs-2026", "valid_today": True}
 
 

@@ -1,0 +1,162 @@
+{
+  "id": "v6_p27_maria_es",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p27_maria_es, closed mode): 'No, mis papás están sin trabajo' is about the parents and must not set the student's earnings to $0 (expedited stays no)",
+  "golden_case": "G1",
+  "channel": "web",
+  "lang": "es",
+  "test": true,
+  "fake_llm_ok": true,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1",
+    "GP_LLM_PROVIDER": "anthropic"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "scripted"
+  ],
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Sí, está bien.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "Estudio una licenciatura en SF State y tomo doce unidades.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "Tengo veinte años y vivo con dos compañeros de cuarto.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "Cada quien compra su propia comida.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household_food_roommates"
+    },
+    {
+      "user": "Gano novecientos al mes en la biblioteca y nadie me da dinero.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "Mil cien.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No, mis papás están sin trabajo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "Sigo ganando unos novecientos al mes en la biblioteca.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "Como mil dólares.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, mis papás están sin trabajo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "Como mil dólares.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, mis papás están sin trabajo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "Como mil dólares.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, gracias.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "slots": {
+      "earned_monthly": "900.00",
+      "rent_paid_by_others_to_landlord": "0.00"
+    },
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306,
+    "expedited_possible": "no"
+  },
+  "note": "From the V6 re-verify fresh-paraphrase probes (closed mode, no model): 'sin trabajo' said about the parents in the answer to the landlord question set the student's earnings ($900 a month) to $0 (changed_from 900.00, state clear) with no read-back, no confirm and no yellow line; the call then told the student they may get food help within days (expedited yes) although rent $1,100 is below $900 of earnings plus $1,000 cash. The env declares the provider with no key, so the whole call runs in closed mode (docs/SPEC.md §3.7). A confirm right after that answer is answered by restating the facts."
+}

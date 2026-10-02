@@ -59,6 +59,23 @@ def test_database_is_wal_and_migrated(db, tmp_db) -> None:
     again.close()
 
 
+def test_every_connection_setting_is_in_force(db, tmp_db) -> None:
+    from gatorplate.store.db import CONNECTION_SETTINGS
+
+    assert dict(CONNECTION_SETTINGS) == {"journal_mode": "WAL", "synchronous": "NORMAL", "foreign_keys": "ON"}
+    # SQLite answers synchronous as a number (NORMAL = 1) and foreign_keys as 0 or 1.
+    assert db.query_one("PRAGMA synchronous")[0] == 1
+    assert db.query_one("PRAGMA foreign_keys")[0] == 1
+    assert db.journal_mode.lower() == "wal"
+    # The settings belong to each connection, not to the file: a second Database on the same file gets them too.
+    again = Database(tmp_db)
+    assert again.query_one("PRAGMA synchronous")[0] == 1 and again.query_one("PRAGMA foreign_keys")[0] == 1
+    again.close()
+    # Rows come back addressable by column name; the connection is autocommit, so tx() owns BEGIN and COMMIT.
+    assert db.query_one("SELECT 1 AS one")["one"] == 1
+    assert db._conn.isolation_level is None and not db._conn.in_transaction
+
+
 def test_create_get_save_versions(cases, fixed_clock) -> None:
     created = cases.create(make_case(fixed_clock))
     assert created.version == 1

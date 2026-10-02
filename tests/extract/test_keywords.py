@@ -75,7 +75,9 @@ def test_routing_uses_the_keyword_intent_names(keywords: KeywordMatcher) -> None
     groups = set(GUARDS["input"]["keywords"])
     known = {i.value for i in Intent} | {"redaction"}
     assert set(routing["precedence"]) <= known
-    assert groups <= set(routing["precedence"])
+    # "redaction" stands for a masked or redacted number and for a question about a Social Security number
+    # (ssn_attempt): the dialogue routes both to the privacy guidance
+    assert groups - {"ssn_attempt"} <= set(routing["precedence"]) and "redaction" in routing["precedence"]
     assert routing["precedence"].index("delete_data") < routing["precedence"].index("stop")
     # done phrases count only while close.anything_else is pending (the dialogue checks that)
     assert keywords.is_done_phrase("No, that's all. Thanks.") and keywords.is_done_phrase("Eso es todo.")

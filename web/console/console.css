@@ -51,6 +51,7 @@ select.input { background-color: var(--gp-surface); color: var(--gp-text); }
 .pill .icon { width: 16px; height: 16px; }
 button.pill { cursor: pointer; }
 button.pill:hover { background: var(--gp-sunken); }
+button.pill--rules { min-height: var(--gp-tap-console); }
 .pill--conn-live { color: var(--gp-primary); border-color: var(--gp-primary-tint); background: var(--gp-primary-tint); }
 .pill--sample { background: var(--gp-sunken); border-color: var(--gp-sunken); }
 .pill--live { color: var(--gp-primary); background: var(--gp-primary-tint); border-color: var(--gp-primary-tint); }
@@ -331,6 +332,7 @@ q.q { font-family: var(--gp-font-italic); font-style: italic; quotes: "“" "”
 .tracking-form .btn { justify-self: start; }
 .field--check { display: flex; align-items: center; gap: var(--gp-s2); min-height: var(--gp-tap-console); }
 .field--check input { width: 20px; height: 20px; accent-color: var(--gp-primary); }
+label.field--check { cursor: pointer; }
 
 /* Student card and QR panels (A6.5) */
 .card-panel { display: flex; gap: var(--gp-s6); align-items: flex-start; flex-wrap: wrap; }

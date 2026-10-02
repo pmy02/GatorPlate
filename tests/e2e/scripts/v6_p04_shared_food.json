@@ -1,0 +1,143 @@
+{
+  "id": "v6_p04_shared_food",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p04_shared_food, live, as said): 'I live by myself', work $900, rent $1,100 → about $306",
+  "channel": "web",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "en"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yeah, that's fine with me! Let's go ahead.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm an undergrad, and I'm taking 12 units this term.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm 20 years old, and I live by myself.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "I live alone, so it's just me.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "I make about 900 dollars a month from work, and no one gives me money.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "My share of the rent is 1100 dollars a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No, nobody pays any of my rent to the landlord for me.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "I'm not sure how much I have right now, honestly.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "I'm not really sure—I'd have to check my account to give you an accurate number.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "No, that's all good. Thanks for the help!",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306
+  },
+  "note": "From the live evaluation run. The model-played student said it lives alone although the persona shares food with roommates (the student model misread the persona's facts), so the expected result is the one for what was said; the brain's $306 was right for it. Utterances from a model-played student, so fake_llm_ok is false."
+}

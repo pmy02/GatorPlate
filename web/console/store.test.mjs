@@ -126,7 +126,9 @@ test("a polled case.updated with an unchanged version does not refetch; other ca
   const other = { type: "case.updated", case_id: "c_sofia2demo", summary: { ...fixture("case_sofia.json").summary, version: 99 } };
   assert.deepEqual(effectsOf(s, reduce(s, { type: "event", event: other }), other), []);
   const reset = { type: "demo.reset" };
-  assert.deepEqual(effectsOf(s, s, reset), [["list"], ["detail", "c_maria2demo"]]);
+  assert.deepEqual(effectsOf(s, s, reset), [["list"]], "the reset deleted the watched case: no detail fetch");
+  const resync = { type: "resync" };
+  assert.deepEqual(effectsOf(s, s, resync), [["list"], ["detail", "c_maria2demo"]]);
 });
 
 test("Reset demo sends reset, then seed (and Seed samples sends seed alone)", async () => {

@@ -1,0 +1,131 @@
+{
+  "id": "v6_p35_daca_es",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p35_daca_es, live, as said): no status volunteered, no income, no rent → about $306",
+  "channel": "web",
+  "lang": "es",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Sí, está bien, entiendo que eres un asistente de IA y que solo reciben el texto, no el audio.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "Estudio una licenciatura, pero no estoy seguro de cuántas unidades estoy tomando este semestre.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "No estoy seguro de cuántas unidades estoy tomando este semestre.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "No estoy seguro, la verdad no sé cuántas unidades tengo exactamente.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "Tengo 20 años y vivo por mi cuenta, solo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "Vivo solo, así que compro y cocino mi comida por mi cuenta.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "No estoy seguro, la verdad no tengo ingresos en este momento y nadie me da dinero.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "No gano nada al mes, no tengo trabajo ahorita.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "No pago renta, no estoy viviendo en un lugar donde tenga que pagar.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No estoy seguro cuánto tengo exactamente en efectivo y en el banco ahorita.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No estoy seguro, la verdad no sé exactamente cuánto tengo en este momento.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, gracias, creo que ya tengo la información que necesitaba. Muchas gracias por tu ayuda.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, está bien, gracias. Voy a llamar si tengo más preguntas.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, nada más, muchas gracias por la ayuda.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306
+  },
+  "note": "From the live evaluation run. The model-played student never volunteered the status in the persona's facts, so the expected result is the one for what was said; the brain's $306 was right for it. Utterances from a model-played student, so fake_llm_ok is false."
+}

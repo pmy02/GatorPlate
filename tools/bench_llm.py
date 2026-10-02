@@ -31,8 +31,12 @@ from gatorplate.extract.text import normalize
 
 ROOT = Path(__file__).resolve().parent.parent
 UTTERANCES = ROOT / "data" / "tests" / "utterances.jsonl"
-# USD per million tokens (input, output), list prices; input counted at the full rate (an upper bound).
+# USD per million tokens (input, output), list prices. Prompt-cache reads cost 0.1x the input price; cache writes cost
+# 1.25x for the five-minute lifetime and 2x for the one-hour lifetime the client asks for; the other input tokens are
+# counted at the full rate.
 PRICES = {"claude-haiku-4-5": (Decimal("1.00"), Decimal("5.00"))}
+CACHE_READ = Decimal("0.1")
+CACHE_WRITE = {"5m": Decimal("1.25"), "1h": Decimal("2")}
 BENCH_TIMEOUT_S = 10.0  # long enough to see the whole latency distribution; the brain cuts at GP_LLM_TIMEOUT_S
 
 
@@ -69,11 +73,14 @@ async def bench(settings: Settings, rows: list[dict[str, Any]]) -> dict[str, Any
         latencies.append(int((time.monotonic() - started) * 1000))
         statuses[result.status] = statuses.get(result.status, 0) + 1
     usage = metrics.snapshot()["usage"]
+    cached, written = client.cache_read_tokens, client.cache_write_tokens
+    plain = max(0, usage["input_tokens"] - cached - written)
     price = PRICES.get(settings.llm_model)
     cost = None
     if price is not None:
-        cost = (Decimal(usage["input_tokens"]) * price[0] + Decimal(usage["output_tokens"]) * price[1]) / Decimal(
-            1_000_000)
+        write = CACHE_WRITE["1h" if client.cache_ttl == "1h" else "5m"]
+        cost = ((Decimal(plain) + Decimal(cached) * CACHE_READ + Decimal(written) * write) * price[0]
+                + Decimal(usage["output_tokens"]) * price[1]) / Decimal(1_000_000)
     timeout_ms = int(settings.llm_timeout_s * 1000)
     calls = max(1, usage["calls"])
     return {
@@ -86,7 +93,9 @@ async def bench(settings: Settings, rows: list[dict[str, Any]]) -> dict[str, Any
         "over_model_timeout": sum(1 for ms in latencies if ms > timeout_ms),
         "tokens": {"input": usage["input_tokens"], "output": usage["output_tokens"],
                    "input_per_call": usage["input_tokens"] // calls,
-                   "output_per_call": usage["output_tokens"] // calls},
+                   "output_per_call": usage["output_tokens"] // calls,
+                   "cache_read": cached, "cache_write": written,
+                   "cache_read_per_call": cached // calls},
         "cost_usd": str(cost.quantize(Decimal("0.0001"))) if cost is not None else None,
         "cost_per_call_usd": str((cost / calls).quantize(Decimal("0.000001"))) if cost is not None else None,
     }

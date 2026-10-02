@@ -442,7 +442,7 @@ function trackingForm(d, state, on) {
   const form = h("form", { class: "tracking-form", novalidate: true },
     f("tr-applied", "Filed on", "date", t.applied_at),
     f("tr-interview", "Interview (Pacific time)", "datetime-local", t.interview_at ? isoToPtLocal(t.interview_at) : ""),
-    h("div", { class: "field field--check" }, missed, h("label", { for: "tr-missed", text: "Interview missed" })),
+    h("label", { class: "field field--check", for: "tr-missed" }, missed, h("span", { text: "Interview missed" })),
     f("tr-docs", "Papers requested on", "date", t.doc_request_at),
     f("tr-approved", "Approved on", "date", t.approved_at),
     h("button", { class: "btn btn--console", type: "submit", disabled: disabled || saving, dataset: { key: "tr-save" } },

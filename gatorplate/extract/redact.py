@@ -3,7 +3,9 @@
 Order (data/content/guards.json, input.redact): card-like written runs (13-19 digits), then any other written run of 9
 or more digits (up to three spaces, dots, dashes or parentheses may separate the digits, so "(415) 338-1203" counts),
 then spoken digit runs of 7 or more digit words (English and Spanish lists both run, because a student may switch
-languages mid-call). Each hit is replaced with the file's replacement text and only its kind is recorded:
+languages mid-call), then grouped number words of 7 or more digits ("one twenty three, forty five, sixty seven eighty
+nine": a teen or tens word, with its unit word, counts two digits). Each hit is replaced with the file's replacement
+text and only its kind is recorded:
 `card_number` for a written card run or a spoken run of 13-19 digits, `ssn` for every other run. A phone utterance
 with `masked: true` is a hit too: the gateway already replaced the run with '#', the number of '#' means nothing, so
 the kind is `card_number` when the utterance names a card or a bank account and `ssn` otherwise; grouped '#' runs
@@ -20,6 +22,7 @@ from pathlib import Path
 from typing import Literal
 
 from gatorplate.extract.guards import GuardData, load_guards
+from gatorplate.extract.text import fold
 
 Kind = Literal["ssn", "card_number"]
 _TOKEN = re.compile(r"[^\W\d_]+|\d")
@@ -46,6 +49,21 @@ class Redactor:
         tokens = _TOKEN.findall(match.lower())
         return sum(1 for tok in tokens if tok.isdigit() or tok in self.g.spoken_digit_words)
 
+    def _group_digits(self, match: str) -> int:
+        """Digits said by a run of grouped number words: "sixty seven" is two, "one" is one, "y" is none."""
+        count, after_tens = 0, False
+        for tok in _TOKEN.findall(fold(match)):
+            if tok in self.g.group_skip:
+                continue
+            if tok in self.g.group_two_digit:
+                count += 2
+                after_tens = tok in self.g.group_tens
+                continue
+            if tok.isdigit() or tok in self.g.spoken_digit_words:
+                count += 0 if after_tens and tok not in ("zero", "oh", "cero") else 1
+            after_tens = False
+        return count
+
     def redact(self, text: str, *, masked: bool = False) -> Redaction:
         """Redact one (already normalized) utterance."""
         kinds: list[Kind] = []
@@ -71,6 +89,14 @@ class Redactor:
                 note("card_number" if low <= count <= high else "ssn")
                 return rep
             out = rx.sub(spoken, out)
+        for rx in self.g.group_patterns:
+            def grouped(m: re.Match[str]) -> str:
+                count = self._group_digits(m.group(0))
+                if count < self.g.spoken_run_min:
+                    return m.group(0)  # "nineteen fifty", "twenty, twelve units": amounts and counts stay
+                note("card_number" if low <= count <= high else "ssn")
+                return rep
+            out = rx.sub(grouped, out)
         if masked:
             out = self._masked_run.sub(rep, out)
             note("card_number" if any(rx.search(text) for rx in self.g.masked_card_words) else "ssn")

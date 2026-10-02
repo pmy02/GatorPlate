@@ -1,0 +1,160 @@
+{
+  "id": "v6_p02_parents_pay_all",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p02_parents_pay_all, live): a student who lives alone is not asked the household or shared-food questions again; parent pays all the rent → about $155, not coordinator.unresolved",
+  "golden_case": "G1-b",
+  "channel": "web",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "en"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yeah, that's fine with me, thanks for letting me know!",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm an undergrad, and I'm taking 12 units this term.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm 20, and I live by myself.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent",
+      "expect_keys_exclude": [
+        "ask.household",
+        "reprompt.unclear"
+      ]
+    },
+    {
+      "user": "I make about 900 dollars a month from work, and no, nobody gives me money.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "My share of the rent is 1100 dollars a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent",
+      "expect_keys_exclude": [
+        "flip.household_food"
+      ]
+    },
+    {
+      "user": "Yeah, actually my parent pays 1100 dollars a month straight to the landlord for me.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "Yeah, that's right — eleven hundred dollars a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "All of it.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others_amount",
+      "typed": true
+    },
+    {
+      "user": "Yes, that's right.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money",
+      "typed": true
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "All of it.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others_amount",
+      "typed": true
+    },
+    {
+      "user": "Yes, that's right.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money",
+      "typed": true
+    },
+    {
+      "user": "No, I think that's everything. Thanks for helping me out!",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else",
+      "expect_keys": [
+        "close.goodbye"
+      ]
+    },
+    {
+      "user": "No, that's all for me. Thanks!",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 155
+  },
+  "note": "From the live evaluation run: after 'I live by myself' the brain asked who the student lives with, then spent one of its two flip questions on 'you and your roommates', stored the answer as unclear and ended with coordinator.unresolved; heat was left over by the question cap. 'No, I think that's everything…' at the close was not taken as done. Utterances from a model-played student, so fake_llm_ok is false."
+}

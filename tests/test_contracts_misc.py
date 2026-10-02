@@ -80,3 +80,17 @@ def test_ids() -> None:
         assert re.fullmatch(CASE_CODE_PATTERN, code) and not set(code) & set("0O1I")
     assert len(real.card_token()) == 22 and re.fullmatch(r"\d{6}", real.short_code())
     assert re.fullmatch(r"[a-f0-9]{32}", real.call_id())
+
+
+def test_the_list_countdown_never_uses_the_approximate_sar7_day() -> None:
+    """The SAR 7 day is shown as "about" (an approximate date): the case list counts down to exact deadlines only."""
+    from gatorplate.contracts.case import Tracking
+    from gatorplate.contracts.summary import next_deadline
+
+    case = make_case(level="undergrad")
+    case.tracking = Tracking(sar7_due=date(2026, 10, 5), recert_due=date(2027, 3, 1))
+    assert next_deadline(case, today=date(2026, 10, 2)) == date(2027, 3, 1)
+    case.tracking = Tracking(sar7_due=date(2026, 10, 5))
+    assert next_deadline(case, today=date(2026, 10, 2)) is None
+    case.tracking = Tracking(sar7_due=date(2026, 10, 5), doc_due=date(2026, 10, 9))
+    assert next_deadline(case, today=date(2026, 10, 2)) == date(2026, 10, 9)

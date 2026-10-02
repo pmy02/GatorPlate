@@ -70,6 +70,25 @@ def parse_ts(text: str | None) -> datetime | None:
     return datetime.fromisoformat(text.replace("Z", "+00:00"))
 
 
+# Settings every connection gets before the schema is touched, as (name, value): the write-ahead log lets readers work
+# next to the one writer; with that log a commit only has to wait for the log itself; references are enforced.
+CONNECTION_SETTINGS: tuple[tuple[str, str], ...] = (
+    ("journal_mode", "WAL"),
+    ("synchronous", "NORMAL"),
+    ("foreign_keys", "ON"),
+)
+
+
+def _connect(path: Path) -> sqlite3.Connection:
+    """A connection any thread may use (the Database lock serializes them). Autocommit: `Database.tx` writes its own
+    BEGIN IMMEDIATE and COMMIT. A busy file is retried for up to ten seconds before an error."""
+    conn = sqlite3.connect(str(path), check_same_thread=False, isolation_level=None, timeout=10)
+    conn.row_factory = sqlite3.Row
+    for name, value in CONNECTION_SETTINGS:
+        conn.execute(f"PRAGMA {name}={value}")
+    return conn
+
+
 class Database:
     """One SQLite file in WAL mode; migrations at construction."""
 
@@ -78,12 +97,8 @@ class Database:
         if str(self.path) != ":memory:":
             self.path.parent.mkdir(parents=True, exist_ok=True)
         self._lock = threading.RLock()
-        self._conn = sqlite3.connect(str(self.path), check_same_thread=False, isolation_level=None, timeout=10)
-        self._conn.row_factory = sqlite3.Row
+        self._conn = _connect(self.path)
         with self._lock:
-            self._conn.execute("PRAGMA journal_mode=WAL")
-            self._conn.execute("PRAGMA synchronous=NORMAL")
-            self._conn.execute("PRAGMA foreign_keys=ON")
             self._migrate()
 
     # ------------------------------------------------------------------------------------------ plumbing

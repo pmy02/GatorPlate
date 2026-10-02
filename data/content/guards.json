@@ -3,11 +3,11 @@
   "format": {
     "summary": "Input guard (redaction and keyword intents) and output guard (forbidden wording) for every reply and every card string.",
     "regex": "All patterns are Python regular expressions, matched with re.search and re.IGNORECASE on text normalized as: curly quotes made straight, whitespace collapsed.",
-    "redact": "Run before anything else sees the utterance (model, logs, case). Order: card (card_patterns: 13-19 written digits), then ssn (any 9+ digit run; up to three spaces, dots, dashes or parentheses may sit between digits, so '(415) 338-1203' and '123 - 45 - 6789' count), then spoken digit runs (spoken_digit_patterns: 7+ digit words or digits; the match is leftmost and greedy, so it covers the whole run). Replace each hit with the replacement text and record only the kind: card_number for a written card run or a spoken run of 13-19 digits (spoken_card_digits); ssn for every other hit. A phone utterance with masked true is a hit too: the gateway already replaced a run of 9+ digits with '#', and the number of '#' characters means nothing (docs/BRAIN_API.md, docs/SPEC.md redaction), so it is card_number when the utterance mentions a card or a bank account (masked_card_words) and ssn otherwise. Privacy events: card_number -> card_number_blocked, ssn -> ssn_blocked.",
-    "keywords": "High-recall backstop for the model's intents. A hit adds that intent. Patterns that can end a call (stop, abuse) stay narrow: negations ('don't hang up', 'no quiero colgar') and frustration that is not aimed at GatorPlate do not count (see tests.keywords). spanish_request tells a request for Spanish apart from other languages.",
+    "redact": "Run before anything else sees the utterance (model, logs, case). Order: card (card_patterns: 13-19 written digits), then ssn (any 9+ digit run; up to three spaces, dots, dashes or parentheses may sit between digits, so '(415) 338-1203' and '123 - 45 - 6789' count), then spoken digit runs (spoken_digit_patterns: 7+ digit words or digits; the match is leftmost and greedy, so it covers the whole run). Then grouped spoken numbers (spoken_group_patterns: three or more number words such as 'one twenty three, forty five, sixty seven eighty nine'): a teen or tens word counts two digits (with its following unit word, 'sixty seven'; Spanish 'sesenta y siete'), any other digit word one; a run of 7 or more digits is redacted with the same kinds, a shorter one stays ('nineteen fifty', 'twenty, twelve units'). Replace each hit with the replacement text and record only the kind: card_number for a written card run or a spoken run of 13-19 digits (spoken_card_digits); ssn for every other hit. A phone utterance with masked true is a hit too: the gateway already replaced a run of 9+ digits with '#', and the number of '#' characters means nothing (docs/BRAIN_API.md, docs/SPEC.md redaction), so it is card_number when the utterance mentions a card or a bank account (masked_card_words) and ssn otherwise. Privacy events: card_number -> card_number_blocked, ssn -> ssn_blocked.",
+    "keywords": "High-recall backstop for the model's intents. A hit adds that intent. Patterns that can end a call (stop, abuse) stay narrow: negations ('don't hang up', 'no quiero colgar') and frustration that is not aimed at GatorPlate do not count (see tests.keywords). spanish_request tells a request for Spanish apart from other languages. Crisis lists include indirect phrases in both languages ('ending it all', 'better off without me', 'no tiene sentido seguir viviendo', 'quisiera desaparecer'); they are the backstop when no model answers.",
     "output": "Every final reply string (both banks, every channel) and every rendered card string must have zero hits in output.forbidden (regex) and output.forbidden_phrases (plain lower-case substrings, the same list as contracts/check_examples.py). A hit replaces the whole reply with error.generic. The same holds for every string of programs.en.json and programs.es.json (the card's 'money you may be missing' part), as written and filled with example values; the programs patterns block promises of savings, refunds, credits, discounts or coverage ('you'll save $', 'you will get a refund', 'you're covered', 'free money').",
     "tests": "Vectors that data/content/check_content.py runs: redaction kinds, keyword intents, routing (the reply key one utterance gets), blocked and allowed outputs. check_content.py also runs the redaction and keyword rules over data/tests/utterances.jsonl.",
-    "routing": "routing.precedence is the order in which the intents of one turn win the reply (docs/SPEC.md, global intents), with delete_data ahead of stop so that 'erase my info and hang up' deletes first. 'redaction' stands for a redacted or masked number. The first entry present gives the reply key in routing.reply. close_phase: while the pending question is close.anything_else, a stop intent or a done phrase ('no, that's all', 'no, thanks', 'eso es todo') ends the call with close.goodbye, not stop.goodbye; 'that's all' is never a stop keyword."
+    "routing": "routing.precedence is the order in which the intents of one turn win the reply (docs/SPEC.md, global intents), with delete_data ahead of stop so that 'erase my info and hang up' deletes first. 'redaction' stands for a redacted or masked number. The first entry present gives the reply key in routing.reply. close_phase: while the pending question is close.anything_else, a stop intent or a done phrase ('no, that's all', 'no, thanks', 'eso es todo', and a 'no' with thanks or a plan to apply: 'No, that's everything, thanks for your help!', 'No, gracias. Voy a hacer la solicitud hoy.') ends the call with close.goodbye, not stop.goodbye; a question, 'but' / 'pero' or 'one more' keeps the call open; 'that's all' is never a stop keyword. close_phase.closing_words: the words of a plain closing (\"No, that's all, thanks!\"). A done phrase made only of them ends the call at once, with no model call; a done phrase that says more (\"No thanks, my roommate wants to know if she can apply too\") is answered first and the close question comes again."
   },
   "input": {
     "redact": {
@@ -60,6 +60,95 @@
           "\\b(?:(?:cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|\\d)[\\s,.-]+){6,}(?:cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|\\d)\\b"
         ]
       },
+      "spoken_group_patterns": {
+        "en": [
+          "\\b(?:(?:twenty|thirty|forty|fourty|fifty|sixty|seventy|eighty|ninety)(?:[\\s-]+(?:one|two|three|four|five|six|seven|eight|nine))?|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|zero|oh|one|two|three|four|five|six|seven|eight|nine|\\d)\\b(?:[\\s,.-]+(?:(?:twenty|thirty|forty|fourty|fifty|sixty|seventy|eighty|ninety)(?:[\\s-]+(?:one|two|three|four|five|six|seven|eight|nine))?|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|zero|oh|one|two|three|four|five|six|seven|eight|nine|\\d)\\b){2,}"
+        ],
+        "es": [
+          "\\b(?:(?:treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa)(?:\\s+y\\s+(?:uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve))?|diez|once|doce|trece|catorce|quince|diecis[eé]is|diecisiete|dieciocho|diecinueve|veinte|veinti(?:uno|una|d[oó]s|tr[eé]s|cuatro|cinco|s[eé]is|siete|ocho|nueve)|cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|\\d)\\b(?:[\\s,.-]+(?:(?:treinta|cuarenta|cincuenta|sesenta|setenta|ochenta|noventa)(?:\\s+y\\s+(?:uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve))?|diez|once|doce|trece|catorce|quince|diecis[eé]is|diecisiete|dieciocho|diecinueve|veinte|veinti(?:uno|una|d[oó]s|tr[eé]s|cuatro|cinco|s[eé]is|siete|ocho|nueve)|cero|uno|una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|\\d)\\b){2,}"
+        ]
+      },
+      "spoken_group_words": {
+        "en": {
+          "two_digit": [
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+            "twenty",
+            "thirty",
+            "forty",
+            "fourty",
+            "fifty",
+            "sixty",
+            "seventy",
+            "eighty",
+            "ninety"
+          ],
+          "tens": [
+            "twenty",
+            "thirty",
+            "forty",
+            "fourty",
+            "fifty",
+            "sixty",
+            "seventy",
+            "eighty",
+            "ninety"
+          ],
+          "skip": []
+        },
+        "es": {
+          "two_digit": [
+            "diez",
+            "once",
+            "doce",
+            "trece",
+            "catorce",
+            "quince",
+            "dieciseis",
+            "diecisiete",
+            "dieciocho",
+            "diecinueve",
+            "veinte",
+            "veintiuno",
+            "veintiuna",
+            "veintidos",
+            "veintitres",
+            "veinticuatro",
+            "veinticinco",
+            "veintiseis",
+            "veintisiete",
+            "veintiocho",
+            "veintinueve",
+            "treinta",
+            "cuarenta",
+            "cincuenta",
+            "sesenta",
+            "setenta",
+            "ochenta",
+            "noventa"
+          ],
+          "tens": [
+            "treinta",
+            "cuarenta",
+            "cincuenta",
+            "sesenta",
+            "setenta",
+            "ochenta",
+            "noventa"
+          ],
+          "skip": [
+            "y"
+          ]
+        }
+      },
       "masked_char": "#",
       "masked_card_words": {
         "en": [
@@ -84,8 +173,8 @@
         "en": [
           "\\bkill(?:ing)? myself\\b",
           "\\bsuicid",
-          "\\bend (?:my life|it all)\\b",
-          "\\btake my (?:own )?life\\b",
+          "\\bend(?:ing|ed)? (?:my life|my own life|it all|everything)\\b",
+          "\\btak(?:e|ing) my (?:own )?life\\b",
           "\\b(?:want|wanna|going) to die\\b",
           "\\bdon'?t want to (?:live|be alive|be here anymore)\\b",
           "\\b(?:hurt|hurting|harm|harming|cut|cutting) myself\\b",
@@ -96,8 +185,49 @@
           "\\bi don'?t feel safe\\b",
           "\\bnot safe at home\\b",
           "\\boverdose\\b",
-          "\\b(?:no|don'?t (?:really )?see (?:the|any)) point (?:of|in) (?:living|being alive|going on)\\b",
-          "\\b(?:can'?t|cannot) go on (?:anymore|like this)\\b"
+          "\\b(?:no|what'?s the|what is the|don'?t (?:really )?see (?:the|any)) point (?:of|in) (?:living|being alive|going on|life)\\b(?!\\s+(?:with|for)\\b)",
+          "\\b(?:can'?t|cannot) go on (?:anymore|like this)\\b",
+          "\\bwish i (?:was|were)(?:n'?t| not) (?:alive|here|born)\\b",
+          "\\bwish i (?:was|were) dead\\b",
+          "\\bwish i could (?:die|disappear)\\b",
+          "\\bbetter off without me\\b",
+          "\\bnot (?:being|be) (?:here|alive|around) anymore\\b",
+          "\\bno longer want to (?:live|be here|be alive)\\b",
+          "\\b(?:want|wanna|going) to disappear\\b(?!\\s+(?:for (?:the |a |an |like )?(?:weekend|day|days|week|weeks|while|bit|few|night|hour|couple|semester|month)|from (?:social media|the internet|class|campus|work|the group chat)|into (?:my|the) (?:room|bed|books?)|on (?:vacation|a trip)))",
+          "\\bdisappear forever\\b",
+          "\\b(?:life|living) (?:is ?n'?t|is not|ain'?t|is no longer) worth (?:living|it)\\b",
+          "\\bnot worth living\\b",
+          "\\bnothing (?:left )?to live for\\b",
+          "\\b(?:don'?t|do not) (?:ever )?want to wake up(?=\\W*$|\\s*[.!;](?:\\s|$)| (?:again|anymore|ever)\\b| tomorrow\\W*$| tomorrow (?:again|ever|or ever)\\b)",
+          "\\b(?:sleep|go to sleep|fall asleep) and (?:never|not) wake up\\b",
+          "\\bnever wake up again\\b",
+          "\\bbetter off (?:if|when) i(?:'?m| am| was| were)? (?:gone|dead|not here|not around)\\b",
+          "\\b(?:can'?t|cannot|can not) go on(?=\\W*$| (?:anymore|any more|living|like this|with (?:my )?life)\\b)",
+          "\\b(?:don'?t|do not) want to exist\\b",
+          "\\b(?:want|wanna) to stop existing\\b",
+          "\\b(?:i'?d|i would) rather (?:be dead|die|not be alive|not exist)\\b",
+          "\\b(?:no|don'?t see (?:a|any)|can'?t see (?:a|any)|there'?s no) reasons? (?:to|for) (?:keep going|go on|going on|keep living|live|living|be alive|being alive)\\b(?! with\\b)",
+          "\\bdone with (?:life|living)\\b(?!\\s+(?:admin|stuff|tasks|chores|errands|paperwork)\\b)",
+          "\\bfeel(?:s|ing)? like (?:dying|i want to die|i'?m dying)\\b(?! (?:of|to|for)\\b)",
+          "\\b(?:don'?t|do not|can'?t|cannot) (?:really )?see (?:the|any) point (?:of|in|to) (?:anything|it all|any of it)(?: anymore)?\\b",
+          "\\b(?:there'?s )?no point (?:of|in|to) (?:anything|living|life|going on)(?: anymore)?\\b(?!\\s+(?:with|for)\\b)",
+          "\\b(?:hang|hanging|drown|drowning|shoot|shooting|poison|poisoning|stab|stabbing) myself\\b",
+          "\\bjump(?:ing)? (?:off|from) (?:a|the|my) (?:bridge|building|roof|rooftop|cliff|balcony|window|tower|overpass)\\b",
+          "\\bjump(?:ing)? in front of (?:a|the) (?:train|bus|car|truck)\\b",
+          "\\b(?:pills|meds|medications?)\\b[^.!?]{0,60}\\b(?:take|swallow) (?:them all|all of them|it all|the whole bottle)\\b",
+          "\\b(?:take|swallow|took) (?:all (?:of )?(?:my|the) )(?:pills|meds|medications?)\\b",
+          "\\b(?:should|could|want to|wanna|going to|gonna|will|might|thinking (?:about|of)|think about) (?:just )?end(?:ing)? it(?: all)?\\b(?!\\s+(?:here|now\\?|there|with (?:the|this) (?:call|conversation|chat)))",
+          "\\bend(?:ing)? things\\b",
+          "\\bwant (?:it all|everything|all of (?:it|this)|it) to (?:be over|end|stop)\\b(?!\\s+(?:soon|already|fast|quick))",
+          "\\b(?:care|miss me|notice|happier|better(?: off)?)\\b[^.!?]{0,40}\\bif i (?:died|was gone|were gone|was dead|were dead|wasn'?t (?:here|around|alive)|weren'?t (?:here|around|alive)|killed myself)\\b",
+          "\\b(?:goodbye|suicide) (?:note|letter)\\b",
+          "\\b(?:tired|sick) of (?:being alive|existing|life\\b(?!\\s+admin)|living\\b(?!\\s+(?:with|in|on|at|here|there|paycheck|off|alone|together|so far|near|by)\\b))",
+          "\\bwish i(?:'d| had)? never (?:been born|existed|woken up)\\b",
+          "\\b(?:don'?t|do not) want to (?:go on|keep on|carry on|keep) living\\b",
+          "\\b(?:except|but|other than|besides) (?:dying|death|to die|killing myself|ending it)\\b",
+          "\\bwanna die\\b|\\bgonna die\\b(?!\\s+(?:of|from|laughing))",
+          "(?:^|[.,!;]\\s*)(?:just |please |somebody |someone )?kill me\\b",
+          "\\bwant(?:s|ing)? (?:death|to be dead)\\b"
         ],
         "es": [
           "\\bmatarme\\b",
@@ -111,7 +241,42 @@
           "\\bno estoy a salvo\\b",
           "\\bno me siento segur[oa]\\b",
           "\\bsobredosis\\b",
-          "\\bno (?:le )?veo (?:el |ning[uú]n )?sentido a (?:la vida|vivir|seguir viviendo)\\b"
+          "\\bno (?:le )?veo (?:el |ning[uú]n )?sentido a (?:la vida|vivir|seguir viviendo)\\b",
+          "\\bya no quiero (?:estar aqu[ií]|vivir|existir|seguir viviendo|seguir con vida)\\b",
+          "\\bno tiene (?:ning[uú]n )?sentido (?:vivir|seguir viviendo|la vida|seguir con vida)\\b",
+          "\\b(?:quisiera|quiero|me gustar[ií]a) desaparecer\\b(?!\\s+(?:de (?:las|mis) redes|del? (?:internet|trabajo|campus|grupo|chat)|un (?:rato|tiempo|d[ií]a|fin)|por un (?:rato|tiempo|d[ií]a)|el fin))",
+          "\\bdesaparecer para siempre\\b",
+          "\\bmejor sin m[ií]\\b",
+          "\\bojal[aá] (?:estuviera muert[oa]|no hubiera nacido|no existiera)\\b",
+          "\\b(?:terminar|acabar) con (?:todo|mi vida)\\b",
+          "\\bme (?:quiero|voy a|quisiera) (?:matar|suicidar)\\b",
+          "\\bno vale la pena (?:vivir|seguir viviendo|seguir con vida)\\b",
+          "\\bla vida no vale la pena\\b",
+          "\\bno quiero (?:volver a )?despertar(?:me)?\\b(?! (?:temprano|tarde|a las|el (?:lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo|fin)|para)\\b)",
+          "\\b(?:estar[ií]a|estar[ií]amos|estar[ií]an|estuviera|ser[ií]a) mejor (?:estar )?muert[oa]s?\\b",
+          "\\bmejor muert[oa]\\b",
+          "\\b(?:quiero|quisiera) (?:estar muert[oa]|dejar de (?:existir|vivir))\\b",
+          "\\b(?:pienso|pensando|pensado|pienso mucho|pensar) en (?:morirme|morir|matarme|suicidarme|quitarme la vida|acabar con (?:todo|mi vida))\\b",
+          "\\bganas de (?:morirme|morir|matarme|no vivir|desaparecer)\\b",
+          "\\bno tengo (?:ninguna |una |ning[uú]n |ni una )?(?:raz[oó]n(?:es)?|motivos?) (?:para|por (?:la )?(?:que|cual)) vivir\\b",
+          "\\bsin (?:raz[oó]n|razones|motivos?) para vivir\\b",
+          "\\bnada por (?:lo )?(?:que|cual) vivir\\b",
+          "\\b(?:ya )?no puedo m[aá]s con (?:la|mi) vida\\b",
+          "\\b(?:ya )?no puedo seguir viviendo\\b",
+          "\\b(?:todos|todo el mundo|mi familia) (?:estar[ií]an?|estar[ií]a) mejor sin m[ií]\\b",
+          "\\bno (?:le )?veo (?:el |ning[uú]n )?sentido a nada\\b",
+          "\\b(?:ahorcarme|me (?:quiero|voy a|quisiera) ahorcar)\\b",
+          "\\b(?:tirarme|aventarme|me (?:voy a|quiero|quisiera) (?:tirar|aventar)) (?:de|desde|por|a) (?:un|el|la|una) (?:puente|edificio|techo|azotea|ventana|balc[oó]n|tren|metro|precipicio)\\b",
+          "\\bpastillas\\b[^.!?]{0,60}\\b(?:tom[aá]rmelas|tomarme(?:las)? todas|todas juntas)\\b",
+          "\\bcansad[oa] de (?:vivir|la vida|estar viv[oa]|existir)\\b",
+          "\\bla vida (?:ya )?no tiene (?:ning[uú]n )?sentido\\b",
+          "\\bno le encuentro (?:ning[uú]n )?sentido a (?:la vida|vivir|nada)\\b",
+          "\\bmejor me muero\\b",
+          "\\bnadie me extra[nñ]ar[ií]a\\b",
+          "\\b(?:extra[nñ]ar[ií]a|importar[ií]a|dar[ií]a cuenta)\\b[^.!?]{0,30}\\bsi (?:me muero|muero|me mato|desaparezco|no estuviera)\\b",
+          "\\bdormir y no despertar\\b",
+          "\\bquiero que todo (?:termine|se acabe|acabe)\\b",
+          "\\b(?:ser[ií]a|estar[ií]an?) mejor si (?:yo )?no (?:estuviera|existiera|viviera)\\b"
         ]
       },
       "human_request": {
@@ -142,7 +307,8 @@
           "\\bi don'?t want to (?:do|continue) this anymore\\b",
           "\\b(?:bye|goodbye|bye bye)\\W*$",
           "\\bi (?:have|need|gotta|got) to go\\b(?!\\s+(?:to|back|in|at|out|for|over|through|get|see|pick|work)\\b)",
-          "\\b(?:then|and) hang up\\b"
+          "\\b(?:then|and) hang up\\b",
+          "\\bi(?:'ve)? gotta go\\b(?!\\s+(?:to|back|in|at|out|for|over|through|get|see|pick|work)\\b)|\\bmy (?:bus|train|ride|class) is (?:here|coming|leaving)\\b"
         ],
         "es": [
           "^\\W*(?:para|basta|ya|adi[oó]s|chao|chau|termina|terminar)\\W*$",
@@ -251,7 +417,8 @@
           "\\bis this (?:a |an )?(?:robot|bot|machine|ai|computer|real person)\\b",
           "\\bam i (?:talking|speaking) (?:to|with) (?:a |an )?(?:robot|bot|machine|ai|computer|person|human|real person)\\b",
           "\\bis this (?:an? )?official\\b",
-          "\\bis this (?:run by|from) (?:sf state|the school|the county|the government)\\b"
+          "\\bis this (?:run by|from) (?:sf state|the school|the county|the government)\\b",
+          "\\bis this (?:a |an )?(?:actual|live|real)? ?(?:person|human)\\b(?! (?:who|that) )"
         ],
         "es": [
           "\\beres (?:un[a]? )?(?:robot|bot|humano|humana|persona|persona real|ia|m[aá]quina|inteligencia artificial)\\b",
@@ -275,6 +442,38 @@
           "\\bse (?:est[aá] )?grab(?:a|ando)\\b",
           "\\best[aá]n grabando\\b",
           "\\bgrabas (?:esto|la llamada)\\b"
+        ]
+      },
+      "proxy_caller": {
+        "en": [
+          "\\b(?:i'?m|i am) calling (?:for|on behalf of|about) my (?:daughter|son|kid|child|brother|sister|cousin|niece|nephew|grandson|granddaughter|friend|roommate|girlfriend|boyfriend|wife|husband|partner)\\b",
+          "\\bcalling on (?:her|his|their) behalf\\b|\\bon behalf of my (?:daughter|son|kid|child|brother|sister|friend|roommate)\\b",
+          "\\b(?:i'?m|i am) (?:her|his|their) (?:mom|mother|dad|father|parent|aunt|uncle|grandma|grandmother|grandpa|guardian)\\b"
+        ],
+        "es": [
+          "\\bllamo (?:por|de parte de|para) mi (?:hij[oa]|herman[oa]|sobrin[oa]|niet[oa]|prim[oa]|amig[oa])\\b",
+          "\\bsoy (?:su|la|el) (?:mam[aá]|madre|pap[aá]|padre|t[ií][oa]|abuel[oa])\\b(?! de)",
+          "\\ben nombre de mi (?:hij[oa]|herman[oa]|amig[oa])\\b"
+        ]
+      },
+      "immigration_question": {
+        "en": [
+          "\\b(?:will|would|could|does|do|can|is|might)\\b[^.?!]{0,40}\\b(?:affect|hurt|impact|mess up|ruin|count against|be a problem for)\\b[^.?!]{0,30}\\b(?:immigration|visa|green card|citizenship|immigration status|residency)\\b",
+          "\\bpublic charge\\b"
+        ],
+        "es": [
+          "\\b(?:afecta|afectar[aá]|afectar[ií]a|perjudica|perjudicar[aá]|perjudicar[ií]a)\\w*\\b[^.?!]{0,30}\\b(?:inmigraci[oó]n|visa|estatus|estatus migratorio|green card|residencia|ciudadan[ií]a)\\b",
+          "\\bcarga p[uú]blica\\b"
+        ]
+      },
+      "ssn_attempt": {
+        "en": [
+          "\\b(?:do|does|will|would|should|can|did) (?:you|i|they|it|we)\\b[^.?!]{0,30}\\b(?:need|want|ask for|have to give|require)\\b[^.?!]{0,12}\\b(?:my |a |the )?(?:social security(?: number)?|social|ssn)\\b",
+          "\\b(?:here'?s|here is|let me give you|i can give you) my (?:social security(?: number)?|social|ssn)\\b"
+        ],
+        "es": [
+          "\\b(?:necesitas?|necesitan|ocupas?|ocupan|pides?|piden|quieres?) (?:mi )?(?:n[uú]mero de )?seguro social\\b",
+          "\\b(?:te doy|aqu[ií] est[aá]) mi (?:n[uú]mero de )?seguro social\\b"
         ]
       }
     },
@@ -336,15 +535,319 @@
         "done": {
           "en": [
             "^\\W*(?:no|nope|nah)(?:[\\s,.!]+(?:thanks|thank you))?\\W*$",
-            "\\bthat'?s (?:all|it)\\b",
-            "\\bnothing else\\b",
-            "\\b(?:i'?m|i am) (?:good|all set|fine)\\W*(?:thanks|thank you)?\\W*$"
+            "^(?!.*(?:\\?|\\bbut\\b(?!\\s+(?:thanks|thank you))|\\bone more\\b|\\banother\\b|\\bwait\\b|\\bactually\\b|\\b(?:can|could|may) (?:i|you)\\b|\\bask\\b|\\btell me\\b|\\bexplain\\b|\\b(?:need|want|like|have) to know\\b|\\bwonder\\w*|\\bcurious\\b|\\bquestions?\\b(?<!if i have questions)(?<!if i have any questions)(?<!if i have more questions)(?<!if i have other questions)(?<!if i have any other questions)(?<!if i have a question)|\\bwhat\\b(?! i (?:need|needed|wanted|was looking for)\\b)|\\bhow\\b|\\bwhen\\b|\\bwhere\\b|\\bwhich\\b|\\bwho\\b|\\bwhy\\b|(?:^|[,.;:!]\\s*|\\b(?:thanks|thank you|no|nope|okay|ok|so|and|also|just|um|uh|oh|well),?\\s+)(?:do|does|did|is|are|am|will|would|should|can|could|was|were|has)\\s+(?:i|it|you|they|we|that|this|there|my|the|he|she)\\b))(?:.*\\W)?that'?s (?:all|it|everything)\\b",
+            "^(?!.*(?:\\?|\\bbut\\b(?!\\s+(?:thanks|thank you))|\\bone more\\b|\\banother\\b|\\bwait\\b|\\bactually\\b|\\b(?:can|could|may) (?:i|you)\\b|\\bask\\b|\\btell me\\b|\\bexplain\\b|\\b(?:need|want|like|have) to know\\b|\\bwonder\\w*|\\bcurious\\b|\\bquestions?\\b(?<!if i have questions)(?<!if i have any questions)(?<!if i have more questions)(?<!if i have other questions)(?<!if i have any other questions)(?<!if i have a question)|\\bwhat\\b(?! i (?:need|needed|wanted|was looking for)\\b)|\\bhow\\b|\\bwhen\\b|\\bwhere\\b|\\bwhich\\b|\\bwho\\b|\\bwhy\\b|(?:^|[,.;:!]\\s*|\\b(?:thanks|thank you|no|nope|okay|ok|so|and|also|just|um|uh|oh|well),?\\s+)(?:do|does|did|is|are|am|will|would|should|can|could|was|were|has)\\s+(?:i|it|you|they|we|that|this|there|my|the|he|she)\\b))(?:.*\\W)?nothing else\\b",
+            "\\b(?:i'?m|i am) (?:good|all set|fine)\\W*(?:thanks|thank you)?\\W*$",
+            "^(?!.*(?:\\?|\\bbut\\b(?!\\s+(?:thanks|thank you))|\\bone more\\b|\\banother\\b|\\bwait\\b|\\bactually\\b|\\b(?:can|could|may) (?:i|you)\\b|\\bask\\b|\\btell me\\b|\\bexplain\\b|\\b(?:need|want|like|have) to know\\b|\\bwonder\\w*|\\bcurious\\b|\\bquestions?\\b(?<!if i have questions)(?<!if i have any questions)(?<!if i have more questions)(?<!if i have other questions)(?<!if i have any other questions)(?<!if i have a question)|\\bwhat\\b(?! i (?:need|needed|wanted|was looking for)\\b)|\\bhow\\b|\\bwhen\\b|\\bwhere\\b|\\bwhich\\b|\\bwho\\b|\\bwhy\\b|(?:^|[,.;:!]\\s*|\\b(?:thanks|thank you|no|nope|okay|ok|so|and|also|just|um|uh|oh|well),?\\s+)(?:do|does|did|is|are|am|will|would|should|can|could|was|were|has)\\s+(?:i|it|you|they|we|that|this|there|my|the|he|she)\\b))\\W*(?:no|nope|nah)\\b(?=.*\\b(?:thanks|thank you|that'?s (?:all|everything|it)|(?:i'?m|i am) (?:good|all set|fine)|i got it|all good|(?:that'?s|that was|very|really) helpful|that helps|(?:i'?ll|i will|i'?m going to|i'?m gonna|gonna) (?:go ahead and )?apply|bye|goodbye)\\b)",
+            "^(?!.*\\?)\\W*(?=.*\\b(?:no|nope|nah|nothing|none|not really|thanks|thank you|thx|bye|goodbye|all good|all set|(?:i'?m|i am) (?:all )?(?:good|set|fine|done)|that'?s (?:all|it|everything)|have a (?:good|great|nice)|take care|helpful|helps|apply|appreciate\\w*|what to do|what i (?:needed|wanted))\\b)(?:no|nope|nah|not really|not right now|not at the moment|nothing|nothing else|nothing more|none|(?:i )?(?:think )?that'?s (?:all|it|everything)(?: for (?:now|today))?|that (?:is|was) (?:all|it|everything)|that'?s all good|(?:i'?m|i am) (?:all )?(?:good|set|fine|done)(?: for now)?|all good|all set|we'?re good|ok(?:ay)?|okey|alright|all right|great|perfect|awesome|cool|nice|good|got it|i got it|understood|sounds good|that works|(?:thanks|thank you|thx)(?: (?:so|very) much| a lot| a bunch| again| kindly)?(?: for (?:the|your|all the|all your) (?:help|time|info|information)| for (?:helping(?: me)?(?: out)?|asking|everything|your time))?|many thanks|i appreciate (?:it|that|you|your help|the help)|appreciate it|much appreciated|bye|bye bye|goodbye|good bye|see you|see ya|have a (?:good|great|nice) (?:one|day|night|evening|afternoon|weekend)|you too|take care|(?:that|this|it) (?:was|is|'s) (?:really |very |super |so )?(?:helpful|great|perfect|clear|useful)|(?:that|this) helps|(?:that'?s|that was|very|really|super|so) helpful|(?:i'?ll|i will|i'?m going to|i'?m gonna|gonna|i'?m about to|let me) (?:go ahead and |go |try to )?apply(?: (?:today|now|right now|tonight|tomorrow|soon|online|this week|right away))?|i (?:know|understand) what to do(?: now)?|that'?s (?:just |exactly )?what i (?:needed|wanted))(?:[\\s,.!;]+(?:(?:and|but|so|oh)\\s+)?(?:no|nope|nah|not really|not right now|not at the moment|nothing|nothing else|nothing more|none|(?:i )?(?:think )?that'?s (?:all|it|everything)(?: for (?:now|today))?|that (?:is|was) (?:all|it|everything)|that'?s all good|(?:i'?m|i am) (?:all )?(?:good|set|fine|done)(?: for now)?|all good|all set|we'?re good|ok(?:ay)?|okey|alright|all right|great|perfect|awesome|cool|nice|good|got it|i got it|understood|sounds good|that works|(?:thanks|thank you|thx)(?: (?:so|very) much| a lot| a bunch| again| kindly)?(?: for (?:the|your|all the|all your) (?:help|time|info|information)| for (?:helping(?: me)?(?: out)?|asking|everything|your time))?|many thanks|i appreciate (?:it|that|you|your help|the help)|appreciate it|much appreciated|bye|bye bye|goodbye|good bye|see you|see ya|have a (?:good|great|nice) (?:one|day|night|evening|afternoon|weekend)|you too|take care|(?:that|this|it) (?:was|is|'s) (?:really |very |super |so )?(?:helpful|great|perfect|clear|useful)|(?:that|this) helps|(?:that'?s|that was|very|really|super|so) helpful|(?:i'?ll|i will|i'?m going to|i'?m gonna|gonna|i'?m about to|let me) (?:go ahead and |go |try to )?apply(?: (?:today|now|right now|tonight|tomorrow|soon|online|this week|right away))?|i (?:know|understand) what to do(?: now)?|that'?s (?:just |exactly )?what i (?:needed|wanted)))*\\W*$",
+            "^\\W*(?:no[\\s,.!]+)?(?:i think\\s+)?(?:i'?m|i am|we'?re|we are)\\s+(?:all\\s+)?(?:set|okay|ok|good|fine)(?:\\s+for now)?(?:[\\s,.!]+(?:thanks|thank you)(?:\\s+(?:so|very)\\s+much)?)?\\W*$",
+            "^\\W*(?:no[\\s,.!]+)?(?:you'?ve|you have) been (?:super |very |really |so |a big |a great |a huge )?(?:helpful|help)(?:[\\s,.!]+(?:thanks|thank you))?\\W*$",
+            "^\\W*(?:no[\\s,.!]+)?(?:i think\\s+)?that'?s (?:okay|ok|good|fine|alright)(?:[\\s,.!]+(?:thanks|thank you))?\\W*$"
           ],
           "es": [
             "^\\W*no(?:[\\s,.!]+gracias)?\\W*$",
-            "\\b(?:eso )?es todo\\W*(?:gracias)?\\W*$",
-            "\\bnada m[aá]s\\W*(?:gracias)?\\W*$",
-            "\\b(?:estoy bien|as[ií] est[aá] bien)\\W*(?:gracias)?\\W*$"
+            "^(?!.*[?¿])(?:.*\\W)?(?:eso )?es todo\\W*(?:gracias)?\\W*$",
+            "^(?!.*[?¿])(?:.*\\W)?nada m[aá]s\\W*(?:gracias)?\\W*$",
+            "\\b(?:estoy bien|as[ií] est[aá] bien)\\W*(?:gracias)?\\W*$",
+            "^(?!.*(?:\\?|¿|\\bpero\\b(?!\\s+(?:muchas\\s+)?gracias)|\\botra (?:pregunta|cosa|duda)\\b|\\buna (?:pregunta|duda)\\b|\\bespera\\b|(?<!\\bsi )\\btengo (?:una |otra |unas |algunas |m[aá]s )?(?:preguntas?|dudas?)\\b|\\b(?:puedo|quiero|quisiera|necesito|me gustar[ií]a) (?:preguntar|saber)\\b|(?<!\\bs[eé] )\\bqué\\b|\\bque (?:documentos|papeles|necesito|tengo que|hago|debo|pasa|sigue|llevo|traigo|requisitos|hay que)\\b|\\bcómo\\b|\\bcomo (?:le |lo |la |me |se |hago|aplico|funciona|puedo)|\\bcu[aá]nt[oa]s?\\b(?! antes)|\\bcuándo\\b|\\bd[oó]nde\\b|\\bcu[aá]l(?:es)?\\b|\\bqui[eé]n\\b|\\bpor qu[eé]\\b))\\W*no\\b(?=.*\\b(?:gracias|es todo|nada m[aá]s|ya est[aá]|est[aá] (?:bien|claro)|entendido|entiendo|me qued[oó] claro|(?:voy|vamos) a (?:hacer|llenar|enviar|mandar|ir|aplicar|presentar)|adi[oó]s)\\b)",
+            "^(?!.*(?:\\?|¿|\\bpero\\b(?!\\s+(?:muchas\\s+)?gracias)|\\botra (?:pregunta|cosa|duda)\\b|\\buna (?:pregunta|duda)\\b|\\bespera\\b|(?<!\\bsi )\\btengo (?:una |otra |unas |algunas |m[aá]s )?(?:preguntas?|dudas?)\\b|\\b(?:puedo|quiero|quisiera|necesito|me gustar[ií]a) (?:preguntar|saber)\\b|(?<!\\bs[eé] )\\bqué\\b|\\bque (?:documentos|papeles|necesito|tengo que|hago|debo|pasa|sigue|llevo|traigo|requisitos|hay que)\\b|\\bcómo\\b|\\bcomo (?:le |lo |la |me |se |hago|aplico|funciona|puedo)|\\bcu[aá]nt[oa]s?\\b(?! antes)|\\bcuándo\\b|\\bd[oó]nde\\b|\\bcu[aá]l(?:es)?\\b|\\bqui[eé]n\\b|\\bpor qu[eé]\\b))(?:.*\\W)?nada m[aá]s(?=\\s*[,.!]|\\W*$)",
+            "^(?!.*[?¿])\\W*(?=.*\\b(?:no|nada|ya est[aá]|es todo|ser[ií]a todo|todo bien|todo claro|est[aá] bien|estoy bien|gracias|agradezco|adi[oó]s|chao|chau|hasta luego|nos vemos|d[ií]a|aplicar|solicitar|solicitud|listo|claro|qu[eé] hacer)\\b)(?:no|nop|nada|nada m[aá]s|ya|ya est[aá]|ya es todo|(?:eso )?es todo|(?:eso )?ser[ií]a todo|creo que (?:eso )?es todo|todo bien|todo claro|todo est[aá] (?:bien|claro)|est[aá] bien|estoy bien|as[ií] est[aá] bien|perfecto|genial|excelente|muy bien|bien|bueno|vale|ok(?:ay)?|listo|de acuerdo|entendido|entiendo|(?:me )?qued[oó] (?:todo )?claro|(?:muchas |mil |much[ií]simas )?gracias(?: de nuevo| otra vez)?(?: por (?:la|tu|su|toda la) (?:ayuda|informaci[oó]n)| por todo| por ayudarme| por (?:tu|su) tiempo)?|(?:te|se) lo agradezco|adi[oó]s|chao|chau|hasta luego|nos vemos|que (?:tengas|tenga) (?:un )?(?:buen|lindo|bonito) d[ií]a|igualmente|cu[ií]da(?:te|se)|(?:me )?(?:ayud[oó]|sirvi[oó]) mucho|(?:fue|es) muy [uú]til|(?:voy|vamos) a (?:aplicar|solicitar|hacer la solicitud|llenar la solicitud|presentar la solicitud|enviar la solicitud)(?: (?:hoy|ahora|ahorita|ma[nñ]ana|ya|en l[ií]nea|pronto|hoy mismo|esta semana))?|ya s[eé] qu[eé] hacer|s[eé] qu[eé] hacer)(?:[\\s,.!;]+(?:(?:y|pero|pues)\\s+)?(?:no|nop|nada|nada m[aá]s|ya|ya est[aá]|ya es todo|(?:eso )?es todo|(?:eso )?ser[ií]a todo|creo que (?:eso )?es todo|todo bien|todo claro|todo est[aá] (?:bien|claro)|est[aá] bien|estoy bien|as[ií] est[aá] bien|perfecto|genial|excelente|muy bien|bien|bueno|vale|ok(?:ay)?|listo|de acuerdo|entendido|entiendo|(?:me )?qued[oó] (?:todo )?claro|(?:muchas |mil |much[ií]simas )?gracias(?: de nuevo| otra vez)?(?: por (?:la|tu|su|toda la) (?:ayuda|informaci[oó]n)| por todo| por ayudarme| por (?:tu|su) tiempo)?|(?:te|se) lo agradezco|adi[oó]s|chao|chau|hasta luego|nos vemos|que (?:tengas|tenga) (?:un )?(?:buen|lindo|bonito) d[ií]a|igualmente|cu[ií]da(?:te|se)|(?:me )?(?:ayud[oó]|sirvi[oó]) mucho|(?:fue|es) muy [uú]til|(?:voy|vamos) a (?:aplicar|solicitar|hacer la solicitud|llenar la solicitud|presentar la solicitud|enviar la solicitud)(?: (?:hoy|ahora|ahorita|ma[nñ]ana|ya|en l[ií]nea|pronto|hoy mismo|esta semana))?|ya s[eé] qu[eé] hacer|s[eé] qu[eé] hacer))*\\W*$",
+            "^\\W*(?:por ahora|de momento|por el momento|ahorita) no(?:[\\s,.!]+(?:muchas\\s+)?gracias)?\\W*$",
+            "^\\W*(?:no[\\s,.!]+)?(?:muchas\\s+)?gracias[\\s,.!]+(?:eso )?es todo(?: por (?:hoy|ahora))?\\W*$"
+          ]
+        },
+        "closing_words": {
+          "en": [
+            "a",
+            "about",
+            "afternoon",
+            "again",
+            "ahead",
+            "all",
+            "all's",
+            "alright",
+            "also",
+            "am",
+            "amazing",
+            "and",
+            "answer",
+            "answered",
+            "answers",
+            "apply",
+            "appreciate",
+            "appreciated",
+            "asking",
+            "at",
+            "away",
+            "awesome",
+            "been",
+            "big",
+            "bunch",
+            "but",
+            "bye",
+            "call",
+            "care",
+            "cheers",
+            "clear",
+            "cool",
+            "cover",
+            "covered",
+            "covers",
+            "day",
+            "do",
+            "done",
+            "else",
+            "evening",
+            "everything",
+            "exactly",
+            "fine",
+            "for",
+            "go",
+            "going",
+            "gonna",
+            "good",
+            "goodbye",
+            "goodnight",
+            "got",
+            "great",
+            "have",
+            "help",
+            "helpful",
+            "helping",
+            "helps",
+            "here",
+            "huge",
+            "i",
+            "i'll",
+            "i'm",
+            "if",
+            "ill",
+            "im",
+            "info",
+            "information",
+            "is",
+            "it",
+            "just",
+            "kindly",
+            "know",
+            "later",
+            "let",
+            "lot",
+            "lovely",
+            "many",
+            "me",
+            "moment",
+            "more",
+            "much",
+            "my",
+            "nah",
+            "need",
+            "needed",
+            "nice",
+            "night",
+            "no",
+            "none",
+            "nope",
+            "not",
+            "nothing",
+            "now",
+            "oh",
+            "ok",
+            "okay",
+            "okey",
+            "one",
+            "online",
+            "out",
+            "perfect",
+            "pretty",
+            "question",
+            "questions",
+            "quite",
+            "real",
+            "really",
+            "right",
+            "see",
+            "set",
+            "should",
+            "so",
+            "soon",
+            "sounds",
+            "super",
+            "sure",
+            "take",
+            "thank",
+            "thanks",
+            "that",
+            "that's",
+            "thats",
+            "the",
+            "think",
+            "this",
+            "thx",
+            "time",
+            "to",
+            "today",
+            "tomorrow",
+            "tonight",
+            "too",
+            "uh",
+            "um",
+            "understand",
+            "understood",
+            "useful",
+            "very",
+            "wanted",
+            "was",
+            "we're",
+            "week",
+            "weekend",
+            "well",
+            "what",
+            "will",
+            "wonderful",
+            "works",
+            "ya",
+            "yeah",
+            "yes",
+            "you",
+            "you're",
+            "you've",
+            "your",
+            "youre",
+            "youve"
+          ],
+          "es": [
+            "a",
+            "acuerdo",
+            "adios",
+            "adiós",
+            "agradezco",
+            "ahora",
+            "ahorita",
+            "aplicar",
+            "asi",
+            "así",
+            "ayuda",
+            "ayudarme",
+            "ayudo",
+            "ayudó",
+            "benefitscal",
+            "bien",
+            "bonito",
+            "buen",
+            "buena",
+            "bueno",
+            "chao",
+            "chau",
+            "claro",
+            "con",
+            "creo",
+            "cuidate",
+            "cuidese",
+            "cuídate",
+            "cuídese",
+            "de",
+            "dia",
+            "día",
+            "el",
+            "en",
+            "entendido",
+            "entiendo",
+            "enviar",
+            "es",
+            "eso",
+            "esta",
+            "estoy",
+            "está",
+            "excelente",
+            "fue",
+            "genial",
+            "gracias",
+            "hacer",
+            "hasta",
+            "hoy",
+            "igualmente",
+            "informacion",
+            "información",
+            "ir",
+            "la",
+            "lindo",
+            "linea",
+            "listo",
+            "llamar",
+            "llenar",
+            "lo",
+            "luego",
+            "línea",
+            "manana",
+            "mas",
+            "mañana",
+            "me",
+            "mi",
+            "mil",
+            "mismo",
+            "momento",
+            "muchas",
+            "muchisimas",
+            "mucho",
+            "muchísimas",
+            "muy",
+            "más",
+            "nada",
+            "necesitaba",
+            "no",
+            "nop",
+            "nos",
+            "nuevo",
+            "numero",
+            "número",
+            "ok",
+            "okay",
+            "otra",
+            "para",
+            "perfecto",
+            "pero",
+            "por",
+            "preguntas",
+            "presentar",
+            "pronto",
+            "pues",
+            "que",
+            "quedo",
+            "quedó",
+            "qué",
+            "se",
+            "semana",
+            "seria",
+            "sería",
+            "si",
+            "sirvio",
+            "sirvió",
+            "solicitar",
+            "solicitud",
+            "su",
+            "sé",
+            "sí",
+            "te",
+            "tenga",
+            "tengas",
+            "tengo",
+            "termine",
+            "terminé",
+            "tiempo",
+            "toda",
+            "todo",
+            "tu",
+            "un",
+            "util",
+            "vale",
+            "vamos",
+            "vemos",
+            "vez",
+            "voy",
+            "y",
+            "ya",
+            "útil"
           ]
         }
       }
@@ -603,6 +1106,11 @@
       {
         "lang": "en",
         "text": "rent is 1100 (1200 with utilities)",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "twenty, thirty, forty dollars a day",
         "expect": null
       }
     ],
@@ -1008,6 +1516,460 @@
           "delete_data",
           "stop"
         ]
+      },
+      {
+        "lang": "en",
+        "text": "I'm thinking about ending it all.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Sometimes I feel like everyone would be better off without me.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I wish I wasn't alive.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I just want to disappear forever.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Ya no quiero estar aquí, en serio.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "No tiene sentido seguir viviendo.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Quisiera desaparecer para siempre.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I'm ending my lease in June.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Life isn't worth living anymore.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I have nothing to live for.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I don't want to wake up tomorrow.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Everyone would be better off if I was gone.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I feel like I can't go on.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I don't want to exist anymore.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I'd rather be dead.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I don't see a reason to keep going.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I wish I could just go to sleep and never wake up.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I'm done with life.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I feel like dying.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I'm good, thanks. I don't really see the point of anything anymore.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Me quiero matar.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "No vale la pena vivir.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "No quiero despertar mañana.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Estaría mejor muerta.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Quiero dejar de existir.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Pienso en morirme.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "No tengo razones para vivir.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Ya no puedo más con la vida.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I don't want to wake up early for the interview.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I can't go on campus on Fridays.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "This rent is killing me, it's eleven hundred.",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "Me muero de hambre, la verdad.",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "No quiero despertar temprano mañana.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I'm going to hang myself.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I have pills saved up and I'm going to take them all.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I've been thinking about taking my own life.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Maybe I should just end it.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Nobody would care if I died.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I'm tired of living.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I wish I'd never been born.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I wrote a goodbye note to my family.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "No. Wanna die.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Nope, kill me.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Me quiero ahorcar.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Estoy cansada de vivir.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "La vida ya no tiene sentido.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Mejor me muero.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Nadie me extrañaría si me muero.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Quisiera dormir y no despertar nunca.",
+        "expect": [
+          "crisis"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I just want to disappear for the weekend, finals are brutal.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I can't go on, I have class at three. I make about 900.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "There's no point in going on with this question, I make 900.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I don't want to wake up tomorrow at six for the interview, but okay, 900 a month.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I'm done with life admin for today, I make 900 a month.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "My mom will kill me if I don't apply.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I'm tired of living with my parents.",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "Quiero desaparecer de las redes un rato.",
+        "expect": []
+      },
+      {
+        "lang": "es",
+        "text": "No quiero despertarme el sábado, pero gano 900 al mes.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "Is this an actual person?",
+        "expect": [
+          "is_ai"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I gotta go, my bus is here.",
+        "expect": [
+          "stop"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "I'm calling for my daughter, she's a student at SF State.",
+        "expect": [
+          "proxy_caller"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Hi, I'm her mom, I'm calling on behalf of my son.",
+        "expect": [
+          "proxy_caller"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Will applying affect my immigration status?",
+        "expect": [
+          "immigration_question"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "Do you need my social security number?",
+        "expect": [
+          "ssn_attempt"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "Llamo por mi hija, ella estudia en SF State.",
+        "expect": [
+          "proxy_caller"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "¿Aplicar afecta mi estatus migratorio?",
+        "expect": [
+          "immigration_question"
+        ]
+      },
+      {
+        "lang": "es",
+        "text": "¿Necesitas mi número de seguro social?",
+        "expect": [
+          "ssn_attempt"
+        ]
+      },
+      {
+        "lang": "en",
+        "text": "My roommate is on a student visa.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I gotta go to work at five, I make about 900.",
+        "expect": []
+      },
+      {
+        "lang": "en",
+        "text": "I don't have a social security number problem, I just want to know the amount.",
+        "expect": []
       }
     ],
     "routing": [
@@ -1210,6 +2172,210 @@
         "text": "I have to go to class at 3.",
         "pending": "ask.units",
         "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "I'm thinking about ending it all.",
+        "pending": "ask.income",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "es",
+        "text": "Quisiera desaparecer para siempre.",
+        "pending": "ask.income",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "en",
+        "text": "No, that's everything, thanks so much for your help!",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "No, I think that's everything. Thanks for helping me out!",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "No, gracias. Entendido, voy a hacer la solicitud hoy.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "No, nada más. Gracias por la ayuda.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Thanks, but what documents do I need?",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "es",
+        "text": "No, pero tengo una pregunta.",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "Nothing, thanks.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "I'm all good, thank you!",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Not really, thanks.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Nope, have a good one.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Okay, I'll apply today. Thanks!",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "Great, I'm going to apply right now.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "Nada, gracias.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "Ya está, gracias.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "Todo bien, gracias.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "Perfecto, muchas gracias.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "Bueno, voy a aplicar hoy, gracias.",
+        "pending": "close.anything_else",
+        "expect": "close.goodbye"
+      },
+      {
+        "lang": "en",
+        "text": "No thanks, I have a question about the card.",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "No, thanks. What documents do I need",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "No thank you, how long does it take",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "No thanks, just one question, do I need my pay stubs",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "es",
+        "text": "No, gracias, qué documentos necesito",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "es",
+        "text": "No gracias, cuánto tarda",
+        "pending": "close.anything_else",
+        "expect": null
+      },
+      {
+        "lang": "en",
+        "text": "I'm good, thanks. I don't really see the point of anything anymore.",
+        "pending": "close.anything_else",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "es",
+        "text": "Me quiero matar.",
+        "pending": "ask.income",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "en",
+        "text": "Life isn't worth living anymore.",
+        "pending": "ask.income",
+        "expect": "crisis.resources"
+      },
+      {
+        "lang": "en",
+        "text": "Is this an actual person?",
+        "pending": "ask.rent",
+        "expect": "answer.is_ai"
+      },
+      {
+        "lang": "en",
+        "text": "I'm calling for my daughter, she's a student at SF State.",
+        "pending": "ask.rent",
+        "expect": "proxy.caller"
+      },
+      {
+        "lang": "en",
+        "text": "Will applying affect my immigration status?",
+        "pending": "ask.income",
+        "expect": "immigration.question"
+      },
+      {
+        "lang": "en",
+        "text": "Do you need my social security number?",
+        "pending": "ask.rent",
+        "expect": "ssn.block"
+      },
+      {
+        "lang": "en",
+        "text": "I gotta go, my bus is here.",
+        "pending": "ask.rent",
+        "expect": "stop.goodbye"
+      },
+      {
+        "lang": "es",
+        "text": "¿Aplicar afecta mi estatus migratorio?",
+        "pending": "ask.rent",
+        "expect": "immigration.question"
       }
     ],
     "output_block": [

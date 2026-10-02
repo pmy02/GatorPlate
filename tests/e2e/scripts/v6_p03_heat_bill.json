@@ -1,0 +1,177 @@
+{
+  "id": "v6_p03_heat_bill",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p03_heat_bill, live): 'No, nobody pays any part of my rent to my landlord. I pay it all myself.' stores $0 paid by others → about $306, never $155",
+  "golden_case": "G1-c",
+  "channel": "web",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "en"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yeah, that's fine with me. Let's go ahead.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm an undergrad, and I'm taking 12 units this term.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm 20 years old, and I live on my own.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "I live alone, so it's just me in my household.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "I live by myself, so there's no one else in my household to share food with.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "I earn about $900 a month from work, and no, nobody gives me money.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "My share of the rent is $1100 a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "I don't have roommates — I live alone, so I buy and cook food just for myself.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.household_food"
+    },
+    {
+      "user": "No, nobody pays any part of my rent to my landlord. I pay it all myself.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others",
+      "expect_keys_exclude": [
+        "result.likely_floor",
+        "confirm.money"
+      ],
+      "case": {
+        "slots": {
+          "rent_paid_by_others_to_landlord": "0.00"
+        }
+      }
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "Yes, I pay the gas and electric bill separately.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "About a thousand dollars.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash",
+      "typed": true
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "Yes, I pay the gas and electric bill separately.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "About a thousand dollars.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash",
+      "typed": true
+    },
+    {
+      "user": "No, that's helpful, thanks! I'll go ahead and apply today.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "Nope, I got it. Thanks for the help!",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, that's all. Thanks!",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306
+  },
+  "note": "From the live evaluation run: the student said nobody pays any of the rent; the brain stored $1,100 paid by others (parser, state clear, no confirm, no yellow line on that slot) and said about $155, maybe more. Utterances from a model-played student (not in the utterance table), so fake_llm_ok is false. Conditional answers after the recorded ones come from the persona's scripted paraphrases."
+}

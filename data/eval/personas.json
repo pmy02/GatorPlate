@@ -1,7 +1,7 @@
 {
  "version": "2026-10-01",
  "label": "Text-level evaluation with simulated students",
- "about": "Fictional personas for tools/simulate_student.py (docs/SPEC.md §10). `facts` uses the engine's Facts keys (the golden-case facts); the truth is these facts run through the rules engine. `answers` maps a question's sentence key to the persona's scripted paraphrase (a list is used in order, its last item repeats); keys a persona does not list get a neutral fallback. English personas run on the web channel and on the phone channel as signed test calls; Spanish personas run on the web channel. Crisis behavior is tested with fixed scripts only (tests/adversarial/scripts), never with personas.",
+ "about": "Fictional personas for tools/simulate_student.py (docs/SPEC.md §10). `facts` uses the engine's Facts keys (the golden-case facts); the truth is these facts run through the rules engine. `story` tells the model-played student (live runs) who it is, in its own language and in plain words: every amount with its own period, the household, and what it says on its own (a visa or immigration status, a correction, a range); the student model never sees `facts`. `answers` maps a question's sentence key to the persona's scripted paraphrase (a list is used in order, its last item repeats); keys a persona does not list get a neutral fallback. English personas run on the web channel and on the phone channel as signed test calls; Spanish personas run on the web channel. Crisis behavior is tested with fixed scripts only (tests/adversarial/scripts), never with personas.",
  "native_review": true,
  "count": 35,
  "personas": [
@@ -18,6 +18,7 @@
     "G1",
     "several facts at once"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You work at the campus library and make about $900 a month before taxes. Nobody gives you money. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -88,6 +89,7 @@
     "G1-b",
     "parents paying the landlord"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You work at the campus library and make about $900 a month before taxes. Nobody gives you money. Your share of the rent is $1,100 a month, and your parents pay all of it, the whole $1,100, straight to your landlord every month; you don't pay any of it yourself. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -158,6 +160,7 @@
    "covers": [
     "G1-c"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You work at the campus library and make about $900 a month before taxes. Nobody gives you money. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Your rent does not include heating: you pay a separate gas and electric bill for heat every month. You have no other utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -228,6 +231,7 @@
     "G2",
     "shared food"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates, and the three of you buy groceries together and cook and eat together most nights. You work at the campus library and make about $900 a month before taxes. Nobody gives you money. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -262,7 +266,7 @@
     "rent_paid_by_others_to_landlord": "0",
     "utility": "none",
     "dependent_care": "0",
-    "cash_on_hand": null,
+    "cash_on_hand": "1000",
     "apply_date": null,
     "income_changing_soon": false,
     "works_80h_month": false,
@@ -298,6 +302,7 @@
     "G4",
     "couch-surfing"
    ],
+   "story": "You are 24, a senior at SF State taking 12 units. Since August you have been sleeping on a friend's couch; you pay your friend nothing, and you have no lease or place of your own. You don't live with your parents. You buy and cook your own food, separately from your friend. You don't have a job right now and nobody gives you money. You have about $40 right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -360,6 +365,7 @@
     "G5",
     "a volunteered status"
    ],
+   "story": "You are 20, an undergrad at SF State taking 12 units. You live alone in an apartment your family owns, so you pay no rent. You are an international student on an F-1 visa, so you can only work on campus; you mention your F-1 visa the first time the assistant asks about your work or income. You make about $700 a month at a campus job. Nobody gives you money.",
    "facts": {
     "lang": "en",
     "volunteered_status": "F-1",
@@ -368,7 +374,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -381,7 +387,15 @@
     "boarder": false,
     "homeless": false,
     "homeless_shelter_cost": "0",
-    "incomes": [],
+    "incomes": [
+     {
+      "amount": "700",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "campus job"
+     }
+    ],
     "rent_share": "0",
     "rent_paid_by_others_to_landlord": "0",
     "utility": "none",
@@ -419,6 +433,7 @@
    "covers": [
     "G6"
    ],
+   "story": "You are 26, in the first year of a master's program at SF State, taking 9 units. You live by yourself in a place your family owns, so you pay no rent. You don't work and you have no work-study, no TA or RA job and no children; you just go to class. Nobody gives you money.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -427,7 +442,7 @@
     "level": "grad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 9,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -478,6 +493,7 @@
     "G6-b",
     "TA pay"
    ],
+   "story": "You are 26, a graduate student in biology at SF State taking 9 units. You are a teaching assistant (TA) for an intro biology lab; it is a paid job on a W-2 and pays about $1,800 a month before taxes. You live by yourself and buy your own food. Nobody else gives you money. Your rent is $1,000 a month and you pay it yourself. Heating and every other utility are included in your rent, so you pay no utility bills.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -486,7 +502,7 @@
     "level": "grad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 9,
     "grad_exemption": "ta_ra",
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -547,6 +563,7 @@
    "covers": [
     "G7"
    ],
+   "story": "You are 21, a senior at SF State, full-time with 12 units. You live by yourself in a place your family owns, so you pay no rent, and you buy your own food. You make about $3,500 a month before taxes from your job. Nobody gives you money.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -555,7 +572,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -614,6 +631,7 @@
    "covers": [
     "G8"
    ],
+   "story": "You are 21, a junior at SF State, full-time with 12 units. You live by yourself and buy your own food. You make $2,660 a month before taxes from your job. Nobody gives you money. Your rent is $1,100 a month and you pay it yourself. Heating and every other utility are included in your rent, so you pay no utility bills.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -622,7 +640,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -682,6 +700,7 @@
     "G9",
     "dorm meal plan"
    ],
+   "story": "You are 18, a freshman at SF State taking 15 units. You live in an on-campus dorm and you have the 14-meals-a-week meal plan. You don't pay any rent besides your campus housing. You don't work and nobody gives you money.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -690,7 +709,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 15,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -741,6 +760,7 @@
     "G10",
     "family cash"
    ],
+   "story": "You are 21, a junior at SF State taking 12 units. You live by yourself and buy your own food. You make about $1,200 a month before taxes from your job, and your mom sends you $300 every month. Your rent is $900 a month and you pay it yourself. Heating and every other utility are included in your rent, so you pay no utility bills.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -749,7 +769,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -816,6 +836,7 @@
     "G11",
     "under half-time"
    ],
+   "story": "You are 20, a junior at SF State, and this term you are taking only 4 units. You share an apartment with 2 roommates; each of you buys and cooks your own food. You work at the campus library and make about $900 a month before taxes. Nobody gives you money. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -850,7 +871,7 @@
     "rent_paid_by_others_to_landlord": "0",
     "utility": "none",
     "dependent_care": "0",
-    "cash_on_hand": null,
+    "cash_on_hand": "1000",
     "apply_date": null,
     "income_changing_soon": false,
     "works_80h_month": false,
@@ -886,6 +907,7 @@
     "G12",
     "hourly pay"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You work at a campus job for $20 an hour, about 15 hours a week. Nobody gives you money. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -956,6 +978,7 @@
     "G13",
     "biweekly pay"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You get paid $900 every two weeks from your job. Nobody gives you money. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1026,6 +1049,7 @@
     "N1",
     "spouse not a student"
    ],
+   "story": "You are 23, a senior at SF State taking 12 units. You live with your wife; she works full-time and is not a student. The two of you buy and eat food together. You make about $600 a month before taxes and your wife makes about $1,500 a month. Nobody else gives you money. Your rent for the two of you is $900 a month and you pay it yourselves. You also pay a separate gas and electric bill for heating every month. You have about $800 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1034,7 +1058,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1103,6 +1127,7 @@
     "N5",
     "work-study excluded"
    ],
+   "story": "You are 27, a master's student at SF State taking 9 units. You have federal work-study this year that pays about $800 a month, and you also work at the campus bookstore for about $400 a month. You live alone and buy your own food. Nobody gives you money. Your rent is $950 a month and you pay it yourself. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $500 right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1111,7 +1136,7 @@
     "level": "grad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 9,
     "grad_exemption": "work_study",
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1179,6 +1204,7 @@
    "covers": [
     "N6-b"
    ],
+   "story": "You are 22, a junior at SF State taking 12 units. You live by yourself and buy your own food. You make about $600 a month from your job and nothing else; nobody gives you money. Your rent is $1,000 a month and you pay it yourself. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $450 in the bank.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1187,7 +1213,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1248,6 +1274,7 @@
     "N7",
     "couch-surfing, pays a friend"
    ],
+   "story": "You are 25, a senior at SF State taking 12 units. For a few weeks you have been staying on a friend's couch; you have no place of your own. You give your friend about $150 a month for letting you stay there. You buy your own food. You make about $1,000 a month from work; nobody gives you money. You have about $60 right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1256,7 +1283,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1318,6 +1345,7 @@
     "N18",
     "parents paying the landlord (part)"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You work at the campus library and make about $900 a month before taxes. Nobody gives you money. Your share of the rent is $1,100 a month; your mom pays $500 of it straight to the landlord every month and you pay the rest. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1326,7 +1354,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1387,6 +1415,7 @@
    "covers": [
     "N3"
    ],
+   "story": "You are 21, a junior at SF State taking 12 units. You live with 2 roommates; everyone buys and cooks their own food. You make about $1,200 a month from your job and nothing else; nobody gives you money. Your share of the rent is $700 a month and you pay it yourself. Heating and every other utility are included in your rent, so you pay no utility bills.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1395,7 +1424,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1457,6 +1486,7 @@
     "N10",
     "ranges"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. Your pay depends on your shifts. The first time the assistant asks about your income, you give a range: between $1,000 and $1,200 a month. If asked again, you say it's usually about $1,200 a month. Nobody gives you money. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1465,7 +1495,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1491,7 +1521,7 @@
     "rent_paid_by_others_to_landlord": "0",
     "utility": "none",
     "dependent_care": "0",
-    "cash_on_hand": null,
+    "cash_on_hand": "1000",
     "apply_date": null,
     "income_changing_soon": false,
     "works_80h_month": false,
@@ -1532,6 +1562,7 @@
     "N13",
     "'sometimes' family cash"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You make about $1,000 a month at the campus library. If asked whether anyone gives you money, you say your mom sometimes sends you a little, but not every month and not a set amount; basically nothing. Your share of the rent is $1,100 a month and you pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1540,7 +1571,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1566,7 +1597,7 @@
     "rent_paid_by_others_to_landlord": "0",
     "utility": "none",
     "dependent_care": "0",
-    "cash_on_hand": null,
+    "cash_on_hand": "1000",
     "apply_date": null,
     "income_changing_soon": false,
     "works_80h_month": false,
@@ -1602,6 +1633,7 @@
    "covers": [
     "corrections"
    ],
+   "story": "You are 20, a junior at SF State taking 12 units this semester. You share an apartment with 2 roommates; each of you buys and cooks your own food. You work at the campus library and make about $900 a month before taxes. Nobody gives you money. The first time the assistant asks about your rent, you say your share is $1,100 a month. In your very next answer you correct yourself: your share is actually $1,200 a month, not $1,100. You pay all of it yourself; nobody pays any part of it to the landlord for you. Heating and every other utility are included in your rent, so you pay no utility bills. You have about $1,000 in the bank right now.",
    "facts": {
     "lang": "en",
     "volunteered_status": null,
@@ -1674,6 +1706,7 @@
     "G3",
     "under 22 with a parent"
    ],
+   "story": "Tienes 19 años, estudias una licenciatura en SF State y tomas 12 unidades este semestre. Vives con tus papás en su casa. No trabajas y no pagas renta.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -1731,6 +1764,7 @@
     "N12",
     "weekly pay"
    ],
+   "story": "Tienes 24 años y estudias una licenciatura en SF State de tiempo completo, con 12 unidades. Vives sola y compras tu propia comida. Trabajas 15 horas a la semana y te pagan $19.50 la hora; te pagan cada semana. Nadie te da dinero. Pagas $1,250 al mes de renta tú misma. Además pagas aparte un recibo de luz y gas para la calefacción cada mes. Tienes unos $200 en el banco.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -1739,7 +1773,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1798,6 +1832,7 @@
    "covers": [
     "G1 in Spanish"
    ],
+   "story": "Tienes 20 años, estás en tercer año de licenciatura en SF State y tomas 12 unidades este semestre. Compartes un departamento con 2 compañeros de cuarto; cada quien compra y cocina su propia comida. Trabajas en la biblioteca del campus y ganas unos $900 al mes antes de impuestos. Nadie te da dinero. Tu parte de la renta es $1,100 al mes y la pagas toda tú; nadie le paga nada al dueño por ti. La calefacción y los demás servicios están incluidos en la renta, así que no pagas ningún recibo aparte. Tienes unos $1,000 en el banco ahora.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -1867,6 +1902,7 @@
     "G4 in Spanish",
     "couch-surfing"
    ],
+   "story": "Tienes 24 años, estás en último año de licenciatura en SF State y tomas 12 unidades. Desde agosto duermes en el sofá de un amigo; no le pagas nada y no tienes un lugar propio. No vives con tus papás. Compras y cocinas tu propia comida, aparte de tu amigo. No trabajas y nadie te da dinero. Tienes unos $40.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -1927,6 +1963,7 @@
    "covers": [
     "G7 in Spanish"
    ],
+   "story": "Tienes 21 años y estudias una licenciatura en SF State de tiempo completo, con 12 unidades. Vives sola en un lugar de tu familia, así que no pagas renta, y compras tu propia comida. Ganas unos $3,500 al mes antes de impuestos en tu trabajo. Nadie te da dinero.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -1935,7 +1972,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -1994,6 +2031,7 @@
     "G9 in Spanish",
     "dorm meal plan"
    ],
+   "story": "Tienes 18 años, estás en primer año de licenciatura en SF State y tomas 15 unidades. Vives en las residencias del campus y tienes el plan de 14 comidas a la semana. No pagas renta aparte del alojamiento del campus. No trabajas y nadie te da dinero.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -2002,7 +2040,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 15,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -2052,6 +2090,7 @@
     "G10 in Spanish",
     "family cash"
    ],
+   "story": "Tienes 21 años, estudias una licenciatura en SF State y tomas 12 unidades. Vives sola y compras tu propia comida. Ganas unos $1,200 al mes antes de impuestos en tu trabajo, y tus papás te mandan $300 cada mes. Pagas $900 al mes de renta tú misma. La calefacción y los demás servicios están incluidos en la renta, así que no pagas ningún recibo aparte.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -2060,7 +2099,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -2126,6 +2165,7 @@
     "G13 in Spanish",
     "biweekly pay"
    ],
+   "story": "Tienes 20 años, estás en tercer año de licenciatura en SF State y tomas 12 unidades este semestre. Compartes un departamento con 2 compañeros de cuarto; cada quien compra y cocina su propia comida. Te pagan $900 cada dos semanas en tu trabajo. Nadie te da dinero. Tu parte de la renta es $1,100 al mes y la pagas toda tú; nadie le paga nada al dueño por ti. La calefacción y los demás servicios están incluidos en la renta, así que no pagas ningún recibo aparte. Tienes unos $1,000 en el banco ahora.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -2195,6 +2235,7 @@
     "G2 in Spanish",
     "shared food"
    ],
+   "story": "Tienes 20 años, estás en tercer año de licenciatura en SF State y tomas 12 unidades este semestre. Compartes un departamento con 2 compañeros de cuarto, y los tres compran la comida juntos y cocinan y comen juntos casi todas las noches. Trabajas en la biblioteca del campus y ganas unos $900 al mes antes de impuestos. Nadie te da dinero. Tu parte de la renta es $1,100 al mes y la pagas toda tú; nadie le paga nada al dueño por ti. La calefacción y los demás servicios están incluidos en la renta, así que no pagas ningún recibo aparte. Tienes unos $1,000 en el banco ahora.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -2229,7 +2270,7 @@
     "rent_paid_by_others_to_landlord": "0",
     "utility": "none",
     "dependent_care": "0",
-    "cash_on_hand": null,
+    "cash_on_hand": "1000",
     "apply_date": null,
     "income_changing_soon": false,
     "works_80h_month": false,
@@ -2264,6 +2305,7 @@
     "G12 in Spanish",
     "hourly pay"
    ],
+   "story": "Tienes 20 años, estás en tercer año de licenciatura en SF State y tomas 12 unidades este semestre. Compartes un departamento con 2 compañeros de cuarto; cada quien compra y cocina su propia comida. Trabajas en el campus, te pagan $20 la hora y trabajas unas 15 horas a la semana. Nadie te da dinero. Tu parte de la renta es $1,100 al mes y la pagas toda tú; nadie le paga nada al dueño por ti. La calefacción y los demás servicios están incluidos en la renta, así que no pagas ningún recibo aparte. Tienes unos $1,000 en el banco ahora.",
    "facts": {
     "lang": "es",
     "volunteered_status": null,
@@ -2328,11 +2370,12 @@
     "web"
    ],
    "golden_case": "G5",
-   "title": "Volunteers an F-1 visa",
+   "title": "Volunteers DACA status (Spanish)",
    "covers": [
     "G5 in Spanish",
     "a volunteered status"
    ],
+   "story": "Tienes 20 años, estudias una licenciatura en SF State y tomas 12 unidades. Vives sola en un lugar de tu familia, así que no pagas renta. Tienes DACA; lo mencionas la primera vez que te pregunten por tu trabajo o tus ingresos. Trabajas en una tienda y ganas como $1,000 al mes. Nadie te da dinero.",
    "facts": {
     "lang": "es",
     "volunteered_status": "DACA",
@@ -2341,7 +2384,7 @@
     "level": "undergrad",
     "public_ca_degree_program": true,
     "half_time": true,
-    "units": null,
+    "units": 12,
     "grad_exemption": null,
     "child_under14_in_hh": false,
     "under22_with_parent": false,
@@ -2354,7 +2397,15 @@
     "boarder": false,
     "homeless": false,
     "homeless_shelter_cost": "0",
-    "incomes": [],
+    "incomes": [
+     {
+      "amount": "1000",
+      "freq": "monthly",
+      "kind": "earned",
+      "excluded": false,
+      "label": "store job"
+     }
+    ],
     "rent_share": "0",
     "rent_paid_by_others_to_landlord": "0",
     "utility": "none",

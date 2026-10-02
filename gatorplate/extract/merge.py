@@ -17,9 +17,11 @@ Combination:
   same amount reported twice from the same words counts once;
 - model and parser agree (amounts within 1 % as monthly values) -> the model's observation; they disagree -> the
   model's value, state unclear (the dialogue may confirm a critical amount once);
-- a parser-only observation is kept when it answers the pending closed or number question (unless the model already
-  put the same spoken amount into another money slot), when it is routing-only, or when the model gave no result
-  (timeout, error, closed mode, fast path);
+- a parser-only observation is kept when it answers one of the pending question's slots, whatever the question's
+  kind (unless the model said the question was not answered, or already put the same spoken amount into another money
+  slot), when it is routing-only, when it is the never-asked roommate count, when it is "lives alone" (household_food
+  alone, which the model often leaves out of an answer about age) and the model said nothing that contradicts it, or
+  when the model gave no result (timeout, error, closed mode, fast path);
 - intents = model intents + keyword intents (+ the parser's when the model gave no result).
 """
 
@@ -34,7 +36,7 @@ from gatorplate.contracts.extraction import ExtractOutcome, Intent, PendingQuest
 from gatorplate.contracts.slots import ROUTING_ONLY, SLOT_SPECS, SlotName
 from gatorplate.extract.conversion import Conversion, in_range
 from gatorplate.extract.numbers import find_numbers
-from gatorplate.extract.parser import _ALL_OF_IT, _SLOT_NAME, MONEY, Parsed, _scale_low, fmt
+from gatorplate.extract.parser import _SLOT_NAME, MONEY, Parsed, _scale_low, all_of_it, fmt
 from gatorplate.extract.text import fold_same, guess_lang
 
 S = SlotName
@@ -48,7 +50,9 @@ _ZERO_WORDS = re.compile(r"\b(?:no|not|nope|nah|nothing|none|nobody|no one|zero|
 _ONE_WORDS = re.compile(r"\b(?:a|an|un|una|uno|one)\b", re.IGNORECASE)
 _SSI = re.compile(r"\b(?:ssi|ssdi)\b", re.IGNORECASE)
 _SSI_SLOTS = frozenset({S.unearned_monthly, S.other_cash_monthly})  # where a model would put an SSI amount
-_CLOSED_KINDS = ("yes_no", "confirm", "choice", "number")
+# Slots the model may leave out of an answer although the student said them: kept from the parser unless the model
+# contradicts them (see _backstop).
+_LIVES_ALONE_CONTRADICTED_BY = {S.roommates: "true", S.lives_with_parent: "true", S.boarder: "true"}
 _ORDER = [i for i in Intent]
 _BOOL_WORDS = {"yes": "true", "no": "false", "si": "true", "sí": "true"}
 
@@ -160,7 +164,7 @@ class Merger:
                 all_of = known.get(S.rent_share) if slot == S.rent_paid_by_others_to_landlord else known.get(slot)
                 ok = self._said(number, evidence, spanish) \
                     or (number == 0 and bool(_ZERO_WORDS.search(evidence))) \
-                    or (_ALL_OF_IT.search(fold_same(evidence)) is not None and all_of is not None
+                    or (all_of_it(fold_same(evidence)) is not None and all_of is not None
                         and _dec(all_of) == number)
                 if not ok:
                     return None
@@ -302,15 +306,17 @@ class Merger:
         for slot, ob in from_parser.items():
             if slot in final:
                 continue
-            answers_pending = pending is not None and slot in pending.slots and pending.kind in _CLOSED_KINDS \
-                and not model_says_unanswered
+            # Any kind of question: "I'm 20, and I live with two roommates" to the open age question answers
+            # lives_with_parent even when the model returns only the age and the roommates.
+            answers_pending = pending is not None and slot in pending.slots and not model_says_unanswered
             if answers_pending and slot in MONEY and _claimed(slot, ob.quote, utterance, model_spans, spanish):
                 # One spoken amount never feeds two slots: the model already put these words into another money
                 # slot ("300 from my mom": other cash, not earnings), so the parser's reading is not added on top.
                 continue
             # A routing-only reading (a volunteered status, SSI/SSDI) is a backstop like the keyword lists: kept even
             # when the model missed it, so the dialogue routes the case and drops that utterance from memory.
-            if keep_all or answers_pending or slot in ROUTING_ONLY:
+            if keep_all or answers_pending or slot in ROUTING_ONLY \
+                    or (not model_says_unanswered and _backstop(slot, ob, from_model)):
                 if slot in ROUTING_ONLY:
                     ob = ob.model_copy(update={"quote": "", "quote_en": None})
                 final[slot] = ob
@@ -345,6 +351,19 @@ class Merger:
         return Merged(observations=[final[s] for s in ordered], intents=intents, lang=lang, answered_pending=answered,
                       side_question=side, requested_language=requested, sources={s: sources[s] for s in ordered},
                       teen_ty=[s for s in SlotName if s in teen], conflicts=conflicts)
+
+
+def _backstop(slot: SlotName, ob: SlotObservation, from_model: dict[SlotName, SlotObservation]) -> bool:
+    """A parser fact kept beside a model answer that left it out: the roommate count (said, never asked), unless the
+    model says there are no roommates; and "lives alone", unless the model reports roommates, a parent or a boarder
+    arrangement."""
+    if slot == S.roommates_count:
+        mates = from_model.get(S.roommates)
+        return mates is None or mates.value != "false"
+    if slot == S.household_food and ob.value == "alone" and ob.state == "clear":
+        return not any(from_model.get(s) is not None and from_model[s].value == v
+                       for s, v in _LIVES_ALONE_CONTRADICTED_BY.items())
+    return False
 
 
 def _teen_ty_value(ob: SlotObservation, spanish: bool) -> bool:

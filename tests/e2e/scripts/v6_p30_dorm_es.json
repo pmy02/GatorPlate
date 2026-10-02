@@ -1,0 +1,193 @@
+{
+  "id": "v6_p30_dorm_es",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p30_dorm_es, live): 'vivo solo en la residencia estudiantil del campus' → the meal-plan question is asked; 14 meals a week → other_help.dorm_meal_plan, never a silent $306",
+  "golden_case": "G9",
+  "channel": "web",
+  "lang": "es",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Sí, está bien. Entiendo que eres un asistente de IA y que no guardas audio.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "Estudio licenciatura, pero no estoy seguro de cuántas unidades tomo este semestre.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "No estoy seguro de cuántas unidades tomo este semestre.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "No estoy seguro, la verdad no sé cuántas unidades tomo exactamente.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "Tengo 18 años y vivo solo en la residencia estudiantil del campus.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent",
+      "case": {
+        "slots": {
+          "dorm_on_campus": "true"
+        }
+      }
+    },
+    {
+      "user": "Tengo el plan de catorce comidas a la semana.",
+      "confidence": 0.95,
+      "when_pending": "ask.meal_plan",
+      "typed": true
+    },
+    {
+      "user": "Vivo solo en la residencia del campus. Y compro y cocino la comida por separado, solo para mí.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "No tengo ingresos de trabajo, y nadie me da dinero tampoco.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "No pago renta, vivo en la residencia del campus.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "Vivo solo en la residencia, así que compro y cocino la comida por separado, solo para mí.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.household_food"
+    },
+    {
+      "user": "No estoy seguro de cuánto dinero tengo ahora en efectivo y en el banco.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No estoy seguro, la verdad no sé cuánto dinero tengo en total.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "Tengo el plan de catorce comidas a la semana.",
+      "confidence": 0.95,
+      "when_pending": "ask.meal_plan",
+      "typed": true
+    },
+    {
+      "user": "No, yo la pago.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "Tengo el plan de catorce comidas a la semana.",
+      "confidence": 0.95,
+      "when_pending": "ask.meal_plan",
+      "typed": true
+    },
+    {
+      "user": "No, yo la pago.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "No, gracias. Me fue muy útil la información, voy a hacer la solicitud hoy.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, está bien. Muchas gracias por la ayuda.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, nada más. Gracias de nuevo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "other_help",
+    "reason_code": "other_help.dorm_meal_plan",
+    "asked_keys_include": [
+      "ask.meal_plan"
+    ]
+  },
+  "note": "From the live evaluation run: dorm_on_campus was stored as true but the meal plan was never asked; the call ended with about $306 and no yellow line about the meal plan. The meal-plan answer is the persona's scripted paraphrase, played only when the question is asked. Utterances from a model-played student, so fake_llm_ok is false."
+}

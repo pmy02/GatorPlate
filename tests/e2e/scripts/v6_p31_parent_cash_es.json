@@ -1,0 +1,198 @@
+{
+  "id": "v6_p31_parent_cash_es",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p31_parent_cash_es, live, closed mode): 'No, nadie me paga parte de la renta al dueño' must not erase the $300 a month from a parent → about $106, never $241",
+  "golden_case": "G10",
+  "channel": "web",
+  "lang": "es",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1",
+    "GP_LLM_PROVIDER": "anthropic"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Sí, me parece bien. Entiendo que eres un asistente de IA y que solo recibes el texto.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "Estudio licenciatura, pero no estoy seguro de cuántas unidades tomo este semestre.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "No estoy seguro de cuántas unidades tomo este semestre.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "No estoy seguro, lo siento. No tengo esa información clara.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "Tengo 21 años y vivo por mi cuenta, solo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "No, vivo solo y compro mi comida aparte.",
+      "confidence": 0.95,
+      "when_pending": "ask.household",
+      "typed": true
+    },
+    {
+      "user": "Tengo 21 años y vivo solo, por mi cuenta.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "Sí, gano 1200 dólares al mes de mi trabajo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "Sí, mi papá me da 300 dólares al mes.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.other_cash",
+      "case": {
+        "slots": {
+          "other_cash_monthly": "300.00"
+        }
+      }
+    },
+    {
+      "user": "Mi parte de la renta es 900 dólares al mes.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No, no pago servicios de calefacción o aire acondicionado aparte de la renta.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "No, nadie me paga parte de la renta al dueño.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others",
+      "case": {
+        "slots": {
+          "other_cash_monthly": "300.00",
+          "rent_paid_by_others_to_landlord": "0.00"
+        }
+      }
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "No, yo la pago.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "Sí, correcto.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money",
+      "typed": true
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "No, yo la pago.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "Sí, correcto.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money",
+      "typed": true
+    },
+    {
+      "user": "No, gracias. Eso fue muy útil, te lo agradezco.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, nada más. Muchas gracias por la ayuda.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, ya está. Gracias de nuevo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 106
+  },
+  "note": "From the live evaluation run: two model timeouts put the call in closed mode; the answer to the landlord question then overwrote the family cash the brain had just read back ($300 → $0, no changed_from, no yellow line on it) and the estimate became $241 (range $241–$294) instead of $106. The env declares the provider with no key, so the whole call runs in closed mode (no model), as in docs/SPEC.md §3.7. Utterances from a model-played student, so fake_llm_ok is false. One answer is added for the closed household question that closed mode asks from the start ('No, vivo solo y compro mi comida aparte.')."
+}

@@ -1,0 +1,125 @@
+{
+  "id": "v6_p25_sofia",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p25_sofia, live, as said): 19, 'vivo solo', no income, no rent → about $306; 'No tengo ingresos…' needs no re-ask; 'No, gracias. Entendido…' at the close ends the call",
+  "channel": "web",
+  "lang": "es",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Sí, está bien. Entiendo que eres un asistente de IA y que solo recibes el texto.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "Estudio licenciatura y este semestre tomo 12 unidades.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "Tengo 19 años y vivo solo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "Vivo solo, así que compro y cocino mi comida por mi cuenta.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "No tengo ingresos, nadie me da dinero regularmente.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income",
+      "expect_keys_exclude": [
+        "reprompt.unclear"
+      ]
+    },
+    {
+      "user": "No gano nada, no tengo trabajo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "No pago renta, no vivo en un lugar donde tenga que pagar.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No estoy seguro cuánto dinero tengo exactamente en este momento.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No estoy seguro, no tengo esa información disponible.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, gracias. Entendido, voy a hacer la solicitud hoy.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else",
+      "expect_keys": [
+        "close.goodbye"
+      ]
+    },
+    {
+      "user": "No, gracias. Está claro todo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, nada más. Gracias por la ayuda.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306
+  },
+  "note": "From the live evaluation run. The model-played student said 'vivo solo' although the persona lives with a parent (the student model misread the persona's facts), so the expected result is the one for what was said; the brain's $306 was right for it. The script keeps two brain defects seen in this call: a zero-income answer re-asked, and a 'no, thanks' with more words at the close asked again twice. Utterances from a model-played student, so fake_llm_ok is false."
+}

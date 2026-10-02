@@ -1,0 +1,162 @@
+{
+  "id": "v6_p06_f1",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p06_f1, live): 'I don't have any income…' / 'I don't earn anything from work' is $0 from work, no re-ask and no earnings split question → about $306 as said",
+  "channel": "web",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "en"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yeah, that's fine with me. Let's go ahead.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm an undergrad, but I'm not sure how many units I'm taking this term.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm not sure about that.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "I'm not sure, sorry.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.units"
+    },
+    {
+      "user": "I'm 20, and I live alone.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "I live alone, so I don't share food with anyone.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "I don't have any income, and no one gives me money either.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income",
+      "expect_keys_exclude": [
+        "reprompt.unclear"
+      ]
+    },
+    {
+      "user": "I don't earn anything from work.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "My rent share is zero.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent",
+      "expect_keys_exclude": [
+        "flip.earned_split",
+        "flip.household_food"
+      ]
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "I've got about 40 dollars right now.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash",
+      "typed": true
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "I've got about 40 dollars right now.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash",
+      "typed": true
+    },
+    {
+      "user": "No, that's all. Thanks for your help!",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306
+  },
+  "note": "From the live evaluation run. The model-played student never volunteered the F-1 status in the persona's facts, so the expected result is the one for what was said (no income, rent $0, lives alone). The brain re-asked income, kept work income unclear after 'I don't earn anything from work', asked 'is your pay from work less than $850?' and ended with coordinator.unresolved. Utterances from a model-played student, so fake_llm_ok is false."
+}

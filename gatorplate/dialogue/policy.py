@@ -218,7 +218,10 @@ class Dialogue:
         names = self.routing.present(u, masked=masked)
         if s.deferred_keys:
             if winner is None or winner.name not in URGENT:
-                return self.deliver_deferred(ctx)
+                if not self._says_more(ctx, u, winner):
+                    return self.deliver_deferred(ctx)
+                return self._before_rest(ctx, u, masked=masked, interrupted=interrupted, confidence=confidence,
+                                         text=text)
             if winner.name != "repeat":
                 s.deferred_keys = []
         if s.phase == Phase.consent:
@@ -243,7 +246,14 @@ class Dialogue:
         if winner is not None and winner.name == "delete_data":
             return self.global_intent(ctx, winner, u, names)
         if at_close and (self.routing.is_done(text, ctx.lang) or "stop" in names):
-            return Plan([Step(self.routing.close_reply)], end_reason="completed")
+            # "Nothing else. Actually my rent is twelve hundred." / "No thanks, I'm on an F-1 visa.": what comes with
+            # the done phrase is applied first (corrections apply at any time, a volunteered status routes —
+            # docs/SPEC.md §3.2, §3.3); only a plain closing that brings nothing new says goodbye at once. A done phrase
+            # that says more and carries another intent ("No thanks, is this call recorded?", a side question the
+            # model noted) gets that intent's answer, then the close question again.
+            plain = "stop" in names or self.routing.is_only_done(text, ctx.lang)
+            if plain or winner is None:
+                return self.close_again(ctx, u, [], done=True, plain=plain)
         if s.awaiting == "continue_or_stop":  # another global intent leaves the choice pending
             if "stop" in names or yes_no(text, ctx.lang) == "no":
                 return self._stop(ctx)
@@ -260,6 +270,13 @@ class Dialogue:
                     self.apply_observations(ctx, u, skip={S.consent})
                     self.refresh(ctx)
                 return self.resume(ctx, [], form="short", skip_pending=True)
+        if winner is not None and winner.name == "hold" and u.observations and s.awaiting == "none":
+            # "One sec... okay, it's eleven hundred": the student came back with an answer in the same breath. It is
+            # handled as an answer (read back, confirmed when needed, then the next question); a bare hold.ok would
+            # change a value without the student hearing it (docs/SPEC.md §3.4). Nothing new said → hold.ok.
+            if at_close:
+                return self.close_again(ctx, u, [], hold=True)
+            return self.answer(ctx, u, interrupted=interrupted, confidence=confidence, text=text, hold=True)
         if winner is not None:
             return self.global_intent(ctx, winner, u, names)
         if at_close:
@@ -286,6 +303,59 @@ class Dialogue:
         if last == "flip.earned_split":
             steps[-1].vars["x"] = self._earned_split(ctx)
         return plan
+
+    def _says_more(self, ctx: Ctx, u: Understanding, winner: Winner | None) -> bool:
+        """Did the student say something new while the rest of a split reply was waiting: an amount or a fact that
+        differs from the case, or a global intent ("Is this a real person?", "Hold on")? A bare "okay" or "yes"
+        (a yes/no value on the already-answered question) is not new: the rest is delivered."""
+        if winner is not None and winner.name != "repeat":
+            return True
+        for obs in u.observations:
+            if obs.value.strip().lower() in POLAR:
+                continue
+            item = ctx.case.slots.get(obs.slot)
+            if obs.slot in ROUTING_ONLY or item is None or item.value is None:
+                return True
+            try:
+                if obs.slot in SLOT_SPECS and SLOT_SPECS[obs.slot].type == "money":
+                    if encode_value(obs.slot, self._money_value(ctx, obs, obs.slot)) != item.value:
+                        return True
+                elif encode_value(obs.slot, obs.value) != item.value:
+                    return True
+            except (InvalidOperation, TypeError, ValueError):
+                return True
+        return False
+
+    def _before_rest(self, ctx: Ctx, u: Understanding, *, masked: bool, interrupted: bool,
+                     confidence: float | None, text: str) -> Plan:
+        """Something new said before the rest of a split reply arrived (docs/SPEC.md §3.2: every turn applies the new
+        observations): it is handled first — a correction is read back, a changed result said again, a question
+        answered — and the rest follows in the same reply. The phase machine plans the next question again, so only
+        the rest's lines that ask nothing (a card code, the apply-today line) are carried over. A hold keeps the
+        rest waiting until the student is back."""
+        s = ctx.session
+        rest = [Step.decode(k) for k in s.deferred_keys]
+        s.deferred_keys = []
+        # the question of the first part was already answered: a yes or no now is no new answer to it
+        u = u.model_copy(update={"observations": [o for o in u.observations if o.value.strip().lower() not in POLAR]})
+        s.pending = None
+        plan = self.utterance(ctx, u, masked=masked, interrupted=interrupted, confidence=confidence, text=text)
+        if plan.end_reason is not None or plan.repeat or plan.delete_case:
+            return plan
+        if plan.hold_s:
+            s.deferred_keys = [st.encode() for st in rest]  # after the hold, the rest of the reply
+            return plan
+        said = {st.key for st in plan.steps}
+        carry = [st for st in rest if not self._asks(st) and st.key not in said]
+        if carry:
+            if plan.steps and self._asks(plan.steps[-1]):
+                plan.steps[-1:-1] = carry
+            else:
+                plan.steps.extend(carry)
+        return plan
+
+    def _asks(self, step: Step) -> bool:
+        return step.question is not None or step.key == self.routing.close_pending or self.bank.is_question(step.key)
 
     def _flip_candidate(self, ctx: Ctx, key: str) -> FlipCandidate | None:
         """The question plan's candidate for a flip key (its reason and outcomes for the console chip)."""
@@ -384,7 +454,7 @@ class Dialogue:
         if name == "hold":
             self.apply_observations(ctx, u)
             self.refresh(ctx)
-            return Plan([Step("hold.ok")], hold_s=HOLD_SECONDS, keep_pending=True)
+            return self._hold()
         if name in ("already_receiving", "interview_waiting"):
             slot = S.already_receiving if name == "already_receiving" else S.applied_waiting_interview
             self.apply_observations(ctx, u)
@@ -444,8 +514,11 @@ class Dialogue:
             if asked == "es":
                 case.language_request = LanguageRequest(asked="es", offered="web")
                 return Plan([Step("language.offer_web")], reply_lang=Lang.es, keep_pending=True)
-            if asked in ("", "en"):
+            if asked == "en":
                 return self.resume(ctx, [], form="short")
+            # a language other than English or Spanish, also when no model named it ("Can we do this in
+            # Vietnamese?" read by the keyword list alone): the unsupported-language line (docs/SPEC.md §3.5)
+            asked = asked or "xx"
             case.language_request = LanguageRequest(asked=asked, offered="none")
             return self.resume(ctx, [Step("language.unsupported")], form="short")
         if asked in ("en", "es"):
@@ -455,6 +528,11 @@ class Dialogue:
             return self.resume(ctx, [Step("ack.short")], form="main")
         case.language_request = LanguageRequest(asked=asked or "xx", offered="none")
         return self.resume(ctx, [Step("language.unsupported")], form="short")
+
+    @staticmethod
+    def _hold() -> Plan:
+        """hold.ok: the line waits (hold_s), nothing is asked, the pending question stays (docs/SPEC.md §3.3)."""
+        return Plan([Step("hold.ok")], hold_s=HOLD_SECONDS, keep_pending=True)
 
     def _stop(self, ctx: Ctx) -> Plan:
         ctx.session.awaiting = "none"
@@ -475,8 +553,10 @@ class Dialogue:
 
     # ======================================================================================== answers
 
-    def answer(self, ctx: Ctx, u: Understanding, *, interrupted: bool, confidence: float | None, text: str) -> Plan:
-        """An utterance with no global intent: apply what it says, then the next step."""
+    def answer(self, ctx: Ctx, u: Understanding, *, interrupted: bool, confidence: float | None, text: str,
+               hold: bool = False) -> Plan:
+        """An utterance with no global intent: apply what it says, then the next step. With `hold` the utterance also
+        held a hold phrase: when it changes nothing (a value said again, no follow-up), the line waits instead."""
         s = ctx.session
         pending = s.pending
         intents = {i.value for i in u.intents} | {i.value for i in u.keyword_intents}
@@ -497,6 +577,9 @@ class Dialogue:
             u = u.model_copy(update={"observations": [
                 o for o in u.observations if not (o.slot == confirmed and o.value.strip().lower() in POLAR)]})
         result = self.apply_observations(ctx, u, confidence=confidence)
+        if hold and not ctx.changed and result.confirm is None and not result.follow_up and not result.status_route:
+            self.refresh(ctx)
+            return self._hold()
         if result.status_route:
             self.refresh(ctx)
             s.phase = Phase.result
@@ -526,7 +609,7 @@ class Dialogue:
             if pending is None and s.phase in (Phase.close, Phase.card):
                 return self.close_again(ctx, u, [])
         self.refresh(ctx)
-        lead = self._readback(ctx, result.readback) + self._result_again(ctx)
+        lead = self._readback(ctx, result.readback, zero=result.zeroed) + self._result_again(ctx)
         partly = self._partly_answered(ctx, pending)
         if partly:
             # the same question would come again with only part of it answered ("I'm twenty" to "How old are you,
@@ -549,7 +632,9 @@ class Dialogue:
         s, case = ctx.session, ctx.case
         if pending is None or s.phase not in PHASES or not pending.key.startswith("ask."):
             return []
-        nxt = self.question_for(ctx, s.phase)
+        if self._hard_stop(ctx, s.phase, earlier=True):
+            return []  # an earlier phase's route is settled by this answer: the result comes next
+        nxt = self._late_question(ctx, s.phase) or self.question_for(ctx, s.phase)
         if nxt is None or nxt.key != pending.key:
             return []
         if not any(known(case, slot) for slot in pending.slots):
@@ -905,6 +990,7 @@ class Dialogue:
         conflict: tuple[SlotName, Decimal, Decimal] | None = None
         follow_up: bool = False
         status_route: bool = False
+        zeroed: set[SlotName] = field(default_factory=set)
 
     def apply_observations(self, ctx: Ctx, u: Understanding, *, quote: bool = True, confidence: float | None = None,
                            skip: set[SlotName] | None = None) -> Dialogue.Applied:
@@ -965,19 +1051,41 @@ class Dialogue:
             needs_confirm = not band and slot in CRITICAL and (
                 state == SlotState.unclear or out_of_range or slot in u.teen_ty
                 or (confidence is not None and confidence < LOW_CONFIDENCE))
+            current = case.slots.get(slot)
             if needs_confirm and ctx.session.confirms.get(slot, 0) >= 1:
+                # the slot's one explicit confirm is used (docs/SPEC.md §3.4)
                 needs_confirm = False
-                state = SlotState.unclear
+                said_again = current is not None and current.confirmed and canonical is not None \
+                    and current.value == canonical and all(o.state == "clear" for o in observations)
+                # the confirmed amount said again (a teen word again) stays confirmed; anything else stays unclear
+                state = SlotState.clear if said_again else SlotState.unclear
             if canonical is None:
                 if needs_confirm:  # out of the plausible range and no value to repeat back: ask again instead
                     continue
                 continue
+            new_value = current is None or current.value != canonical
+            # A known critical amount set to $0 by an answer to another question ("No, no rent help from anybody" to
+            # the landlord question, "my mom is not working" said about a parent) is never applied silently: it is
+            # read back with its $0 and a yellow line asks a person to check it (docs/SPEC.md §3.3 corrections, §3.4).
+            zeroed = spec.type == "money" and slot in CRITICAL and new_value and canonical is not None \
+                and current is not None and current.value is not None and _is_zero(canonical) \
+                and not _is_zero(current.value) and not self._pending_asks(ctx, slot)
+            old_display = (current.display or format_display(slot, current.value, current.basis)) if zeroed \
+                and current is not None else None
             heard = obs.quote[:80] if quote and obs.quote else None
             heard_en = obs.quote_en[:120] if quote and spanish and obs.quote_en else None
             source = u.sources.get(slot, SlotSource.llm)
             self._set(ctx, slot, canonical, source=source, heard=heard, heard_en=heard_en,
                       state=SlotState.unclear if needs_confirm else state, basis=basis)
-            if band and state == SlotState.assumed and spec.type == "money":
+            if zeroed and old_display is not None:
+                item = case.slots[slot]
+                new_display = item.display or format_display(slot, canonical)
+                yellow.conflict(case, slot, old_display.removesuffix("/mo"), new_display.removesuffix("/mo"), ctx.now,
+                                heard=heard)
+                out.zeroed.add(slot)
+                if slot in machine.READBACK_KEYS:
+                    out.readback.append(slot)
+            elif band and state == SlotState.assumed and spec.type == "money":
                 item = case.slots[slot]
                 yellow.unclear(case, slot, item.display or "—", ctx.now, heard=heard)
             elif needs_confirm and out.confirm is None:
@@ -988,10 +1096,20 @@ class Dialogue:
                     a, b = (format_display(slot, encode_value(slot, v)).removesuffix("/mo") for v in out.conflict[1:])
                     yellow.conflict(case, slot, a, b, ctx.now, heard=heard)
                 else:
-                    yellow.unclear(case, slot, item.display or "—", ctx.now, heard=heard)
+                    yellow.unclear(case, slot, item.display or "—", ctx.now, heard=heard, update=new_value)
+                if new_value and slot in machine.READBACK_KEYS:
+                    # a new amount after the slot's one confirm (a teen-word correction of a confirmed amount): no
+                    # second confirm, but never applied silently — the new value is read back so the student hears
+                    # it and can correct it (docs/SPEC.md §3.3 corrections, §3.4), and the line asks a person to check
+                    out.readback.append(slot)
             elif slot in machine.READBACK_KEYS and state == SlotState.clear:
                 out.readback.append(slot)
         return out
+
+    def _pending_asks(self, ctx: Ctx, slot: SlotName) -> bool:
+        """Does the pending question ask this slot (its own answer, or its confirm)?"""
+        pending = ctx.session.pending
+        return pending is not None and slot in pending.slots
 
     def _yes_no_band(self, ctx: Ctx, pending: PendingQuestion) -> bool:
         """A yes/no question whose answers are parts of a band (flip.earned_split)."""
@@ -1084,13 +1202,14 @@ class Dialogue:
             if slot not in ctx.changed:
                 ctx.changed.append(slot)
 
-    def _readback(self, ctx: Ctx, slots: list[SlotName]) -> list[Step]:
-        """One implicit read-back of a money answer (never of cash on hand, never of a zero)."""
+    def _readback(self, ctx: Ctx, slots: list[SlotName], *, zero: set[SlotName] | None = None) -> list[Step]:
+        """One implicit read-back of a money answer (never of cash on hand; a zero only when a known amount was set to
+        $0 by an answer to another question, `zero`)."""
         for slot in (S.earned_monthly, S.other_cash_monthly, S.rent_share):
             if slot not in slots:
                 continue
             value = value_of(ctx.case, slot)
-            if value is None or value == 0:
+            if value is None or (value == 0 and slot not in (zero or set())):
                 continue
             item = ctx.case.slots[slot]
             if slot == S.earned_monthly and item.basis is not None and item.basis.period == "hour":
@@ -1182,7 +1301,10 @@ class Dialogue:
         while True:
             phase = s.phase
             if phase in PHASES:
-                question = self.question_for(ctx, phase)
+                if self._hard_stop(ctx, phase, earlier=True):  # an earlier phase's route, settled late
+                    s.phase = Phase.result
+                    continue
+                question = self._late_question(ctx, phase) or self.question_for(ctx, phase)
                 if question is not None:
                     if ack and not steps:
                         steps.append(Step("ack.short"))
@@ -1201,6 +1323,12 @@ class Dialogue:
                         steps.append(Step("ack.short"))
                     again.form = form
                     return self._question(ctx, steps, again, record="reprompt", drop=drop)
+                late = self._late_question(ctx, phase)
+                if late is not None:  # a question phase's question that became needed only now (before the result)
+                    if ack and not steps:
+                        steps.append(Step("ack.short"))
+                    late.form = form
+                    return self._question(ctx, steps, late, record="standard", drop=drop)
                 plan = self._flip(ctx, steps, ack=ack, drop=drop)
                 if plan is not None:
                     return plan
@@ -1337,9 +1465,24 @@ class Dialogue:
             return None if known(case, S.rent_share) else Step("ask.rent")
         return None
 
-    def _hard_stop(self, ctx: Ctx, phase: Phase) -> bool:
+    def _late_question(self, ctx: Ctx, phase: Phase) -> Step | None:
+        """A question of an earlier question phase that became needed only after the call moved past that phase: on-
+        campus housing said in a later answer ("I live alone in the dorm" to the household question) still gets
+        ask.meal_plan before the result, because more than ten meals a week changes the route (docs/SPEC.md §3.2
+        phase 2, §4.3 row 3.12). Phases are passed only once their questions are answered, so only a new fact (on-campus
+        housing, a corrected level) opens one again."""
+        end = QUESTION_PHASES.index(phase) if phase in QUESTION_PHASES else len(QUESTION_PHASES)
+        for earlier in QUESTION_PHASES[:end]:
+            question = self.question_for(ctx, earlier)
+            if question is not None:
+                return question
+        return None
+
+    def _hard_stop(self, ctx: Ctx, phase: Phase, *, earlier: bool = False) -> bool:
         """A phase's own routes end the conversation once its goals are known and clear (an unclear goal is decided by
-        the question plan later)."""
+        the question plan later). With `earlier`, only the routes of the phases before `phase` count (a route that
+        an answer given later settles: a late meal-plan answer of more than ten meals a week goes straight to the
+        result, docs/SPEC.md §3.2)."""
         case = ctx.case
 
         def unsure(slot: SlotName) -> bool:
@@ -1351,10 +1494,10 @@ class Dialogue:
         def settled(p: Phase) -> bool:
             return not any(unsure(g) for g in PHASES[p].goals)
 
-        if not settled(phase):
+        if not earlier and not settled(phase):
             return False
         codes: set[str] = set()
-        for p in QUESTION_PHASES[: QUESTION_PHASES.index(phase) + 1]:
+        for p in QUESTION_PHASES[: QUESTION_PHASES.index(phase) + (0 if earlier else 1)]:
             if settled(p):
                 codes |= set(PHASES[p].hard_stops)
         return case.reason_code in codes
@@ -1483,9 +1626,19 @@ class Dialogue:
                             expires_at=ctx.now + timedelta(days=int(getattr(ctx.settings, "card_ttl_days", 7))))
         return case.card
 
-    def close_again(self, ctx: Ctx, u: Understanding | None, lead: list[Step]) -> Plan:
-        """Something else at the close: answer it, then ask again (at most two loops), then goodbye."""
+    def close_again(self, ctx: Ctx, u: Understanding | None, lead: list[Step], *, hold: bool = False,
+                    done: bool = False, plain: bool = True) -> Plan:
+        """Something else at the close: answer it, then ask again (at most two loops), then goodbye. With `hold` the
+        utterance also held a hold phrase: when it changes nothing, the line waits instead. With `done` the utterance
+        was a done phrase ("nothing else", "no thanks"): when it changes nothing, goodbye; when it carried a correction
+        or a volunteered status, that is answered (read back, the result again) and the close question comes again,
+        so the student hears the new value or route before the call ends. A done phrase that said more than a plain
+        closing (`plain` False: "No thanks, so I still need to bring my lease, right") and was not understood is never a
+        goodbye at once: the close question comes again (at most two loops), so a question said without a question
+        mark does not end the call. A value said again as it is ("No thanks, my rent is eleven hundred like I said")
+        was understood and changes nothing: goodbye."""
         s = ctx.session
+        news = False
         if u is not None and u.observations:
             # a correction after the result: the rules run again, the value is read back, and a changed result is
             # said again (docs/SPEC.md §3.3: corrections apply at any time)
@@ -1497,8 +1650,15 @@ class Dialogue:
                 return self._question(ctx, [], Step("confirm.money", vars={"slot": slot.value}), record="confirm",
                                       pending_slots=[slot])
             if ctx.changed or applied.status_route:
+                news = True
                 self.refresh(ctx)
-                lead = lead + self._readback(ctx, applied.readback) + self._result_again(ctx)
+                lead = lead + self._readback(ctx, applied.readback, zero=applied.zeroed) + self._result_again(ctx)
+            elif hold:
+                self.refresh(ctx)
+                return self._hold()
+        understood = u is not None and bool(u.observations)  # what came with it was read: a value said again
+        if done and not news and (plain or understood):
+            return Plan(lead + [Step(self.routing.close_reply)], end_reason="completed")
         s.close_loops += 1
         if s.close_loops > MAX_CLOSE_LOOPS:
             return Plan(lead + [Step(self.routing.close_reply)], end_reason="completed")
@@ -1586,6 +1746,13 @@ class Dialogue:
         if not question.key.startswith(machine.CASE_QUESTION_PREFIXES):
             return None
         return "closed" if question.form == "closed" else "reprompt"
+
+
+def _is_zero(raw: str) -> bool:
+    try:
+        return Decimal(str(raw).replace(",", "").replace("$", "")) == 0
+    except InvalidOperation:
+        return False
 
 
 def _is_canonical(slot: SlotName, raw: str) -> bool:

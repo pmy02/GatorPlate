@@ -996,8 +996,8 @@ def route(text, lang, pending=None, masked=False):
     at_close = pending is not None and pending == CLOSE.get("pending")
     for name in PRECEDENCE:
         if name == "redaction":
-            if kind:
-                return (ROUTE_REPLY.get("redaction") or {}).get(kind)
+            if kind or "ssn_attempt" in intents:  # a question about a Social Security number gets the same guidance
+                return (ROUTE_REPLY.get("redaction") or {}).get(kind or "ssn")
         elif name in intents:
             if name == "stop" and at_close:
                 return CLOSE.get("stop_becomes")

@@ -4,6 +4,7 @@
 import { h, icon, chip, replace, countUp, reducedMotion } from "./dom.js";
 import { compactAnswers } from "./answers.js";
 import { reasonChip, notAskedChip, qrImage, talkQr } from "./detail.js";
+import { followBottom } from "./follow.js";
 import { money } from "../../shared/format.js";
 import { lineKey } from "../store.js";
 import {
@@ -39,6 +40,7 @@ export function createLiveView(root, on) {
     const k = `${model.mode}:${model.id || ""}`;
     if (k !== key) {
       clearTimers();
+      if (ui && ui.follow) ui.follow.stop();
       key = k;
       reset();
       ui = model.mode === "idle" ? buildIdle(model) : buildCase(model);
@@ -96,6 +98,7 @@ export function createLiveView(root, on) {
     const announce = h("input", { type: "checkbox", id: "announce-live" });
     announce.addEventListener("change", () => on.announce(announce.checked));
     const transcript = h("ol", { class: "transcript", role: "list", "aria-label": "Live transcript" });
+    const follow = followBottom(transcript);
     const nowBig = h("div", { class: "live__nowbig", hidden: true });
     const notice = h("p", { class: "live__notice", hidden: true });
     const qr = h("div", { class: "live__qr", hidden: true });
@@ -137,7 +140,7 @@ export function createLiveView(root, on) {
     const node = h("div", { class: ["live-case", model.mode === "replay" && "is-replay"] }, head, hint,
       h("div", { class: "live__body" }, talk, side, answersSec));
     replace(root, node);
-    return { node, title, dot, elapsed, meta, consent, other, hint, transcript, nowBig, notice, qr, rangeLo, rangeHi,
+    return { node, title, dot, elapsed, meta, consent, other, hint, transcript, follow, nowBig, notice, qr, rangeLo, rangeHi,
       band, track, rangePrefix, rangeAmount, rangeText, rangeSr, reason, rangeBox, est, nowText, nowChip, why, chips, answers, notAsked,
       announce, talk, answersSec, skips };
   }
@@ -266,6 +269,9 @@ export function createLiveView(root, on) {
     // End choreography
     if (!replay && !isLive) endChoreography(model, d);
     if (replay && model.replayLast) showQr(d);
+
+    // Every render re-pins a transcript that is following: a Presenter toggle re-renders and grows the text.
+    ui.follow.pin();
   }
 
   function updateRange(c, moving) {
@@ -324,9 +330,9 @@ export function createLiveView(root, on) {
   // ------------------------------------------------------------ transcript
 
   // Lines arrive sorted (store.js); a line that arrives late (GET /live after the events) is inserted in its place.
+  // Following is the reader's choice (views/follow.js), not the box's size when the lines arrive.
   function syncLines(lines) {
     const box = ui.transcript;
-    const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 48;
     let added = false;
     let prevLi = null;
     for (const line of lines) {
@@ -345,7 +351,7 @@ export function createLiveView(root, on) {
     if (!added) return;
     const all = [...box.children];
     all.forEach((li, i) => li.classList.toggle("is-old", i < all.length - 2));
-    if (atBottom) box.scrollTop = box.scrollHeight;
+    ui.follow.pin();
   }
 
   // A field that just filled waits until a student line holds its words: the line may come before or after the

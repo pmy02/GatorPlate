@@ -2,10 +2,10 @@
 
 It answers from an exact-utterance table built from data/tests/utterances.jsonl (keyed by the redacted, normalized
 utterance, so the contract examples and the end-to-end scripts replay the same extraction). An entry recorded for a
-different question is used only when its facts do not depend on that question (a "No." recorded for the rent flip is
-not reused for the consent question). Any other utterance gets the rule parser plus the keyword lists. A delay and
-failures can be injected for tests: `delay_s`, and `fail` = a list of "timeout" | "error" | "invalid" | "refused"
-consumed one per call.
+different question (or for the same question about another slot, such as a confirm) is used only when its facts do
+not depend on that question (a "No." recorded for the rent flip is not reused for the consent question). Any other
+utterance gets the rule parser plus the keyword lists. A delay and failures can be injected for tests: `delay_s`, and
+`fail` = a list of "timeout" | "error" | "invalid" | "refused" consumed one per call.
 """
 
 from __future__ import annotations
@@ -57,13 +57,14 @@ class FakeLLM:
         self.calls = 0
 
     def _load(self, path: Path) -> dict[str, list[_Entry]]:
+        """The prepared lines keyed by their redacted text; a missing file is an empty table (rules only)."""
         table: dict[str, list[_Entry]] = {}
-        if not path.exists():
-            return table
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if not line.strip():
-                continue
-            row = json.loads(line)
+        try:
+            with path.open(encoding="utf-8") as handle:
+                rows = [json.loads(chunk) for chunk in handle if not chunk.isspace()]
+        except FileNotFoundError:
+            rows = []
+        for row in rows:
             expect = row["expect"]
             result = ExtractionResult.model_validate({k: expect[k] for k in _RESULT_KEYS})
             pending = row.get("pending") or {}
@@ -107,7 +108,10 @@ class FakeLLM:
             chosen = entries[0]
         else:
             req_slots = tuple(req.get("slots") or ())
-            for test in (lambda e: e.pending_key == req.get("key"),
+            # The same question first (key and slots: "Yes, that's right." confirms whichever amount is pending, so a
+            # line recorded for one confirmed slot is not reused for another), then the same slots, then a line whose
+            # facts do not depend on the question it was recorded for.
+            for test in (lambda e: e.pending_key == req.get("key") and set(e.pending_slots) == set(req_slots),
                          lambda e: set(e.pending_slots) == set(req_slots),
                          lambda e: not {o.slot.value for o in e.result.observations} & set(e.pending_slots)):
                 chosen = next((e for e in entries if test(e)), None)

@@ -355,7 +355,9 @@ export function effectsOf(prev, next, evt) {
   const out = [];
   const id = evt.case_id || (evt.summary && evt.summary.id) || null;
   const watched = new Set([next.selectedId, next.followId].filter(Boolean));
-  if (evt.type === "resync" || evt.type === "demo.reset") {
+  // A reset deleted every case: only the list is fetched again (a watched case is gone, so no detail fetch).
+  if (evt.type === "demo.reset") return [["list"]];
+  if (evt.type === "resync") {
     out.push(["list"]);
     for (const w of watched) out.push(["detail", w]);
     return out;
@@ -570,6 +572,9 @@ export function createController({ fetchJSON, now = () => Date.now(), save = () 
     },
     async demoReset() {
       try {
+        // nothing is watched while the cases are deleted, so no fetch asks for a case the reset just removed
+        dispatch({ type: "select", id: null });
+        dispatch({ type: "follow", id: null });
         const reset = await call("/api/demo/reset", { method: "POST", body: {} });
         await call("/api/demo/seed", { method: "POST", body: {} });
         const text = resetResult(reset.deleted ?? 0);

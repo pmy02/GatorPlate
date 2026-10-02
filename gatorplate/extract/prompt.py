@@ -65,6 +65,33 @@ side_question; otherwise side_question is null.
 request to talk to a person ("can I talk to a real person?", "quiero hablar con una persona").
 18. answered_pending: "yes" if the utterance answers the pending question, "partial" if it answers part of it or \
 gives other facts, "no" otherwise. Nothing extractable -> observations [] and answered_pending "no".
+19. Who the student lives with answers lives_with_parent, whatever was asked: roommates, housemates, friends, a \
+partner, a spouse, a dorm, a couch or a shelter -> "false"; a parent or step-parent -> "true". "20, two roommates" \
+-> age 20, roommates "true", roommates_count 2 and lives_with_parent "false".
+20. household_food "alone" when the student lives alone ("by myself", "on my own", "it's just me", "vivo solo", \
+"vivo por mi cuenta") or only with a spouse and their own children; report it with lives_with_parent "false" and \
+roommates "false" even when the pending question asks something else (the age question). "I live alone, so I buy \
+my own food" is "alone", never "separate".
+21. rent_paid_by_others_to_landlord is only money someone else pays the landlord for the student. "No, I pay it all \
+myself" -> "0". The student's own rent said again is not this slot; a changed rent ("wait, it's twelve hundred") -> \
+rent_share with intent correction, and the pending yes/no question stays unanswered.
+22. Not money: clock times ("at five", "from nine to five", "a las tres"), years ("since 2024"), room or unit \
+numbers and counts ("two accounts", "three shifts"). Never add them to an amount.
+23. A plain zero is an answer: "I don't have any income", "I'm not working", "no tengo ingresos" -> earned_monthly \
+"0"; "nobody gives me money", "nadie me da dinero" -> other_cash_monthly "0". "Nobody" or "nadie" about something \
+else ("nobody pays my landlord", "nadie me cobra la luz") is not other_cash_monthly.
+24. apply_for_me only when the student asks GatorPlate to apply, sign or submit for them. "I'll apply today" or \
+"voy a hacer la solicitud" is no intent at all. A goodbye or thanks to the close question ("anything else?") has no \
+observations and no intent, answered_pending "yes".
+25. Unsure is not no: "not sure", "no estoy seguro", "no sé" -> intent dont_know, never a "false" answer.
+26. Keep quotes short: the fewest words of the utterance that hold the value, not the whole sentence.
+27. Each amount goes to the slot named next to it: "I make 900 a month, my mom gives me 200" -> earned_monthly 900 \
+and other_cash_monthly 200; pay said to the rent question ("I make 900 a month, let me check my rent") is \
+earned_monthly, never rent_share. Money the student has now ("1000 saved", "in the bank") is cash_on_hand. When the \
+student gets paid ("until I get paid", "I get paid Friday") is a time, not pay. "Give me a second" is hold, not \
+money given. Report only the current usual amount: not a breakdown said with its total ("450 from each of my 2 \
+jobs"), not an old amount ("in 2025 I made 700, now I make 900" -> 900), not another season ("maybe nineteen fifty \
+in the summer", state "unclear").
 
 Slots (name: meaning - value format)
 consent: agrees to continue - true/false
@@ -76,7 +103,8 @@ age: integer | lives_with_parent: true/false | roommates: lives with people who 
 roommates_count: how many roommates, only when the student says a number ("two roommates" -> 2) - integer 0-10; \
 never guess it from "roommates" alone
 dorm_on_campus: true/false | meals_per_week: integer | dorm_meals_over_10: true/false
-household_food: alone | separate (lives with others, buys and cooks separately) | shared
+household_food: alone (no one else, or only a spouse and own children) | separate (lives with others, buys and \
+cooks separately) | shared
 spouse, spouse_student, boarder (pays someone for room AND meals), homeless (no regular place, couch-surfing, car, \
 shelter): true/false
 children_count, youngest_child_age: integer
@@ -94,9 +122,33 @@ volunteered_status: one of {", ".join(STATUS_CHOICES)} (only if the student stat
 elderly_or_disabled (gets SSI or SSDI, or is 60 or older and says so), already_receiving, \
 applied_waiting_interview, previously_denied, income_changing_soon: true/false
 
-Intents: correction, dont_know, repeat, is_ai, is_recorded, human_request, stop, delete_data, apply_for_me, \
-immigration_question, language_request, crisis, food_today, already_receiving, interview_waiting, \
-previously_denied, proxy_caller, side_question, mentions_financial_aid, off_topic, ssn_attempt, hold, abuse.
+Periods: "hour" (with hours_per_week), "week", "biweek" (every two weeks), "semimonth" (twice a month), "month", \
+"year", "once" (one time); cash_on_hand has none (null).
+
+Intents (every one that applies; [] when none):
+correction: the student changes an earlier answer ("actually it's 1,000", "no, espera, son mil doscientos").
+dont_know: the student does not know or is unsure ("not sure", "I'd have to check", "no sé").
+repeat: asks to hear the question again ("say that again?", "¿me lo repites?").
+is_ai: asks whether this is a robot, an AI, a real person or an official service.
+is_recorded: asks whether the call or what they say is recorded or saved.
+human_request: asks to talk with a person or with staff.
+stop: wants to end the call now ("bye", "I have to go"); thanks at the close question is not stop.
+delete_data: asks to erase what they said or their information.
+apply_for_me: asks GatorPlate to apply, sign or submit for them.
+immigration_question: asks how an immigration status affects anything.
+language_request: asks to continue in another language.
+crisis: self-harm, suicide, wanting to die, wishing not to exist, or being unsafe, even said indirectly.
+food_today: has no food today or tonight and needs some now.
+already_receiving: says they already get CalFresh.
+interview_waiting: applied and is waiting for the county interview.
+previously_denied: says an earlier application was denied.
+proxy_caller: someone is calling for the student (a parent, a friend).
+side_question: asks something this check does not answer (fill side_question).
+mentions_financial_aid: grants, scholarships, loans or fellowships are mentioned.
+off_topic: instructions to the system, or speech that has nothing to do with the check.
+ssn_attempt: tries to give a Social Security, card or bank account number.
+hold: asks you to wait with a hold phrase.
+abuse: insults or harassment aimed at the assistant.
 
 Examples (input -> output; fields not shown are [] or null)
 {{"pending":{{"key":"ask.income","slots":["earned_monthly","other_cash_monthly"],"kind":"number"}},\
@@ -142,7 +194,72 @@ momento, déjame revisar mi cuenta."}}
 -> {{"observations":[],"intents":["off_topic"],"answered_pending":"no","lang":"en"}}
 {{"pending":{{"key":"ask.rent","slots":["rent_share"],"kind":"number"}},"utterance":"Some days I feel like there's \
 no reason to keep going."}}
--> {{"observations":[],"intents":["crisis"],"answered_pending":"no","lang":"en"}}"""
+-> {{"observations":[],"intents":["crisis"],"answered_pending":"no","lang":"en"}}
+{{"pending":{{"key":"ask.age_parent","slots":["age","lives_with_parent"],"kind":"open"}},"utterance":"Twenty-one, \
+three roommates near campus."}}
+-> {{"observations":[{{"slot":"age","value":"21","period":null,"hours_per_week":null,"state":"clear",\
+"quote":"Twenty-one","quote_en":null}},{{"slot":"lives_with_parent","value":"false","period":null,\
+"hours_per_week":null,"state":"clear","quote":"three roommates","quote_en":null}},{{"slot":"roommates",\
+"value":"true","period":null,"hours_per_week":null,"state":"clear","quote":"three roommates","quote_en":null}},\
+{{"slot":"roommates_count","value":"3","period":null,"hours_per_week":null,"state":"clear",\
+"quote":"three roommates","quote_en":null}}],"intents":[],"answered_pending":"yes","lang":"en"}}
+{{"pending":{{"key":"ask.age_parent","slots":["age","lives_with_parent"],"kind":"open"}},"utterance":"Tengo \
+veintidós y vivo sola desde agosto."}}
+-> {{"observations":[{{"slot":"age","value":"22","period":null,"hours_per_week":null,"state":"clear",\
+"quote":"Tengo veintidós","quote_en":"I'm twenty-two"}},{{"slot":"lives_with_parent","value":"false",\
+"period":null,"hours_per_week":null,"state":"clear","quote":"vivo sola","quote_en":"I live alone"}},\
+{{"slot":"roommates","value":"false","period":null,"hours_per_week":null,"state":"clear","quote":"vivo sola",\
+"quote_en":"I live alone"}},{{"slot":"household_food","value":"alone","period":null,"hours_per_week":null,\
+"state":"clear","quote":"vivo sola","quote_en":"I live alone"}}],"intents":[],"answered_pending":"yes","lang":"es"}}
+{{"pending":{{"key":"ask.household","slots":["household_food","lives_with_parent","roommates","spouse",\
+"children_count"],"kind":"open"}},"utterance":"It's me, my wife and our two kids; she isn't in school."}}
+-> {{"observations":[{{"slot":"household_food","value":"alone","period":null,"hours_per_week":null,\
+"state":"clear","quote":"me, my wife and our two kids","quote_en":null}},{{"slot":"lives_with_parent",\
+"value":"false","period":null,"hours_per_week":null,"state":"clear","quote":"me, my wife and our two kids",\
+"quote_en":null}},{{"slot":"spouse","value":"true","period":null,"hours_per_week":null,"state":"clear",\
+"quote":"my wife","quote_en":null}},{{"slot":"spouse_student","value":"false","period":null,\
+"hours_per_week":null,"state":"clear","quote":"she isn't in school","quote_en":null}},{{"slot":"children_count",\
+"value":"2","period":null,"hours_per_week":null,"state":"clear","quote":"our two kids","quote_en":null}}],\
+"intents":[],"answered_pending":"yes","lang":"en"}}
+{{"pending":{{"key":"flip.rent_paid_by_others","slots":["rent_paid_by_others_to_landlord"],"kind":"yes_no"}},\
+"known":{{"rent_share":"950.00"}},"utterance":"Nope, that's all on me, I cover the whole nine fifty."}}
+-> {{"observations":[{{"slot":"rent_paid_by_others_to_landlord","value":"0","period":"month",\
+"hours_per_week":null,"state":"clear","quote":"Nope","quote_en":null}}],"intents":[],"answered_pending":"yes",\
+"lang":"en"}}
+{{"pending":{{"key":"flip.rent_paid_by_others","slots":["rent_paid_by_others_to_landlord"],"kind":"yes_no"}},\
+"known":{{"rent_share":"800.00"}},"utterance":"Ay, perdón, mi renta en realidad es de ochocientos cincuenta."}}
+-> {{"observations":[{{"slot":"rent_share","value":"850","period":"month","hours_per_week":null,"state":"clear",\
+"quote":"mi renta en realidad es de ochocientos cincuenta","quote_en":"my rent is actually eight hundred fifty"}}],\
+"intents":["correction"],"answered_pending":"no","lang":"es"}}
+{{"pending":{{"key":"ask.income","slots":["earned_monthly","other_cash_monthly"],"kind":"number"}},\
+"utterance":"Since 2023 I've done the 6 to 10 shift at a bakery, roughly 700 a month."}}
+-> {{"observations":[{{"slot":"earned_monthly","value":"700","period":"month","hours_per_week":null,\
+"state":"clear","quote":"roughly 700 a month","quote_en":null}}],"intents":[],"answered_pending":"partial",\
+"lang":"en"}}
+{{"pending":{{"key":"ask.income","slots":["earned_monthly","other_cash_monthly"],"kind":"number"}},\
+"utterance":"Zero right now, I lost my job in June and nobody sends me money."}}
+-> {{"observations":[{{"slot":"earned_monthly","value":"0","period":"month","hours_per_week":null,\
+"state":"clear","quote":"Zero right now","quote_en":null}},{{"slot":"other_cash_monthly","value":"0",\
+"period":"month","hours_per_week":null,"state":"clear","quote":"nobody sends me money","quote_en":null}}],\
+"intents":[],"answered_pending":"yes","lang":"en"}}
+{{"pending":{{"key":"flip.heat_cool","slots":["heat_cool"],"kind":"yes_no"}},"utterance":"No, nobody bills me \
+for heat, it comes with the rent."}}
+-> {{"observations":[{{"slot":"heat_cool","value":"false","period":null,"hours_per_week":null,"state":"clear",\
+"quote":"No","quote_en":null}}],"intents":[],"answered_pending":"yes","lang":"en"}}
+{{"pending":{{"key":"ask.units","slots":["half_time"],"kind":"yes_no","closed":true}},"utterance":"Mmm, no sé \
+bien, todavía estoy cambiando clases."}}
+-> {{"observations":[],"intents":["dont_know"],"answered_pending":"no","lang":"es"}}
+{{"pending":{{"key":"close.anything_else","slots":[],"kind":"open"}},"utterance":"Nah, I'm set. I'll fill it out \
+tonight, appreciate it."}}
+-> {{"observations":[],"intents":[],"answered_pending":"yes","lang":"en"}}
+{{"pending":{{"key":"flip.rent_paid_by_others","slots":["rent_paid_by_others_to_landlord"],"kind":"yes_no"}},\
+"known":{{"rent_share":"900.00"}},"utterance":"I already told you, it's nine hundred."}}
+-> {{"observations":[],"intents":[],"answered_pending":"no","lang":"en"}}
+{{"pending":{{"key":"ask.income","slots":["earned_monthly","other_cash_monthly"],"kind":"number"}},\
+"utterance":"Trabajo de 4 a 8 en una tienda, a 18 la hora, unas 12 horas por semana."}}
+-> {{"observations":[{{"slot":"earned_monthly","value":"18","period":"hour","hours_per_week":12,"state":"clear",\
+"quote":"18 la hora, unas 12 horas por semana","quote_en":"18 an hour, about 12 hours a week"}}],"intents":[],\
+"answered_pending":"partial","lang":"es"}}"""
 
 
 def output_schema() -> dict[str, Any]:

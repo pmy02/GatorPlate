@@ -63,7 +63,8 @@ def test_healthz(make_client) -> None:
     assert (body["card_delivery"], body["debug_keys"], body["live_transcript"]) == ("screen", True, True)
     assert body["programs"] == {"enabled": True, "table_id": "GP-Programs-2026", "valid_today": True}
     assert body["llm"] == {"provider": "fake", "status": "ready", "last_ok_at": None,
-                           "usage": {"calls": 0, "input_tokens": 0, "output_tokens": 0}}
+                           "usage": {"calls": 0, "input_tokens": 0, "output_tokens": 0,
+                                     "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0}}
     off = make_client(programs=False).client.get("/healthz").json()
     assert off["programs"] == {"enabled": False, "table_id": None, "valid_today": False}
 
@@ -72,7 +73,8 @@ def test_healthz_reads_llm_usage(make_client) -> None:
     from tests.api.fakes import FakeUnderstanding
 
     health = {"status": "ok", "last_ok_at": "2026-10-02T17:00:00Z",
-              "usage": {"calls": 3, "input_tokens": 6000, "output_tokens": 300}}
+              "usage": {"calls": 3, "input_tokens": 6000, "output_tokens": 300, "cache_read_input_tokens": 4000,
+                        "cache_creation_input_tokens": 1000}}
     h = make_client(understanding=FakeUnderstanding(health))
     assert h.client.get("/healthz").json()["llm"] == {"provider": "fake", **health}
     keyless = make_client(llm_provider="anthropic")

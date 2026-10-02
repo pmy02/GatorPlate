@@ -1,0 +1,155 @@
+{
+  "id": "v6_p18_low_income",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p18_low_income, closed mode): 'No, I get no rent assistance' answers the landlord question and must not set the rent share to $0",
+  "golden_case": "N6-b",
+  "channel": "web",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1",
+    "GP_LLM_PROVIDER": "anthropic"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "scripted"
+  ],
+  "web_session": {
+    "lang": "en"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yes, go ahead.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm a junior at SF State, twelve units.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm 22, I live by myself.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "About 600 a month from my job, nothing else.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "A thousand a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No, I get no rent assistance.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "My rent is still a thousand a month, and I make about 600 a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "No, I get no rent assistance.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "About 450.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, I get no rent assistance.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "About 450.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, thanks.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "slots": {
+      "rent_share": "1000.00",
+      "rent_paid_by_others_to_landlord": "0.00"
+    },
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 306
+  },
+  "note": "From the V6 re-verify fresh-paraphrase probes (closed mode, no model): the phrase 'no rent' in the answer to the landlord question set the rent share said earlier ($1,000) to $0 (changed_from 1000.00, state clear) with no read-back, no confirm and no yellow line, and the estimate dropped. The env declares the provider with no key, so the whole call runs in closed mode (docs/SPEC.md §3.7). A confirm right after that answer is answered by restating the facts."
+}

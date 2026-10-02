@@ -76,7 +76,9 @@ async def test_request_shape_and_ok_reply() -> None:
     assert params["extra_body"] == {"temperature": 0}  # deterministic sampling on the configured model
     assert "temperature" not in params and "thinking" not in params
     snap = c.metrics.snapshot()
-    assert snap["status"] == "ok" and snap["usage"] == {"calls": 1, "input_tokens": 2000, "output_tokens": 60}
+    assert snap["status"] == "ok" and snap["usage"] == {"calls": 1, "input_tokens": 2000, "output_tokens": 60,
+                                                        "cache_read_input_tokens": 200,
+                                                        "cache_creation_input_tokens": 0}
 
 
 async def test_other_models_get_no_temperature() -> None:
@@ -168,3 +170,55 @@ async def test_concurrency_is_capped() -> None:
     c = client(Counting([message()]))
     await asyncio.gather(*(c.complete(SYSTEM_PROMPT, "{}", {}, 2.3) for _ in range(20)))
     assert peak <= 8
+
+
+async def test_cache_reads_and_writes_are_counted_and_logged_apart(caplog: pytest.LogCaptureFixture) -> None:
+    """The cached system prompt shows in the usage as cache reads and writes; they are counted on their own (and also
+    inside input_tokens), and the content-free log line carries them, so a live run shows whether the cache works."""
+    first = message()
+    first.usage = SimpleNamespace(input_tokens=500, output_tokens=60, cache_creation_input_tokens=4600,
+                                  cache_read_input_tokens=0)
+    second = message()
+    second.usage = SimpleNamespace(input_tokens=500, output_tokens=60, cache_creation_input_tokens=0,
+                                   cache_read_input_tokens=4600)
+    c = client(StubSDK([first, second]))
+    with caplog.at_level("INFO", logger="gatorplate.llm"):
+        await c.complete(SYSTEM_PROMPT, "{}", output_schema(), 2.0)
+        await c.complete(SYSTEM_PROMPT, "{}", output_schema(), 2.0)
+    assert (c.cache_write_tokens, c.cache_read_tokens) == (4600, 4600)
+    assert c.metrics.snapshot()["usage"]["input_tokens"] == 2 * 5100
+    lines = [json.loads(r.getMessage()) for r in caplog.records if r.name == "gatorplate.llm"]
+    assert [(x["cache_creation_input_tokens"], x["cache_read_input_tokens"]) for x in lines] == [(4600, 0), (0, 4600)]
+    assert all(set(x) <= {"event", "model", "status", "latency_ms", "input_tokens", "output_tokens",
+                          "cache_read_input_tokens", "cache_creation_input_tokens"} for x in lines)
+
+
+async def test_the_system_prompt_carries_the_cache_marker() -> None:
+    """The one-hour lifetime keeps the prefix warm across the gaps between calls (a cold prefix made the first model
+    turn of a call the slowest); everything after the marker is the per-turn message only."""
+    sdk = StubSDK([message()])
+    await client(sdk).complete(SYSTEM_PROMPT, "{}", output_schema(), 2.0)
+    (system,) = sdk.calls[0]["system"]
+    assert system["text"] == SYSTEM_PROMPT and system["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
+    assert sdk.calls[0]["messages"] == [{"role": "user", "content": "{}"}]
+
+
+async def test_a_rejected_cache_lifetime_falls_back_to_the_plain_marker() -> None:
+    """A provider that refuses the lifetime (HTTP 400) gets the plain marker at once, in the same turn, and from then
+    on; a 400 never repeats on every turn."""
+    sdk = StubSDK([status_error(400), message(), message()])
+    c = client(sdk)
+    out = await c.complete(SYSTEM_PROMPT, "{}", output_schema(), 2.0)
+    assert out.status == "ok" and len(sdk.calls) == 2
+    assert sdk.calls[0]["system"][0]["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
+    assert sdk.calls[1]["system"][0]["cache_control"] == {"type": "ephemeral"}
+    await c.complete(SYSTEM_PROMPT, "{}", output_schema(), 2.0)
+    assert sdk.calls[2]["system"][0]["cache_control"] == {"type": "ephemeral"} and len(sdk.calls) == 3
+
+
+async def test_other_provider_errors_keep_the_cache_lifetime() -> None:
+    sdk = StubSDK([status_error(529), message()])
+    c = client(sdk)
+    assert (await c.complete(SYSTEM_PROMPT, "{}", output_schema(), 2.0)).status == "error" and len(sdk.calls) == 1
+    await c.complete(SYSTEM_PROMPT, "{}", output_schema(), 2.0)
+    assert sdk.calls[1]["system"][0]["cache_control"] == {"type": "ephemeral", "ttl": "1h"}

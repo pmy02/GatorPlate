@@ -1,0 +1,109 @@
+{
+  "id": "v6_p23_no_family_cash",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p23_no_family_cash, scripted): 'sometimes, basically nothing' → unclear → the cash band question; 'I'm not sure' → the lower amount with an open yellow line ($238, maybe more)",
+  "golden_case": "N13-a",
+  "channel": "phone",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "scripted"
+  ],
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yes, go ahead.",
+      "confidence": 0.95,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm a junior at SF State, twelve units this semester.",
+      "confidence": 0.95,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm twenty, and I share an apartment with two roommates.",
+      "confidence": 0.95,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "We each buy our own food.",
+      "confidence": 0.95,
+      "when_pending": "ask.household_food_roommates"
+    },
+    {
+      "user": "I make about 1,000 a month at the library.",
+      "confidence": 0.95,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "My mom sometimes sends me money, but not every month. Basically nothing.",
+      "confidence": 0.95,
+      "when_pending": "ask.other_cash"
+    },
+    {
+      "user": "My mom sometimes sends me money, but not every month. Basically nothing.",
+      "confidence": 0.95,
+      "when_pending": "ask.other_cash"
+    },
+    {
+      "user": "My share is eleven hundred.",
+      "confidence": 0.95,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "I'm not sure.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_cash_band"
+    },
+    {
+      "user": "About a thousand dollars.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, thanks.",
+      "confidence": 0.95,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 238,
+    "estimate_is_floor": true,
+    "asked_keys_include": [
+      "flip.other_cash_band"
+    ]
+  },
+  "note": "From the scripted evaluation run. The brain followed docs/SPEC.md §4 row 4.8; the $68 gap to the persona's truth ($306) comes from the persona, which has no paraphrase for the cash band question, so the scripted student said 'I'm not sure'. The script keeps the conversation as it happened."
+}

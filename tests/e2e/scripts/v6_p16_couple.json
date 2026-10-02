@@ -1,0 +1,159 @@
+{
+  "id": "v6_p16_couple",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p16_couple, scripted): 'I'm 23, I live with my wife.' records the spouse; no 'you and your roommates' question → household of two, about $353",
+  "golden_case": "N1",
+  "channel": "phone",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "scripted"
+  ],
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yes, go ahead.",
+      "confidence": 0.95,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm a senior at SF State, twelve units.",
+      "confidence": 0.95,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm 23, I live with my wife.",
+      "confidence": 0.95,
+      "when_pending": "ask.age_parent",
+      "case": {
+        "slots": {
+          "spouse": "true"
+        }
+      }
+    },
+    {
+      "user": "I live with my wife. She works full-time and isn't in school.",
+      "confidence": 0.95,
+      "when_pending": "ask.household",
+      "expect_keys_exclude": [
+        "reprompt.unclear"
+      ]
+    },
+    {
+      "user": "I live with my wife. She works full-time and isn't in school.",
+      "confidence": 0.95,
+      "when_pending": "ask.household",
+      "expect_keys_exclude": [
+        "reprompt.unclear"
+      ]
+    },
+    {
+      "user": "I make about 600 a month, and my wife makes around 1,500.",
+      "confidence": 0.95,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "Nobody, I'm on my own.",
+      "confidence": 0.95,
+      "when_pending": "ask.other_cash"
+    },
+    {
+      "user": "Our rent is 900 a month.",
+      "confidence": 0.95,
+      "when_pending": "ask.rent",
+      "expect_keys_exclude": [
+        "flip.household_food"
+      ]
+    },
+    {
+      "user": "Yes, I pay the gas and electric bill separately.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Yes, I pay the gas and electric bill separately.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "Yes, that's right.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "About 800 in the bank.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "Yes, I pay the gas and electric bill separately.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "Yes, that's right.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "About 800 in the bank.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, thanks.",
+      "confidence": 0.95,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 353
+  },
+  "note": "From the scripted evaluation run (fake model: the parser path). The spouse was not recorded, the household question was asked twice, the shared-food flip asked about roommates, and the call ended with coordinator.unresolved."
+}

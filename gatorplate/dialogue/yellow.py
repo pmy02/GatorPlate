@@ -47,11 +47,22 @@ def incomplete(case: Case, now: datetime) -> YellowLine | None:
 
 
 def unclear(case: Case, slot: SlotName, value_display: str, now: datetime, *,
-            heard: str | None = None) -> YellowLine | None:
-    """Still unclear after the one explicit confirm (or the one closed re-ask): the conservative value is used."""
+            heard: str | None = None, update: bool = False) -> YellowLine | None:
+    """Still unclear after the one explicit confirm (or the one closed re-ask): the conservative value is used. With
+    `update`, an open line of the same code shows the new value instead (a new amount said after the slot's confirm);
+    a line a coordinator already resolved is never changed."""
     label = SLOT_SPECS[slot].label
-    return add(case, kind=YellowKind.unclear, code=f"unclear.{slot.value}", slot=slot, now=now, heard=heard,
-               reason=console_text.unclear(label, value_display), assumed=value_display)
+    code = f"unclear.{slot.value}"
+    reason = console_text.unclear(label, value_display)
+    if update:
+        for line in case.yellow_lines:
+            if line.code == code and line.resolved is None:
+                line.reason, line.assumed = reason[:240], value_display
+                if heard:
+                    line.heard = heard[:80]
+                return line
+    return add(case, kind=YellowKind.unclear, code=code, slot=slot, now=now, heard=heard, reason=reason,
+               assumed=value_display)
 
 
 def conflict(case: Case, slot: SlotName, a: str, b: str, now: datetime, *,

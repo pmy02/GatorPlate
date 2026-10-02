@@ -58,10 +58,12 @@ def summary_line(case: Case) -> str:
 
 
 def next_deadline(case: Case, *, today: date | None = None, tz: str = "America/Los_Angeles") -> date | None:
-    """The earliest tracking deadline on or after `today` (default: the Pacific date of the case's last update)."""
+    """The earliest exact tracking deadline on or after `today` (default: the Pacific date of the case's last update).
+    The SAR 7 day is approximate (docs/SPEC.md §5.7: "about"), so the case list never counts down to it; the case
+    detail shows it as "about …"."""
     reference = today or case.updated_at.astimezone(ZoneInfo(tz)).date()
     t = case.tracking
-    dates = [d for d in (t.deadline_30d, t.doc_due, t.sar7_due, t.recert_due) if d is not None and d >= reference]
+    dates = [d for d in (t.deadline_30d, t.doc_due, t.recert_due) if d is not None and d >= reference]
     return min(dates) if dates else None
 
 

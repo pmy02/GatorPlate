@@ -153,6 +153,13 @@ def test_progress(h) -> None:
     assert err(h.client.post(f"/api/card/{TOKEN}/progress", json={"applied": True})) == (422, "invalid_request")
 
 
+@pytest.mark.parametrize("applied", ["yes", "true", 1, "1", 0, None])
+def test_progress_takes_only_a_json_boolean(h, applied) -> None:
+    h.add_case()
+    r = h.client.post(f"/api/card/{TOKEN}/progress", json={"program": "calfresh", "applied": applied})
+    assert err(r) == (422, "invalid_request")
+
+
 def test_shared_bucket_of_30_a_minute_per_token(h) -> None:
     h.add_case()
     h.add_case(code="AAA-BBB", token="othercard00000000000001")

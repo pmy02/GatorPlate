@@ -9,7 +9,13 @@
   A refusal, a cut-off reply or invalid JSON is a failed extraction, never a guess.
 - At most 8 calls at a time (the daily turn cap is the Understander's); an optional hedge
   (GP_LLM_HEDGE_MS > 0 sends one identical second request when the first is slow, and takes the first answer).
-- Logs are content-free: model, latency, token counts and status only.
+- The fixed system text carries the cache marker. The model caches only a prefix of at least its minimum length
+  (4,096 tokens for claude-haiku-4-5), so the prompt is kept above it (tests/extract/test_prompt.py); cache reads and
+  writes are counted and logged apart from the other input tokens, so a live run shows whether the cache is used.
+  The marker asks for the one-hour lifetime: calls come in bursts (a demo table, a class visit) with gaps longer than
+  the default five minutes, and a cold prefix makes the first model turn of the next call the slowest one. A provider
+  that rejects the lifetime (HTTP 400) gets the plain marker from then on, and that turn is retried once without it.
+- Logs are content-free: model, latency, token counts (cache reads and writes included) and status only.
 """
 
 from __future__ import annotations
@@ -31,6 +37,7 @@ log = logging.getLogger("gatorplate.llm")
 MAX_TOKENS = 1024
 CONCURRENCY = 8
 FALLBACK_MIN_S = 0.3  # time a fallback attempt needs to be worth sending
+CACHE_TTL = "1h"  # prompt-cache lifetime asked for on the system prompt (the provider's default is five minutes)
 # Models that still accept a sampling temperature; the SDK no longer has the argument, so it goes in the body.
 _DETERMINISTIC_MODELS = frozenset({"claude-haiku-4-5"})
 
@@ -48,6 +55,12 @@ class AnthropicClient:
         self.metrics = metrics or UsageMetrics(provider=self.provider)
         self.metrics.provider = self.provider
         self._sems: dict[int, asyncio.Semaphore] = {}
+        self.cache_ttl: str | None = CACHE_TTL  # None after the provider rejected it: the plain five-minute marker
+        self._rejected = False  # the last attempt was refused as a bad request (HTTP 400)
+        # Since process start, content-free: input tokens served from the prompt cache and written to it (both are
+        # also inside the outcome's input_tokens, which counts every input token).
+        self.cache_read_tokens = 0
+        self.cache_write_tokens = 0
         if sdk is None:
             sdk = anthropic.AsyncAnthropic(api_key=api_key, base_url=base_url, max_retries=0)
             # Only GP_* settings configure the client: drop any header merged from the process environment.
@@ -60,30 +73,47 @@ class AnthropicClient:
         if timeout_s <= 0:
             return outcome("timeout", model=self.model)
         started = time.monotonic()
-        result = await self._attempt(self.model, system, user_json, schema, timeout_s)
+        result, cache = await self._attempt(self.model, system, user_json, schema, timeout_s)
+        if result.status == "error" and self._rejected and self.cache_ttl is not None:
+            self.cache_ttl = None  # the cache lifetime may be what the provider refused: never ask for it again
+            left = timeout_s - (time.monotonic() - started)
+            if left >= FALLBACK_MIN_S:
+                result, cache = await self._attempt(self.model, system, user_json, schema, left)
         if result.status == "error" and self.fallback_model:
             left = timeout_s - (time.monotonic() - started)
             if left >= FALLBACK_MIN_S:
-                result = await self._attempt(self.fallback_model, system, user_json, schema, left)
+                result, cache = await self._attempt(self.fallback_model, system, user_json, schema, left)
         result = result.model_copy(update={"latency_ms": int((time.monotonic() - started) * 1000)})
         self.metrics.record(result)
+        self.cache_read_tokens += cache[0]
+        self.cache_write_tokens += cache[1]
+        self.metrics.record_cache(cache[0], cache[1])  # /healthz llm.usage prices them apart
         log.info(json.dumps({"event": "llm", "model": result.model, "status": result.status,
                              "latency_ms": result.latency_ms, "input_tokens": result.input_tokens,
+                             "cache_read_input_tokens": cache[0], "cache_creation_input_tokens": cache[1],
                              "output_tokens": result.output_tokens}))
         return result
 
     # ------------------------------------------------------------------------------------------ internals
     async def _attempt(self, model: str, system: str, user_json: str, schema: dict[str, Any], timeout_s: float
-                       ) -> ExtractOutcome:
+                       ) -> tuple[ExtractOutcome, tuple[int, int]]:
+        """The outcome and the (cache read, cache write) input tokens of one request."""
+        self._rejected = False
         try:
             async with asyncio.timeout(timeout_s):
                 async with self._semaphore():
                     message = await self._hedged(model, system, user_json, schema, timeout_s)
         except (TimeoutError, anthropic.APITimeoutError):
-            return outcome("timeout", model=model)
-        except (anthropic.APIConnectionError, anthropic.APIStatusError):
-            return outcome("error", model=model)
-        return self._read(message, model)
+            return outcome("timeout", model=model), (0, 0)
+        except anthropic.APIStatusError as exc:
+            self._rejected = getattr(exc, "status_code", None) == 400
+            return outcome("error", model=model), (0, 0)
+        except anthropic.APIConnectionError:
+            return outcome("error", model=model), (0, 0)
+        usage = getattr(message, "usage", None)
+        cache = (int(getattr(usage, "cache_read_input_tokens", 0) or 0),
+                 int(getattr(usage, "cache_creation_input_tokens", 0) or 0))
+        return self._read(message, model), cache
 
     def _semaphore(self) -> asyncio.Semaphore:
         """At most CONCURRENCY calls at a time, per event loop (the app runs one loop; tests may run several)."""
@@ -98,7 +128,7 @@ class AnthropicClient:
         params: dict[str, Any] = {
             "model": model,
             "max_tokens": MAX_TOKENS,
-            "system": [{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
+            "system": [{"type": "text", "text": system, "cache_control": self._cache_control()}],
             "messages": [{"role": "user", "content": user_json}],
             "output_config": {"format": {"type": "json_schema", "schema": schema}},
             "timeout": timeout_s,
@@ -106,6 +136,12 @@ class AnthropicClient:
         if model in _DETERMINISTIC_MODELS:
             params["extra_body"] = {"temperature": 0}
         return params
+
+    def _cache_control(self) -> dict[str, str]:
+        marker = {"type": "ephemeral"}
+        if self.cache_ttl is not None:
+            marker["ttl"] = self.cache_ttl
+        return marker
 
     async def _create(self, params: dict[str, Any]) -> Any:
         return await self.sdk.messages.create(**params)

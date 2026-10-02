@@ -1149,10 +1149,12 @@ def free_port() -> int:
 
 
 def port_in_use(port: int) -> bool:
-    """True when something listens on the port (a connection succeeds) or the port cannot be bound."""
+    """True when something listens on the port (a connection succeeds) or the port cannot be bound. The bind test
+    sets SO_REUSEADDR, as the server does, so a port left in TIME_WAIT by a closed connection counts as free."""
     with contextlib.suppress(OSError), socket.create_connection(("127.0.0.1", port), timeout=0.3):
         return True
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
             sock.bind(("127.0.0.1", port))
         except OSError:

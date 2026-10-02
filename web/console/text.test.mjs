@@ -159,6 +159,10 @@ test("short source titles keep the first clause and the date", () => {
   assert.equal(T.shortTitle("CPUC: California LifeLine vs federal Lifeline ($19 + $9.25)"), "CPUC: California LifeLine vs federal Lifeline");
   assert.equal(T.sourceText("ACL-26-25", meta.rules.sources, { short: true }), "CDSS All County Letter 26-25, 2026-04-13");
   assert.equal(T.sourceText("nope", meta.rules.sources), "nope");
+  // abbreviations are never a sentence end
+  assert.equal(T.shortTitle("DHCS H.R. 1 implementation plan (Medi-Cal changes)"), "DHCS H.R. 1 implementation plan");
+  assert.equal(T.shortTitle("IRS Rev. Proc. 2025-32 (2026 inflation adjustments)"), "IRS Rev. Proc. 2025-32");
+  assert.equal(T.shortTitle("Basic Needs hours. Checked on the page"), "Basic Needs hours");
 });
 
 test("tracking inputs are Pacific wall time", () => {

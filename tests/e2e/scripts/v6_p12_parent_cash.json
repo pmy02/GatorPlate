@@ -1,0 +1,143 @@
+{
+  "id": "v6_p12_parent_cash",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p12_parent_cash, closed mode): 'No, my mom doesn't give me money for the rent, she sends it for food' answers the landlord question and must not erase the $300 a month from a parent → about $106, never $241",
+  "golden_case": "G10",
+  "channel": "web",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1",
+    "GP_LLM_PROVIDER": "anthropic"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "scripted"
+  ],
+  "web_session": {
+    "lang": "en"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yes, go ahead.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm a junior at SF State, twelve units.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm 21, I live by myself.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "I make about 1,200 a month, and my mom sends me 300 a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "I pay 900 a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "No, my mom doesn't give me money for the rent, she sends it for food.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "My mom still sends me 300 a month, and I make about 1,200 a month.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "No, my mom doesn't give me money for the rent, she sends it for food.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "No, my mom doesn't give me money for the rent, she sends it for food.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "No, thanks.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "slots": {
+      "other_cash_monthly": "300.00",
+      "rent_paid_by_others_to_landlord": "0.00"
+    },
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 106
+  },
+  "note": "From the V6 re-verify fresh-paraphrase probes (closed mode, no model): the answer to the landlord question set the family cash said at the income question to $0 (changed_from 300.00, state clear) with no read-back, no confirm and no yellow line, and the student heard about $241 instead of about $106. The env declares the provider with no key, so the whole call runs in closed mode (the rule parser alone, docs/SPEC.md §3.7). A confirm right after that answer is answered by restating the facts."
+}

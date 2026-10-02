@@ -131,11 +131,13 @@ class AppContext:
     # ------------------------------------------------------------------------------------------ health
 
     def llm_health(self) -> dict[str, Any]:
-        """{provider, status, last_ok_at, usage: {calls, input_tokens, output_tokens}} read from the understanding
+        """{provider, status, last_ok_at, usage: {calls, input_tokens, output_tokens, cache_read_input_tokens,
+        cache_creation_input_tokens}} read from the understanding
         component: a `llm_health()` mapping when it offers one, else the attributes of its language-model client."""
         settings = self.settings
         out: dict[str, Any] = {"provider": settings.llm_provider, "status": None, "last_ok_at": None,
-                               "usage": {"calls": 0, "input_tokens": 0, "output_tokens": 0}}
+                               "usage": {"calls": 0, "input_tokens": 0, "output_tokens": 0,
+                                         "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0}}
         source: Any = self.deps.understanding
         try:
             reader = getattr(source, "llm_health", None)
@@ -153,7 +155,8 @@ class AppContext:
             if callable(usage):
                 usage = usage()
             if usage is not None:
-                for key in ("calls", "input_tokens", "output_tokens"):
+                for key in ("calls", "input_tokens", "output_tokens", "cache_read_input_tokens",
+                            "cache_creation_input_tokens"):
                     value = usage.get(key) if isinstance(usage, dict) else getattr(usage, key, None)
                     if isinstance(value, int):
                         out["usage"][key] = value

@@ -1,0 +1,149 @@
+{
+  "id": "v6_p32_biweekly_es",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p32_biweekly_es, live, as said): 'Gano como $1,800 al mes', rent $1,100 → about $85",
+  "channel": "web",
+  "lang": "es",
+  "test": true,
+  "fake_llm_ok": false,
+  "native_review": true,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "live-llm"
+  ],
+  "web_session": {
+    "lang": "es"
+  },
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "es",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Sí, me parece bien, entiendo que GatorPlate es un asistente de IA hecho por estudiantes y que solo recibe el texto, no el audio.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "Estudio licenciatura y tomo 12 unidades este semestre.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "Tengo 20 años y vivo por mi cuenta.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.age_parent"
+    },
+    {
+      "user": "Vivo por mi cuenta, así que no compro ni cocino comida con otras personas.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.household"
+    },
+    {
+      "user": "Gano como $1,800 al mes de mi trabajo, y nadie me da dinero.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.income"
+    },
+    {
+      "user": "Mi parte de la renta es $1,100 al mes.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "ask.rent"
+    },
+    {
+      "user": "No, no pago aparte factura de calefacción ni aire acondicionado.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "No, nadie me paga parte de la renta directamente al dueño.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "No, yo la pago.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "No, todo está incluido en la renta.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool",
+      "typed": true
+    },
+    {
+      "user": "No, yo la pago.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others",
+      "typed": true
+    },
+    {
+      "user": "Ninguno, todo está incluido.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils",
+      "typed": true
+    },
+    {
+      "user": "No, gracias, está claro. Voy a hacer la solicitud hoy mismo.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, entiendo. Voy a ir a BenefitsCal para hacer la solicitud. Gracias por la ayuda.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    },
+    {
+      "user": "No, gracias. Tengo el número y sé qué hacer. Adiós.",
+      "confidence": 0.95,
+      "typed": true,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 85
+  },
+  "note": "From the live evaluation run. The model-played student turned the persona's $900 every two weeks into '$1,800 al mes' (the student model's own conversion), so the expected result is the one for what was said; the brain's $85 was right for it. Utterances from a model-played student, so fake_llm_ok is false."
+}

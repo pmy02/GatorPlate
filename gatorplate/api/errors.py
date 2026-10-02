@@ -88,19 +88,32 @@ def install(app: FastAPI) -> None:
 MAX_BODY_BYTES = 64 * 1024  # every request body GatorPlate accepts is small (a turn's text is at most 1000 chars)
 
 
+def _too_large() -> ApiProblem:
+    return ApiProblem("invalid_request", "Request body too large.")
+
+
+def declared_length(request: Request) -> int | None:
+    """The Content-Length header as a number, or None when it is missing or not plain ASCII digits (a body sent in
+    chunks has none). Only the first 12 digits are read: anything that long is far past every limit anyway."""
+    text = request.headers.get("content-length", "")
+    if not (text.isascii() and text.isdigit()):
+        return None
+    return int(text[:12])
+
+
 async def read_body(request: Request, *, limit: int = MAX_BODY_BYTES) -> bytes:
-    """The raw body, refused with 422 invalid_request when it is larger than any valid request could be."""
-    declared = request.headers.get("content-length", "")
-    if declared.isdigit() and int(declared[:12]) > limit:
-        raise ApiProblem("invalid_request", "Request body too large.")
-    # Read in chunks and stop past the limit: a chunked body has no Content-Length to check first.
-    chunks: list[bytes] = []
-    size = 0
-    async for chunk in request.stream():
-        size += len(chunk)
-        if size > limit:
-            raise ApiProblem("invalid_request", "Request body too large.")
-        chunks.append(chunk)
-    body = b"".join(chunks)
+    """The raw body, refused with 422 invalid_request when it is larger than any valid request could be.
+
+    A declared length past the limit is refused before anything is read. The limit is also enforced while the body
+    arrives, before each piece is kept, so an undeclared (chunked) body never grows past it in memory."""
+    expected = declared_length(request)
+    if expected is not None and expected > limit:
+        raise _too_large()
+    received = bytearray()
+    async for piece in request.stream():
+        if len(received) + len(piece) > limit:
+            raise _too_large()
+        received.extend(piece)
+    body = bytes(received)
     request._body = body  # later readers of request.body() get the same bytes
     return body

@@ -52,8 +52,10 @@ class UsageMetrics:
     provider: str = "fake"
     status: LLMStatus = "ready"
     calls: int = 0
-    input_tokens: int = 0
+    input_tokens: int = 0  # every input token, the prompt-cache reads and writes below included
     output_tokens: int = 0
+    cache_read_tokens: int = 0  # input tokens served from the prompt cache (priced lower)
+    cache_write_tokens: int = 0  # input tokens written to the prompt cache (priced higher)
     last_ok_at: datetime | None = None
     _lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
 
@@ -68,6 +70,11 @@ class UsageMetrics:
             elif outcome.status in ("error", "invalid", "refused", "timeout"):
                 self.status = "error"
 
+    def record_cache(self, read: int, write: int) -> None:
+        with self._lock:
+            self.cache_read_tokens += max(0, int(read))
+            self.cache_write_tokens += max(0, int(write))
+
     def count_extra_call(self) -> None:
         with self._lock:
             self.calls += 1
@@ -79,7 +86,8 @@ class UsageMetrics:
                 "status": self.status,
                 "last_ok_at": self.last_ok_at.isoformat().replace("+00:00", "Z") if self.last_ok_at else None,
                 "usage": {"calls": self.calls, "input_tokens": self.input_tokens,
-                          "output_tokens": self.output_tokens},
+                          "output_tokens": self.output_tokens, "cache_read_input_tokens": self.cache_read_tokens,
+                          "cache_creation_input_tokens": self.cache_write_tokens},
             }
 
 

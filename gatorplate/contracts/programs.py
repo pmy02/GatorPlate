@@ -10,7 +10,7 @@ from __future__ import annotations
 from datetime import date
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, StrictBool
 
 from gatorplate.contracts.case import ProgramAnswer, ProgramProgress
 from gatorplate.contracts.common import CardRow, Lang, Model
@@ -151,4 +151,4 @@ class ProgramAnswersRequest(Model):
 
 class ProgramProgressRequest(Model):
     program: str  # "calfresh" or a program id shown on the card
-    applied: bool
+    applied: StrictBool  # JSON true or false only: "yes", "true", 1 or "1" are a 422

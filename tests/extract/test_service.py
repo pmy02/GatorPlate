@@ -292,7 +292,7 @@ async def test_spanish_gloss(understander: Understander) -> None:
 def test_health_counts(settings_test) -> None:
     u = Understander(settings=settings_test)
     health = u.llm_health()
-    assert health["provider"] == "fake" and set(health["usage"]) == {"calls", "input_tokens", "output_tokens"}
+    assert health["provider"] == "fake" and set(health["usage"]) == {"calls", "input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"}
     asyncio.run(call(u, "I make like 640 a month at the gym, and my mom sends me 50 a week.", INCOME))
     assert u.llm_health()["usage"]["calls"] == 1 and u.llm_health()["status"] == "ok"
     assert u.llm_health()["last_ok_at"].endswith("Z")

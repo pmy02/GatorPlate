@@ -63,7 +63,7 @@ def test_user_message_is_compact_json() -> None:
 def test_examples_validate_and_are_fresh(utterances: list[dict]) -> None:
     outputs = re.findall(r"^-> (\{.*\})$", SYSTEM_PROMPT, flags=re.MULTILINE)
     inputs = re.findall(r"^(\{\"pending\".*\})$", SYSTEM_PROMPT, flags=re.MULTILINE)
-    assert 8 <= len(outputs) <= 10 and len(inputs) == len(outputs)
+    assert 8 <= len(outputs) <= 24 and len(inputs) == len(outputs)
     defaults = {"observations": [], "intents": [], "side_question": None, "requested_language": None}
     merger = Merger()
     for raw_in, raw_out in zip(inputs, outputs, strict=True):
@@ -90,3 +90,20 @@ def test_prompt_rules() -> None:
         assert needle in SYSTEM_PROMPT, needle
     assert "[REDACTED]" in SYSTEM_PROMPT
     assert not re.search(r"\d{7,}", SYSTEM_PROMPT)
+
+
+def test_system_prompt_is_long_enough_to_be_cached() -> None:
+    """The system block carries the cache marker, but the model caches only a prefix of at least 4,096 tokens
+    (claude-haiku-4-5); a shorter prompt is billed and processed in full on every turn. About 4.4 characters per
+    token is the cautious end for this English and JSON text, so the block must hold at least 4,096 x 4.4
+    characters."""
+    assert len(SYSTEM_PROMPT) >= 4096 * 44 // 10
+
+
+def test_prompt_rules_for_the_observed_misses() -> None:
+    """Rules that answer misses seen with the live model: who the student lives with, living alone, the student's own
+    rent at the rent-paid-by-others question, numbers that are not money, plain zeros, closing words, unsure answers."""
+    for needle in ('"20, two roommates"', 'household_food "alone" when the student lives alone',
+                   '"No, I pay it all myself" -> "0"', "Not money: clock times", "A plain zero is an answer",
+                   '"I\'ll apply today"', "Unsure is not no", "Keep quotes short"):
+        assert needle in SYSTEM_PROMPT, needle

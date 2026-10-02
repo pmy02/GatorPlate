@@ -34,6 +34,7 @@ _NO = {
 _YES_RX = {lang: re.compile(p, re.IGNORECASE) for lang, p in _YES.items()}
 _ENGLISH = re.compile(r"\b(?:english|ingl[eé]s)\b", re.IGNORECASE)
 _NO_RX = {lang: re.compile(p, re.IGNORECASE) for lang, p in _NO.items()}
+_WORD = re.compile(r"[^\W\d_]+(?:'[^\W\d_]+)?")
 
 
 def yes_no(text: str, lang: Lang) -> str | None:
@@ -66,6 +67,9 @@ class Routing:
             lang: [re.compile(p, re.IGNORECASE) for p in (close.get("done") or {}).get(lang) or []]
             for lang in ("en", "es")
         }
+        words = close.get("closing_words") or {}
+        self.closing_words: dict[str, frozenset[str]] = {
+            lang: frozenset(str(w).lower() for w in words.get(lang) or []) for lang in ("en", "es")}
         redact = (data.get("input") or {}).get("redact") or {}
         card_words = redact.get("masked_card_words") or {}
         self.card_words: list[re.Pattern[str]] = [
@@ -79,6 +83,16 @@ class Routing:
     def is_done(self, text: str, lang: Lang) -> bool:
         clean = normalize(text)
         return any(rx.search(clean) for code in (lang.value, "en") for rx in self.done.get(code, []))
+
+    def is_only_done(self, text: str, lang: Lang) -> bool:
+        """A done phrase that says nothing else ("No, that's all. Thanks!"): every word is a closing word
+        (guards.json close_phase.closing_words). "No thanks, my roommate wants to know if she can apply too" is a done
+        phrase that says more: what it says is answered first."""
+        if not self.is_done(text, lang):
+            return False
+        vocab = self.closing_words["en"] | (self.closing_words["es"] if lang != Lang.en else frozenset())
+        words = _WORD.findall(normalize(text).lower().replace("\u2019", "'"))
+        return bool(words) and all(w in vocab for w in words)
 
     def asks_spanish(self, text: str) -> bool:
         clean = normalize(text)

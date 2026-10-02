@@ -1,0 +1,164 @@
+{
+  "id": "v6_p19_couch_paid",
+  "version": "2026-10-02",
+  "title": "Evaluation regression (p19_couch_paid, scripted): 'About 1,000 a month from work, nobody gives me money.' is $1,000 from work, never $1,000 from family → about $192",
+  "golden_case": "N7",
+  "channel": "phone",
+  "lang": "en",
+  "test": true,
+  "fake_llm_ok": true,
+  "native_review": false,
+  "env": {
+    "GP_CARD_DELIVERY": "code",
+    "GP_DEBUG_KEYS": "1"
+  },
+  "tags": [
+    "regression",
+    "simulated-student",
+    "scripted"
+  ],
+  "turns": [
+    {
+      "start": true,
+      "expect_keys": [
+        "consent.ask"
+      ],
+      "reply": {
+        "end": false,
+        "end_reason": null,
+        "lang": "en",
+        "expect": "yes_no",
+        "interruptible": false,
+        "ask": "present"
+      }
+    },
+    {
+      "user": "Yes, go ahead.",
+      "confidence": 0.95,
+      "when_pending": "consent.ask"
+    },
+    {
+      "user": "I'm a senior, twelve units.",
+      "confidence": 0.95,
+      "when_pending": "ask.level_units"
+    },
+    {
+      "user": "I'm 25 and I've been staying on a friend's couch, I buy my own food.",
+      "confidence": 0.95,
+      "when_pending": "ask.age_parent",
+      "expect_keys_exclude": [
+        "reprompt.unclear"
+      ]
+    },
+    {
+      "user": "I'm 25 and I've been staying on a friend's couch, I buy my own food.",
+      "confidence": 0.95,
+      "when_pending": "ask.age_parent",
+      "expect_keys_exclude": [
+        "reprompt.unclear"
+      ]
+    },
+    {
+      "user": "About 1,000 a month from work, nobody gives me money.",
+      "confidence": 0.95,
+      "when_pending": "ask.income",
+      "expect_keys_exclude": [
+        "readback.other_cash",
+        "reprompt.unclear"
+      ],
+      "case": {
+        "slots": {
+          "earned_monthly": "1000.00"
+        }
+      }
+    },
+    {
+      "user": "About 1,000 a month from work, nobody gives me money.",
+      "confidence": 0.95,
+      "when_pending": "ask.income",
+      "expect_keys_exclude": [
+        "readback.other_cash",
+        "reprompt.unclear"
+      ],
+      "case": {
+        "slots": {
+          "earned_monthly": "1000.00"
+        }
+      }
+    },
+    {
+      "user": "I give my friend about 150 a month for letting me crash there.",
+      "confidence": 0.95,
+      "when_pending": "ask.homeless_cost"
+    },
+    {
+      "user": "I'm not sure.",
+      "confidence": 0.95,
+      "when_pending": "flip.earned_split"
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "Yes, that's right.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "Like sixty dollars.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, I pay it myself.",
+      "confidence": 0.95,
+      "when_pending": "flip.rent_paid_by_others"
+    },
+    {
+      "user": "No, utilities are included in my rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.heat_cool"
+    },
+    {
+      "user": "Nothing, it's all included in rent.",
+      "confidence": 0.95,
+      "when_pending": "flip.other_utils"
+    },
+    {
+      "user": "Yes, that's right.",
+      "confidence": 0.95,
+      "when_pending": "confirm.money"
+    },
+    {
+      "user": "Like sixty dollars.",
+      "confidence": 0.95,
+      "when_pending": "expedited.intro_cash"
+    },
+    {
+      "user": "No, thanks.",
+      "confidence": 0.95,
+      "when_pending": "close.anything_else"
+    }
+  ],
+  "end": {
+    "reason": "completed"
+  },
+  "final": {
+    "tier": "likely",
+    "reason_code": "likely",
+    "estimate_monthly": 192
+  },
+  "note": "From the scripted evaluation run (fake model: the parser path, the same path closed mode uses). The brain read the work income back as money from family or friends twice, asked whether pay from work is under $250 and ended with coordinator.unresolved."
+}

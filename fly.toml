@@ -17,18 +17,25 @@ primary_region = "iad"
   GP_TZ = "America/Los_Angeles"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
+  # GatorPlate keeps call state and the live view in one process, so its single machine never sleeps on idle
+  # and is always counted as running.
   auto_stop_machines = "off"
-  auto_start_machines = true
   min_machines_running = 1
+  # uvicorn listens here inside the machine (see the Dockerfile).
+  internal_port = 8080
+  # After a deploy or a crash, the next request starts the machine again.
+  auto_start_machines = true
+  # Plain-HTTP requests are redirected: the card, console and talk pages are served over HTTPS only.
+  force_https = true
 
+  # Health check: the Brain API's unauthenticated health route (docs/BRAIN_API.md).
   [[http_service.checks]]
-    grace_period = "10s"
-    interval = "15s"
-    method = "GET"
     path = "/v1/health"
+    method = "GET"
+    # Every 15 s, 5 s to answer; the first 10 s after a start are not counted.
+    interval = "15s"
     timeout = "5s"
+    grace_period = "10s"
 
 [mounts]
   source = "gp_data"

@@ -257,10 +257,13 @@ export function shortTitle(title) {
   let cut = t.length;
   const colon = t.indexOf(": ");
   if (colon >= 8) cut = colon;
-  for (const mark of [" (", ". ", ", ", "; "]) {
+  for (const mark of [" (", ", ", "; "]) {
     const i = t.indexOf(mark);
     if (i > 0 && i < cut) cut = i;
   }
+  // a sentence end after a full word, never an abbreviation ("H.R. 1", "Rev. Proc. 2025-32")
+  const stop = /(?<=[a-z]{4,})\. /.exec(t);
+  if (stop && stop.index > 0 && stop.index < cut) cut = stop.index;
   const out = t.slice(0, cut).trim();
   return out.length > 56 ? `${out.slice(0, 55).trim()}…` : out;
 }

@@ -47,7 +47,7 @@ fixtures:        ; $(DEVENV) $(PY) tools/make_fixtures.py
 e2e:             ; $(RUNNER) --scripts tests/e2e/scripts $(if $(LIVE),--live,) $(if $(ONLY),--only $(ONLY),)
 adversarial:     ; $(RUNNER) --scripts tests/adversarial/scripts
 examples:        ; $(RUNNER) --examples contracts/examples
-eval:            ; $(TOOLENV) $(if $(LIVE),GP_LLM_PROVIDER=anthropic GP_LLM_API_KEY="$$GP_LLM_API_KEY",) $(PY) tools/simulate_student.py --base $(or $(BASE),http://127.0.0.1:8000) --personas data/eval/personas.json $(if $(LIVE),--live --max-usd $(or $(MAX_USD),3),)
+eval:            ; $(TOOLENV) $(if $(LIVE),GP_LLM_PROVIDER=anthropic GP_LLM_API_KEY="$$GP_LLM_API_KEY",) $(PY) tools/simulate_student.py --base $(or $(BASE),http://127.0.0.1:8000) --personas data/eval/personas.json $(if $(LIVE),--live --max-usd $(or $(MAX_USD),3),) $(if $(ONLY),--only $(ONLY),) $(ARGS)
 bench:           ; $(TOOLENV) GP_LLM_PROVIDER=anthropic GP_LLM_API_KEY="$$GP_LLM_API_KEY" $(PY) tools/bench_llm.py --n 30
 test-live:       ; $(TESTENV) GP_LLM_PROVIDER=anthropic GP_LLM_API_KEY="$$GP_LLM_API_KEY" $(PY) -m pytest -q -m live tests/extract
 leakcheck:       ; $(TOOLENV) $(PY) tools/leakcheck.py --root . $(if $(HISTORY),--git-history,)

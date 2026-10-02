@@ -25,6 +25,13 @@ class GuardData:
     spoken_patterns: tuple[re.Pattern[str], ...]  # en and es, both always run
     spoken_digit_words: frozenset[str]
     spoken_card_digits: tuple[int, int]
+    spoken_run_min: int
+    # grouped number words ("one twenty three, forty five"): patterns, and per language the words that count two
+    # digits, the tens words that take a following unit word, and connector words that count nothing ("y")
+    group_patterns: tuple[re.Pattern[str], ...]
+    group_two_digit: frozenset[str]
+    group_tens: frozenset[str]
+    group_skip: frozenset[str]
     masked_char: str
     masked_card_words: tuple[re.Pattern[str], ...]
     keywords: tuple[tuple[str, str, re.Pattern[str]], ...]  # (intent, lang, pattern)
@@ -54,6 +61,16 @@ def load_guards(path: Path | str | None = None) -> GuardData:
             for pattern in by_lang.get(lang, []):
                 keywords.append((intent, lang, re.compile(pattern, re.IGNORECASE)))
     low, high = red["spoken_card_digits"]
+    groups: list[str] = []
+    two_digit: set[str] = set()
+    tens: set[str] = set()
+    skip: set[str] = set()
+    for lang in LANGS:
+        groups.extend((red.get("spoken_group_patterns") or {}).get(lang, []))
+        group_words = (red.get("spoken_group_words") or {}).get(lang) or {}
+        two_digit.update(w.lower() for w in group_words.get("two_digit", []))
+        tens.update(w.lower() for w in group_words.get("tens", []))
+        skip.update(w.lower() for w in group_words.get("skip", []))
     return GuardData(
         raw=raw,
         replacement=red["replacement"],
@@ -62,6 +79,11 @@ def load_guards(path: Path | str | None = None) -> GuardData:
         spoken_patterns=_compile(spoken),
         spoken_digit_words=frozenset(words),
         spoken_card_digits=(int(low), int(high)),
+        spoken_run_min=int(red.get("spoken_digit_run_min", 7)),
+        group_patterns=_compile(groups),
+        group_two_digit=frozenset(two_digit),
+        group_tens=frozenset(tens),
+        group_skip=frozenset(skip),
         masked_char=red.get("masked_char", "#"),
         masked_card_words=_compile(cards),
         keywords=tuple(keywords),

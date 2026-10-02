@@ -221,30 +221,60 @@ def test_case_checks_read_the_console_detail() -> None:
 # ------------------------------------------------------------------------------------------------ in-process
 
 def _in_process(card_delivery: str, *, debug_keys: bool = True, dirs: list[Path] | None = None,
-                only: list[str] | None = None, concurrency: int = 1) -> runner.Run:
-    app = create_stub_app(card_delivery=card_delivery, debug_keys=debug_keys)
+                only: list[str] | None = None, concurrency: int = 1, live: bool = False,
+                stub_dirs: list[Path] | None = None) -> runner.Run:
+    app = create_stub_app(card_delivery=card_delivery, debug_keys=debug_keys, script_dirs=stub_dirs)
     with TestClient(app) as client:
-        run = runner.Run(kind="scripts", mode="in-process", llm="fake")
+        run = runner.Run(kind="scripts", mode="in-process", llm="live" if live else "fake")
         target = runner.Target(client=client, base="http://testserver", secret=runner.DEV_GATEWAY_SECRET,
                                passcode="dev", debug_keys=debug_keys, card_delivery=card_delivery)
-        items = runner.build_items("scripts", scripts_dir=dirs, examples_dir=None, only=only, live=False)
+        items = runner.build_items("scripts", scripts_dir=dirs, examples_dir=None, only=only, live=live)
         runner.run_items(items, target, run, group=card_delivery, concurrency=concurrency)
     return run
 
 
+def _skip_problems(run: runner.Run, mode: str, live: bool, dirs: list[Path] | None = None) -> list[str]:
+    """Every skip has its reason: a phone script of the other card-delivery mode ("env:"), or — in a fake-model run
+    only — a script that needs a live language model (fake_llm_ok false: regression scripts made from live
+    conversations, docs/SPEC.md §10). Nothing else is skipped, and nothing that should be skipped runs."""
+    scripts = {s.id: s for _, s in runner.load_scripts(dirs or runner.SCRIPTS_DIRS)}
+    problems = []
+    for r in run.results:
+        script = scripts[r.id]
+        other_mode_phone = script.channel == "phone" and script.card_mode != mode
+        needs_live = not script.fake_llm_ok and not live
+        if (r.status == "skipped") != (other_mode_phone or needs_live):
+            problems.append(f"{r.id}: status {r.status} ({r.skip_reason})")
+        elif other_mode_phone and not (r.skip_reason or "").startswith("env:"):
+            problems.append(f"{r.id}: skipped for {r.skip_reason!r}, expected an env reason")
+        elif needs_live and not other_mode_phone and "live language model" not in (r.skip_reason or ""):
+            problems.append(f"{r.id}: skipped for {r.skip_reason!r}, expected the live-model reason")
+    return problems
+
+
+@pytest.mark.parametrize("live", [False, True], ids=["fake", "live"])
 @pytest.mark.parametrize("mode", runner.CARD_MODES)
-def test_every_script_plays_against_the_stub(mode: str) -> None:
-    run = _in_process(mode)
+def test_every_script_plays_against_the_stub(mode: str, live: bool) -> None:
+    run = _in_process(mode, live=live)
     failed = {r.id: r.failures[:3] for r in run.results if r.status == "failed"}
     assert failed == {}
-    skipped = {r.id: r.skip_reason for r in run.results if r.status == "skipped"}
-    for r in run.results:
-        script = next(s for p, s in runner.load_scripts(runner.SCRIPTS_DIRS) if s.id == r.id)
-        other_mode_phone = script.channel == "phone" and script.card_mode != mode
-        assert (r.id in skipped) == other_mode_phone, r.id
-        if other_mode_phone:
-            assert skipped[r.id].startswith("env:")
+    assert _skip_problems(run, mode, live) == []
     assert run.executed and all(r.keys_asserted and r.console_checked for r in run.executed)
+
+
+@pytest.mark.parametrize("mode", runner.CARD_MODES)
+def test_a_regression_script_that_needs_a_live_model_keeps_the_stub_test_green(mode: str, tmp_path: Path) -> None:
+    """A regression script from a live conversation sets fake_llm_ok false (docs/SPEC.md §10): the fake-model run
+    skips it with the live-model reason and the skip check accepts that; a live run plays it."""
+    data = _load("sofia_g3")
+    data["id"] = "regression_needs_live"
+    data["fake_llm_ok"] = False
+    (tmp_path / "regression_needs_live.json").write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    for live in (False, True):
+        run = _in_process(mode, dirs=[tmp_path], live=live, stub_dirs=[tmp_path])
+        (result,) = run.results
+        assert result.status == ("passed" if live else "skipped"), (live, result.failures[:3])
+        assert _skip_problems(run, mode, live, dirs=[tmp_path]) == []
 
 
 def test_runner_detects_a_wrong_expectation(tmp_path: Path) -> None:
@@ -521,21 +551,113 @@ def test_wilson_upper_bound() -> None:
     assert sim.wilson_upper(0, 0) is None
 
 
-def test_metrics_count_silent_errors_only_without_a_yellow_line() -> None:
+def test_metrics_count_a_wrong_result_as_flagged_only_by_a_related_yellow_line() -> None:
+    """docs/SPEC.md §10 silent errors: an open yellow line flags a wrong result only when it names the route, a slot
+    that made it wrong, or the call ended incomplete; the truth inside the estimate range also flags it. An unrelated
+    open line (a half-time question on a rent error) does not — the old count took any open line."""
     from tools import simulate_student as sim
 
     truth = {"tier": "likely", "reason_code": "likely", "monthly": 306, "expedited": "no"}
     good = sim.Outcome("a", "en", "web", truth, case={"tier": "likely", "estimate_monthly": 306,
                                                       "expedited_possible": "no", "yellow_lines": [], "asked": [],
                                                       "turn_count": 9})
-    flagged = sim.Outcome("b", "es", "web", truth, case={"tier": "coordinator", "estimate_monthly": None,
-                                                         "yellow_lines": [{"code": "x", "resolved": None}]})
-    silent = sim.Outcome("c", "en", "phone", truth, case={"tier": "likely", "estimate_monthly": 155,
-                                                          "yellow_lines": [{"code": "x", "resolved": "confirm"}]})
-    m = sim.metrics([good, flagged, silent], brain_cost_usd=0.03)
-    assert m["silent_errors"] == [1, 3] and m["tier_agreement"] == [2, 3]
-    assert m["amount_exact"] == [1, 2] and m["amount_mae"] == 75.5
-    assert m["expedited_agreement"] == [1, 3] and m["brain_llm_cost_per_call_usd"] == 0.01
+    route = sim.Outcome("b", "es", "web", truth, case={
+        "tier": "coordinator", "reason_code": "coordinator.shared_household", "estimate_monthly": None,
+        "yellow_lines": [{"code": "coordinator.shared_household", "slot": "household_food", "resolved": None}]})
+    resolved = sim.Outcome("c", "en", "phone", truth, case={"tier": "likely", "estimate_monthly": 155,
+                                                            "yellow_lines": [{"code": "x", "resolved": "confirm"}]})
+    unrelated = sim.Outcome("d", "en", "web", truth, case={
+        "tier": "likely", "estimate_monthly": 155, "estimate_range": {"lo": 155, "hi": 285, "settled": False},
+        "yellow_lines": [{"code": "unclear.half_time", "slot": "half_time", "resolved": None}]})
+    in_range = sim.Outcome("e", "en", "web", truth, case={
+        "tier": "likely", "estimate_monthly": 155, "estimate_range": {"lo": 155, "hi": 306, "settled": False},
+        "yellow_lines": [{"code": "student_question", "resolved": None}]})
+    incomplete = sim.Outcome("f", "en", "web", truth, case={
+        "tier": None, "estimate_monthly": None, "yellow_lines": [{"code": "incomplete", "resolved": None}]})
+    m = sim.metrics([good, route, resolved, unrelated, in_range, incomplete], brain_cost_usd=0.06)
+    assert m["silent_errors"] == [2, 6], "the resolved line and the unrelated line leave their errors silent"
+    assert m["silent_errors_any_line"] == [1, 6], "counting any open line hides the unrelated-line error"
+    assert m["tier_agreement"] == [4, 6]
+    assert m["amount_exact"] == [1, 4] and m["amount_mae"] == 113.25
+    assert m["expedited_agreement"] == [1, 6] and m["brain_llm_cost_per_call_usd"] == 0.01
+
+
+@pytest.fixture(scope="module")
+def real_rules():
+    from gatorplate.config import Settings
+    from gatorplate.rules import Rules
+
+    return Rules.from_settings(Settings(env="test", llm_provider="fake"))
+
+
+def _persona(pid: str) -> dict:
+    return next(p for p in PERSONAS["personas"] if p["id"] == pid)
+
+
+def _heard(pid: str, **changes) -> dict:
+    from gatorplate.contracts.rules_io import Facts
+
+    facts = {**_persona(pid)["facts"], **changes}
+    return Facts.model_validate(facts).model_dump(mode="json")
+
+
+def test_a_yellow_line_must_name_the_slot_that_made_the_result_wrong(real_rules) -> None:
+    """Three wrong live calls rebuilt from their final cases; the old count called all three flagged because each had
+    an open yellow line. The dorm and parent-cash calls have lines only on unrelated slots: silent. The heating-bill
+    call's open line is the heating-bill assumption, and confirming that one slot with the student moves the estimate
+    to $285, within $50 of the true $306: flagged. A line on the slot that made a result wrong flags it."""
+    from tools import simulate_student as sim
+
+    def outcome(pid: str, heard: dict, case: dict) -> sim.Outcome:
+        persona = _persona(pid)
+        return sim.Outcome(pid, persona["lang"], "web", sim.truth_for(real_rules, persona), case=case,
+                           truth_facts=sim.persona_facts(persona), heard_facts=heard)
+
+    # heating bill persona: the brain heard "a parent pays all the rent" (the student said nobody does); the open
+    # line is the heating-bill assumption the question limit left over
+    heat = outcome("p03_heat_bill", _heard("p03_heat_bill", rent_paid_by_others_to_landlord="1100", utility="none",
+                                           household_food="alone"),
+                   {"tier": "likely", "reason_code": "likely", "estimate_monthly": 155,
+                    "estimate_range": {"lo": 155, "hi": 285, "settled": False},
+                    "yellow_lines": [{"code": "assumed.heat_cool", "slot": "heat_cool", "resolved": None}]})
+    # dorm persona: the meal plan was never asked; the open lines are about units and cash
+    dorm = outcome("p30_dorm_es", _heard("p30_dorm_es", meals_per_week=0, household_food="separate", units=None),
+                   {"tier": "likely", "reason_code": "likely", "estimate_monthly": 306,
+                    "estimate_range": {"lo": 306, "hi": 306, "settled": True},
+                    "yellow_lines": [{"code": "unclear.half_time", "slot": "half_time", "resolved": None},
+                                     {"code": "unclear.cash_on_hand", "slot": "cash_on_hand", "resolved": None}]})
+    # parent-cash persona: the parent's $300 a month was not heard
+    cash = outcome("p31_parent_cash_es", _heard("p31_parent_cash_es", incomes=[
+        {"amount": "1200", "freq": "monthly", "kind": "earned", "excluded": False, "label": ""}]),
+                   {"tier": "likely", "reason_code": "likely", "estimate_monthly": 241,
+                    "estimate_range": {"lo": 241, "hi": 294, "settled": False},
+                    "yellow_lines": [{"code": "unclear.half_time", "slot": "half_time", "resolved": None},
+                                     {"code": "assumed.other_utils", "slot": "other_utils", "resolved": None}]})
+    calls = [heat, dorm, cash]
+    scores = [sim.score(o, rules=real_rules) for o in calls]
+    assert [s["decisive_slots"] for s in scores] == [
+        ["heat_cool", "other_utils", "rent_paid_by_others_to_landlord"], ["dorm_meals_over_10", "meals_per_week"],
+        sorted(sim.FACT_SLOTS["incomes"])]
+    assert "household_food" in scores[0]["differing"], "a differing fact that changes nothing is not decisive"
+    m = sim.metrics(calls, None, rules=real_rules)
+    assert m["silent_errors"] == [2, 3] and m["silent_errors_any_line"] == [0, 3]
+    assert [s["silent"] for s in scores] == [False, True, True]
+    heat.case["yellow_lines"] = [{"code": "unclear.household_food", "slot": "household_food", "resolved": None}]
+    assert sim.score(heat, rules=real_rules)["silent"], "a line on a fact that changes nothing does not flag"
+    heat.case["yellow_lines"].append({"code": "unclear.rent_paid_by_others_to_landlord", "slot": None,
+                                      "resolved": None})
+    dorm.case["yellow_lines"].append({"code": "unclear.meals_per_week", "slot": "meals_per_week", "resolved": None})
+    assert sim.metrics(calls, None, rules=real_rules)["silent_errors"] == [1, 3]
+
+
+def test_fact_slots_cover_every_engine_fact() -> None:
+    from gatorplate.contracts.rules_io import Facts
+    from gatorplate.contracts.slots import SlotName
+    from tools import simulate_student as sim
+
+    assert set(sim.FACT_SLOTS) == set(Facts.model_fields) - {"lang", "apply_date", "status_route"}
+    names = {s.value for s in SlotName}
+    assert all(slot in names for slots in sim.FACT_SLOTS.values() for slot in slots)
 
 
 class _GoldenRules:
@@ -808,6 +930,240 @@ def test_simulate_student_truth_has_no_outlook_without_the_cash_question() -> No
 
     assert sim.truth_for(Rules(True), persona)["expedited"] == "no"
     assert sim.truth_for(Rules(False), persona)["expedited"] is None
+    # the engine's outlook stays available for a call that asked the cash question anyway (docs/SPEC.md §5.8)
+    assert sim.truth_for(Rules(False), persona)["expedited_if_asked"] == "no"
+
+
+def test_expedited_truth_follows_the_cash_question_and_maybe_is_counted_apart(real_rules) -> None:
+    """The call asks the cash question when the screen applies in any world still open (docs/SPEC.md §5.5, §5.8), so
+    a correct "no" after that question is an agreement even when the true world's screen is off; "maybe" is the
+    designed hedge and is counted on its own line, not as a disagreement."""
+    from tools import simulate_student as sim
+
+    hourly = sim.truth_for(real_rules, _persona("p14_hourly"))
+    assert hourly["expedited"] is None and hourly["expedited_if_asked"] == "no"
+    asked = [{"key": "ask.rent", "kind": "standard", "slots": ["rent_share"]},
+             {"key": "expedited.intro_cash", "kind": "standard", "slots": ["cash_on_hand"]}]
+
+    def call(truth: dict, outlook: str | None, questions: list[dict]) -> sim.Outcome:
+        return sim.Outcome("p", "en", "web", truth, case={"tier": truth["tier"], "estimate_monthly": truth["monthly"],
+                                                          "expedited_possible": outlook, "yellow_lines": [],
+                                                          "asked": questions})
+
+    no_after_cash = call(hourly, "no", asked)
+    maybe = call(sim.truth_for(real_rules, _persona("p17_grad_work_study")), "maybe", asked)
+    not_asked = call(hourly, None, asked[:1])
+    wrong = call(sim.truth_for(real_rules, _persona("p05_couch")), "no", asked)
+    m = sim.metrics([no_after_cash, maybe, not_asked, wrong], None, rules=real_rules)
+    assert m["expedited_agreement"] == [1, 2], "the correct 'no' agrees; the couch persona's 'no' does not"
+    assert m["expedited_maybe"] == [1, 3]
+    unknown_cash = dict(hourly, expedited_if_asked=None)
+    assert sim.expected_outlook(unknown_cash, no_after_cash.case) is None, "no truth when the cash is unknown"
+
+
+def test_scripted_personas_state_the_cash_their_facts_hold() -> None:
+    """A persona whose scripted answer gives its cash on hand carries that cash in its facts, so the expedited truth
+    and the call agree on what was said."""
+    for p in PERSONAS["personas"]:
+        if "expedited.intro_cash" in p["answers"]:
+            assert p["facts"]["cash_on_hand"] is not None, p["id"]
+
+
+# ------------------------------------------------------------------------------------------------ model-played students
+
+_FACT_WORDS = {
+    "en": {"parent": ("parent", "mom", "dad"), "shared": ("together",), "couch": ("couch",), "dorm": ("dorm",)},
+    "es": {"parent": ("papás", "mamá", "papá", "padres"), "shared": ("juntos",), "couch": ("sofá",),
+           "dorm": ("residencia",)},
+}
+_PERIODS = {"en": {"weekly": ("a week",), "biweekly": ("every two weeks",)},
+            "es": {"weekly": ("a la semana", "cada semana"), "biweekly": ("cada dos semanas",)}}
+
+
+def _story_numbers(story: str) -> set:
+    import re
+    from decimal import Decimal
+
+    plain = re.sub(r"(?<=\d),(?=\d{3}\b)", "", story)
+    return {Decimal(n) for n in re.findall(r"\d+(?:\.\d+)?", plain)}
+
+
+def test_every_persona_story_states_its_facts_in_plain_words() -> None:
+    """The model-played student gets each persona's story, not its facts: every amount with its own period, the
+    units, the age and the situations the rules route on are in it, in the persona's language."""
+    from decimal import Decimal
+
+    for p in PERSONAS["personas"]:
+        story, f, lang = p.get("story") or "", p["facts"], p["lang"]
+        assert story.strip(), p["id"]
+        numbers = _story_numbers(story)
+        assert f["age"] in numbers and (f["units"] is None or f["units"] in numbers), p["id"]
+        for name in ("rent_share", "rent_paid_by_others_to_landlord", "homeless_shelter_cost", "cash_on_hand"):
+            if f[name] is not None and Decimal(f[name]) > 0:
+                assert Decimal(f[name]) in numbers, (p["id"], name)
+        for income in f["incomes"]:
+            amount = Decimal(income["amount"])
+            label = [Decimal(x) for x in __import__("re").findall(r"\d+(?:\.\d+)?", income["label"])]
+            pair = next(((a, b) for a in label for b in label if a * b == amount), None)
+            assert amount in numbers or (pair and set(pair) <= numbers), (p["id"], income)
+            if income["freq"] in _PERIODS[lang]:
+                assert any(w in story for w in _PERIODS[lang][income["freq"]]), (p["id"], income["freq"])
+        words = _FACT_WORDS[lang]
+        if f["under22_with_parent"]:
+            assert any(w in story for w in words["parent"]), p["id"]
+        if f["household_food"] == "shared":
+            assert any(w in story for w in words["shared"]), p["id"]
+        if f["homeless"]:
+            assert any(w in story for w in words["couch"]), p["id"]
+        if f["dorm_on_campus"]:
+            assert any(w in story for w in words["dorm"]) and f["meals_per_week"] in numbers, p["id"]
+        if f["volunteered_status"]:
+            assert f["volunteered_status"] in story, p["id"]
+
+
+def test_the_model_student_gets_the_story_never_the_facts(monkeypatch) -> None:
+    from gatorplate.contracts.rules_io import Facts
+    from tools import simulate_student as sim
+
+    for p in PERSONAS["personas"]:
+        prompt = sim.student_system_prompt(p)
+        assert prompt.endswith(p["story"]) and "{" not in prompt, p["id"]
+        leaked = [name for name in Facts.model_fields if "_" in name and name in prompt]
+        assert leaked == [], (p["id"], leaked)
+        assert ("Spanish" if p["lang"] == "es" else "English") in prompt
+    assert "never convert an amount to another period" in sim.student_system_prompt(_persona("p32_biweekly_es"))
+    with pytest.raises(ValueError):
+        sim.student_system_prompt({**_persona("p01_maria"), "story": " "})
+    placeholder = "placeholder-not-a-key"  # never sent: the client is built, no request is made
+    student = sim.ModelStudent(_persona("p25_sofia"), model="m", api_key=placeholder,
+                               base_url="http://127.0.0.1:9", price_in=1.0, price_out=5.0)
+    assert student.system == sim.student_system_prompt(_persona("p25_sofia")) and "under22_with_parent" not in student.system
+
+
+def test_answers_of_what_was_said_rescore_a_run_without_a_call(real_rules, tmp_path: Path) -> None:
+    """A model-played student that departs from its persona is adjudicated: the report scores every metric against
+    the persona and against what was said, and --rescore applies an adjudication file to a finished run."""
+    from tools import simulate_student as sim
+
+    by_id = {p["id"]: p for p in PERSONAS["personas"]}
+    biweekly = _persona("p32_biweekly_es")
+    monthly_1800 = [{"amount": "1800", "freq": "monthly", "kind": "earned", "excluded": False, "label": ""}]
+    said = sim.truth_for(real_rules, biweekly, {"incomes": monthly_1800})
+    heard = _heard("p32_biweekly_es", incomes=monthly_1800)
+    o = sim.Outcome("p32_biweekly_es", "es", "web", sim.truth_for(real_rules, biweekly),
+                    case={"tier": "likely", "reason_code": "likely", "estimate_monthly": said["monthly"],
+                          "yellow_lines": [], "asked": []},
+                    truth_facts=sim.persona_facts(biweekly), heard_facts=heard)
+    adj = tmp_path / "adj.json"
+    adj.write_text(json.dumps({"adjudications": [{"persona": "p32_biweekly_es", "channel": "web",
+                                                  "said": {"incomes": monthly_1800},
+                                                  "note": "said a monthly amount"}]}), encoding="utf-8")
+    entries = sim.load_adjudications(adj, by_id)
+    assert sim.apply_adjudications([o], entries, by_id, real_rules) == 1
+    persona_view = sim.metrics([o], None, rules=real_rules)
+    said_view = sim.metrics([o], None, against="said", rules=real_rules)
+    assert persona_view["amount_exact"] == [0, 1] and persona_view["silent_errors"] == [1, 1]
+    assert said_view["amount_exact"] == [1, 1] and said_view["silent_errors"] == [0, 1]
+    assert said_view["student_departures"] == [1, 1]
+    bad = tmp_path / "bad.json"
+    bad.write_text(json.dumps([{"persona": "p32_biweekly_es", "said": {"pay": "1800"}}]), encoding="utf-8")
+    with pytest.raises(ValueError):
+        sim.load_adjudications(bad, by_id)
+
+    # --rescore: a finished run's JSON report, no client at all
+    report = {"started_at": "t", "base": "http://127.0.0.1:8006", "mode": "live", "order": "coverage",
+              "persona_ids": ["p32_biweekly_es"], "planned_calls": 1, "stopped_by_cap": False, "max_usd": 1.5,
+              "brain_llm": "anthropic", "skipped": {}, "student_cost_usd": 0.01,
+              "cost_usd": {"student": 0.01, "brain": 0.05, "total": 0.06, "per_call": 0.06},
+              "per_call": [{"outcome": dict(o.to_row())}]}
+    old = tmp_path / "eval-live.json"
+    old.write_text(json.dumps(report), encoding="utf-8")
+    out = tmp_path / "rescored.md"
+    assert sim.main(["--rescore", str(old), "--adjudicate", str(adj), "--report", str(out)], client=object(),
+                    rules=real_rules) == 0
+    text = out.read_text(encoding="utf-8")
+    assert "Rescored from eval-live.json with 1 adjudicated call(s)" in text
+    assert "Against what the students said" in text and "said a monthly amount" not in text
+    data = json.loads(out.with_suffix(".json").read_text(encoding="utf-8"))
+    assert data["metrics_said"]["all"]["silent_errors"] == [0, 1] and data["metrics"]["all"]["silent_errors"] == [1, 1]
+    report["per_call"] = [{"persona": "p32_biweekly_es"}]
+    old.write_text(json.dumps(report), encoding="utf-8")
+    assert sim.main(["--rescore", str(old), "--report", str(out)], client=object(), rules=real_rules) == 2
+
+
+# ------------------------------------------------------------------------------------------------ order, cap, record
+
+def test_coverage_order_reaches_both_languages_before_any_second_channel() -> None:
+    """A run stopped by the spending cap still covers both languages and as many personas as it can: every persona
+    once (web, languages interleaved, the smaller language first), then the phone calls."""
+    from tools import simulate_student as sim
+
+    personas = PERSONAS["personas"]
+    n_es = sum(1 for p in personas if p["lang"] == "es")
+    plan = sim.plan_calls(personas, {"web", "phone"}, "coverage")
+    assert len(plan) == len(sim.plan_calls(personas, {"web", "phone"}, "file"))
+    first = plan[: len(personas)]
+    assert {p["id"] for p, _ in first} == {p["id"] for p in personas} and {c for _, c in first} == {"web"}
+    assert [p["lang"] for p, _ in plan[: 2 * n_es]] == ["es", "en"] * n_es
+    capped = plan[:24]  # what a $1.5 cap allowed at the measured $0.061 per call
+    assert sum(1 for p, _ in capped if p["lang"] == "es") == n_es
+    assert all(c == "phone" for _, c in plan[len(personas):])
+    file_order = sim.plan_calls(personas, {"web", "phone"}, "file")
+    assert not any(p["lang"] == "es" for p, _ in file_order[:24]), "the file order reaches no Spanish persona"
+
+
+def test_a_live_run_never_starts_a_call_that_would_pass_the_cap(monkeypatch, tmp_path: Path) -> None:
+    """The cap stops the run before a call whose measured cost would push the spend over it, and the report keeps the
+    measured cost; the conversation record keeps every call for regression scripts."""
+    from tools import simulate_student as sim
+
+    class PricedStudent(sim.ScriptedStudent):
+        def __init__(self, persona, **kwargs) -> None:
+            super().__init__(json.loads(json.dumps(persona)))
+            self.cost_usd = 0.40
+
+    monkeypatch.setattr(sim, "ModelStudent", PricedStudent)
+    monkeypatch.setenv("GP_LLM_API_KEY", "placeholder-not-a-key")
+    app = create_stub_app(card_delivery="screen", debug_keys=True)
+    report = tmp_path / "eval.md"
+    with TestClient(app) as client:
+        code = sim.main(["--base", "http://127.0.0.1:8000", "--only", "p01_maria,p25_sofia", "--live",
+                         "--max-usd", "1.0", "--report", str(report)], client=client, rules=_GoldenRules())
+    assert code == 0
+    data = json.loads(report.with_suffix(".json").read_text(encoding="utf-8"))
+    assert data["calls"] == 2 and data["stopped_by_cap"] is True and data["cost_usd"]["total"] <= 1.0
+    assert [(c["persona"], c["channel"]) for c in data["per_call"]] == [("p01_maria", "web"), ("p25_sofia", "web")]
+    assert data["metrics"]["all"]["personas_reached"] == [2, 2]
+    text = report.read_text(encoding="utf-8")
+    assert "Measured cost of this run: student model $0.8000" in text and "the cap allows about 2 calls" in text
+    record = [json.loads(line) for line in report.with_suffix(".calls.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert [r["persona"] for r in record] == ["p01_maria", "p25_sofia"]
+    said = [e["event"]["text"] for e in record[0]["exchanges"] if (e.get("event") or {}).get("event") == "utterance"]
+    assert said[0] == "Yes, go ahead." and all("failed" in r for r in record)
+    assert "Yes, go ahead." not in text and "Yes, go ahead." not in report.with_suffix(".json").read_text("utf-8")
+
+
+def test_the_evaluation_reads_what_the_real_brain_understood(settings_test) -> None:
+    """Against the real wiring (fake language model, in process): the evaluator reads the final case as the case
+    contract and keeps the engine facts the brain built, so a wrong result can be traced to its slot."""
+    from gatorplate.rules import Rules
+    from tests.e2e import inprocess
+    from tools import simulate_student as sim
+
+    h = inprocess.build(settings_test.model_copy(update={"card_delivery": "screen"}), fixed_clock=False)
+    try:
+        rules = Rules.from_settings(settings_test)
+        report = Path(settings_test.db_path).with_name("eval.md")
+        code = sim.main(["--base", "http://testserver", "--only", "p01_maria", "--channels", "web", "--report",
+                         str(report)], client=h.client, rules=rules)
+    finally:
+        inprocess.close(h)
+    assert code == 0
+    data = json.loads(report.with_suffix(".json").read_text(encoding="utf-8"))
+    (row,) = data["per_call"]
+    assert row["outcome"]["heard_facts"] is not None and row["persona_vs_heard"] is not None
+    assert row["tier"] == "likely" and row["estimate_monthly"] == 306 and row["failed"] is False
+    assert data["metrics"]["all"]["no_slot_comparison"] == 0
 
 
 def test_remote_replay_without_a_secret_still_runs_unsigned_scenarios() -> None:
@@ -824,3 +1180,38 @@ def test_remote_replay_without_a_secret_still_runs_unsigned_scenarios() -> None:
     assert by_id["health"].status == "passed"
     assert by_id["maria_phone"].status == "skipped" and "gateway secret" in by_id["maria_phone"].skip_reason
     assert by_id["sofia_web_es"].status != "skipped", "web scenarios need no gateway secret"
+
+
+def test_a_port_left_in_time_wait_counts_as_free() -> None:
+    """The server closed a connection first, so the port sits in TIME_WAIT with nothing listening: the runner's
+    port check must call it free (the server binds with SO_REUSEADDR and would start)."""
+    import socket
+
+    listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    listener.bind(("127.0.0.1", 0))
+    listener.listen(1)
+    port = listener.getsockname()[1]
+    client = socket.create_connection(("127.0.0.1", port), timeout=1)
+    conn, _addr = listener.accept()
+    conn.close()  # the server side closes first: its end of the connection waits in TIME_WAIT
+    client.close()
+    listener.close()
+    assert not runner.port_in_use(port)
+
+
+def test_the_brain_cost_prices_prompt_cache_tokens_apart() -> None:
+    """/healthz counts cache reads and writes inside input_tokens and on their own: the evaluation prices reads at
+    0.1x and one-hour writes at 2x the input price, the rest at the full price (as tools/bench_llm.py does)."""
+    from tools import simulate_student as sim
+
+    before = {"calls": 0, "input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0,
+              "cache_creation_input_tokens": 0}
+    warm = {"calls": 10, "input_tokens": 50_000, "output_tokens": 850, "cache_read_input_tokens": 42_300,
+            "cache_creation_input_tokens": 4_700}
+    cost = sim._cost(before, warm, 1.0, 5.0)
+    plain = 50_000 - 42_300 - 4_700
+    assert abs(cost - (plain + 42_300 * 0.1 + 4_700 * 2.0 + 850 * 5.0) / 1_000_000) < 1e-12
+    # an older server without the cache keys: every input token at the full price
+    assert sim._cost({"input_tokens": 0, "output_tokens": 0}, {"input_tokens": 1000, "output_tokens": 10}, 1.0, 5.0) \
+        == (1000 + 50) / 1_000_000
