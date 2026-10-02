@@ -3,7 +3,8 @@
 GatorPlate is a student-built prototype that helps SF State students check whether they may get CalFresh, California's
 food benefit. A student talks to it on the phone or on the web (English and Spanish on the web). It asks only the
 questions that can change the answer, gives an estimate that the county decides, and hands the student a card with
-the next steps. The SF State CalFresh coordinator sees each conversation's answers in a console and checks them.
+the next steps. It is designed for a campus CalFresh coordinator, who would see each conversation's answers in a
+console; in this demo the console holds sample data and only our team sees it.
 
 It is not an official SF State, county or CalFresh service. GatorPlate never decides eligibility: every amount is an
 estimate, and the county makes the final decision.

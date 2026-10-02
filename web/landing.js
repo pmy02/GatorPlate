@@ -8,9 +8,9 @@ import { telHref } from "./shared/format.js";
 export const LANDING_STRINGS = {
   en: {
     title: "GatorPlate",
-    headline_phone: "Check CalFresh in a few minutes — by phone or in your browser.",
-    headline_web: "Check CalFresh in a few minutes in your browser.",
-    sub: "For SF State students. Free. Estimate only — the county decides.",
+    headline_phone: "Check the money you may be missing — by phone or in your browser.",
+    headline_web: "Check the money you may be missing — in your browser.",
+    sub: "SF State students: CalFresh pays one person up to $306 a month for groceries, and it can open more help. A few minutes. Free. Estimates only — each agency decides.",
     talk: "Talk in your browser",
     call: "Call {number}",
     phone_note: "",
@@ -19,7 +19,7 @@ export const LANDING_STRINGS = {
     "trust.label": "Privacy and limits",
     "trust.recorded": "Not recorded",
     "trust.ssn": "Never asks for your Social Security number or immigration status",
-    "trust.estimate": "Estimate only — the county decides",
+    "trust.estimate": "Estimates only — each agency decides",
     "more.label": "More about GatorPlate",
     prototype: "Student-built prototype — not an official SF State, county, or CalFresh service.",
     skip: "Skip to main content",
@@ -27,9 +27,9 @@ export const LANDING_STRINGS = {
   },
   es: {
     title: "GatorPlate",
-    headline_phone: "Consulta CalFresh en unos minutos, por teléfono o en tu navegador.",
-    headline_web: "Consulta CalFresh en unos minutos en tu navegador.",
-    sub: "Para estudiantes de SF State. Gratis. Solo es un estimado: el condado decide.",
+    headline_phone: "Revisa el dinero que quizá te falta reclamar, por teléfono o en tu navegador.",
+    headline_web: "Revisa el dinero que quizá te falta reclamar en tu navegador.",
+    sub: "Estudiantes de SF State: CalFresh da hasta $306 al mes a una persona para comida, y puede abrir más ayudas. Unos minutos. Gratis. Solo son estimados: cada agencia decide.",
     talk: "Habla en tu navegador",
     call: "Llama al {number}",
     phone_note: "La línea telefónica es solo en inglés.",
@@ -38,7 +38,7 @@ export const LANDING_STRINGS = {
     "trust.label": "Privacidad y límites",
     "trust.recorded": "No se graba",
     "trust.ssn": "Nunca te pide tu número de Seguro Social ni tu estatus migratorio",
-    "trust.estimate": "Solo es un estimado: el condado decide",
+    "trust.estimate": "Solo son estimados: cada agencia decide",
     "more.label": "Más sobre GatorPlate",
     prototype: "Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh.",
     skip: "Ir al contenido",
@@ -50,6 +50,19 @@ export function resolveLang(search = "", navLang = "") {
   const q = new URLSearchParams(search).get("lang");
   if (q === "en" || q === "es") return q;
   return String(navLang || "").toLowerCase().startsWith("es") ? "es" : "en";
+}
+
+// The headline as display lines: the hook (up to "—" or the first comma), then the channel part, so a break never
+// splits "you may be / missing". No-break spaces keep the dash on the hook's line (no line starts with "—") and the
+// channel's last three words together ("by phone or / in your browser", never "… or in / your browser"). Only spaces
+// change; the words are the strings above.
+export function headlineParts(text) {
+  const t = String(text).replace(/ —/g, "\u00a0—");
+  const m = t.match(/^(.*?(?:\u00a0—|,))\s+(\S.*)$/);
+  if (!m) return [t];
+  const words = m[2].split(" ");
+  const tail = words.length > 3 ? words.splice(-3).join("\u00a0") : null;
+  return [m[1], tail ? [...words, tail].join(" ") : m[2]];
 }
 
 // Everything the page shows, from PublicInfo (or null when it could not be loaded) and the language.
@@ -90,7 +103,13 @@ function paint() {
   for (const b of document.querySelectorAll(".langswitch__btn")) {
     b.setAttribute("aria-pressed", String(b.dataset.lang === v.lang));
   }
-  $("headline").textContent = v.headline;
+  const lines = headlineParts(v.headline).map((part) => {
+    const span = document.createElement("span");
+    span.className = "hero__line";
+    span.textContent = part;
+    return span;
+  });
+  $("headline").replaceChildren(...lines.flatMap((span, i) => (i ? [" ", span] : [span])));
   $("talk-link").setAttribute("href", v.talkHref);
   $("about-link").setAttribute("href", v.aboutHref);
   $("console-link").setAttribute("href", v.consoleHref);

@@ -883,8 +883,10 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
 - Groups: `color` (surfaces, text, action, brand, tiers, yellow line, system errors) · `font` · `type` · `space`
   (4 px grid) · `radius` · `shadow` · `motion` · `effect` (colors derived with `color-mix`: the live-dot ring and the
   dialog scrim) · `size` · `print`.
-- Color roles: warm neutral surfaces; blue primary for actions and live state; orange brand for the logo and large
-  accents only; green, amber and teal for the three result tiers; yellow for lines a person must check; red only for
+- Color roles (2026-10-02 *paper, ink and persimmon*): warm paper surfaces (bg #FAF9F6, sunken #F2F0EA, sunken-2
+  #E9E6DE for a hovered sunken control); ink-blue primary (#2142A8, the ballpoint that fills a paper form) for actions
+  and live state; persimmon brand for the logo and large accents only, with `brand-wash` (#FFF3EC) as the only brand
+  fill (the landing panel, the *Why SF State* fact, the console role pill); green, amber and teal for the three result tiers; yellow for lines a person must check; red only for
   system errors (never for a student's result, never for a deadline).
 - `python3 tools/check_contrast.py` must pass. It checks: every allowed text/background pair; token coverage; CSS
   equal to JSON; light theme only (`color-scheme: only light`, no `prefers-color-scheme` anywhere under `web/`, the
@@ -893,18 +895,20 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
   the icon sprite parses and every `icons.svg#id` reference exists; and CSP-safe HTML and CSS (no inline styles,
   scripts or handlers, no `@import`, nothing loaded from another site).
 
-### A6.2 Contrast (WCAG 2.2 formula, computed 2026-10-01, truncated to 2 decimals; the full list is in `tokens.json`)
+### A6.2 Contrast (WCAG 2.2 formula, computed 2026-10-02, truncated to 2 decimals; the full list of 74 pairs is in `tokens.json`)
 
 | Pair | Ratio | Needs |
 |---|---|---|
-| text on surface · text on page | 17.21 · 15.91 | 4.5 |
-| text-2 on surface · text-3 on surface · text-3 on page · text-3 on sunken | 9.12 · 5.90 · 5.46 · 5.13 | 4.5 |
-| white on primary · primary on surface · primary on primary-tint | 6.67 · 6.67 · 5.79 | 4.5 |
+| text on surface · text on page · text on sunken-2 | 17.75 · 16.86 · 14.23 | 4.5 |
+| text-2 on surface · text-3 on surface · text-3 on page · text-3 on sunken | 9.14 · 6.11 · 5.80 · 5.36 | 4.5 |
+| white on primary · primary on surface · primary on primary-tint | 8.71 · 8.71 · 7.70 | 4.5 |
 | likely · coordinator · other · yellow · error ink on their backgrounds | 6.17 · 6.03 · 6.10 · 7.86 · 6.26 | 4.5 |
 | brand-ink on surface · brand on surface (large text and logo only) | 5.85 · 3.78 | 4.5 · 3 |
+| inside brand-wash: text · text-2 · brand-ink · primary · brand (large) | 16.30 · 8.39 · 5.37 · 8.00 · 3.47 | 4.5 · 3 |
+| err-ink on sunken · on sunken-2 (Delete pill) | 6.46 · 5.90 | 4.5 |
 | line colors on surface (likely · coordinator · other · yellow · error) | 4.05 · 3.45 · 4.07 · 3.68 · 4.71 | 3 |
-| border-strong on surface · on page · on sunken | 3.47 · 3.21 · 3.02 | 3 |
-| inside tinted panels: primary on yl-bg · border-strong on yl-bg · focus on yl-bg · focus on primary-tint · coord-line on coord-bg | 6.13 · 3.19 · 6.13 · 5.79 · 3.06 | 4.5 · 3 · 3 · 3 · 3 |
+| border-strong on surface · on page · on sunken | 3.45 · 3.27 · 3.02 | 3 |
+| inside tinted panels: primary on yl-bg · border-strong on yl-bg · focus on yl-bg · focus on primary-tint · coord-line on coord-bg | 8.01 · 3.17 · 8.01 · 7.70 · 3.06 | 4.5 · 3 · 3 · 3 · 3 |
 
 ### A6.3 Typeface
 
@@ -928,34 +932,41 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
   checks this.
 - **Numbers and codes:** amounts, times, countdowns **and case codes** use the text font's tabular figures (`.num`
   and `.code` apply `font-variant-numeric: var(--gp-num)`; the font has the `tnum` feature). Case codes (`.code`) stay
-  in `--gp-font` (upright) with `letter-spacing: var(--gp-tracking-code)` (0.04em). The code generator avoids the
+  in `--gp-font` (upright) with `letter-spacing: var(--gp-tracking-code)` (0.06em). The font has no unslashed zero
+  (features: ccmp, frac, locl, pnum, tnum only), so large amounts are set at 600, never 800, to keep the slash clean. The code generator avoids the
   look-alike characters `0`, `O`, `1` and `I` (codes keep matching `^[A-Z0-9]{3}-[A-Z0-9]{3}$`).
 
 ### A6.4 Type usage
 
+Hierarchy comes from size and space, not weight (2026-10-02): headings 500 with negative tracking, card and section
+titles 600, body 400, nothing at 800.
+
 | Token | Size / weight | Use |
 |---|---|---|
-| `fs-display` | 56 / 800, tabular | console estimate (summary band, Live view) |
-| `fs-hero` | 44 / 800, tabular | card amounts (the hero and the unlocked total) |
-| `fs-h1` | 28 / 700 | card hero sentence, page titles |
-| `fs-talk` | 26 / 600 | talk page current line |
-| `fs-card-h2` | 22 / 700 | card section titles |
-| `fs-h2` | 20 / 700 | console section titles |
+| `fs-hero-title` | clamp 36–56 / 500, `lh-display` 1.06, `tracking-display` −0.025em | landing headline |
+| `fs-title` | clamp 32–44 / 500, −0.025em | page titles (talk intro, about), Live view replay turn |
+| `fs-display` | 56 / 600, −0.035em, tabular | console estimate (summary band, Live view) |
+| `fs-hero` | clamp 48–56 / 600, −0.035em, tabular | card amount, on its own line inside the hero sentence |
+| `fs-h1` | 28 / 500, `tracking-tight` −0.015em | card hero sentence without an amount, console case title, /go title |
+| `fs-talk` | 28 / 500, line height 1.3 | talk page current line |
+| `fs-card-h2` | 22 / 600 (card sections) · 22 / 500 (hero sentence around the amount) | card section titles |
+| `fs-lead` | 20 / 400, text-2 | landing, about and talk intro lead |
+| `fs-h2` | 20 / 600 | console section titles |
 | `fs-transcript` | 20 / 400 | live transcript in Presenter mode |
 | `fs-body-l` | 18 / 400 | card and talk body; live transcript |
-| `fs-h3` | 17 / 700 | yellow line reasons |
+| `fs-h3` | 17 / 600 | yellow line reasons |
 | `fs-body` | 16 / 400 | console body |
-| `fs-small` | 14 / 400–600 | console meta and chips; card legal footer only |
-| `fs-label` | 13 / 700, upper case, +0.04em | panel labels (*ESTIMATE SO FAR*) only |
+| `fs-small` | 14 / 400–500 | console meta and chips; card legal footer only |
+| `fs-label` | 13 / 600, upper case, +0.06em | panel labels (*ESTIMATE SO FAR*) only |
 
 Never below 13 px anywhere; card text at least 16 px except the legal footer (14 px); Presenter mode at least 15 px.
-Line height 1.5 for text, 1.15 for display numbers.
+Line height 1.5 for text, 1.2 for headings, 1.0–1.06 for display numbers and the landing headline.
 
 ### A6.5 Components
 
 | Component | Spec |
 |---|---|
-| Button | Min height 48 px (`--gp-tap`; console 40 px `--gp-tap-console`), radius `--gp-r-md`, 16 px horizontal padding, weight 600, icon + label. Primary: `--gp-primary` with `--gp-on-primary` text, hover `--gp-primary-hover`. Secondary: surface with a 1 px `--gp-border-strong` border. Quiet: text only in `--gp-primary`. Locked: sunken, `--gp-text-2`, `i-lock`, visible reason, `aria-disabled`. Danger (*Delete*): secondary style with `--gp-err-ink` text, never a red fill. |
+| Button | Pill (`--gp-r-pill`). Min height 48 px (`--gp-tap`; big 56 `--gp-tap-l`; console 40 `--gp-tap-console`), 20 px horizontal padding (console 16, big 32), weight 500, icon + label; pressed scales to 0.98. Primary: `--gp-primary` with `--gp-on-primary` text, hover `--gp-primary-hover`. Secondary: a `--gp-sunken` fill and no line, hover `--gp-sunken-2`. Quiet: text only in `--gp-primary`, hover primary-tint. Locked: no fill, 1 px dashed `--gp-border-strong`, `--gp-text-2`, `i-lock`, visible reason, `aria-disabled`. Danger (*Delete*): secondary style with `--gp-err-ink` text, never a red fill. |
 | Tier chip | Pill, 28 px, icon + text: *Likely* (`i-check-circle`, likely colors) · *Coordinator check* (`i-person`, coordinator colors) · *Other help* (`i-heart-hand`, other colors). |
 | Reason chip | Pill, 28 px. Outcome-changing: `--gp-primary-tint` with `--gp-primary` text and a `$` badge (`--gp-primary` circle, `--gp-on-primary` text). Routine: sunken with `--gp-text-2`. Not asked: surface with a 1 px dashed `--gp-border-strong` border and `--gp-text-2`. Never asked: sunken, `--gp-text-2`, `i-lock`. |
 | Count badge | *1 to check*: `--gp-yl-bg`, `--gp-yl-ink`, `i-alert-circle`. None open: `i-check` in `--gp-likely-ink`. |
@@ -963,14 +974,14 @@ Line height 1.5 for text, 1.15 for display numbers.
 | Answer row | Min 44 px; label (`--gp-text-2`) · value (`--gp-text`, 600, tabular) · state icon · quote (`--gp-text-2`, italic, one line, full text on hover and focus) · source icon. |
 | Transcript bubble | Max 85% wide; radius 14 with the speaker's corner 4; GatorPlate = sunken, student = primary-tint; padding 12/16; 13 px upper-case label. |
 | Range bar | Track 12 px, sunken, pill; band `--gp-primary`; end labels 14 px tabular; settled = 4 px tick + count-up. |
-| Unlocked bar (card) | Track 12 px (`--gp-range-h`), sunken, pill, full width. One segment per `segments[]` entry in the order sent, width = its value ÷ `found_display` (set from JS with `style.setProperty('--w', …)`), 2 px gaps. The CalFresh segment is `--gp-brand` (the brand accent, a large accent); the others `--gp-likely-line`. A segment whose program is marked *I applied* is solid; the others are drawn at 35 % opacity (no color literal), so the solid part always equals `claimed_display`. `aria-hidden="true"`: the total and the claimed line next to it carry the values. Printed as text only (A4.5). |
+| Unlocked bar (card) | Track 10 px, sunken, pill, full width. One segment per `segments[]` entry in the order sent, width = its value ÷ `found_display` (set from JS with `style.setProperty('--w', …)`), 2 px gaps. A segment not yet marked *I applied* is the neutral `--gp-border` (at 0 % the bar reads as an empty track, never as a warning); marked *I applied* it turns solid: the CalFresh segment `--gp-brand` (a large accent), the others `--gp-likely-line`; so the colored part always equals `claimed_display`. `aria-hidden="true"`: the total and the claimed line next to it carry the values. Printed as text only (A4.5). |
 | Live dot | 10 px `--gp-live`, pulse ring every 1.6 s (`--gp-live-ring`). |
 | Toast | Console bottom-left, phones top; surface + `--gp-sh-3`; 4 s; `role="status"`. |
-| Card section | Surface, radius `--gp-r-lg`, `--gp-sh-1`, padding 20 (phones 16), 12 px gap. Tones: default = surface; accent = `--gp-primary-tint` with a 4 px `--gp-primary` left edge; warning = `--gp-coord-bg` with a `--gp-coord-line` edge; muted = sunken. |
+| Card section | Surface, radius `--gp-r-lg` (20), `--gp-sh-1` (a hairline ring, no visible drop), padding 24 (phones 20), 12 px gap. Tones are fills, not edges: default = surface; accent = `--gp-primary-tint`; warning = `--gp-coord-bg`; muted = sunken. *Do this today* shows its first sentence, then its button, then the details (CSS order only). |
 | Banner | Full width. System error: `--gp-err-bg`, `--gp-err-ink`, `i-alert-triangle`. Card review banner: `--gp-likely-bg`, `--gp-likely-ink`, `i-check-circle`. |
 | Dialog | Surface, radius `--gp-r-xl`, `--gp-sh-3`, backdrop `--gp-scrim`; focus trapped; `Esc` closes. |
-| Segmented control | Language switch and list segments: buttons with `aria-pressed`; selected = `--gp-primary-tint` with `--gp-primary` text. |
-| Input | 48 px (console 40), 1 px `--gp-border-strong`, radius `--gp-r-md`, label above, error text `--gp-err-ink` with an icon. |
+| Segmented control | Language switch and list segments: a sunken pill track (4 px inset) holding pill buttons with `aria-pressed`; selected = a surface pill with `--gp-sh-1` and `--gp-text`, the others `--gp-text-2`. |
+| Input | 48 px (console 40), 1 px `--gp-border-strong`, radius `--gp-r-md` (12), 16 px padding, label above (500), error text `--gp-err-ink` with an icon. The talk composer is one pill holding the field and the send button; its ring turns 2 px `--gp-focus` on focus (one ring, not two). The /go code field is 80 px, centered, 28 px, +0.2em tracking. |
 | QR panel | White panel, QR at 260 px with at least 24 px white margin (quiet zone at least 4 modules), caption *Student card — scan with your phone camera*, case code below. |
 
 ### A6.6 Icons (`web/shared/icons.svg`)
@@ -1009,7 +1020,7 @@ button (and a tooltip).
 
 `gp-logo` (in the sprite, on its own 32 px grid): a plate with a voice wave, drawn in `currentColor`. Color it with a
 class (`.logo { color: var(--gp-brand); }`), never an inline style (CSP). Wordmark: *GatorPlate* in the UI font at
-800, `--gp-text`. The logo is never combined with SF State, CalFresh or county marks.
+700, −0.01em, `--gp-text`. The logo is never combined with SF State, CalFresh or county marks.
 
 ### A6.8 Motion
 
@@ -1075,12 +1086,15 @@ spaces ignored) sends `POST /api/card/lookup` `{"code": "481206"}`, then the pag
 
 ### A7.2 `/` (landing)
 
-One screen, English and Spanish: headline *Check CalFresh in a few minutes — by phone or in your browser.* (without a
-demo number: *Check CalFresh in a few minutes in your browser.*) · *For SF State students. Free. Estimate only — the
-county decides.* · the demo phone number (`demo_phone_display` from `GET /api/public/info`, only when set) · *Talk in
-your browser* (`/talk`, EN/ES) · *How it works and responsible AI* (`/about`) · *For coordinators* (`/console`) · trust
-row *Not recorded · Never asks for your Social Security number or immigration status · Estimate only — the county
-decides* · the prototype line.
+One screen, English and Spanish: headline *Check the money you may be missing — by phone or in your browser.* (without a
+demo number: *Check the money you may be missing — in your browser.*) · *SF State students: CalFresh pays one person up
+to $306 a month for groceries, and it can open more help. A few minutes. Free. Estimates only — each agency decides.* ·
+the demo phone number (`demo_phone_display` from `GET /api/public/info`, only when set) · *Talk in your browser*
+(`/talk`, EN/ES) · *How it works and responsible AI* (`/about`) · *For coordinators* (`/console`) · trust row *Not
+recorded · Never asks for your Social Security number or immigration status · Estimates only — each agency decides* ·
+the prototype line. The headline shows in two parts, the hook up to the dash (Spanish: the comma) and then the channel,
+each balanced on its own lines, with no-break spaces before the dash and inside the channel's last three words; on
+phones (under 48em) it uses `fs-title`.
 
 ### A7.3 `/about` (how it works; facts to use exactly)
 

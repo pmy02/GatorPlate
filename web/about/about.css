@@ -1,38 +1,48 @@
-/* About page (docs/UI_SPEC.md A7.3). Links after /landing.css (shared top bar and footer). Light only; tokens only. */
+/* About page (docs/UI_SPEC.md A7.3). Links after /landing.css (shared top bar and footer). Light only; tokens only.
+   Desktop: an editorial two-column page, section titles on the left; phones: one column. */
 
-.about__talk { min-height: var(--gp-tap); font-size: var(--gp-fs-body); }
+.about__talk { min-height: var(--gp-tap); padding-inline: var(--gp-s4); font-size: var(--gp-fs-body); }
 
 .about {
   flex: 1 0 auto;
-  width: min(100%, 44rem);
+  width: min(100%, calc(var(--gp-page-max) + 2 * var(--gp-s9)));
   margin-inline: auto;
-  padding: var(--gp-s7) var(--gp-s4) var(--gp-s9);
+  padding: var(--gp-s10) var(--gp-s9) var(--gp-s12);
 }
 .about:focus { outline: none; }
-.about p + p { margin-top: var(--gp-s3); }
+.about p + p { margin-top: var(--gp-s4); }
 
-.about__head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s3); padding-bottom: var(--gp-s6); border-bottom: 1px solid var(--gp-border); }
-.about__head h1 { font-size: var(--gp-fs-h1); font-weight: var(--gp-fw-heavy); text-wrap: balance; }
-.about__lead { color: var(--gp-text-2); font-size: var(--gp-fs-body-l); }
+.about__head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s5); max-width: 50rem; padding-bottom: var(--gp-s11); }
+.about__head h1 { font-size: var(--gp-fs-title); line-height: var(--gp-lh-display); letter-spacing: var(--gp-tracking-display);
+  text-wrap: balance; }
+.about__lead { max-width: 40em; color: var(--gp-text-2); font-size: var(--gp-fs-lead); line-height: 1.5; }
 
 /* minmax(0, 1fr): a long word at 200 % text wraps inside its column instead of widening the page. */
-.about__section { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s4); padding-top: var(--gp-s7); }
+.about__section { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gp-s4); padding-block: var(--gp-s9);
+  border-top: 1px solid var(--gp-border); }
 .about__section h2 { font-size: var(--gp-fs-card-h2); text-wrap: balance; scroll-margin-top: var(--gp-s6); }
 .about__section > p, .limits { max-width: var(--gp-text-max); }
+@media (min-width: 64em) {
+  .about__section { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 0 var(--gp-s12); }
+  .about__section > :not(h2) + :not(h2) { margin-top: var(--gp-s4); }
+  .about__section > h2 { grid-column: 1; grid-row: 1 / span 20; align-self: start; position: sticky; top: var(--gp-s6);
+    max-width: 14em; }
+  .about__section > :not(h2) { grid-column: 2; }
+}
 
-/* The model listens, rules decide, a person confirms. */
-.steps { display: grid; gap: var(--gp-s3); margin: 0; padding: 0; list-style: none; }
+/* The model listens, rules decide, a person confirms: three steps on one sunken panel. */
+.about .steps { display: grid; gap: var(--gp-s2); margin: var(--gp-s2) 0; padding: var(--gp-s2); list-style: none;
+  border-radius: var(--gp-r-xl); background: var(--gp-sunken); counter-reset: step; }
 .steps__item {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: var(--gp-s4);
   align-items: start;
-  padding: var(--gp-s5);
+  padding: var(--gp-s5) var(--gp-s6);
   border-radius: var(--gp-r-lg);
   background: var(--gp-surface);
-  box-shadow: var(--gp-sh-1);
 }
-.steps__item h3 { margin-bottom: var(--gp-s1); font-size: var(--gp-fs-body-l); }
+.steps__item h3 { margin-bottom: var(--gp-s1); font-size: var(--gp-fs-body-l); font-weight: var(--gp-fw-medium); }
 .steps__item p { color: var(--gp-text-2); font-size: var(--gp-fs-body); }
 .steps__icon {
   box-sizing: content-box;
@@ -47,33 +57,45 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gp-s2);
-  min-height: var(--gp-chip);
-  padding: var(--gp-s1) var(--gp-s3);
+  min-height: var(--gp-s9);
+  padding: 0 var(--gp-s4) 0 var(--gp-s3);
   border-radius: var(--gp-r-pill);
-  background: var(--gp-sunken);
+  background: var(--gp-surface);
+  box-shadow: var(--gp-sh-1);
   font-size: var(--gp-fs-body);
-  font-weight: var(--gp-fw-semibold);
+  font-weight: var(--gp-fw-medium);
 }
-.kept .icon { color: var(--gp-primary); }
+.kept .icon { width: var(--gp-icon); height: var(--gp-icon); color: var(--gp-primary); }
 
-/* Facts with their source and date. */
+/* Facts with their source and date: a quiet quote, a hairline, then the source. */
 .fact {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--gp-s2);
+  gap: var(--gp-s3);
   margin: 0;
-  padding: var(--gp-s4) var(--gp-s5);
-  border-left: 4px solid var(--gp-primary);
-  border-radius: var(--gp-r-md);
-  background: var(--gp-surface);
-  box-shadow: var(--gp-sh-1);
+  padding: var(--gp-s5) 0 var(--gp-s2);
 }
+.fact + .fact { border-top: 1px solid var(--gp-border); }
 .fact__text { font-size: var(--gp-fs-body-l); }
-.fact--lead .fact__text { font-size: var(--gp-fs-h2); font-weight: var(--gp-fw-semibold); line-height: var(--gp-lh); }
-.fact__source { color: var(--gp-text-2); font-size: var(--gp-fs-body); }
+.fact--lead { padding: var(--gp-s7); border-radius: var(--gp-r-xl); background: var(--gp-brand-wash); }
+.fact--lead .fact__text { font-size: var(--gp-fs-card-h2); font-weight: var(--gp-fw-medium); line-height: 1.4;
+  letter-spacing: -0.01em; }
+.fact--lead + .fact { border-top: 0; }
+.fact__source { color: var(--gp-text-2); font-size: var(--gp-fs-small); }
 
-.limits { display: grid; gap: var(--gp-s2); margin: 0; padding-left: var(--gp-s5); }
-.limits li::marker { color: var(--gp-text-2); }
+.limits { display: grid; gap: var(--gp-s3); margin: 0; padding-left: var(--gp-s5); }
+.limits li::marker { color: var(--gp-text-3); }
+
+@media (max-width: 47.99em) {
+  /* One top row on phones: the mark and the button fit side by side once the button drops its icon. */
+  .about-page .topbar__inner { flex-wrap: nowrap; }
+  .about__talk .icon { display: none; }
+  .about { padding: var(--gp-s7) var(--gp-s5) var(--gp-s10); }
+  .about__head { padding-bottom: var(--gp-s8); }
+  .about__section { padding-block: var(--gp-s8); }
+  .steps__item { padding: var(--gp-s4); }
+  .fact--lead { padding: var(--gp-s5); }
+}
 
 @media print {
   .about__talk { display: none !important; }

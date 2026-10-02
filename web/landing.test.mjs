@@ -4,7 +4,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-import { LANDING_STRINGS, landingView, resolveLang } from "./landing.js";
+import { LANDING_STRINGS, headlineParts, landingView, resolveLang } from "./landing.js";
 import { STRINGS } from "./talk/strings.js";
 
 // The names only the web disclosure may use (the capitalized words inside the talk page's privacy parentheses).
@@ -17,7 +17,7 @@ const info = (demo) => ({ demo_phone_display: demo, rules_label: "CalFresh FY202
 test("without a demo number: the browser-only headline and no phone button", () => {
   for (const missing of [null, "", "   ", undefined]) {
     const v = landingView(info(missing), "en");
-    assert.equal(v.headline, "Check CalFresh in a few minutes in your browser.");
+    assert.equal(v.headline, "Check the money you may be missing — in your browser.");
     assert.equal(v.phone, null);
   }
   assert.equal(landingView(null, "en").phone, null);
@@ -25,13 +25,29 @@ test("without a demo number: the browser-only headline and no phone button", () 
 
 test("with a demo number: the phone headline and a call link", () => {
   const v = landingView(info("(415) 338-1203"), "en");
-  assert.equal(v.headline, "Check CalFresh in a few minutes — by phone or in your browser.");
+  assert.equal(v.headline, "Check the money you may be missing — by phone or in your browser.");
   assert.equal(v.phone.text, "Call (415) 338-1203");
   assert.equal(v.phone.href, "tel:+14153381203");
   const es = landingView(info("(415) 338-1203"), "es");
   assert.equal(es.phone.text, "Llama al (415) 338-1203");
   assert.equal(es.phone.note, "La línea telefónica es solo en inglés.");
   assert.equal(landingView(info("DEMO LINE"), "en").phone.href, null);
+});
+
+test("headline lines: hook, then channel; the dash stays on the hook's line; nothing is lost", () => {
+  const nb = "\u00a0";
+  assert.deepEqual(headlineParts(LANDING_STRINGS.en.headline_phone),
+    [`Check the money you may be missing${nb}—`, `by phone or in${nb}your${nb}browser.`]);
+  assert.deepEqual(headlineParts(LANDING_STRINGS.en.headline_web), [`Check the money you may be missing${nb}—`, "in your browser."]);
+  assert.deepEqual(headlineParts(LANDING_STRINGS.es.headline_phone),
+    ["Revisa el dinero que quizá te falta reclamar,", `por teléfono o en${nb}tu${nb}navegador.`]);
+  assert.deepEqual(headlineParts("One line only."), ["One line only."]);
+  for (const lang of ["en", "es"]) {
+    for (const k of ["headline_phone", "headline_web"]) {
+      const text = LANDING_STRINGS[lang][k];
+      assert.equal(headlineParts(text).join(" ").replaceAll(nb, " "), text);
+    }
+  }
 });
 
 test("the A7.2 English wording is used word for word", () => {
