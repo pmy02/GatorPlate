@@ -1,6 +1,6 @@
 /* Landing page (docs/UI_SPEC.md A7.2) and the shared chrome of the small public pages (the about page links this
    file too). The landing's first screen (top bar + hero) is one dark stage: the body paints the graphite falloff and
-   the .dark.stage parts only re-point the role tokens. Below it, five pitch sections alternate paper and dark; the
+   the .dark.stage parts only re-point the role tokens. Below it, six pitch sections alternate paper and dark; the
    about page stays on paper. Every color, font, radius and duration is a var(--gp-*) token; role tokens (text,
    text-2, border) re-point inside .dark. */
 
@@ -203,7 +203,7 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
 }
 
 /* ------------------------------------------------------------------------------------------- pitch sections */
-/* Five sections under the first screen, one idea each (A7.2). Paper ones paint var(--gp-bg); .dark ones keep the
+/* Six sections under the first screen, one idea each (A7.2). Paper ones paint var(--gp-bg); .dark ones keep the
    graphite falloff from base.css. Same 12 columns as the hero. */
 .pitch {
   display: grid;
@@ -278,8 +278,8 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
 .split__total { margin-bottom: var(--gp-s3); font-weight: var(--gp-fw-semibold); }
 .split__bar, .split__keys { display: flex; gap: var(--gp-s1); }
 .split__bar { height: var(--gp-s7); }
-.split__have, .split__key--have { flex: 2518 1 0; }   /* ≈2,520 already receive it */
-.split__miss, .split__key--miss { flex: 3293 1 0; }   /* ≈3,290 not yet */
+.split__have, .split__key--have { flex: 2577 1 0; }   /* ≈2,580 already receive it */
+.split__miss, .split__key--miss { flex: 3452 1 0; }   /* ≈3,450 not yet */
 .split__have { border-radius: var(--gp-r-xs) 0 0 var(--gp-r-xs); background: var(--gp-text-3); }
 .split__miss { border: 1.5px solid var(--gp-text); border-radius: 0 var(--gp-r-xs) var(--gp-r-xs) 0; background: var(--gp-accent); }
 .split__keys { margin-top: var(--gp-s3); }
@@ -299,21 +299,86 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
 .fine__src li + li { margin-top: var(--gp-s1); }
 .pitch > .fine__method { grid-column: 1 / 9; margin-top: var(--gp-s8); }
 
-/* 02 How it works: three steps under big thin numerals. */
-.steps3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gp-s7); margin-top: var(--gp-s11); }
-.step3 { padding-top: var(--gp-s5); border-top: 1.5px solid var(--gp-text); }
-.step3__no { display: block; margin-bottom: var(--gp-s6); font-size: var(--gp-fs-hero); font-weight: var(--gp-fw-thin);
-  letter-spacing: var(--gp-tracking-num); line-height: 0.8; }
-.step3 h3, .care h3 { margin-bottom: var(--gp-s3); font-size: var(--gp-fs-h1); line-height: var(--gp-lh-tight);
-  letter-spacing: -0.02em; }
-.step3 p, .care p { color: var(--gp-text-2); font-size: var(--gp-fs-body-l); text-wrap: pretty; }
-
-/* 03 Responsible: four promises; the one yellow is the sample "To check" line. */
-.cares { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gp-s9) var(--gp-s7); margin-top: var(--gp-s10); }
-.care { padding-top: var(--gp-s5); border-top: 1px solid var(--gp-border-strong); }
-.care__icon { margin-bottom: var(--gp-s4); color: var(--gp-accent); }
-.care h3 { max-width: 20em; }
-.care .yl-line {
+/* 02 How it works: the pipeline, seven numbered steps on one rail. The two AI steps sit on the single accent (the
+   legend's swatch); code, people and the student stay paper. Desktop: number | chip + title | what happens. */
+.flow__legend { display: flex; align-items: center; gap: var(--gp-s3); margin-top: var(--gp-s9); color: var(--gp-text-2);
+  font-size: var(--gp-fs-small); font-weight: var(--gp-fw-medium); }
+.flow__swatch { width: var(--gp-s6); height: var(--gp-s4); border: 1.5px solid var(--gp-text); border-radius: var(--gp-r-xs);
+  background: var(--gp-accent); }
+.flow { margin: var(--gp-s5) 0 0; padding: 0; list-style: none; }
+/* Desktop: the whole pipeline at a glance, left to right, before the detailed steps (hidden from assistive tech: the
+   list below says the same). */
+.strip { display: none; }
+@media (min-width: 64em) {
+  .strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--gp-s2); margin: var(--gp-s5) 0 0;
+    padding: 0; list-style: none; }
+  .strip__step { display: flex; flex-direction: column; gap: var(--gp-s2); min-height: 100%; padding: var(--gp-s4);
+    border: 1px solid var(--gp-border-strong); border-radius: var(--gp-r-lg); }
+  .strip__no { display: grid; place-items: center; width: var(--gp-s8); height: var(--gp-s8); border: 1.5px solid var(--gp-text);
+    border-radius: 50%; font-size: var(--gp-fs-body); font-weight: var(--gp-fw-semibold); }
+  .strip__chip { color: var(--gp-text-2); font-size: var(--gp-fs-label); font-weight: var(--gp-fw-semibold); letter-spacing: 0.02em; }
+  .strip__h { font-size: var(--gp-fs-body-l); font-weight: var(--gp-fw-bold); line-height: var(--gp-lh-heading); text-wrap: balance; }
+  .strip__step--ai { border-color: var(--gp-text); background: var(--gp-accent); }
+  .strip__step--ai .strip__no { background: var(--gp-text); color: var(--gp-surface); }
+  .strip__step--ai .strip__chip { color: var(--gp-text); }
+  .strip + .flow { margin-top: var(--gp-s10); }
+}
+.flow__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--gp-s10) minmax(0, 4fr) minmax(0, 7fr);
+  column-gap: var(--gp-s7);
+  align-items: start;
+  padding: var(--gp-s6) var(--gp-s6);
+  border-radius: var(--gp-r-lg);
+}
+.flow__step::before {   /* the rail between the numbers */
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--gp-s6) + var(--gp-s10) / 2);
+  width: 1.5px;
+  background: var(--gp-border-strong);
+  transform: translateX(-50%);
+}
+.flow__step:first-child::before { top: var(--gp-s9); }
+.flow__step:last-child::before { bottom: auto; height: var(--gp-s6); }
+.flow__no {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--gp-s10);
+  height: var(--gp-s10);
+  border: 1.5px solid var(--gp-text);
+  border-radius: var(--gp-r-pill);
+  background: var(--gp-surface);
+  font-size: var(--gp-fs-h1);
+  font-weight: var(--gp-fw-light);
+  line-height: 1;
+}
+.flow__head { padding-top: var(--gp-s1); }
+.flow__chip {
+  display: inline-block;
+  margin-bottom: var(--gp-s2);
+  padding: var(--gp-s1) var(--gp-s3);
+  border: 1px solid var(--gp-border-strong);
+  border-radius: var(--gp-r-pill);
+  color: var(--gp-text-2);
+  font-size: var(--gp-fs-small);
+  font-weight: var(--gp-fw-medium);
+  line-height: 1.3;
+}
+.flow__head h3 { font-size: var(--gp-fs-h1); line-height: var(--gp-lh-tight); letter-spacing: -0.02em; text-wrap: balance; }
+.flow__body { padding-top: var(--gp-s1); }
+.flow__body p { color: var(--gp-text-2); font-size: var(--gp-fs-body-l); line-height: 1.45; text-wrap: pretty; }
+.flow__body .flow__more { margin-top: var(--gp-s3); color: var(--gp-text); font-size: var(--gp-fs-body); font-weight: var(--gp-fw-medium); }
+.flow__step--ai { background: var(--gp-accent); }
+.flow__step--ai::before { background: var(--gp-text); }
+.flow__step--ai .flow__no { border-color: var(--gp-text); background: var(--gp-text); color: var(--gp-surface); font-weight: var(--gp-fw-semibold); }
+.flow__step--ai .flow__chip { border-color: var(--gp-text); background: var(--gp-text); color: var(--gp-surface); }
+.flow__step--ai .flow__body p { color: var(--gp-text); }
+.flow .yl-line {
   display: inline-flex;
   flex-wrap: wrap;
   gap: var(--gp-s1) var(--gp-s3);
@@ -328,7 +393,92 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
 }
 .yl-line__tag { font-weight: var(--gp-fw-bold); }
 
-/* 04 Six programs: the chips, then Maria's build-up from CalFresh alone to the four that pay out. */
+/* 03 Why the AI is essential (dark): one heard sentence becoming facts, three reasons, then six checks. */
+.heard__label { margin-top: var(--gp-s10); color: var(--gp-text-3); font-size: var(--gp-fs-label); font-weight: var(--gp-fw-semibold);
+  letter-spacing: 0.06em; text-transform: uppercase; }
+.heard__label + .heard { margin-top: var(--gp-s3); }
+.heard {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gp-s4) var(--gp-s6);
+  margin: var(--gp-s10) 0 0;
+  padding: var(--gp-s6) 0;
+  border-block: 1px solid var(--gp-border);
+}
+.heard__quote { flex: 1 1 24em; font-family: var(--gp-font-italic); font-size: var(--gp-fs-h1); font-style: italic;
+  font-weight: var(--gp-fw-light); line-height: 1.25; text-wrap: balance; }
+.heard__arrow { color: var(--gp-text-2); }
+.heard__arrow .icon { width: var(--gp-icon-card); height: var(--gp-icon-card); }
+.heard__facts { display: flex; flex-wrap: wrap; gap: var(--gp-s3); }
+.heard__fact {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--gp-s2);
+  padding: var(--gp-s2) var(--gp-s4);
+  border: 1px solid var(--gp-border-strong);
+  border-radius: var(--gp-r-pill);
+  color: var(--gp-text-2);
+  font-size: var(--gp-fs-body);
+  white-space: nowrap;
+}
+@media (max-width: 22.5em) { .heard__fact { flex-wrap: wrap; white-space: normal; } }
+.heard__fact b { color: var(--gp-text); font-size: var(--gp-fs-h2); font-weight: var(--gp-fw-bold); }
+.heard__flag { padding: 0 var(--gp-s2); border-radius: var(--gp-r-xs); background: var(--gp-yl-bg); color: var(--gp-yl-ink);
+  font-size: var(--gp-fs-small); font-weight: var(--gp-fw-bold); }
+.whys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gp-s7); margin: var(--gp-s9) 0 0;
+  padding: 0; list-style: none; }
+.why { padding-top: var(--gp-s5); border-top: 1.5px solid var(--gp-text); }
+.why h3 { margin-bottom: var(--gp-s3); font-size: var(--gp-fs-h1); line-height: var(--gp-lh-tight); letter-spacing: -0.02em;
+  text-wrap: balance; }
+.why p { color: var(--gp-text-2); font-size: var(--gp-fs-body-l); line-height: 1.45; text-wrap: pretty; }
+.edges__title { margin-top: var(--gp-s12); font-size: var(--gp-fs-title); font-weight: var(--gp-fw-bold); line-height: var(--gp-lh-tight);
+  letter-spacing: -0.025em; }
+.edges { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gp-s8) var(--gp-s7); margin: var(--gp-s8) 0 0;
+  padding: 0; list-style: none; }
+.edge { padding-top: var(--gp-s4); border-top: 1px solid var(--gp-border-strong); }
+.edge h4 { margin-bottom: var(--gp-s2); font-size: var(--gp-fs-h2); font-weight: var(--gp-fw-bold); line-height: var(--gp-lh-heading); }
+.edge p { color: var(--gp-text-2); font-size: var(--gp-fs-body); line-height: 1.5; text-wrap: pretty; }
+.edges__note { margin-top: var(--gp-s8); color: var(--gp-text-3); font-size: var(--gp-fs-small); }
+
+/* 04 Responsible by design: the risk matrix. Desktop a table (risk | today | before real students); under 64em each
+   row becomes a card with its own column labels. */
+.pitch--care:not(.dark) { background: var(--gp-surface); }
+.risks-wrap { margin-top: var(--gp-s10); }
+.risks { width: 100%; border-collapse: collapse; }
+.risks thead th {
+  padding: 0 var(--gp-s5) var(--gp-s3);
+  border-bottom: 1.5px solid var(--gp-text);
+  color: var(--gp-text-2);
+  font-size: var(--gp-fs-small);
+  font-weight: var(--gp-fw-medium);
+  text-align: left;
+}
+.risks thead th:first-child { width: 27%; padding-left: 0; }
+.risks thead th:nth-child(2) { width: 49%; }
+.risks td, .risks tbody th { padding: var(--gp-s4) var(--gp-s5); border-bottom: 1px solid var(--gp-border); vertical-align: top;
+  text-align: left; }
+.risks tbody th { padding-left: 0; }
+.risk__icon { display: block; margin-bottom: var(--gp-s2); color: var(--gp-text); }
+.risk__name { display: block; font-size: var(--gp-fs-h2); font-weight: var(--gp-fw-bold); line-height: var(--gp-lh-heading); }
+.risk__what { display: block; margin-top: var(--gp-s2); color: var(--gp-text-2); font-size: var(--gp-fs-body); font-weight: var(--gp-fw-regular);
+  line-height: 1.45; }
+.risk__today { font-size: var(--gp-fs-body); line-height: 1.5; text-wrap: pretty; }
+.risk__next { color: var(--gp-text-2); font-size: var(--gp-fs-body); line-height: 1.5; text-wrap: pretty; }
+.risk__lab { display: none; }
+.risk__key { display: block; color: var(--gp-text); font-size: var(--gp-fs-body-l); font-weight: var(--gp-fw-bold);
+  line-height: var(--gp-lh-heading); text-wrap: balance; }
+.risk__more { margin-top: var(--gp-s2); }
+.risk__sum { display: inline-flex; align-items: center; min-height: var(--gp-s9); color: var(--gp-text); cursor: pointer;
+  font-size: var(--gp-fs-small); font-weight: var(--gp-fw-semibold); text-decoration: underline; text-underline-offset: 0.2em; }
+.risk__sum:focus-visible { outline: 2px solid var(--gp-text); outline-offset: 2px; border-radius: var(--gp-r-xs); }
+.risk__do { color: var(--gp-text-2); font-size: var(--gp-fs-small); line-height: 1.5; text-wrap: pretty; }
+@media (min-width: 64em) {
+  .risk__more[open] > .risk__sum { display: none; }
+}
+.risks__note { margin-top: var(--gp-s7); color: var(--gp-text-3); font-size: var(--gp-fs-small); }
+
+/* 05 Six programs: the chips, then Maria's build-up from CalFresh alone to the four that pay out. */
 .pitch__sofar { color: var(--gp-text-2); font-size: var(--gp-fs-h1); font-weight: var(--gp-fw-light); margin-bottom: var(--gp-s3); }
 .build {
   display: grid;
@@ -370,8 +520,9 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
 .ledger__row--total { border-top: 1.5px solid var(--gp-text); font-weight: var(--gp-fw-bold); }
 .ledger__row--plus dd { font-weight: var(--gp-fw-semibold); }
 .ledger__row--maybe { color: var(--gp-text-2); }
+.ledger__row--maybe dd { white-space: normal; } /* a phrase, not an amount: it may wrap on narrow screens */
 
-/* 05 Try it: the actions again, then the two quiet links. */
+/* 06 Try it: the actions again, then the two quiet links. */
 .pitch--try .hero__actions { margin-top: var(--gp-s8); }
 .try__more { display: flex; flex-wrap: wrap; gap: var(--gp-s2) var(--gp-s7); margin-top: var(--gp-s8); }
 .try__more a { display: inline-flex; align-items: center; min-height: var(--gp-tap); color: var(--gp-text);
@@ -391,9 +542,8 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
     transition: transform var(--gp-d-fill) var(--gp-ease); }
   .js-reveal .split.is-in .split__bar > span { transform: none; transition-delay: 300ms; }
   .js-reveal .split.is-in .split__bar > .split__miss { transition-delay: 700ms; }
-  .js-reveal .steps3 .step3:nth-child(2), .js-reveal .cares .care:nth-child(2) { transition-delay: 120ms; }
-  .js-reveal .steps3 .step3:nth-child(3), .js-reveal .cares .care:nth-child(3) { transition-delay: 240ms; }
-  .js-reveal .cares .care:nth-child(4) { transition-delay: 360ms; }
+  .js-reveal .whys .why:nth-child(2) { transition-delay: 120ms; }
+  .js-reveal .whys .why:nth-child(3) { transition-delay: 240ms; }
 }
 
 @media (min-width: 64em) {
@@ -403,7 +553,27 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
   .pitch { padding-block: var(--gp-s12); }
   .pitch__title, .pitch__lead, .pitch > .fine__method { grid-column: 1 / -1; }
   .fig__num { font-size: var(--gp-fs-hero); }
-  .steps3 { grid-template-columns: minmax(0, 1fr); row-gap: var(--gp-s8); }
+  .flow__step { grid-template-columns: var(--gp-s9) minmax(0, 1fr); column-gap: var(--gp-s5); row-gap: var(--gp-s3);
+    padding: var(--gp-s5) var(--gp-s4); }
+  .flow__step::before { left: calc(var(--gp-s4) + var(--gp-s9) / 2); }
+  .flow__step:first-child::before { top: var(--gp-s8); }
+  .flow__step:last-child::before { height: var(--gp-s5); }
+  .flow__no { width: var(--gp-s9); height: var(--gp-s9); font-size: var(--gp-fs-h2); }
+  .flow__head, .flow__body { grid-column: 2; }
+  .flow__body { padding-top: 0; }
+  .whys, .edges { grid-template-columns: minmax(0, 1fr); row-gap: var(--gp-s8); }
+  .edges { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gp-s6); }
+  .risks, .risks tbody, .risks tr, .risks td, .risks tbody th { display: block; }
+  .risks thead { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .risks tbody tr { padding: var(--gp-s4) var(--gp-s5); border-radius: var(--gp-r-lg); background: var(--gp-bg); }
+  .risks tbody tr + tr { margin-top: var(--gp-s3); }
+  .risks td, .risks tbody th { padding: 0; border: 0; }
+  .risk__lab { display: block; margin: var(--gp-s4) 0 var(--gp-s1); padding-top: var(--gp-s3); border-top: 1px solid var(--gp-border);
+    color: var(--gp-text-2); font-size: var(--gp-fs-small); font-weight: var(--gp-fw-semibold); }
+  .risk__icon { display: inline-block; margin: 0 var(--gp-s2) 0 0; vertical-align: -0.15em; }
+  .risk__name { display: inline; }
+  .risk__more { margin-top: 0; }
+  .risk__more[open] .risk__do { padding-bottom: var(--gp-s2); }
   .build__side, .ledger { grid-column: 1 / -1; }
   .ledger { margin-top: var(--gp-s9); }
   .fine { grid-template-columns: minmax(0, 1fr); row-gap: var(--gp-s4); }
@@ -420,9 +590,13 @@ html:not([lang="es"]) .numeral [lang="es"], html[lang="es"] .numeral [lang="en"]
   .split, .fine { margin-top: var(--gp-s9); }
   .split__keys { flex-direction: column; gap: var(--gp-s1); }
   .split__key--have, .split__key--miss { flex: none; }
-  .step3__no { font-size: var(--gp-fs-mega); }
-  .step3 h3, .care h3 { font-size: var(--gp-fs-h2); }
-  .cares { grid-template-columns: minmax(0, 1fr); row-gap: var(--gp-s8); }
+  .flow__head h3, .why h3 { font-size: var(--gp-fs-h2); }
+  .flow__body p { font-size: var(--gp-fs-body); }
+  .heard__quote { flex-basis: 100%; font-size: var(--gp-fs-h2); }
+  .heard__arrow { transform: rotate(90deg); }
+  .edges { grid-template-columns: minmax(0, 1fr); }
+  .edges__title { margin-top: var(--gp-s11); font-size: var(--gp-fs-h1); }
+  .risks-wrap { margin-top: var(--gp-s8); }
   .ledger { padding: var(--gp-s6); }
   .pitch--try .hero__actions { flex-direction: column; }
 }
