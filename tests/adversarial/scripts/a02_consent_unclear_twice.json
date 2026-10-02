@@ -36,7 +36,7 @@
       "budget": "opening"
     },
     {
-      "user": "Hello?",
+      "user": "Maybe later.",
       "confidence": 0.93,
       "expect_keys": [
         "consent.reask"
@@ -60,7 +60,7 @@
       }
     },
     {
-      "user": "Hello?",
+      "user": "Maybe later.",
       "confidence": 0.93,
       "expect_keys": [
         "consent.declined"

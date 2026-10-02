@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="only light">
-  <meta name="description" content="Talk to refriGator, a student-built prototype that helps SF State students check CalFresh by voice or by typing, in English or Spanish.">
-  <title>Talk to refriGator</title>
+  <meta name="description" content="Talk to GatorPlate, a student-built prototype that helps SF State students check CalFresh by voice or by typing, in English or Spanish.">
+  <title>Talk to GatorPlate</title>
   <link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="/shared/fonts/Archivo-Variable.woff2">
   <link rel="stylesheet" href="/shared/tokens.css">
@@ -18,9 +18,9 @@
 
   <header class="topbar">
     <div class="topbar__inner">
-      <a class="brand" href="/" data-t-label="home" aria-label="refriGator home">
+      <a class="brand" href="/" data-t-label="home" aria-label="GatorPlate home">
         <svg class="logo brand__logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg>
-        <span class="wordmark" translate="no">refri<b>Gator</b></span>
+        <span class="wordmark" translate="no"><b>Gator</b>Plate</span>
       </a>
       <div class="langswitch" role="group" data-t-label="lang.label" aria-label="Language">
         <button type="button" class="langswitch__btn" lang="en" data-lang="en" aria-pressed="true">English</button>
@@ -34,11 +34,11 @@
   </header>
 
   <main id="main" class="talk" tabindex="-1">
-    <noscript><p class="notice notice--info" data-t="no_js">This page needs JavaScript to talk with refriGator.</p></noscript>
+    <noscript><p class="notice notice--info" data-t="no_js">This page needs JavaScript to talk with GatorPlate.</p></noscript>
 
     <section id="intro" class="intro" aria-labelledby="intro-title">
       <svg class="intro__mark logo" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#gp-logo"></use></svg>
-      <h1 id="intro-title"><span class="intro__lead-in" data-t="title.lead">Talk to</span> <span class="wordmark" translate="no">refri<b>Gator</b></span></h1>
+      <h1 id="intro-title"><span class="intro__lead-in" data-t="title.lead">Talk to</span> <span class="wordmark" translate="no"><b>Gator</b>Plate</span></h1>
       <p class="intro__lead" data-t="intro.time">A few minutes. We'll ask about school, home and money — never your Social Security number or immigration status.</p>
       <ul class="intro__facts" role="list">
         <li>
@@ -47,7 +47,7 @@
         </li>
         <li>
           <svg class="icon icon--card" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg>
-          <span data-t="privacy">Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). refriGator only gets the text and never stores audio. We keep your answers and short quotes, not the conversation.</span>
+          <span data-t="privacy">Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio. We keep your answers and short quotes, not the conversation.</span>
         </li>
       </ul>
       <p id="intro-notice" class="notice notice--error" hidden>
@@ -67,10 +67,10 @@
     </section>
 
     <section id="convo" class="convo" aria-labelledby="convo-title" hidden>
-      <h1 id="convo-title" class="sr-only" data-t="title">Talk to refriGator</h1>
+      <h1 id="convo-title" class="sr-only" data-t="title">Talk to GatorPlate</h1>
 
       <div class="line" id="line-box">
-        <p class="line__who" data-t="gatorplate">refriGator</p>
+        <p class="line__who" data-t="gatorplate">GatorPlate</p>
         <p id="line" class="line__text" aria-live="polite"></p>
       </div>
 

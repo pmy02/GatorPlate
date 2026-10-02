@@ -35,6 +35,16 @@ _YES_RX = {lang: re.compile(p, re.IGNORECASE) for lang, p in _YES.items()}
 _ENGLISH = re.compile(r"\b(?:english|ingl[eé]s)\b", re.IGNORECASE)
 _NO_RX = {lang: re.compile(p, re.IGNORECASE) for lang, p in _NO.items()}
 _WORD = re.compile(r"[^\W\d_]+(?:'[^\W\d_]+)?")
+# A goodbye at the end of other talk ("thanks for watching everybody, see you tomorrow, bye bye") is often the room on
+# a speakerphone (a TV, other people), and so is a bare end word ("stop", "bye", "adiós") that the recognizer heard
+# with low confidence: such a stop is asked about first ("keep going, or stop here?"). A plain "Bye!", an explicit
+# request ("I want to stop", "I have to go, bye", "hang up") and a short thanks-bye ("Okay thanks, bye") still end
+# the call at once.
+_BARE_STOP = re.compile(
+    r"^\W*(?:stop|quit|cancel|goodbye|bye|bye bye|i'?m done|para|basta|ya|adi[oó]s|chao|chau|termina|terminar)\W*$",
+    re.IGNORECASE)
+_TRAILING_BYE = re.compile(r"\b(?:bye|goodbye|bye bye|bye-bye|adi[oó]s|chao|chau)\W*$", re.IGNORECASE)
+_TALK_BEFORE_BYE = 3  # words before a trailing goodbye that make it talk with a goodbye, not a goodbye
 
 
 def yes_no(text: str, lang: Lang) -> str | None:
@@ -75,6 +85,9 @@ class Routing:
         self.card_words: list[re.Pattern[str]] = [
             re.compile(p, re.IGNORECASE) for lang in ("en", "es") for p in card_words.get(lang) or []
         ]
+        stop = ((data.get("input") or {}).get("keywords") or {}).get("stop") or {}
+        self.stop: list[re.Pattern[str]] = [re.compile(p, re.IGNORECASE) for lang in ("en", "es")
+                                            for p in stop.get(lang) or []]
         spanish = (data.get("input") or {}).get("spanish_request") or {}
         self.spanish: dict[str, list[re.Pattern[str]]] = {
             lang: [re.compile(p, re.IGNORECASE) for p in spanish.get(lang) or []] for lang in ("en", "es")
@@ -93,6 +106,21 @@ class Routing:
         vocab = self.closing_words["en"] | (self.closing_words["es"] if lang != Lang.en else frozenset())
         words = _WORD.findall(normalize(text).lower().replace("\u2019", "'"))
         return bool(words) and all(w in vocab for w in words)
+
+    def weak_stop(self, text: str, confidence: float | None = None, *, low: float = 0.75) -> bool:
+        """A stop heard only as a goodbye at the end of other talk, or as a bare end word below `low` recognizer
+        confidence (see _TRAILING_BYE); False when the rest of the utterance still asks to stop ("I have to go,
+        bye")."""
+        clean = normalize(text)
+        if _BARE_STOP.search(clean):
+            return confidence is not None and confidence < low
+        hit = _TRAILING_BYE.search(clean)
+        if hit is None:
+            return False
+        rest = clean[:hit.start()]
+        if len(_WORD.findall(rest)) < _TALK_BEFORE_BYE:
+            return False
+        return not any(rx.search(rest) for rx in self.stop)
 
     def asks_spanish(self, text: str) -> bool:
         clean = normalize(text)

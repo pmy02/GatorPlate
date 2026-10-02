@@ -68,6 +68,7 @@ from gatorplate.contracts.extraction import Intent, PendingQuestion, SlotObserva
 from gatorplate.contracts.slots import SLOT_SPECS, SlotName
 from gatorplate.extract.bank import Bank, QuestionForm
 from gatorplate.extract.conversion import Conversion, in_range
+from gatorplate.extract.noise import background
 from gatorplate.extract.numbers import Num, find_numbers
 from gatorplate.extract.text import fold_same, guess_lang, normalize
 
@@ -123,6 +124,9 @@ _HEDGE = _rx(r"\bmaybe\b|\bsometimes\b|\bdepends?\b|\bkind of\b|\bsort of\b|\bpr
              r"\ba veces\b|\bdepende\b|\btal vez\b|\bquizas?\b|\bcreo que\b")
 _CORRECTION = _rx(r"\bno wait\b|\bwait\b|\bi mean\b|\bi meant\b|\bactually\b|\bsorry\b|\bperdon\b|\bo sea\b|"
                   r"\bdigo\b|\bquise decir\b|\bquiero decir\b|\bespera\b|\bme equivoque\b")
+# "quince unidades… no, doce", "Grad— no, undergrad": a "no" said after the start of an answer takes back what came
+# before it (a "no" that starts the utterance answers a yes/no question instead)
+_MID_NO = _rx(r"(?<=\S)[\s,.;:!\u2026\u2013\u2014-]+(?:no|nope|nah)\s*[,.;:!\u2026\u2013\u2014-]+\s*(?=\w)")
 _NEGATED_BEFORE = _rx(r"\b(?:not|no|no son|no es|it'?s not|isn'?t|not like)\s+$")
 # A count, not an amount: a number before a noun of things or people ("two accounts", "three shifts", "two of us"),
 # also with "other" or "more" between ("two other students", "three more roommates", "two other jobs"). A time noun
@@ -768,7 +772,8 @@ class Parser:
             for slot in pslots:
                 if kind == "choice" and slot in MONEY and self._edges(pending, form) is not None:
                     band = None
-                    if _BAND_WORDS.search(f) or (slot not in observations and not elsewhere):
+                    # a bare number from background speech ("the Lakers at seven thirty") is no band answer
+                    if _BAND_WORDS.search(f) or (slot not in observations and not elsewhere and not background(t)):
                         band = _spoken_band(slot, t, f, self._edges(pending, form), spanish)  # type: ignore[arg-type]
                     if band is not None:
                         observations[slot] = band
@@ -784,6 +789,7 @@ class Parser:
                 if choice is not None:
                     observations[slot] = choice
 
+        self._corrected_facts(t, f, pending, known, lang, observations)
         if pslots == [S.other_utils] and S.other_utils not in observations and _BARE_NO.search(f):
             observations[S.other_utils] = _obs(S.other_utils, "none", t)
         if dont_know and not any(o.slot in pslots for o in observations.values()):
@@ -797,6 +803,26 @@ class Parser:
         out.confident = bool(pslots) and pslots[0] in observations \
             and observations[pslots[0]].state == "clear" and not dont_know
         return out
+
+    def _corrected_facts(self, t: str, f: str, pending: PendingQuestion | None, known: dict[SlotName, str],
+                         lang: str, observations: dict[SlotName, SlotObservation]) -> None:
+        """A correction inside the utterance ("Grad student— no sorry, undergrad", "I'm 23 — sorry, 24", "quince
+        unidades… no, doce"): a fact said again after the last correction word replaces the value said before it.
+        Amounts already keep only what follows a correction (_money); only slots found on both sides change."""
+        cuts = [m.end() for m in _CORRECTION.finditer(f)] + [m.end() for m in _MID_NO.finditer(f)]
+        if not cuts or not observations:
+            return
+        cut = max(cuts)
+        if cut >= len(t) or not t[cut:].strip(" ,.;:!?\u2026\u2013\u2014-"):
+            return
+        tail = self.parse(t[cut:], pending, known, lang)
+        for ob in tail.observations:
+            slot = SlotName(ob.slot)
+            if slot not in observations or observations[slot].value == ob.value:
+                continue
+            if slot in MONEY and observations[slot].value not in ("true", "false"):
+                continue  # an amount: _money already kept the one said after the correction
+            observations[slot] = ob.model_copy(update={"quote": t[:80]})
 
     # ------------------------------------------------------------------------------------------ yes / no
     @staticmethod
@@ -927,6 +953,7 @@ class Parser:
                 fc[slice(*_part_span(fc, m, clauses[m.clause]))]) and not _HAVE_BEFORE.search(
                 f[max(0, m.start - 30):m.start]))]
         hours = [m for m in mentions if m.kind == "hours"]
+        unaddressed = background(t)  # a TV or the room: an amount without a cue of its own answers nothing
         by_slot: dict[SlotName, list[_Mention]] = {}
         corrected = False  # an amount corrects a slot already known that the pending question does not ask
         for m in mentions:
@@ -942,7 +969,7 @@ class Parser:
                 # "I have 40, I get paid 450 every two weeks", "About sixty dollars, I get paid on the first": the
                 # amount said before (or apart from) the pay answers the cash question
                 src = None
-            if src in ("aid", "ssi"):
+            if src in ("aid", "ssi") or (src is None and unaddressed):
                 continue
             if src == "rent" and default != S.rent_share and _rent_is_place(f, m):
                 continue  # "I rent a room with two other students": where the student lives, not a rent amount
@@ -1230,8 +1257,8 @@ class Parser:
                 m = _HALF_TIME_FALSE.search(f)
                 if m:
                     add(S.half_time, "false", m, "unclear")
-        # age
-        for n in nums:
+        # age (none from background speech: "police say the twenty four year old suspect ...")
+        for n in ([] if background(t) else nums):
             if n.value != n.value.to_integral_value() or not (10 <= n.value <= 99):
                 continue
             before = f[max(0, n.start - 12):n.start]

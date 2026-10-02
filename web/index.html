@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="only light">
-  <meta name="description" content="refriGator is a student-built prototype that helps SF State students check CalFresh in a few minutes, by phone or in the browser. Estimate only — the county decides.">
-  <title>refriGator</title>
+  <meta name="description" content="GatorPlate is a student-built prototype that helps SF State students check CalFresh in a few minutes, by phone or in the browser. Estimate only — the county decides.">
+  <title>GatorPlate</title>
   <link rel="icon" href="/shared/favicon.svg" type="image/svg+xml">
   <link rel="preload" as="font" type="font/woff2" crossorigin href="/shared/fonts/Archivo-Variable.woff2">
   <link rel="stylesheet" href="/shared/tokens.css">
@@ -13,15 +13,15 @@
   <link rel="stylesheet" href="/landing.css">
   <script type="module" src="/landing.js"></script>
 </head>
-<body class="landing-page dark">
+<body class="landing-page">
   <a class="skip-link" href="#main" data-t="skip">Skip to main content</a>
 
-  <header class="topbar">
+  <header class="topbar dark stage">
     <div class="topbar__inner">
       <p class="brand">
-        <span class="wordmark" translate="no">refri<b>Gator</b></span>
+        <span class="wordmark" translate="no"><b>Gator</b>Plate</span>
       </p>
-      <nav class="more" data-t-label="more.label" aria-label="More about refriGator">
+      <nav class="more" data-t-label="more.label" aria-label="More about GatorPlate">
         <a id="about-link" class="more__link" href="/about">
           <span class="more__text" data-t="about">How it works and responsible AI</span>
         </a>
@@ -37,7 +37,7 @@
   </header>
 
   <main id="main" class="landing" tabindex="-1">
-    <section class="hero" aria-labelledby="headline">
+    <section class="hero dark stage" aria-labelledby="headline">
       <h1 id="headline" class="hero__title"><span class="hero__line">Check the money you may be missing&nbsp;—</span> <span class="hero__line">in your browser.</span></h1>
 
       <p class="numeral" aria-hidden="true">
@@ -49,13 +49,13 @@
       <div class="hero__copy">
         <p class="hero__sub" data-t="sub">SF State students: CalFresh pays one person up to $306 a month for groceries, and it can open more help. A few minutes. Free. Estimates only — each agency decides.</p>
         <div class="hero__actions">
-          <a id="talk-link" class="btn btn--primary btn--big" href="/talk?lang=en">
-            <span data-t="talk">Talk in your browser</span>
-            <span class="btn__o"><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-mic"></use></svg></span>
-          </a>
           <a id="phone-link" class="btn btn--big" hidden>
             <span id="phone-text" class="num"></span>
             <span class="btn__o"><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-phone"></use></svg></span>
+          </a>
+          <a id="talk-link" class="btn btn--primary btn--big" href="/talk?lang=en">
+            <span data-t="talk">Talk in your browser</span>
+            <span class="btn__o"><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-mic"></use></svg></span>
           </a>
         </div>
         <p id="phone-note" class="hero__note" hidden></p>
@@ -66,7 +66,7 @@
         <ul class="trust" role="list" data-t-label="trust.label" aria-label="Privacy and limits">
           <li class="trust__item">
             <svg class="icon trust__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-check"></use></svg>
-            <span data-t="trust.recorded">Not recorded</span>
+            <span data-t="trust.recorded">Audio isn't recorded</span>
           </li>
           <li class="trust__item">
             <svg class="icon trust__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-check"></use></svg>
@@ -79,9 +79,159 @@
         </ul>
       </div>
     </section>
+
+    <section id="gap" class="pitch pitch--gap" aria-labelledby="gap-title">
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">01</span> <span data-t="gap.kicker">The gap at SF State</span></p>
+      <h2 id="gap-title" class="pitch__title" data-reveal data-t="gap.title">About 3,300 SF State undergraduates likely qualify for CalFresh and aren't getting it.</h2>
+      <div class="figs" aria-hidden="true" data-reveal>
+        <p class="fig">
+          <span class="fig__over" data-t="gap.about">about</span>
+          <span class="fig__num num">3,300</span>
+          <span class="fig__under" data-t="gap.students">students</span>
+        </p>
+        <p class="fig">
+          <span class="fig__over" data-t="gap.upto">up to</span>
+          <span class="fig__num num"><span class="fig__cur">$</span>12M</span>
+          <span class="fig__under" data-t="gap.year">a year</span>
+        </p>
+      </div>
+      <p class="pitch__lead" data-reveal data-t="gap.money">Up to $12 million a year in food money — CalFresh alone, at the one-person maximum.</p>
+      <div class="split" data-reveal>
+        <p class="split__total num" data-t="gap.eligible">≈5,810 likely eligible</p>
+        <div class="split__bar" aria-hidden="true"><span class="split__have"></span><span class="split__miss"></span></div>
+        <p class="split__keys">
+          <span class="split__key split__key--have num" data-t="gap.receiving">≈2,520 already receive it</span>
+          <span class="split__key split__key--miss num" data-t="gap.missing">≈3,290 not yet</span>
+        </p>
+      </div>
+      <div class="fine" data-reveal>
+        <p class="fine__method" data-t="gap.method">Estimate based on UC eligibility research applied to SF State enrollment: 33% of UC undergraduates were eligible for CalFresh (California Policy Lab, Fall 2019 data, published Aug 2024), applied to SF State's 17,607 undergraduates (Fall 2025), minus the 14.3% of SF State undergraduates who already received CalFresh in 2023–24 (California Policy Lab, Aug 2026). "Up to" assumes the $306 one-person maximum for 12 months; the average benefit is lower.</p>
+        <ol class="fine__src" data-t-label="gap.sources" aria-label="Sources">
+          <li data-t="gap.src1">Enrollment: 17,607 undergraduates, Fall 2025 (SF State Facts).</li>
+          <li data-t="gap.src2">Eligible: 33% of UC undergraduates, Fall 2019 (California Policy Lab, "Filling the Gap," Aug 2024) → ≈5,810 at SF State.</li>
+          <li data-t="gap.src3">Already receiving: 14.3% of SF State undergraduates, 2023–24 (California Policy Lab, Aug 2026) → ≈2,520.</li>
+          <li data-t="gap.src4">Up to $306/month: CalFresh maximum for one person from Oct 1, 2026 (CDSS ACIN I-40-26).</li>
+          <li data-t="gap.src5">Average is lower: participating UC undergraduates averaged $161/month when the maximum was $194 (California Policy Lab, Feb 2025) — about $10M/yr at that ratio.</li>
+          <li data-t="gap.src6">Graduate students not counted: 13.6% of SF State grad students already receive CalFresh, above UC's 7% grad eligibility rate.</li>
+          <li data-t="gap.src7">Likely conservative: since June 1, 2026, half-time CSU bachelor's students meet the student rule (CDSS ACL 26-25); the 2019 rate predates this.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="how" class="pitch pitch--how" aria-labelledby="how-title">
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">02</span> <span data-t="how.kicker">How it works</span></p>
+      <h2 id="how-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="how.title">The AI listens. A rules table decides. A person confirms.</h2>
+      <ol class="steps3" role="list">
+        <li class="step3" data-reveal>
+          <span class="step3__no num" aria-hidden="true">1</span>
+          <h3 data-t="how.1.h">The AI listens</h3>
+          <p data-t="how.1.p">A language model turns what the student says into answers, such as units, rent and income. It never writes a sentence and never sets a number.</p>
+        </li>
+        <li class="step3" data-reveal>
+          <span class="step3__no num" aria-hidden="true">2</span>
+          <h3 data-t="how.2.h">A rules table decides</h3>
+          <p data-t="how.2.p">A dated rules table computes the estimate, and every sentence comes from a sentence bank written in advance.</p>
+        </li>
+        <li class="step3" data-reveal>
+          <span class="step3__no num" aria-hidden="true">3</span>
+          <h3 data-t="how.3.h">A person confirms</h3>
+          <p data-t="how.3.p">A campus CalFresh coordinator confirms or edits anything uncertain before a case can be marked reviewed. The county makes every eligibility decision.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="care" class="pitch pitch--care dark" aria-labelledby="care-title">
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">03</span> <span data-t="care.kicker">Responsible by design</span></p>
+      <h2 id="care-title" class="pitch__title" data-reveal data-t="care.title">It asks before it starts, keeps little, and decides nothing.</h2>
+      <ul class="cares" role="list">
+        <li class="care" data-reveal>
+          <svg class="icon icon--card care__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-person-check"></use></svg>
+          <h3 data-t="care.consent.h">Consent before questions</h3>
+          <p data-t="care.consent.p">Every call and chat opens by saying it's a student-built AI, then asks if it's okay to start.</p>
+        </li>
+        <li class="care" data-reveal>
+          <svg class="icon icon--card care__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-eye-off"></use></svg>
+          <h3 data-t="care.audio.h">Call audio isn't recorded</h3>
+          <p data-t="care.audio.p">GatorPlate keeps the student's answers and short quotes of their words, not the conversation.</p>
+        </li>
+        <li class="care" data-reveal>
+          <svg class="icon icon--card care__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-shield"></use></svg>
+          <h3 data-t="care.ssn.h">Never asks for a Social Security number or immigration status</h3>
+          <p data-t="care.ssn.p">Digits that look like a Social Security or card number are removed before anything else sees the text.</p>
+        </li>
+        <li class="care" data-reveal>
+          <svg class="icon icon--card care__icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-check-circle"></use></svg>
+          <h3 data-t="trust.estimate">Estimates only — each agency decides</h3>
+          <p data-t="care.est.p">A coordinator checks every uncertain answer before a case is marked reviewed.</p>
+          <p class="yl-line"><span class="yl-line__tag" data-t="care.yl.tag">To check</span> <span data-t="care.yl.text">Monthly rent — "around 800, I think"</span></p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="programs" class="pitch pitch--programs" aria-labelledby="programs-title">
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">04</span> <span data-t="prog.kicker">Six programs</span></p>
+      <div class="build">
+        <div class="build__side">
+          <p class="pitch__sofar" data-reveal data-t="prog.sofar">The numbers above count CalFresh alone.</p>
+          <h2 id="programs-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="prog.title">CalFresh is the key.</h2>
+          <p class="pitch__lead" data-reveal data-t="prog.sub">It can open more help this year: Medi-Cal, Clipper START, PG&amp;E CARE, California LifeLine and tax credits.</p>
+          <div data-reveal>
+            <ul class="chips6" role="list">
+              <li class="chip6 chip6--key">CalFresh</li>
+              <li class="chip6">Medi-Cal</li>
+              <li class="chip6">Clipper START</li>
+              <li class="chip6">PG&amp;E CARE</li>
+              <li class="chip6">California LifeLine</li>
+              <li class="chip6" data-t="prog.tax">Tax credits</li>
+            </ul>
+            <p class="build__check" data-t="prog.check">We check six programs. For Maria, four save money, one is health coverage, and one is a maybe at tax time.</p>
+          </div>
+        </div>
+        <figure class="ledger" data-reveal>
+          <figcaption class="ledger__who" data-t="prog.who">Maria, a sample student from our demo</figcaption>
+          <p class="ledger__from"><span data-t="prog.alone">CalFresh alone</span> <span class="num">$3,670</span> <svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-arrow-right"></use></svg></p>
+          <p class="ledger__big" aria-hidden="true">
+            <span class="ledger__upto" data-t="prog.upto">up to about</span>
+            <span class="ledger__num num"><span class="fig__cur">$</span>4,220</span>
+            <span class="ledger__per" data-t="gap.year">a year</span>
+          </p>
+          <dl class="ledger__rows">
+            <div class="ledger__row"><dt>CalFresh</dt><dd class="num">$3,670</dd></div>
+            <div class="ledger__row"><dt data-t="prog.transit">Clipper START — transit</dt><dd class="num">$160</dd></div>
+            <div class="ledger__row"><dt data-t="prog.phone">California LifeLine — phone</dt><dd class="num" data-t="prog.phone.amt">up to $220</dd></div>
+            <div class="ledger__row"><dt data-t="prog.energy">PG&amp;E CARE — energy</dt><dd class="num">$170</dd></div>
+            <div class="ledger__row ledger__row--total"><dt data-t="prog.total">Total a year, up to about</dt><dd class="num">$4,220</dd></div>
+            <div class="ledger__row ledger__row--plus"><dt>Medi-Cal</dt><dd data-t="prog.coverage">+ health coverage</dd></div>
+            <div class="ledger__row ledger__row--maybe"><dt data-t="prog.tax">Tax credits</dt><dd data-t="prog.maybe">maybe $200 — not counted</dd></div>
+          </dl>
+        </figure>
+      </div>
+      <p class="fine__method" data-reveal data-t="prog.note">Estimates from dated tables, computed by code, not by the AI. Each agency decides.</p>
+    </section>
+
+    <section id="try" class="pitch pitch--try dark" aria-labelledby="try-title">
+      <p class="pitch__kicker" data-reveal><span class="pitch__no num">05</span> <span data-t="try.kicker">Try it</span></p>
+      <h2 id="try-title" class="pitch__title pitch__title--big" data-reveal data-lines data-t="try.title">Check the money you may be missing.</h2>
+      <p id="try-sub" class="pitch__lead" data-reveal>A few minutes. Free. Talk in your browser in English or Spanish.</p>
+      <div class="hero__actions" data-reveal>
+        <a id="cta-phone-link" class="btn btn--big" hidden>
+          <span id="cta-phone-text" class="num"></span>
+          <span class="btn__o"><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-phone"></use></svg></span>
+        </a>
+        <a id="cta-talk-link" class="btn btn--primary btn--big" href="/talk?lang=en">
+          <span data-t="talk">Talk in your browser</span>
+          <span class="btn__o"><svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-mic"></use></svg></span>
+        </a>
+      </div>
+      <p id="cta-phone-note" class="hero__note" hidden></p>
+      <p class="try__more" data-reveal>
+        <a id="cta-about-link" href="/about"><span data-t="about">How it works and responsible AI</span></a>
+        <a id="cta-console-link" href="/console"><span data-t="console">For coordinators</span></a>
+      </p>
+    </section>
   </main>
 
-  <footer class="page-footer">
+  <footer class="page-footer dark stage">
     <p data-t="prototype">Student-built prototype — not an official SF State, county, or CalFresh service.</p>
   </footer>
 </body>

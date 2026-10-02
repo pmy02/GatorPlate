@@ -1,4 +1,4 @@
-// refriGator coordinator console (docs/UI_SPEC.md A3). Boot: load meta and the case list, subscribe to live events
+// GatorPlate coordinator console (docs/UI_SPEC.md A3). Boot: load meta and the case list, subscribe to live events
 // (SSE with the polling fallback of ./events.js), render on every state change, keyboard shortcuts (A2.7).
 import { fetchJSON, FIXTURES } from "../shared/api.js";
 import { subscribeEvents } from "./events.js";

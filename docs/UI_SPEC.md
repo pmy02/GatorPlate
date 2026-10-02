@@ -1,6 +1,6 @@
-# refriGator UI Spec
+# GatorPlate UI Spec
 
-**Version 2026-10-01.** Layout and behavior truth for every refriGator screen: the coordinator console, the student
+**Version 2026-10-01.** Layout and behavior truth for every GatorPlate screen: the coordinator console, the student
 card, the talk page and the small public pages. Related files:
 
 | What | Where |
@@ -144,15 +144,15 @@ directly under it, the unlocked part. Answers are accepted only after the call h
 
 ### A2.3 The opening (what the student hears and sees first)
 
-- **Phone** (the `/start` reply; never interruptible): say *"Hi, this is Refri Gator, a student-built AI assistant,
-  not an official SF State service. An AI turns what you say into text to check CalFresh; the call audio
-  isn't recorded."* ask *"Okay to start? Say yes, or press one."* Together that is 39 words, within the 40-word opening
-  budget (the phone says the name as two words, `verbalize.PHONE_SPOKEN_NAME`; A6.7); phone text never contains digits. This is the bank's canonical phone `consent.ask`. Yes or key 1 continues;
+- **Phone** (the `/start` reply; never interruptible): say *"Hi, this is GatorPlate, a student-built AI assistant,
+  not an official SF State service. An AI turns what you say into text to check CalFresh for you; the call audio
+  isn't recorded."* ask *"Okay to start? Say yes, or press one."* Together that is exactly 40 words, the opening
+  budget; phone text never contains digits. This is the bank's canonical phone `consent.ask`. Yes or key 1 continues;
   no or key 2 gives the coordinator contact and ends; an unclear answer gets one re-ask, then counts as no. The console
-  transcript shows it as the first refriGator bubble.
-- **Web** (talk page, first reply, shown and spoken): *"Hi, I'm refriGator, a student-built AI assistant, not an
+  transcript shows it as the first GatorPlate bubble.
+- **Web** (talk page, first reply, shown and spoken): *"Hi, I'm GatorPlate, a student-built AI assistant, not an
   official SF State service. Your browser turns your voice into text (Chrome uses Google's speech service; Safari
-  uses Apple's). refriGator only gets the text and never stores audio."* + *"Is that okay?"* — Spanish in the
+  uses Apple's). GatorPlate only gets the text and never stores audio."* + *"Is that okay?"* — Spanish in the
   sentence bank (see `contracts/examples/sofia_web_es.json`). Quick replies come from `choices`. Naming the browsers
   and their makers here is the only company naming allowed in product text, apart from the public programs and the
   regulated utility on the card's unlocked part (A0.9).
@@ -262,7 +262,7 @@ Never test crisis words on purpose. If they come up, stop the demo and be human.
 Work view, 1366×768:
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ [logo] refriGator  Coordinator · Prototype coordinator view                                                        │
+│ [logo] GatorPlate  Coordinator · Prototype coordinator view                                                        │
 │ [Rules FY2027 · in effect Oct 1, 2026]  [Live]  [Sample data]  [Presenter]  [Demo]                                 │
 ├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ AI listens  >  Rules decide  >  A person confirms                                                                  │
@@ -282,7 +282,7 @@ Live view, 1366×768 (Presenter):
 ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ (o) Live call · Phone · EN · 01:12 · Not recorded · Consent 0:09                             [Exit live view · L]  │
 ├─────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────────┤
-│ refriGator                                          │ ESTIMATE SO FAR                                              │
+│ GatorPlate                                          │ ESTIMATE SO FAR                                              │
 │ Does anyone, like a parent, pay part of your        │ $155 [==============================] $306                   │
 │ rent straight to your landlord?                     │ Between $155 and $306 a month · Not settled yet              │
 │                                                     │ NOW ASKING — WHY                                             │
@@ -300,7 +300,7 @@ Live view, 1366×768 (Presenter):
 
 ### A3.3 Top bar and how-it-works strip
 
-- Logo (`gp-logo`, brand color) + wordmark *refriGator* + *Coordinator* · *Prototype coordinator view* label · rules
+- Logo (`gp-logo`, brand color) + wordmark *GatorPlate* + *Coordinator* · *Prototype coordinator view* label · rules
   pill *Rules FY2027 · in effect Oct 1, 2026* (opens a drawer with the table label, the effective dates and every
   source with its date, from `ConsoleMeta.rules`) · connection pill *Live* / *Polling* · neutral *Sample data* badge
   when `demo_mode` · Presenter toggle (`P`) · demo menu (`Shift+D`, only when `demo_mode`): *Seed samples · Reset
@@ -458,7 +458,7 @@ not an entry of `flags[]`) · *Sample* (`seeded`). The review time is `reviewed_
   (*Consent*, `i-check` and the time).
 - **Transcript** (demo setting `GP_LIVE_TRANSCRIPT=1`, which the console reads as `ConsoleMeta.live_transcript`;
   lines arrive as `live.turn` events, and a console that opens mid-call first loads `GET /api/cases/{id}/live`;
-  process memory only, never stored): refriGator bubbles on the left (`--gp-sunken`, label *refriGator*), student
+  process memory only, never stored): GatorPlate bubbles on the left (`--gp-sunken`, label *GatorPlate*), student
   bubbles on the right (`--gp-primary-tint`, label *Student*).
   18 px (20 px in Presenter). Sticks to the bottom unless the user scrolled up; older bubbles fade to 60%. Redacted
   digits arrive as the replacement text `[REDACTED]` (`data/content/guards.json`, `input.redact.replacement`) and show
@@ -698,7 +698,7 @@ that button with its new label. Re-rendering on a language switch keeps *Your pl
   text 16 px; legal footer 14 px minimum.
 - Buttons at least 48 px high, full width on phones, icon + label. Primary *Open BenefitsCal*. Secondary: *Add 3
   dates to my calendar* (the CardView's `reminders_url`, which is `GET /api/card/{token}/reminders.ics?lang=…`:
-  three all-day calendar events relative to the filing day — `tracking.filed_on` when the coordinator recorded it, else `first_month.filed_on` — downloaded by the student as `gatorplate-dates.ics`; the button shows only when the case has a filing day; refriGator sends
+  three all-day calendar events relative to the filing day — `tracking.filed_on` when the coordinator recorded it, else `first_month.filed_on` — downloaded by the student as `gatorplate-dates.ics`; the button shows only when the case has a filing day; GatorPlate sends
   nothing, and no student-facing string calls them "reminders", a word the output guard blocks), *Call the clinic*, *Email the clinic*, *Call the county (855) 355-5757* inside the
   interview section, *Print or save PDF*, *Delete my info*.
 - *Delete my info* opens a confirm screen, then `DELETE /api/card/{token}`, then *Your information was deleted.*
@@ -755,12 +755,12 @@ including the control labels in `UnlockedView.labels` (`ui.claimed`, `ui.calfres
 | `delete.yes` / `delete.no` | Delete · Keep it | Borrar · No borrar |
 | `deleted` | Your information was deleted. | Tu información fue borrada. |
 | `badlink` | This card link doesn't work. It may have expired or been deleted. | Este enlace no funciona. Puede que haya vencido o que se haya borrado. |
-| `badlink.talk` | Talk to refriGator | Hablar con refriGator |
+| `badlink.talk` | Talk to GatorPlate | Hablar con GatorPlate |
 | `loading` | Loading your card… | Cargando tu tarjeta… |
 | `error` | We couldn't load your card. Check your connection and try again. | No pudimos cargar tu tarjeta. Revisa tu conexión e intenta otra vez. |
 | `retry` | Try again | Intentar otra vez |
 | `code` | Your case code: {code} | Tu código: {code} |
-| `print.header` | refriGator card · {code} · printed {date} | Tarjeta de refriGator · {code} · impresa el {date} |
+| `print.header` | GatorPlate card · {code} · printed {date} | Tarjeta de GatorPlate · {code} · impresa el {date} |
 | `noscript` | This card needs JavaScript. To talk to a person: SF State CalFresh Help Clinic, (415) 338-1203, calfresh@sfsu.edu. | Esta tarjeta necesita JavaScript. Para hablar con una persona: CalFresh Help Clinic de SF State, (415) 338-1203, calfresh@sfsu.edu. |
 | `prototype` | Student-built prototype — not an official SF State, county, or CalFresh service. | Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh. |
 
@@ -783,7 +783,7 @@ demo fallback and the Spanish channel. It uses `POST /api/web/sessions` and then
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────┐
-│ [logo] refriGator            [English | Español]                Not recorded       │
+│ [logo] GatorPlate            [English | Español]                Not recorded       │
 │                                                                                    │
 │   Does anyone, like a parent, pay part of your rent     <- current reply, 26 px    │
 │   straight to your landlord?                                                       │
@@ -807,7 +807,7 @@ demo fallback and the Spanish channel. It uses `POST /api/web/sessions` and then
 | Permission prompt | — | The browser's prompt. |
 | Listening | pulsing ring · *Listening…* | Interim words gray, final words ink. Push to talk, one utterance per tap. |
 | Thinking | three dots · *Thinking…* | Calm; no spinner. The brain itself switches to a closed question if it is slow. |
-| Speaking | sound bars · *refriGator is speaking — tap to interrupt* | The mic is closed while refriGator speaks (no echo). When `interruptible` is false (opening, amounts, codes, phone numbers, crisis resources) there is no tap-to-interrupt and the label is just *refriGator is speaking*. Tap or `Space` stops the voice and listens. |
+| Speaking | sound bars · *GatorPlate is speaking — tap to interrupt* | The mic is closed while GatorPlate speaks (no echo). When `interruptible` is false (opening, amounts, codes, phone numbers, crisis resources) there is no tap-to-interrupt and the label is just *GatorPlate is speaking*. Tap or `Space` stops the voice and listens. |
 | Done | *Your card is ready* + *Open my card* (`card_url`) | After `end: true` the page sends `/end` with the same reason. The page shows the button and the card link; it has no QR of its own (the contract has no QR endpoint the talk page may call, and no client QR library is used). At the demo table the judge scans the card QR in the console's Live view, which works the same for a web call. A declined consent shows *Conversation ended* + *Start again*. |
 | Typing mode | text field focused | Same API turns (`typed: true`); quick replies stay. |
 
@@ -859,14 +859,14 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
 
 | Key | English | Español |
 |---|---|---|
-| `title` | Talk to refriGator | Habla con refriGator |
+| `title` | Talk to GatorPlate | Habla con GatorPlate |
 | `title.lead` | Talk to | Habla con |
 | `intro.time` | A few minutes. We'll ask about school, home and money — never your Social Security number or immigration status. | Unos minutos. Te preguntaremos sobre tus estudios, tu casa y tu dinero; nunca tu número de Seguro Social ni tu estatus migratorio. |
 | `intro.mic` | Your browser will ask to use your microphone. You can also type. | Tu navegador te pedirá usar el micrófono. También puedes escribir. |
-| `privacy` | Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). refriGator only gets the text and never stores audio. We keep your answers and short quotes, not the conversation. | Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). refriGator solo recibe el texto y nunca guarda audio. Guardamos tus respuestas y citas cortas, no la conversación. |
+| `privacy` | Your browser turns your voice into text (Chrome uses Google's speech service; Safari uses Apple's). GatorPlate only gets the text and never stores audio. We keep your answers and short quotes, not the conversation. | Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio. Guardamos tus respuestas y citas cortas, no la conversación. |
 | `start` / `type` / `send` | Start talking · Type instead · Send | Empezar a hablar · Escribir · Enviar |
 | `listening` / `thinking` | Listening… · Thinking… | Escuchando… · Pensando… |
-| `speaking` / `speaking.tap` | refriGator is speaking · refriGator is speaking — tap to interrupt | refriGator está hablando · refriGator está hablando; toca para interrumpir |
+| `speaking` / `speaking.tap` | GatorPlate is speaking · GatorPlate is speaking — tap to interrupt | GatorPlate está hablando · GatorPlate está hablando; toca para interrumpir |
 | `tap_to_talk` | Tap to talk | Toca para hablar |
 | `done` / `open_card` | Your card is ready · Open my card | Tu tarjeta está lista · Abrir mi tarjeta |
 | `ended` / `again` | Conversation ended · Start again | Conversación terminada · Empezar otra vez |
@@ -982,7 +982,7 @@ Line height 1.5 for text, 1.15 for headings, 0.9–0.98 for display numbers and 
 | Count badge | *1 to check*: `--gp-yl-bg`, `--gp-yl-ink`, `i-alert-circle`. None open: `i-check` in `--gp-likely-ink`. |
 | Yellow line card | `--gp-yl-bg`, 4 px left edge `--gp-yl-line`, radius `--gp-r-lg`, padding 16; actions right-aligned (stacked below 1280 px). |
 | Answer row | Min 44 px; label (`--gp-text-2`) · value (`--gp-text`, 600, tabular) · state icon · quote (`--gp-text-2`, italic, one line, full text on hover and focus) · source icon. |
-| Transcript bubble | Max 85% wide; radius 14 with the speaker's corner 4; refriGator = sunken, student = primary-tint; padding 12/16; 13 px sentence-case label (700) |
+| Transcript bubble | Max 85% wide; radius 14 with the speaker's corner 4; GatorPlate = sunken, student = primary-tint; padding 12/16; 13 px sentence-case label (700) |
 | Range bar | Track 12 px, sunken, pill; band `--gp-primary`; end labels 14 px tabular; settled = 4 px tick + count-up. |
 | Unlocked bar (card) | Track 10 px, sunken, pill, full width. One segment per `segments[]` entry in the order sent, width = its value ÷ `found_display` (set from JS with `style.setProperty('--w', …)`), 2 px gaps. A segment not yet marked *I applied* is the neutral `--gp-border` (at 0 % the bar reads as an empty track, never as a warning); marked *I applied* it turns solid: the CalFresh segment `--gp-brand` (a large accent), the others `--gp-likely-line`; so the colored part always equals `claimed_display`. `aria-hidden="true"`: the total and the claimed line next to it carry the values. Printed as text only (A4.5). |
 | Live dot | 10 px `--gp-live`, pulse ring every 1.6 s (`--gp-live-ring`). |
@@ -996,7 +996,7 @@ Line height 1.5 for text, 1.15 for headings, 0.9–0.98 for display numbers and 
 
 ### A6.6 Icons (`web/shared/icons.svg`)
 
-Original line icons drawn for refriGator: 24 px grid, stroke 2, round caps and joins, `currentColor`. No icon set was
+Original line icons drawn for GatorPlate: 24 px grid, stroke 2, round caps and joins, `currentColor`. No icon set was
 copied. Size 20 px in the console (`--gp-icon`), 24 px on the card and talk page (`--gp-icon-card`).
 
 ```html
@@ -1028,14 +1028,12 @@ button (and a tooltip).
 
 ### A6.7 Logo and wordmark
 
-Wordmark (every page header): `<span class="wordmark" translate="no">refri<b>Gator</b></span>` — *refri* in the UI
-font at 780, 116 % wide, −0.03em; *Gator* at 300 inside a pill ring of `currentColor` (base.css `.wordmark`). The name
-is always spelled *refriGator*, also at the start of a sentence. The `gp-logo` mark (in the sprite, a plate with a
-voice wave in `currentColor`) is hidden when it stands right before the wordmark (`.logo:has(+ .wordmark)`) and may be
-used elsewhere in ink (`.logo { color: var(--gp-brand); }`), never with an inline style (CSP). The logo is never
-combined with SF State, CalFresh or county marks. On the phone channel only, the name is said as two words, *Refri Gator*
-(`gatorplate/dialogue/verbalize.py` `PHONE_SPOKEN_NAME`), so a voice says the name rather than the appliance; the web
-talk page's own voice does the same, while every screen, the web talk text and the card keep *refriGator*.
+Wordmark (every page header): `<span class="wordmark" translate="no"><b>Gator</b>Plate</span>` — *Gator* at 300
+inside a pill ring of `currentColor`, then *Plate* in the UI font at 780, 116 % wide, −0.03em (base.css `.wordmark`). The
+name is always spelled *GatorPlate*, also at the start of a sentence, and the phone and the web talk voice say it as
+written. The `gp-logo` mark (in the sprite, a plate with a voice wave in `currentColor`) is hidden when it stands right
+before the wordmark (`.logo:has(+ .wordmark)`) and may be used elsewhere in ink (`.logo { color: var(--gp-brand); }`),
+never with an inline style (CSP). The logo is never combined with SF State, CalFresh or county marks.
 
 ### A6.8 Motion
 
@@ -1102,19 +1100,39 @@ spaces ignored) sends `POST /api/card/lookup` `{"code": "481206"}`, then the pag
 
 ### A7.2 `/` (landing)
 
-One screen, English and Spanish: headline *Check the money you may be missing — by phone or in your browser.* (without a
+First screen, English and Spanish: headline *Check the money you may be missing — by phone or in your browser.* (without a
 demo number: *Check the money you may be missing — in your browser.*) · *SF State students: CalFresh pays one person up
 to $306 a month for groceries, and it can open more help. A few minutes. Free. Estimates only — each agency decides.* ·
 the demo phone number (`demo_phone_display` from `GET /api/public/info`, only when set) · *Talk in your browser*
-(`/talk`, EN/ES) · *How it works and responsible AI* (`/about`) · *For coordinators* (`/console`) · trust row *Not
-recorded · Never asks for your Social Security number or immigration status · Estimates only — each agency decides* ·
+(`/talk`, EN/ES) · *How it works and responsible AI* (`/about`) · *For coordinators* (`/console`) · trust row *Audio
+isn't recorded · Never asks for your Social Security number or immigration status · Estimates only — each agency decides* ·
 the prototype line. The headline shows in two parts, the hook up to the dash (Spanish: the comma) and then the channel,
 each balanced on its own lines, with no-break spaces before the dash and inside the channel's last three words; on
 phones (under 48em) it uses `fs-title`.
+When the demo number is set, the call button comes first and is the filled one (`tel:` link), then *Talk in your
+browser*; on the Spanish page the English-only call stays first but outlined and *Talk in your browser* is the filled
+one; without a number, *Talk in your browser* is the only, filled button.
+
+Under the first screen, five pitch sections to scroll while presenting, one idea each, alternating paper and dark
+(strings: `web/landing.js` `LANDING_STRINGS`, keys `gap.*`, `how.*`, `care.*`, `prog.*`, `try.*`; Spanish waits for a
+native review): **01 The gap at SF State** — *About 3,300 SF State undergraduates likely qualify for CalFresh and
+aren't getting it.* · *Up to $12 million a year in food money — CalFresh alone, at the one-person maximum.* · the split ≈5,810 likely
+eligible = ≈2,520 already receive it + ≈3,290 not yet (so the split adds up; the title rounds to 3,300) · the method line and seven dated sources (UC eligibility
+33%, Fall 2019, CPL Aug 2024; SF State 17,607 undergraduates, Fall 2025; 14.3% receiving 2023–24, CPL Aug 2026; $306
+from Oct 1, 2026, ACIN I-40-26; average $161 of $194, CPL Feb 2025; graduate students not counted; ACL 26-25 makes the
+2019 rate likely conservative). **02 How it works** — *The AI listens. A rules table decides. A person confirms.*,
+three steps from A7.3. **03 Responsible by design** (dark) — consent before questions; call audio isn't recorded;
+never asks for a Social Security number or immigration status; estimates only — each agency decides, with one sample
+yellow *To check* line (the only yellow). **04 Six programs** — *The numbers above count CalFresh alone.* → *CalFresh is the key.* →
+Maria (a sample student from the demo): CalFresh $3,670 → up to about $4,220 a year from four programs (transit $160,
+phone up to $220, energy $170) + Medi-Cal coverage; the $200 tax credit is a maybe, not counted; never multiplied
+across the school. **05 Try it** (dark) — a lead that mentions calling only when there is a number (`try.sub_phone` / `try.sub_web`), the same two buttons, then *How it works and responsible AI* and *For
+coordinators*. Motion: the sections rise 16 px and the split bar grows once when the bar itself scrolls into view, only with
+`prefers-reduced-motion: no-preference`; without JavaScript or with reduced motion everything simply shows.
 
 ### A7.3 `/about` (how it works; facts to use exactly)
 
-Sections: what refriGator is · how it works (*The model listens, rules decide, a person confirms*) · what is kept
+Sections: what GatorPlate is · how it works (*The model listens, rules decide, a person confirms*) · what is kept
 (answers and short quotes; no audio, no Social Security numbers, no immigration status, no phone numbers) · rules and
 sources · why SF State · limits (an estimate only; English on the phone, English and Spanish on the web) · team
 (*Built by an SF State student team*; say *SF State students* only if it is true for every team member) · the
@@ -1127,8 +1145,8 @@ exists). Facts, with source and date on the page:
 | For applications since March 1, 2026, grants, scholarships, fellowships and loans for college don't count as income for CalFresh (AB 42). Cash that family or friends give still counts. | CDSS ACL 26-16 (2026-03-19) |
 | Since June 1, 2026, students attending a community college, CSU or UC at least half-time in an associate or bachelor's degree program meet an exemption from CalFresh's student rule. | CDSS ACL 26-25 (2026-04-13) |
 | New FY2027 amounts took effect on October 1, 2026 — for example, up to $306 a month for one person. | CDSS ACIN I-40-26 (2026-09-10) |
-| We don't collect Social Security numbers. | refriGator's design (no statute is cited) |
-| The pilot uses no student records, so it needs no student-records integration; a real pilot follows SF State's data and accessibility review. | refriGator's design |
+| We don't collect Social Security numbers. | GatorPlate's design (no statute is cited) |
+| The pilot uses no student records, so it needs no student-records integration; a real pilot follows SF State's data and accessibility review. | GatorPlate's design |
 
 Not on screens: *"Only about a quarter of eligible students participate"* (a UC and community-college figure only) and
 the missed-interview statistic used in the pitch (its wording contains a word the forbidden-phrase check blocks).

@@ -73,14 +73,9 @@ export function chunkSentences(text, max = 180) {
 export function speechPlan(reply) {
   if (!reply) return [];
   const chunks = [];
-  for (const text of chunkSentences(spokenName(reply.say))) chunks.push({ text, interruptible: Boolean(reply.interruptible) });
-  if (!reply.end) for (const text of chunkSentences(spokenName(reply.ask))) chunks.push({ text, interruptible: true });
+  for (const text of chunkSentences(reply.say)) chunks.push({ text, interruptible: Boolean(reply.interruptible) });
+  if (!reply.end) for (const text of chunkSentences(reply.ask)) chunks.push({ text, interruptible: true });
   return chunks;
-}
-
-// The voice says the display name as two words ("Refri Gator"); the text on screen keeps "refriGator".
-export function spokenName(text) {
-  return typeof text === "string" ? text.replace(/\brefriGator\b/g, "Refri Gator") : text;
 }
 
 // After the voice ends, may the page listen again by itself? Only with the voice on and read aloud, after a question

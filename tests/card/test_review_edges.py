@@ -198,7 +198,7 @@ def test_every_amount_sits_next_to_the_estimate_wording(builder, kit, lang) -> N
     for case in (kit.maria(), kit.maria(floor=True), kit.jamal(), kit.boundary()):
         view = builder.build(case, lang=lang, now=kit.NOW, base_url="")
         assert "$" in view.headline
-        words = ("estimate", "county decides") if lang == "en" else ("cálculo", "condado decide")
+        words = ("estimate", "county decides") if lang == "en" else ("estimación", "condado decide")
         assert all(w in view.subhead for w in words), view.subhead
         first = block(view, "today_action").paragraphs[-1]
         assert first.startswith("Our estimate:" if lang == "en" else "Nuestro cálculo:")

@@ -41,12 +41,17 @@ from gatorplate.dialogue.lines import gateway_lines
 from gatorplate.dialogue.output_guard import OutputGuard
 from gatorplate.dialogue.policy import Ctx, Dialogue, Plan, forget_unconsented, outcome, value_of
 from gatorplate.dialogue.templates import Bank, Rendered, Renderer, Step, fill
+from gatorplate.extract import noise
 
 IDLE_TIMEOUT = timedelta(minutes=10)  # docs/BRAIN_API.md §4: an idle call is closed as a timeout
 MEMORY_TURNS = 2  # short-term memory: the last two redacted utterances
 LLM_FAILED = frozenset({"timeout", "error", "refused", "invalid"})
 NON_INTERRUPTIBLE_KEYS = frozenset({"result.likely", "result.likely_floor", "card.phone_code", "crisis.resources"})
 CHOICE_MAX = 6
+NOISE_TURNS = 3  # consecutive noise turns handled as "nothing heard"; after that the unclear-answer rules apply
+# intents that background speech can carry by accident ("please hold for the next available operator"); a stop is never
+# swallowed: a goodbye at the end of other talk is asked about first (Dialogue.utterance, weak_stop)
+BACKGROUND_INTENTS = frozenset({"human_request", "hold", "off_topic", "repeat"})
 
 
 class Brain:
@@ -72,6 +77,7 @@ class Brain:
         self.renderer = Renderer(self.bank, self._values_unbound)
         self._locks: dict[str, asyncio.Lock] = {}
         self._memory: dict[str, deque[str]] = {}
+        self._noise: dict[str, int] = {}  # consecutive noise turns per call (process memory, like _memory)
         self._ctx: Ctx | None = None
         self.metrics: dict[str, int] = {"guard_hits": 0, "llm_failures": 0}
 
@@ -146,12 +152,18 @@ class Brain:
             session.last_seq = req.seq
             if not plan.repeat:
                 session.last_reply = reply
-                session.last_keys = rendered.keys
+                keys = list(rendered.keys)
+                if plan.noise:  # a noise re-ask is no unclear answer: the unclear ladder stays where it was
+                    keys = [k for k in keys if k != "reprompt.unclear"]
+                    if "reprompt.unclear" in session.last_keys:
+                        keys.append("reprompt.unclear")
+                session.last_keys = keys
             if not plan.delete_case:  # the lines reach the console before the case update that they explain
                 self._live_lines(ctx, student_text, reply, question)
             self._persist(ctx, plan, question)
             if reply.end:  # nothing more to understand: short-term memory goes now, not at /end
                 self._memory.pop(call_id, None)
+                self._noise.pop(call_id, None)
             self.sessions.put(session)
             return reply
 
@@ -173,18 +185,34 @@ class Brain:
         if req.event == "silence":
             return None, self.policy.silence(ctx, int(req.silence_n or 1))
         if req.event == "dtmf":
+            self._noise.pop(ctx.call_id, None)
             return None, self.policy.keypad(ctx, str(req.dtmf or ""))
         text = req.text or ""
         choice = self._quick_reply(ctx, text) if req.typed else None
         if choice is not None:
             return text, self.policy.apply_entry(ctx, choice, source=SlotSource.parser)
+        heard = noise.kind(text)
+        if heard is not None and self._noise_turn(ctx, count=heard == "noise"):
+            # nothing usable heard ("[inaudible]", "uh", "", "hello?", "sorry what"): no model call, nothing stored,
+            # no unclear answer — a short re-ask (noise) or the last reply again (a line check)
+            return None, self.policy.noise(ctx, heard, interrupted=req.interrupted)
+        if heard is None:
+            self._noise.pop(ctx.call_id, None)
         if not text.strip():
             if s.deferred_keys:
                 return None, self.policy.deliver_deferred(ctx)
             return None, self.policy.unclear(ctx)
         u = await self._understand(ctx, req)
         failed = u.llm.status in LLM_FAILED
-        if failed:
+        intents = {i.value for i in u.intents} | {i.value for i in u.keyword_intents}
+        crisis = Intent.crisis.value in intents
+        redacted = bool(u.redactions) or req.masked
+        status_said = any(o.slot == SlotName.volunteered_status for o in u.observations)
+        # background speech (a TV, other people in the room) that says nothing to us: like noise, and a model that
+        # timed out on it is no reason for closed mode
+        background = not u.observations and intents <= BACKGROUND_INTENTS and u.answered_pending != "yes" \
+            and not redacted and noise.background(text)
+        if failed and not background:
             s.llm_failures += 1
             self.metrics["llm_failures"] += 1
             if s.llm_failures >= 2:
@@ -193,10 +221,6 @@ class Brain:
                     ctx.case.flags.append("closed_mode")
         elif u.llm.status == "ok":
             s.llm_failures = 0
-        intents = {i.value for i in u.intents} | {i.value for i in u.keyword_intents}
-        crisis = Intent.crisis.value in intents
-        redacted = bool(u.redactions) or req.masked
-        status_said = any(o.slot == SlotName.volunteered_status for o in u.observations)
         if req.interrupted and not u.observations and intents <= {Intent.repeat.value} and not s.deferred_keys \
                 and s.phase != Phase.consent:
             question = self.policy._pending_step(ctx, "main")
@@ -204,6 +228,8 @@ class Brain:
                 plan = Plan([Step("reprompt.after_interrupt", question=question)],
                             record=self.policy._reask_kind(ctx, question))
                 return u.redacted_text, plan
+        if background and self._noise_turn(ctx):
+            return None, self.policy.noise(ctx, "noise", interrupted=req.interrupted)
         if failed and not u.observations and not (intents - {Intent.off_topic.value}) and not s.deferred_keys \
                 and s.phase != Phase.consent:
             question = self.policy._pending_step(ctx, "closed")
@@ -222,6 +248,19 @@ class Brain:
             memory.append(u.redacted_text)
         shown = None if (crisis or status_said or plan.drop_from_memory) else u.redacted_text
         return shown, plan
+
+    def _noise_turn(self, ctx: Ctx, *, count: bool = True) -> bool:
+        """Count one more noise turn in a row (a line check or a repeat request is not counted: it only hears the last
+        reply again); False (the normal rules apply) when no question is pending, the rest of a split reply is
+        waiting, a choice is awaited, or after NOISE_TURNS noise turns in a row."""
+        s = ctx.session
+        if s.pending is None or s.deferred_keys or s.awaiting not in ("none", "consent"):
+            return False
+        n = self._noise.get(ctx.call_id, 0) + (1 if count else 0)
+        if n > NOISE_TURNS:
+            return False
+        self._noise[ctx.call_id] = n
+        return True
 
     async def _understand(self, ctx: Ctx, req: TurnRequest) -> Understanding:
         s = ctx.session
@@ -320,11 +359,7 @@ class Brain:
 
     def _render(self, ctx: Ctx, steps: list[Step], lang: Lang) -> Rendered:
         self._ctx = ctx
-        rendered = self.renderer.render(steps, lang, ctx.channel, call_id=ctx.call_id, turn=ctx.turn)
-        if ctx.channel == Channel.phone:  # the phone says the name as verbalize.PHONE_SPOKEN_NAME, before word budgets
-            rendered.say = verbalize.name_spoken(rendered.say)
-            rendered.ask = verbalize.name_spoken(rendered.ask) if rendered.ask is not None else None
-        return rendered
+        return self.renderer.render(steps, lang, ctx.channel, call_id=ctx.call_id, turn=ctx.turn)
 
     def _fit(self, ctx: Ctx, steps: list[Step], lang: Lang, rendered: Rendered) -> tuple[list[Step], Rendered]:
         """Phone budgets: drop flip.intro when it does not fit (docs/SPEC.md §3.2 phase 6), then split at a key
@@ -579,6 +614,7 @@ class Brain:
             self.events.publish("case.updated", case=saved if isinstance(saved, Case) else case)
             self._wipe_live(case.id)
         self._memory.pop(session.call_id, None)
+        self._noise.pop(session.call_id, None)
         self.sessions.put(session)
 
     def _closing_reply(self, session: SessionState) -> BrainReply:
@@ -609,8 +645,6 @@ class Brain:
             lines.append(LiveTurn(case_id=case_id, turn=ctx.turn, who="student", text=student,
                                   lang=ctx.session.lang, at=ctx.now))
         text = reply.display if reply.display else " ".join(p for p in (reply.say, reply.ask or "") if p)
-        if text and ctx.channel == Channel.phone:  # the screen keeps the display name, not the spoken form
-            text = verbalize.name_display(text)
         if text:
             lines.append(LiveTurn(case_id=case_id, turn=ctx.turn, who="assistant", text=text, lang=reply.lang,
                                   at=ctx.now))

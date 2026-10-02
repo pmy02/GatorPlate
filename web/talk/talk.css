@@ -95,7 +95,7 @@ html:has(> body.talk-page) { background: var(--gp-ink); }
 /* "Talk to" thin and grey on its own line, the name heavy and wide below it with "Gator" in the wordmark ring. */
 .intro h1 {
   max-width: 6.2em;
-  font-size: min(calc(var(--gp-fs-display) * 1.45), 15vw);
+  font-size: min(calc(var(--gp-fs-display) * 1.45), 13vw);
   font-weight: var(--gp-fw-heavy);
   font-stretch: var(--gp-wide);
   line-height: 0.98;

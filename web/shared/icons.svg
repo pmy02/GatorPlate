@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg">
 <!--
-  refriGator icon sprite. Original line icons drawn for refriGator (not copied from any icon set).
+  GatorPlate icon sprite. Original line icons drawn for GatorPlate (not copied from any icon set).
   Grid 24 x 24, stroke 2, round caps and joins, colour from currentColor. The logo symbol uses its own 32 x 32 grid.
   Use:  <svg class="icon" aria-hidden="true" focusable="false"><use href="/shared/icons.svg#i-phone"/></svg>
   Icon list and meaning: docs/UI_SPEC.md, section A6.6.

@@ -11,7 +11,7 @@
     "renamed": "items are the card's paragraphs (each item has its own when). The first-month line is the today_action item that uses {filed_on}, {first_month} and {month_label} (FirstMonth fields). irt_applies may be null when there is no estimate; then neither IRT item shows.",
     "headline": "headline and subhead: one per tier, plus likely_floor (the estimate is a floor), incomplete (the call ended before a result), and one per info route (keys info.already_receiving and info.interview_waiting), used when the case's reason code is an info route, whatever its tier.",
     "verify": "verify names an entry of unverified[]: the line avoids exact dates where its source is not confirmed, and the source is re-checked before a real pilot.",
-    "ui": "Strings for the card page's own controls, the same as docs/UI_SPEC.md (card UI strings). ui.calendar = the 3 .ics events (days after the estimated filing day), as in docs/SPEC.md; they are calendar entries the student downloads, and refriGator sends nothing. ui.rules_label is CardView.rules_label in this language (the English text equals the rules table's label)."
+    "ui": "Strings for the card page's own controls, the same as docs/UI_SPEC.md (card UI strings). ui.calendar = the 3 .ics events (days after the estimated filing day), as in docs/SPEC.md; they are calendar entries the student downloads, and GatorPlate sends nothing. ui.rules_label is CardView.rules_label in this language (the English text equals the rules table's label)."
   },
   "when_keys": {
     "tier": "list of tiers: likely, coordinator, other_help",
@@ -129,7 +129,7 @@
     }
   },
   "headline": {
-    "likely": "Podrías recibir unos {estimate} al mes para comprar comida.",
+    "likely": "Podrías recibir hasta {estimate} al mes para comprar comida.",
     "likely_floor": "Podrías recibir unos {estimate} al mes o más para comprar comida.",
     "coordinator": "Un detalle necesita que lo revise una persona.",
     "other_help": "Todavía hay ayuda con comida para ti.",
@@ -138,8 +138,8 @@
     "info.interview_waiting": "Prepárate para tu entrevista por teléfono."
   },
   "subhead": {
-    "likely": "Es un cálculo. El condado decide.",
-    "likely_floor": "Es un cálculo. El condado decide.",
+    "likely": "Es una estimación. El condado decide.",
+    "likely_floor": "Es una estimación. El condado decide.",
     "coordinator": "Tus respuestas quedan guardadas para la coordinación de CalFresh de SF State.",
     "other_help": "Las reglas de CalFresh para tu situación son complicadas, así que no vamos a adivinar.",
     "incomplete": "Empieza otra vez en la web, o habla con la coordinación de CalFresh de SF State.",
@@ -644,7 +644,7 @@
               "other_help.not_sfsu"
             ]
           },
-          "text": "refriGator está hecho para estudiantes de SF State. La oficina de CalFresh de tu condado te puede ayudar."
+          "text": "GatorPlate está hecho para estudiantes de SF State. La oficina de CalFresh de tu condado te puede ayudar."
         },
         {
           "when": {
@@ -694,7 +694,7 @@
           "when": {},
           "screen": "Your Information",
           "question": "¿Estudias en la universidad?",
-          "answer": "Sí. Tu número de Seguro Social y tu información de ciudadanía los escribes tú. refriGator nunca los pide."
+          "answer": "Sí. Tu número de Seguro Social y tu información de ciudadanía los escribes tú. GatorPlate nunca los pide."
         },
         {
           "when": {
@@ -1427,7 +1427,7 @@
     }
   ],
   "footer": [
-    "refriGator nunca guarda audio. Guardamos tus respuestas, no la conversación.",
+    "GatorPlate nunca guarda audio. Guardamos tus respuestas, no la conversación.",
     "No recolectamos números de Seguro Social y nunca preguntamos por tu estatus migratorio.",
     "Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh.",
     "Tú haces tu solicitud en BenefitsCal. El condado decide.",
@@ -1464,7 +1464,7 @@
     "delete_confirm_no": "No borrar",
     "deleted": "Tu información fue borrada.",
     "bad_link": "Este enlace no funciona. Puede que haya vencido o que se haya borrado.",
-    "talk_link": "Hablar con refriGator",
+    "talk_link": "Hablar con GatorPlate",
     "case_code_label": "Código",
     "rules_label": "CalFresh año fiscal 2027 (1 oct 2026 – 30 sep 2027)",
     "demo_badge": "Demo: datos de muestra, se borran al final del día",

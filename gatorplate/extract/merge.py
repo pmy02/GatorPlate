@@ -24,6 +24,8 @@ Combination:
   value) is never replaced. It is also kept when it is routing-only, when it is the never-asked roommate count, when it
   is "lives alone" (household_food alone, which the model often leaves out of an answer about age) and the model said
   nothing that contradicts it, or when the model gave no result (timeout, error, closed mode, fast path);
+- a household_food "alone" from the model to a question that offers only together / separately ("by myself") yields
+  to the parser's clear reading of the offered choice;
 - answered_pending: the model's, except that "partial" becomes "yes" once every slot the pending question asks is in
   hand (a slot the model left out may come from the parser); without a model result it is computed from the slots;
 - intents = model intents + keyword intents (+ the parser's when the model gave no result).
@@ -325,6 +327,17 @@ class Merger:
                     ob = ob.model_copy(update={"quote": "", "quote_en": None})
                 final[slot] = ob
                 sources[slot] = SlotSource.parser
+
+        food_model, food_parser = final.get(S.household_food), from_parser.get(S.household_food)
+        if pending is not None and S.household_food in pending.slots and pending.choices \
+                and not any("alone" in c.lower() for c in pending.choices) and food_model is not None \
+                and food_model.value == "alone" and food_parser is not None and food_parser.state == "clear" \
+                and food_parser.value in ("separate", "shared"):
+            # "I buy and cook my own food, by myself" to "together, or separately?": the question offers no "alone"
+            # (the student lives with others), so the parser's reading of the choice that was offered stands
+            final[S.household_food] = food_parser
+            sources[S.household_food] = SlotSource.parser
+            conflicts = [c for c in conflicts if c != S.household_food]
 
         intents = list(result.intents) if result is not None else []
         extra = list(keyword_intents)

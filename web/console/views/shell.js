@@ -13,7 +13,7 @@ export function renderTopbar(el, state, on) {
     replace(el,
       h("div", { class: "topbar__brand" },
         icon("gp-logo", "logo topbar__logo"),
-        h("span", { class: "wordmark", translate: "no" }, "refri", h("b", { text: "Gator" })),
+        h("span", { class: "wordmark", translate: "no" }, h("b", { text: "Gator" }), "Plate"),
         h("span", { class: "topbar__role", text: "Coordinator" }),
         h("span", { class: "topbar__proto", text: "Prototype coordinator view" })),
       h("div", { class: "topbar__tools" },
@@ -170,7 +170,7 @@ export function renderLogin(el, state, on) {
   const err = h("p", { class: "field__error", id: "login-err", role: "alert", hidden: true });
   const btn = h("button", { class: "btn btn--primary btn--block", type: "submit" }, "Log in");
   const form = h("form", { class: "login__card" },
-    h("div", { class: "login__brand" }, icon("gp-logo", "logo login__logo"), h("span", { class: "wordmark", translate: "no" }, "refri", h("b", { text: "Gator" }))),
+    h("div", { class: "login__brand" }, icon("gp-logo", "logo login__logo"), h("span", { class: "wordmark", translate: "no" }, h("b", { text: "Gator" }), "Plate")),
     h("h1", { text: "Coordinator" }),
     h("p", { class: "muted", text: "Prototype coordinator view. Enter the shared passcode." }),
     h("div", { class: "field" }, h("label", { for: "passcode", text: "Passcode" }), input, err), btn);

@@ -339,7 +339,7 @@
     "ui.key_line": "CalFresh es la llave. Abre las demás ayudas.",
     "ui.claimed": "Ya empezaste {claimed} de {found}",
     "ui.question_count": "Pregunta {i} de {n}",
-    "ui.footnote": "Cálculos para los próximos 12 meses con reglas oficiales, revisadas el {checked}. Cada agencia decide. No es una promesa.",
+    "ui.footnote": "Estimaciones para los próximos 12 meses con reglas oficiales, revisadas el {checked}. Cada agencia decide. No es una promesa.",
     "ui.coverage_chip": "+ cobertura médica (Medi-Cal)",
     "ui.maybe_chip": "quizá +{value}",
     "ui.check_chip.clipper_start": "¿Usas transporte en vacaciones? unos {lo}–{hi}",
@@ -347,15 +347,15 @@
     "ui.stage.today": "Hoy",
     "ui.stage.after_approval": "Cuando llegue tu carta de aprobación de CalFresh",
     "ui.stage.tax_time": "En la temporada de impuestos (por lo general, de fin de enero al 15 de abril)",
-    "ui.apply_by": "Solicítalo antes del {date}, más o menos",
+    "ui.apply_by": "Solicítalo antes del {date}",
     "ui.mark_applied": "Ya lo solicité",
     "ui.undo": "Deshacer",
-    "ui.status.likely": "Probable",
+    "ui.status.likely": "Posible",
     "ui.status.maybe": "Quizá",
     "ui.status.check": "Por revisar",
     "ui.status.coverage": "Cobertura",
     "ui.status.zero": "No se cuenta",
-    "ui.status.note": "Dato útil",
+    "ui.status.note": "Bueno saberlo",
     "ui.value.likely": "unos {value} al año",
     "ui.value.ceiling": "hasta {value} al año",
     "ui.value.maybe": "quizá unos {value} al año",
@@ -692,7 +692,7 @@
     },
     "GP-PROJECT": {
       "date": "2026-10-01",
-      "name": "Reglas de cálculo de refriGator (redondeo, facturas supuestas)",
+      "name": "Reglas de cálculo de GatorPlate (redondeo, facturas supuestas)",
       "date_text": "1 oct 2026"
     }
   }

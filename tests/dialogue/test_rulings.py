@@ -30,11 +30,11 @@ KEYPAD_ENTRY = re.compile(r"\bpound\b|\bhash\b|\bkeypad\b|\btype\b|\bdial\b|\ben
 
 
 async def test_phone_opening_is_the_forty_word_text(rig) -> None:
-    reply = await rig.start()  # the phone says the name as two words (verbalize.PHONE_SPOKEN_NAME)
-    assert reply.say == ("Hi, this is Refri Gator, a student-built AI assistant, not an official SF State service. "
-                         "An AI turns what you say into text to check CalFresh; the call audio isn't recorded.")
+    reply = await rig.start()
+    assert reply.say == ("Hi, this is GatorPlate, a student-built AI assistant, not an official SF State service. "
+                         "An AI turns what you say into text to check CalFresh for you; the call audio isn't recorded.")
     assert reply.ask == "Okay to start? Say yes, or press one."
-    assert count_words(reply.say + " " + reply.ask) == 39  # within the 40-word opening budget
+    assert count_words(reply.say + " " + reply.ask) == 40
     assert not reply.interruptible and not phone_reply_problems(reply, ["consent.ask"], start=True)
 
 

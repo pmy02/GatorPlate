@@ -203,7 +203,7 @@
            "order_within_stage": ["apply_by (earliest first, null last)", "value desc", "priority"],
            "today_always": "calfresh", "tax_time_window": "usually late January to April 15 (2027 dates not announced; SF State VITA 2026 ran Jan 29-Apr 15)"},
 
-  "source_notes": {"grades": "A = primary text read directly. B = official, seen via a search snippet or not re-read for this table. C = computed or a refriGator assumption.",
+  "source_notes": {"grades": "A = primary text read directly. B = official, seen via a search snippet or not re-read for this table. C = computed or a GatorPlate assumption.",
                    "dates": "date = the source's own date, or the day it was read when the page carries no date."},
   "sources": [
     {"id": "CA-FY2027", "title": "CalFresh FY2027 table (existing): data/rules/ca_fy2027.json, from CDSS ACIN I-40-26", "url": null, "date": "2026-09-10", "grade": "A"},

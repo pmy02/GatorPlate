@@ -87,6 +87,7 @@ class Plan:
     record: str | None = None  # AskedQuestion kind for the question, None = not a case question
     flip: FlipCandidate | None = None
     drop_from_memory: bool = False
+    noise: bool = False  # a re-ask after nothing usable was heard: no unclear answer, the unclear ladder stays
 
 
 @dataclass
@@ -225,7 +226,7 @@ class Dialogue:
             if winner.name != "repeat":
                 s.deferred_keys = []
         if s.phase == Phase.consent:
-            return self.consent(ctx, u, winner, text)
+            return self.consent(ctx, u, winner, text, confidence=confidence)
         pending_key = s.pending.key if s.pending else None
         # The close question is open (an explicit confirm asked at the close is answered first, never a goodbye).
         at_close = pending_key == self.routing.close_pending or (s.phase == Phase.close
@@ -270,6 +271,14 @@ class Dialogue:
                     self.apply_observations(ctx, u, skip={S.consent})
                     self.refresh(ctx)
                 return self.resume(ctx, [], form="short", skip_pending=True)
+        if winner is not None and winner.name == "stop" and s.awaiting == "none" \
+                and self.routing.weak_stop(text, confidence, low=LOW_CONFIDENCE):
+            # a bare "stop" / "bye", or a goodbye at the end of other talk (a TV, the room on a speakerphone): asked
+            # about first; "stop" or "no" to it ends the call, anything else goes on (the continue_or_stop branch)
+            self.apply_observations(ctx, u, quote=False)
+            self.refresh(ctx)
+            s.awaiting = "continue_or_stop"
+            return Plan([Step("crisis.continue_or_stop")])
         if winner is not None and winner.name == "hold" and u.observations and s.awaiting == "none":
             # "One sec... okay, it's eleven hundred": the student came back with an answer in the same breath. It is
             # handled as an answer (read back, confirmed when needed, then the next question); a bare hold.ok would
@@ -282,6 +291,28 @@ class Dialogue:
         if at_close:
             return self.close_again(ctx, u, [])
         return self.answer(ctx, u, interrupted=interrupted, confidence=confidence, text=text)
+
+    def noise(self, ctx: Ctx, heard: str, *, interrupted: bool) -> Plan:
+        """Nothing usable heard (extract/noise.py): an empty, filler-only or bracketed transcript, a cut-off fragment,
+        background speech that says nothing to us ("noise"), or a line check such as "hello?"
+        ("check"), a request to hear it again ("repeat"). Nothing is stored and it is no unclear answer: a repeat or a
+        check hears the last reply again, noise gets the pending question again (consent: a line check or noise gets
+        consent.reask, its re-ask count unchanged)."""
+        s = ctx.session
+        pending = s.pending
+        at_consent = pending is not None and pending.key in CONSENT_KEYS
+        if (heard == "repeat" or (heard == "check" and not at_consent)) and not interrupted:
+            return Plan([], repeat=True)
+        if at_consent:
+            return Plan([Step("consent.reask")], noise=True)
+        # the short form keeps "Sorry, I missed that." + the question within the word budget; a question asked in its
+        # closed form (or closed mode) is asked closed again
+        closed = pending is not None and (pending.closed or s.closed_mode)
+        question = self._pending_step(ctx, "main" if closed else "short")
+        if question is None:
+            return Plan([], repeat=True)
+        wrapper = "reprompt.after_interrupt" if interrupted else "reprompt.unclear"
+        return Plan([Step(wrapper, question=question)], record=self._reask_kind(ctx, question), noise=True)
 
     def deliver_deferred(self, ctx: Ctx) -> Plan:
         steps = [Step.decode(k) for k in ctx.session.deferred_keys]
@@ -368,7 +399,8 @@ class Dialogue:
 
     # ======================================================================================== consent (phase 0)
 
-    def consent(self, ctx: Ctx, u: Understanding, winner: Winner | None, text: str) -> Plan:
+    def consent(self, ctx: Ctx, u: Understanding, winner: Winner | None, text: str, *,
+                confidence: float | None = None) -> Plan:
         s = ctx.session
         answer: str | None = None
         for obs in u.observations:
@@ -376,7 +408,9 @@ class Dialogue:
                 answer = "yes" if obs.value.strip().lower() in ("true", "yes") else "no"
         if winner is not None and winner.name in ("crisis", "redaction"):
             return self.global_intent(ctx, winner, u, [winner.name])
-        if winner is not None and winner.name in ("stop", "delete_data"):
+        weak = winner is not None and winner.name == "stop" and self.routing.weak_stop(text, confidence,
+                                                                                         low=LOW_CONFIDENCE)
+        if winner is not None and winner.name in ("stop", "delete_data") and not weak:
             answer = "no"
         if answer is None and winner is not None and winner.name in INFO_LINES:
             if winner.name == "side_question" and u.side_question:

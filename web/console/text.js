@@ -249,8 +249,7 @@ export function longDate(dateOnly) {
 export function sourceText(id, sources, { short = false } = {}) {
   const s = (sources || []).find((x) => x.id === id);
   if (!s) return id || "";
-  const title = (short ? shortTitle(s.title) : s.title).replace(/^GatorPlate\b/, "refriGator");
-  return `${title}, ${s.date}`;
+  return `${short ? shortTitle(s.title) : s.title}, ${s.date}`;
 }
 
 export function shortTitle(title) {

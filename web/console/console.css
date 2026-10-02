@@ -1,4 +1,4 @@
-/* refriGator coordinator console (docs/UI_SPEC.md A3, A6). Light theme only; every color, font, size, radius, shadow
+/* GatorPlate coordinator console (docs/UI_SPEC.md A3, A6). Light theme only; every color, font, size, radius, shadow
    and duration comes from var(--gp-*) (web/shared/tokens.css). Layouts: A3.2. Motion: A6.8.
    Look (A6.1): an ink frame (top bar, how-it-works strip, case list, live header, login) around a paper work area;
    huge thin numerals, wide heavy headlines, one filled primary action per screen, square tags, pills only to press. */

@@ -2,7 +2,7 @@
   "version": "2026-10-01",
   "format": {
     "summary": "Public contact facts used by the sentence bank (spoken forms) and the card (display forms). Phone numbers: E.164 in phone, (xxx) xxx-xxxx in display, digit groups in spoken.",
-    "hours": "hours.weekly is machine-readable (America/Los_Angeles) for display and checks only; refriGator has no 'open now' logic (docs/SPEC.md, situation 9.2): hours.text and hours.spoken are always given with the number.",
+    "hours": "hours.weekly is machine-readable (America/Los_Angeles) for display and checks only; GatorPlate has no 'open now' logic (docs/SPEC.md, situation 9.2): hours.text and hours.spoken are always given with the number.",
     "rule": "Only numbers listed here may appear in the repo (besides 988, 911 and the demo number setting). Never invent hours: null means 'see the website'.",
     "omitted": "The county fax number and drop-box address from earlier drafts are left out: they are not on a page saved for this project. Students are pointed to BenefitsCal uploads and the county phone line instead."
   },
@@ -212,6 +212,6 @@
       "en": "benefits cal dot com",
       "es": "benefits cal punto com"
     },
-    "note": "The state's online application. refriGator never applies, signs or submits for the student."
+    "note": "The state's online application. GatorPlate never applies, signs or submits for the student."
   }
 }

@@ -7,7 +7,6 @@ one Spanish phone notice and for the Spanish web conversation. Money is Decimal;
 
 from __future__ import annotations
 
-import re
 from decimal import ROUND_DOWN, ROUND_HALF_UP, Decimal
 from urllib.parse import urlsplit
 
@@ -29,11 +28,6 @@ DIGIT_WORDS = {
     Lang.en: ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"],
     Lang.es: ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"],
 }
-# The display name is "refriGator" on every screen, in the web talk text and on the card. On the phone channel only, it
-# is written as two words, so a voice says the name rather than the appliance.
-PHONE_SPOKEN_NAME = "Refri Gator"
-_DISPLAY_NAME = re.compile(r"\brefriGator\b")
-
 _URL_WORDS = {Lang.en: {".": "dot", "/": "slash", "-": "dash"}, Lang.es: {".": "punto", "/": "barra", "-": "guion"}}
 
 _DOLLAR = Decimal(1)
@@ -257,16 +251,3 @@ def url_display(base_url: str, path: str) -> str:
     parts = urlsplit(base_url)
     host = parts.netloc or base_url
     return f"{host}/{path.strip('/')}"
-
-
-# ---------------------------------------------------------------------------------------------- the name on the phone
-
-def name_spoken(text: str) -> str:
-    """Phone text: 'Thanks for calling refriGator.' -> 'Thanks for calling Refri Gator.' (PHONE_SPOKEN_NAME). Web
-    addresses keep their lower-case host ('gatorplate dot fly dot dev'), so only the display name changes."""
-    return _DISPLAY_NAME.sub(PHONE_SPOKEN_NAME, text)
-
-
-def name_display(text: str) -> str:
-    """The reverse of name_spoken, for what a screen shows of a phone reply (the console's live transcript)."""
-    return text.replace(PHONE_SPOKEN_NAME, "refriGator")

@@ -3,8 +3,8 @@
  "code": "K7Q-2FM",
  "tier": "likely",
  "reason_code": "likely",
- "headline": "Podrías recibir unos $306 al mes para comprar comida.",
- "subhead": "Es un cálculo. El condado decide.",
+ "headline": "Podrías recibir hasta $306 al mes para comprar comida.",
+ "subhead": "Es una estimación. El condado decide.",
  "estimate_monthly": 306,
  "estimate_is_floor": false,
  "expedited": "no",
@@ -55,7 +55,7 @@
     {
      "screen": "Your Information",
      "question": "¿Estudias en la universidad?",
-     "answer": "Sí. Tu número de Seguro Social y tu información de ciudadanía los escribes tú. refriGator nunca los pide."
+     "answer": "Sí. Tu número de Seguro Social y tu información de ciudadanía los escribes tú. GatorPlate nunca los pide."
     },
     {
      "screen": "People",
@@ -193,7 +193,7 @@
   }
  ],
  "footer": [
-  "refriGator nunca guarda audio. Guardamos tus respuestas, no la conversación.",
+  "GatorPlate nunca guarda audio. Guardamos tus respuestas, no la conversación.",
   "No recolectamos números de Seguro Social y nunca preguntamos por tu estatus migratorio.",
   "Prototipo hecho por estudiantes; no es un servicio oficial de SF State, del condado ni de CalFresh.",
   "Tú haces tu solicitud en BenefitsCal. El condado decide.",
@@ -379,7 +379,7 @@
     "id": "calfresh",
     "name": "CalFresh",
     "status": "likely",
-    "status_label": "Probable",
+    "status_label": "Posible",
     "value_text": "unos $3,670 al año",
     "counted": true,
     "line": "Solicita CalFresh hoy en BenefitsCal. Los pasos están arriba, en esta tarjeta.",
@@ -442,7 +442,7 @@
     ],
     "stage": "after_approval",
     "stage_label": "Cuando llegue tu carta de aprobación de CalFresh",
-    "apply_by_text": "Solicítalo antes del 19 de noviembre, más o menos",
+    "apply_by_text": "Solicítalo antes del 19 de noviembre",
     "apply_url": "https://www.clipperstartcard.com/s/application",
     "apply_label": "Solicitar Clipper START",
     "applied": false,
@@ -572,7 +572,7 @@
    }
   ],
   "share_text": "Encontré unos $3,600 al año en ayudas que quizá no estoy recibiendo (son cálculos, no promesas). Revisa las tuyas en 2 minutos: https://gatorplate.fly.dev",
-  "footnote": "Cálculos para los próximos 12 meses con reglas oficiales, revisadas el 1 oct 2026. Cada agencia decide. No es una promesa.",
+  "footnote": "Estimaciones para los próximos 12 meses con reglas oficiales, revisadas el 1 oct 2026. Cada agencia decide. No es una promesa.",
   "labels": {
    "ui.claimed": "Ya empezaste $0 de $3,670",
    "ui.calfresh_part": "CalFresh: unos $3,670 al año ($306 al mes)",

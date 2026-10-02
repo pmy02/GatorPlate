@@ -103,7 +103,7 @@ def test_g1_maria_en(builder, kit) -> None:
 def test_g1_maria_es(builder, kit) -> None:
     view = builder.build(kit.maria(), lang="es", now=kit.NOW, base_url="")
     assert view.lang == "es" and ids(view) == LIKELY_BLOCKS
-    assert view.headline == "Podrías recibir unos $306 al mes para comprar comida."
+    assert view.headline == "Podrías recibir hasta $306 al mes para comprar comida."
     assert "Si el ingreso total de tu hogar pasa de $1,729 al mes, avísale al condado en 10 días." in \
         block(view, "after_approval").paragraphs
     assert block(view, "today_action").paragraphs[-1].endswith(

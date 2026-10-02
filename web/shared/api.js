@@ -1,4 +1,4 @@
-// refriGator shared API helper (docs/UI_SPEC.md A8.3). ES module, same origin only.
+// GatorPlate shared API helper (docs/UI_SPEC.md A8.3). ES module, same origin only.
 // fetchJSON: JSON in and out; a non-200 answer throws ApiError from the {"error": {code, message, retryable}} body.
 // The console's live events (server-sent events with a polling fallback) are in web/console/events.js, which only
 // the console loads.

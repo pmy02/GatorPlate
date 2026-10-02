@@ -1,6 +1,6 @@
 [
  {
-  "say": "Hola, soy refriGator, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). refriGator solo recibe el texto y nunca guarda audio.",
+  "say": "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio.",
   "ask": "¿Te parece bien?",
   "end": false,
   "end_reason": null,
@@ -9,7 +9,7 @@
   "expect": "yes_no",
   "interruptible": false,
   "hold_s": 0,
-  "display": "Hola, soy refriGator, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). refriGator solo recibe el texto y nunca guarda audio. ¿Te parece bien?",
+  "display": "Hola, soy GatorPlate, un asistente de IA hecho por estudiantes, no un servicio oficial de SF State. Tu navegador convierte tu voz en texto (Chrome usa el servicio de voz de Google; Safari usa el de Apple). GatorPlate solo recibe el texto y nunca guarda audio. ¿Te parece bien?",
   "choices": [
    "Sí",
    "No"
@@ -19,7 +19,7 @@
  },
  {
   "say": "Gracias.",
-  "ask": "En SF State, ¿estudias licenciatura o posgrado, y cuántas unidades tomas este semestre?",
+  "ask": "En SF State, ¿estudias licenciatura o posgrado, y cuántas unidades estás tomando este semestre?",
   "end": false,
   "end_reason": null,
   "lang": "es",
@@ -27,7 +27,7 @@
   "expect": "open",
   "interruptible": true,
   "hold_s": 0,
-  "display": "Gracias. En SF State, ¿estudias licenciatura o posgrado, y cuántas unidades tomas este semestre?",
+  "display": "Gracias. En SF State, ¿estudias licenciatura o posgrado, y cuántas unidades estás tomando este semestre?",
   "choices": null,
   "card_url": null,
   "debug": null
@@ -48,7 +48,7 @@
   "debug": null
  },
  {
-  "say": "Como tienes menos de 22 años y vives con tu mamá o tu papá, para CalFresh tú y tu familia son un solo hogar. La coordinación de CalFresh de SF State te puede ayudar a hacer la solicitud en familia. Tus respuestas quedan guardadas para la coordinación. Tu tarjeta de refriGator está lista. Ábrela para ver tus próximos pasos. Si quieres hablar con una persona, la coordinación de CalFresh de SF State atiende en el cuatro uno cinco, tres tres ocho, uno dos cero tres.",
+  "say": "Como tienes menos de 22 años y vives con tu mamá o tu papá, para CalFresh tú y tu familia son un solo hogar. La coordinación de CalFresh de SF State te puede ayudar a hacer la solicitud en familia. Tus respuestas quedan guardadas para la coordinación. Tu tarjeta de GatorPlate está lista. Ábrela para ver tus próximos pasos. Si quieres hablar con una persona, la coordinación de CalFresh de SF State atiende en el cuatro uno cinco, tres tres ocho, uno dos cero tres.",
   "ask": "¿Algo más?",
   "end": false,
   "end_reason": null,
@@ -57,7 +57,7 @@
   "expect": "open",
   "interruptible": false,
   "hold_s": 0,
-  "display": "Como tienes menos de 22 años y vives con tu mamá o tu papá, para CalFresh tú y tu familia son un solo hogar. La coordinación de CalFresh de SF State te puede ayudar a hacer la solicitud en familia. Tus respuestas quedan guardadas para la coordinación. Tu tarjeta de refriGator está lista. Ábrela para ver tus próximos pasos. Si quieres hablar con una persona, la coordinación de CalFresh de SF State atiende en el (415) 338-1203. ¿Algo más?",
+  "display": "Como tienes menos de 22 años y vives con tu mamá o tu papá, para CalFresh tú y tu familia son un solo hogar. La coordinación de CalFresh de SF State te puede ayudar a hacer la solicitud en familia. Tus respuestas quedan guardadas para la coordinación. Tu tarjeta de GatorPlate está lista. Ábrela para ver tus próximos pasos. Si quieres hablar con una persona, la coordinación de CalFresh de SF State atiende en el (415) 338-1203. ¿Algo más?",
   "choices": [
    "No, gracias"
   ],
@@ -65,7 +65,7 @@
   "debug": null
  },
  {
-  "say": "¡Gracias por usar refriGator! Mucha suerte.",
+  "say": "¡Gracias por usar GatorPlate! Mucha suerte.",
   "ask": null,
   "end": true,
   "end_reason": "completed",
@@ -74,7 +74,7 @@
   "expect": "open",
   "interruptible": false,
   "hold_s": 0,
-  "display": "¡Gracias por usar refriGator! Mucha suerte.",
+  "display": "¡Gracias por usar GatorPlate! Mucha suerte.",
   "choices": null,
   "card_url": "/c/example-card-token-sofia-0001",
   "debug": null

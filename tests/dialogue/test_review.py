@@ -167,10 +167,10 @@ async def test_volunteered_cash_still_gets_the_outlook(rig_factory) -> None:
 # ------------------------------------------------------------------------------------------ unclear answers
 
 async def test_a_given_up_answer_leaves_a_yellow_line(rig_factory) -> None:
-    rig = rig_factory(understanding=FakeUnderstanding(extra={"Hmm.": x()}))
+    rig = rig_factory(understanding=FakeUnderstanding(extra={"Banana.": x()}))
     await at(rig, "ask.rent")
-    await rig.say("Hmm.")
-    await rig.say("Hmm.")
+    await rig.say("Banana.")
+    await rig.say("Banana.")
     case = rig.case()
     assert case.slots[S.rent_share].state == "unclear"
     assert [y.code for y in case.yellow_lines if y.resolved is None] == ["unclear.rent_share"]
@@ -453,16 +453,16 @@ async def test_an_unclear_answer_to_a_flip_about_an_unclear_answer_is_given_up_o
                                             "hours_per_week": None, "state": "unclear", "quote": "kind of both",
                                             "quote_en": None}])
     rig = rig_factory(card_delivery="screen", understanding=FakeUnderstanding(extra={
-        "Kind of both, it depends.": unclear_food, "Hmm.": x()}))
+        "Kind of both, it depends.": unclear_food, "Banana.": x()}))
     await rig.start()
     for text in ("Yes, that's fine.", "I'm an SF State undergrad, a junior, and I'm taking 12 units.",
                  "I'm 20, and I live with two roommates.", "Kind of both, it depends.",
                  "I work at the campus library, about 900 a month. Nobody gives me cash."):
         await rig.say(text)
     assert keys(await rig.say("Eleven hundred."))[-1] == "flip.household_food"
-    first = await rig.say("Hmm.")
+    first = await rig.say("Banana.")
     assert keys(first) == ["reprompt.unclear", "flip.household_food"]
-    second = await rig.say("Hmm.")
+    second = await rig.say("Banana.")
     assert "flip.household_food" not in keys(second)  # given up once, never asked again
     assert sum(1 for a in rig.case().asked if a.key == "flip.household_food") == 2  # the flip and its closed form
     assert any(y.slot == S.household_food for y in rig.case().yellow_lines)

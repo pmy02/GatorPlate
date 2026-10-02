@@ -64,7 +64,10 @@ side_question; otherwise side_question is null.
 17. is_ai covers "are you a robot?", "is this a real person?" and "is this official?"; human_request is only a \
 request to talk to a person ("can I talk to a real person?", "quiero hablar con una persona").
 18. answered_pending: "yes" if the utterance answers the pending question, "partial" if it answers part of it or \
-gives other facts, "no" otherwise. Nothing extractable -> observations [] and answered_pending "no".
+gives other facts, "no" otherwise. Nothing extractable -> observations [] and answered_pending "no". Noise, \
+fillers or a cut-off word ("[inaudible]", "uh", "mm", "under-") and background speech not said to you (TV, radio, \
+other people: "tonight's jackpot is four hundred million", "see you tomorrow, bye bye") are nothing extractable: no \
+intents, never dont_know.
 19. Who the student lives with answers lives_with_parent, whatever was asked; always report it, also beside \
 roommates: alone, roommates, housemates, friends, other students, a partner, a spouse, a dorm, a couch or a shelter \
 -> "false"; a parent, step-parent or guardian, even with others -> "true". "20, two roommates" -> age 20, \

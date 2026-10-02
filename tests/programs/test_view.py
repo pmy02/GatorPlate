@@ -282,7 +282,7 @@ def test_dates_in_both_languages(engine, make_case) -> None:
     clip_en = next(p for p in en.programs if p.id == "clipper_start")
     clip_es = next(p for p in es.programs if p.id == "clipper_start")
     assert clip_en.apply_by_text == "Apply by about November 19"
-    assert clip_es.apply_by_text == "Solicítalo antes del 19 de noviembre, más o menos"
+    assert clip_es.apply_by_text == "Solicítalo antes del 19 de noviembre"
     assert "checked Oct 1, 2026." in en.footnote and "revisadas el 1 oct 2026." in es.footnote
 
 

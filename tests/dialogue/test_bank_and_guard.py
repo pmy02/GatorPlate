@@ -19,13 +19,11 @@ from gatorplate.dialogue.budget import budget_class, count_words, fits, split_po
 from gatorplate.dialogue.output_guard import OutputGuard
 from gatorplate.dialogue.templates import Bank, Step, fill, pick_index
 from gatorplate.dialogue.verbalize import (
-    PHONE_SPOKEN_NAME,
     code_display,
     digits_spoken,
     int_words,
     money_display,
     money_words,
-    name_spoken,
     url_display,
     url_spoken,
 )
@@ -220,18 +218,6 @@ def test_money_cents_codes_urls() -> None:
         assert not phone_text_problems(money_words(n))
 
 
-def test_phone_says_the_name_as_two_words() -> None:
-    """Phone text says the display name as two words (PHONE_SPOKEN_NAME); other words are left alone."""
-    assert PHONE_SPOKEN_NAME == "Refri Gator"
-    assert name_spoken("Thanks for calling refriGator. Goodbye.") == "Thanks for calling Refri Gator. Goodbye."
-    assert name_spoken("refriGator is built for SF State students.") == "Refri Gator is built for SF State students."
-    assert name_spoken("refriGator's design") == "Refri Gator's design"
-    url = url_spoken("https://gatorplate.fly.dev", "/talk", Lang.es)
-    assert name_spoken(f"usa refriGator en la web: {url}.") == f"usa Refri Gator en la web: {url}."
-    assert name_spoken("a refrigerator, refriGators, GatorPlate") == "a refrigerator, refriGators, GatorPlate"
-    assert not phone_text_problems(name_spoken("Thanks for calling refriGator."))
-
-
 # ------------------------------------------------------------------------------------------ word budgets
 
 def test_word_counter_follows_the_contract_rule() -> None:
@@ -264,7 +250,6 @@ async def test_phone_offer_web_is_spanish_and_within_budget(settings_test) -> No
     reply = await rig.say("Can we do this in Spanish? Español, por favor.")
     assert reply.lang == "es" and "gatorplate punto fly punto dev barra talk" in reply.say
     assert count_words(reply.say) <= 25 and not phone_text_problems(reply.say)
-    assert "usa Refri Gator en la web" in reply.say and "refriGator" not in reply.say
 
 
 def test_sample_combinations_stay_within_budget() -> None:

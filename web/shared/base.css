@@ -1,4 +1,4 @@
-/* refriGator base styles (docs/UI_SPEC.md A6). Link after /shared/tokens.css. Tokens only. */
+/* GatorPlate base styles (docs/UI_SPEC.md A6). Link after /shared/tokens.css. Tokens only. */
 *,*::before,*::after{box-sizing:border-box}
 html{line-height:var(--gp-lh)}
 body{min-height:100vh;font-size:var(--gp-fs-body);color:var(--gp-text);overflow-wrap:break-word}
@@ -26,9 +26,9 @@ small,.small{font-size:var(--gp-fs-small)}
 .icon--card{width:var(--gp-icon-card);height:var(--gp-icon-card)}
 .logo{color:var(--gp-brand)}
 .logo:has(+ .wordmark){display:none}
-/* Wordmark: refri<b>Gator</b>; "Gator" light inside a currentColor pill ring (A6.7). */
+/* Wordmark: <b>Gator</b>Plate; "Gator" light inside a currentColor pill ring, "Plate" heavy (A6.7). */
 .wordmark{display:inline-flex;align-items:center;font-size:var(--gp-fs-h2);font-weight:var(--gp-fw-heavy);font-stretch:var(--gp-wide);letter-spacing:-0.03em;line-height:1;white-space:nowrap;color:var(--gp-text)}
-.wordmark b{font-weight:var(--gp-fw-light);letter-spacing:-0.01em;border:1.5px solid;border-radius:var(--gp-r-pill);padding:.1em .38em .14em;margin-left:.06em}
+.wordmark b{font-weight:var(--gp-fw-light);letter-spacing:-0.01em;border:1.5px solid;border-radius:var(--gp-r-pill);padding:.1em .38em .14em;margin-right:.08em}
 .cluster{display:flex;flex-wrap:wrap;gap:var(--gp-s2);align-items:center}
 /* Dark area: graphite falloff + grain; role tokens re-point to their on-ink pairs (A6.1). */
 .dark{--gp-text:var(--gp-on-ink);--gp-text-2:var(--gp-on-ink-2);--gp-text-3:var(--gp-on-ink-3);--gp-primary:var(--gp-on-ink);--gp-primary-hover:var(--gp-accent);--gp-on-primary:var(--gp-ink);--gp-primary-tint:var(--gp-ink-3);--gp-surface:var(--gp-ink-2);--gp-sunken:var(--gp-ink-3);--gp-sunken-2:var(--gp-ink-2);--gp-border:var(--gp-ink-hair);--gp-border-strong:var(--gp-ink-line);--gp-focus:var(--gp-accent);--gp-live:var(--gp-accent);--gp-live-ring:color-mix(in srgb,var(--gp-live) 45%,transparent);--gp-live-ring-0:color-mix(in srgb,var(--gp-live) 0%,transparent);--gp-brand:var(--gp-on-ink);position:relative;isolation:isolate;color:var(--gp-text);background:radial-gradient(120% 90% at 85% 0%,var(--gp-ink-3),var(--gp-ink-2) 38%,var(--gp-ink) 72%)}
