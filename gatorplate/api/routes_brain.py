@@ -3,10 +3,15 @@ exact body bytes against the frozen schema, serializes requests per call and map
 every word, the seq rules and the stored replies.
 
 A request rejected with 401 or 422 never reaches the brain, so it never uses up its seq.
+
+After a successful `/start`, the platform asks the understanding to open its pooled connection to the language-model
+host (no model call: `/start` never calls the language model, docs/BRAIN_API.md §9). The pre-connect runs as a
+background task while the opening is spoken; `/start` never waits for it and never sees its result or failure.
 """
 
 from __future__ import annotations
 
+import asyncio
 import re
 from typing import Any
 
@@ -22,6 +27,27 @@ from gatorplate.contracts.common import Lang
 
 router = APIRouter()
 CALL_ID_RE = re.compile(CALL_ID)
+_PRECONNECTS: set[asyncio.Task[Any]] = set()  # strong references until each pre-connect finishes
+
+
+def _preconnect(ctx: AppContext) -> None:
+    """Fire and forget: schedule the understanding's pre-connect, if it has one (the fake provider and a missing key
+    make it a no-op). Nothing here can delay or fail `/start`."""
+    hook = getattr(ctx.deps.understanding, "prewarm_llm", None)
+    if not callable(hook):
+        return
+    try:
+        task = asyncio.get_running_loop().create_task(hook())
+    except Exception:  # noqa: BLE001 - not a coroutine function, or no loop: no pre-connect
+        return
+    _PRECONNECTS.add(task)
+    task.add_done_callback(_preconnect_done)
+
+
+def _preconnect_done(task: asyncio.Task[Any]) -> None:
+    _PRECONNECTS.discard(task)
+    if not task.cancelled():
+        task.exception()  # retrieved and dropped: a failed pre-connect is never reported as an error
 
 
 def _ctx(request: Request) -> AppContext:
@@ -85,6 +111,7 @@ async def start(call_id: str, request: Request) -> JSONResponse:
     async with ctx.call_lock(call_id):
         _check_channel(ctx, call_id, creds)
         reply = await ctx.deps.brain.start(call_id, req)
+    _preconnect(ctx)
     return _reply(reply)
 
 

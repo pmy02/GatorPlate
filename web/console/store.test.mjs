@@ -149,6 +149,46 @@ test("Reset demo sends reset, then seed (and Seed samples sends seed alone)", as
   assert.deepEqual(api.calls.slice(m).map((c) => c.key), ["POST /api/demo/seed", "GET /api/cases"]);
 });
 
+test("Reset demo shows the new list by itself: no event and no page reload needed", async () => {
+  const before = fixture("cases.json");
+  const after = { ...before, seq: before.seq + 2, items: before.items.filter((it) => it.id !== "c_jamal2demo") };
+  let resetDone = false;
+  const api = stub({ "GET /api/meta": fixture("meta.json"), "GET /api/cases": () => (resetDone ? after : before),
+    "POST /api/demo/reset": () => { resetDone = true; return fixture("demo_reset.json"); },
+    "POST /api/demo/seed": fixture("demo_seed.json") });
+  const ctl = createController({ fetchJSON: api.fetchJSON, ...timers });
+  await ctl.loadAll();
+  assert.ok(ctl.getState().list.byId.c_jamal2demo);
+  await ctl.actions.demoReset();
+  const s = ctl.getState();
+  assert.equal(s.list.byId.c_jamal2demo, undefined, "the removed case is gone from the list");
+  assert.deepEqual(Object.keys(s.list.byId).sort(), after.items.map((it) => it.id).sort());
+  assert.equal(s.list.seq, after.seq);
+});
+
+test("Reset demo whose seed fails still shows the list after the reset; a failed reset fetches nothing more", async () => {
+  const before = fixture("cases.json");
+  const after = { ...before, seq: before.seq + 1, items: before.items.filter((it) => it.id !== "c_jamal2demo") };
+  let resetDone = false;
+  const api = stub({ "GET /api/meta": fixture("meta.json"), "GET /api/cases": () => (resetDone ? after : before),
+    "POST /api/demo/reset": () => { resetDone = true; return fixture("demo_reset.json"); },
+    "POST /api/demo/seed": new StubError(500, "internal", "Something went wrong.") });
+  const ctl = createController({ fetchJSON: api.fetchJSON, ...timers });
+  await ctl.loadAll();
+  const n = api.calls.length;
+  assert.equal(await ctl.actions.demoReset(), null);
+  assert.deepEqual(api.calls.slice(n).map((c) => c.key), ["POST /api/demo/reset", "POST /api/demo/seed", "GET /api/cases"]);
+  assert.equal(ctl.getState().list.byId.c_jamal2demo, undefined, "the removed case does not linger");
+
+  const refused = stub({ "GET /api/meta": fixture("meta.json"), "GET /api/cases": before,
+    "POST /api/demo/reset": new StubError(500, "internal", "Something went wrong.") });
+  const ctl2 = createController({ fetchJSON: refused.fetchJSON, ...timers });
+  await ctl2.loadAll();
+  const m = refused.calls.length;
+  assert.equal(await ctl2.actions.demoReset(), null);
+  assert.deepEqual(refused.calls.slice(m).map((c) => c.key), ["POST /api/demo/reset"]);
+});
+
 test("Sofia: 'Looks right' unlocks 'Mark reviewed'; the review then succeeds", async () => {
   const api = stub({
     "GET /api/meta": fixture("meta.json"), "GET /api/cases": fixture("cases.json"),

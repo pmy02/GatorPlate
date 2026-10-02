@@ -571,11 +571,12 @@ export function createController({ fetchJSON, now = () => Date.now(), save = () 
       }
     },
     async demoReset() {
+      let reset = null;
       try {
         // nothing is watched while the cases are deleted, so no fetch asks for a case the reset just removed
         dispatch({ type: "select", id: null });
         dispatch({ type: "follow", id: null });
-        const reset = await call("/api/demo/reset", { method: "POST", body: {} });
+        reset = await call("/api/demo/reset", { method: "POST", body: {} });
         await call("/api/demo/seed", { method: "POST", body: {} });
         const text = resetResult(reset.deleted ?? 0);
         dispatch({ type: "demo/result", text });
@@ -589,6 +590,8 @@ export function createController({ fetchJSON, now = () => Date.now(), save = () 
         return reset;
       } catch (err) {
         if (!handleFailure(err)) toast(err && err.message ? err.message : "Something went wrong.", "error");
+        // The reset went through and a later step failed: the list must not keep showing the removed cases.
+        if (reset) await loadList().catch(() => {});
         return null;
       }
     },

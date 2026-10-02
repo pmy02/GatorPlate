@@ -158,7 +158,9 @@ async def test_brain_routes_get_server_timing_and_one_content_free_log_line(capl
     assert timing.startswith("brain;dur=") and float(timing.removeprefix("brain;dur=")) >= 0
     assert body == {"type": "http.response.body", "body": b"{}"}
     [line] = log_lines(caplog)
-    assert set(line) == {"method", "route", "status", "server_ms"}
+    # A /turn line always carries the model step's fields; both are null when no understanding step ran.
+    assert set(line) == {"method", "route", "status", "server_ms", "llm_ms", "llm_status"}
+    assert (line["llm_ms"], line["llm_status"]) == (None, None)
     assert (line["method"], line["route"], line["status"]) == ("POST", "/v1/calls/{call_id}/turn", 200)
     assert line["server_ms"] >= 0 and CALL not in json.dumps(line)
 

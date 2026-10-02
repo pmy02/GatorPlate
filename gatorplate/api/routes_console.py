@@ -335,5 +335,6 @@ async def events(request: Request, last_event_id: str | None = None) -> Streamin
     ctx = _ctx(request)
     last = parse_last_event_id(request.headers.get("last-event-id") or last_event_id)
     sub = ctx.deps.events.open(last_seq=last)
+    # No proxy buffering, caching or transforming (compression would hold the stream back).
     return StreamingResponse(event_stream(sub, ping_s=ctx.sse_ping_s), media_type="text/event-stream",
-                             headers={"X-Accel-Buffering": "no"})
+                             headers={"X-Accel-Buffering": "no", "Cache-Control": "no-cache, no-transform"})

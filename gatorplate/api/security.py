@@ -19,7 +19,10 @@ def security_headers(path: str) -> list[tuple[bytes, bytes]]:
         (b"x-content-type-options", b"nosniff"),
         (b"permissions-policy", b"microphone=(self)" if talk else b"microphone=()"),
     ]
-    if path.startswith("/api/") or path.startswith("/v1/") or path == "/healthz":
+    if path == "/api/events":
+        # The event stream also asks proxies not to transform (and so buffer or compress) its chunks.
+        headers.append((b"cache-control", b"no-store, no-transform"))
+    elif path.startswith("/api/") or path.startswith("/v1/") or path == "/healthz":
         headers.append((b"cache-control", b"no-store"))
     if path.startswith(NOINDEX_PREFIXES):
         headers.append((b"x-robots-tag", b"noindex"))

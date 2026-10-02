@@ -11,6 +11,8 @@ primary_region = "iad"
   GP_PUBLIC_BASE_URL = "https://gatorplate.fly.dev"
   GP_DB_PATH = "/data/gatorplate.db"
   GP_LLM_PROVIDER = "anthropic"
+  # Hedge a slow model call with a second identical request at about the warm median latency (about half the turns).
+  GP_LLM_HEDGE_MS = "1250"
   GP_DEBUG_KEYS = "0"
   GP_DEMO_MODE = "1"
   GP_LIVE_TRANSCRIPT = "1"

@@ -41,9 +41,17 @@ old amount ("in 2025 I made 700, now I make 900"), another season ("maybe ninete
 with its split ("2200, I pay half, so 1100") is never a sum.
 
 Not amounts: clock times ("at five", "from nine to five", "a las tres"), years ("since 2024", "since 2023 and make
-900"), labels ("room 4", "my room is number 4") and counts ("two accounts", "three shifts").
+900"), labels ("room 4", "my room is number 4") and counts ("two accounts", "three shifts", "two other students").
+Renting a place ("I rent a room with two other students") is where the student lives: while the rent question is not
+pending, a number said with it is a rent only when said as money ("for 900", "$900", "900 a month").
 
 Where the student lives: roommates, friends, a couch, a dorm or a spouse (and no parent named) -> not with a parent;
+asked who the student lives with, friends, other students or a partner said with "with" ("live in an apartment with
+friends") and living alone ("20, on my own") answer it too, unless a parent, the family or a guardian is named. A
+parent named at home beside the others ("I live with my wife and my parents", "two roommates and my mom") is never
+"not with a parent" (docs/SPEC.md §4.3 item 3.5: no exceptions), and asked, a parent said plainly ("20, my parents",
+"me and my mom") is "with a parent". Only the home today counts: a negated, past, future or work phrase ("I don't
+live alone", "I used to live in the dorms", "I'm looking for roommates", "I work at the dorms") says nothing about it;
 living alone, or only with a spouse and their own children ("my wife and I") -> household_food "alone" (also roommates
 "false" when the student says alone). Unsure ("no estoy seguro", "No, I'm not sure", "no clue") is never a "no", and
 "Nobody.", "Nobody but me" or "Solo yo" to the rent-paid-by-others question is a no.
@@ -116,13 +124,20 @@ _HEDGE = _rx(r"\bmaybe\b|\bsometimes\b|\bdepends?\b|\bkind of\b|\bsort of\b|\bpr
 _CORRECTION = _rx(r"\bno wait\b|\bwait\b|\bi mean\b|\bi meant\b|\bactually\b|\bsorry\b|\bperdon\b|\bo sea\b|"
                   r"\bdigo\b|\bquise decir\b|\bquiero decir\b|\bespera\b|\bme equivoque\b")
 _NEGATED_BEFORE = _rx(r"\b(?:not|no|no son|no es|it'?s not|isn'?t|not like)\s+$")
+# A count, not an amount: a number before a noun of things or people ("two accounts", "three shifts", "two of us"),
+# also with "other" or "more" between ("two other students", "three more roommates", "two other jobs"). A time noun
+# takes no such word: "1200 other weeks" is an amount said for some weeks, not a count of weeks.
+_THING_NOUN = (r"roommates?|roomies|housemates?|flatmates?|compa\w+|kids?|children|sons?|daughters?|hij[oa]s?|"
+               r"nin[oa]s?|people|persons|personas|friends?|amig[oa]s|siblings?|brothers?|sisters?|herman[oa]s|"
+               r"students?|estudiantes|others|guys|girls|gals|chic[oa]s|muchach[oa]s|classmates?|coworkers?|"
+               r"cousins?|prim[oa]s|units?|unidades|credits?|creditos|classes|clases|jobs?|trabajos|meals?|comidas|"
+               r"accounts?|cuentas|cards?|tarjetas|(?:bed)?rooms?|cuartos|recamaras|habitaciones|pets?|mascotas|cars?|"
+               r"carros|shifts?|turnos|apartments?")
 _COUNT_NOUN = _rx(
-    r"\s*-?\s*(?:units?|unidades|credits?|creditos|classes|clases|jobs?|trabajos|roommates?|roomies|housemates|"
-    r"compa\w+|kids?|children|sons?|daughters?|hij[oa]s?|nin[oa]s?|years?|anos|months?|meses|weeks?|semanas|"
-    r"days?|dias|meals?|comidas|times|veces|people|personas|semesters?|semestres?|minutes?|minutos|hours?|hrs?|"
-    r"horas|percent|por ciento|ways|partes|accounts?|cuentas|cards?|tarjetas|(?:bed)?rooms?|cuartos|recamaras|"
-    r"habitaciones|pets?|mascotas|cars?|carros|friends?|amig[oa]s|siblings?|brothers?|sisters?|herman[oa]s|"
-    r"shifts?|turnos|apartments?|%)\b")
+    r"\s*-?\s*(?:(?:(?:other|more|older|younger|fellow|different|college|grad|international|female|male)\s+){1,2}"
+    r"(?:" + _THING_NOUN + r")|" + _THING_NOUN + r"|"
+    r"years?|anos|months?|meses|weeks?|semanas|days?|dias|times|veces|semesters?|semestres?|minutes?|minutos|hours?|"
+    r"hrs?|horas|percent|por ciento|ways|partes|of us|of them|de nosotr[oa]s|de ell[oa]s|%)\b")
 # Numbers that are not amounts: clock times ("at five", "from nine to five", "a las cinco"), years ("since 2024")
 # and labels ("room 4", "my room is number 4", "#4"). Their spans are skipped like the words of a period.
 _CLOCK = (r"(?:1[0-2]|0?[1-9])(?::[0-5]\d)?|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|"
@@ -222,6 +237,13 @@ _OTHER_CASH = _rx(
     r"\bfrom (?:my|mi) " + _FAMILY + r"\b|"
     r"\b(?:my|mi|mis) " + _FAMILY + r"\s+(?:\w+\s+)?(?:pays?|paid) me\b")
 _RENT = _rx(r"\b(?:rent|renta|my share|mi parte|my part|lease|alquiler)\b")
+# "I rent a room with two other students": renting a place is where the student lives, not an amount. While the rent
+# question is not pending, a number said with it is a rent only when it is said as money ("for 900", "$900", "900 a
+# month").
+_RENT_VERB = _rx(r"\brent(?:s|ing|ed)?\s+(?:out\s+)?(?:a|an|one|the|my|our|this|that)\s+(?:\w+\s+){0,2}?"
+                 r"(?:rooms?|place|apartment|apt|studio|house|home|unit|bedroom|bed|spot|flat|condo|in-?law)\b")
+_RENT_LINK_BEFORE = _rx(r"\b(?:for|is|it'?s|costs?|runs?|pay|paying)\s+(?:about\s+|around\s+|like\s+|maybe\s+|"
+                        r"roughly\s+|only\s+|just\s+)?\$?$")
 _EARNED = _rx(r"\b(?:work|works|working|job|jobs|make|makes|making|earn|earns|earning|paycheck|pays me|"
               r"(?:get|gets|got|getting|am|i'?m|be|being) paid|paid me|"
               r"pay me|salary|wages?|shifts?|gano|gana|ganamos|trabajo|trabaja|me pagan|me paga|sueldo|salario|"
@@ -450,6 +472,10 @@ _FLAGS: list[tuple[SlotName, re.Pattern[str]]] = [
                     r"\brento un cuarto\b.{0,80}\bcomidas\b")),
 ]
 _LWP_FALSE = _rx(r"\b(?:don'?t|do not) live with my (?:parents|mom|dad|family)\b|\bno vivo con mis (?:papas|padres)\b|"
+                 r"\b(?:i'?m|i am) not (?:living|staying) with my (?:parents|mom|dad|mother|father|family)\b|"
+                 r"\bno longer live with my (?:parents|mom|dad|mother|father|family)\b|"
+                 r"(?:^|[,.;]\s*)not with my (?:parents|mom|dad|mother|father|family)\W*$|"
+                 r"\bya no vivo con (?:mi|mis) (?:papas|padres|mama|papa|madre|padre)\b|"
                  r"\b(?:live|living) (?:alone|by myself|on my own)\b|\bvivo sol[oa]\b|\bvivo por mi cuenta\b|"
                  r"\bvivo independiente\b|"
                  r"\b(?:staying|sleeping|crashing|living) (?:on|at|with) (?:a |my |some )?(?:friends?'?s?|"
@@ -473,7 +499,7 @@ _LWP_FALSE = _rx(r"\b(?:don'?t|do not) live with my (?:parents|mom|dad|family)\b
                  r"\bvivo con (?:dos |tres |\w+ )?compa\w+\b|\bvivo en (?:el campus|las residencias|"
                  r"los dormitorios)\b|\bresidencias del campus\b")
 _LWP_TRUE = _rx(r"\b(?:live|living|stay|staying)\b(?: at home)? with (?:my |mis? )?(?:mom|mother|dad|father|parents|"
-                r"stepdad|stepmom|stepfather|stepmother|folks|papas|padres|mama|papa)\b|\blive at home\b|"
+                r"stepdad|stepmom|stepfather|stepmother|folks|papas|padres|mama|papa)\b(?!-in-law)|\blive at home\b|"
                 r"(?:^|[,.;]\s*)(?:still )?with (?:my )?(?:mom|mother|dad|father|parents|folks)\W*$|"
                 r"(?:^|[,.;]\s*)con (?:mi|mis) (?:mama|papa|papas|padres|madre|padre)\W*$|"
                 r"\bvivo con (?:mi|mis) (?:mama|papa|papas|padres|madre|padre|padrastro|madrastra)\b")
@@ -486,8 +512,78 @@ _NO_ONE = _rx(r"\b(?:no one|nobody|no-one|nadie)\b")
 _NEG_NEAR = _rx(r"\b(?:don'?t|do not|never|no|not|nunca|sin|without)\s+(?:\w+\s+){0,2}$")
 _PARENT_WORDS = _rx(r"\b(?:mom|mother|dad|father|parents?|stepdad|stepmom|folks|mama|papa|papas|padres|madre|"
                     r"padre|at home)\b")
-_ROOMMATE_NOUN = _rx(r"\s+(?:roommates|roomies|housemates|compa\w+(?: de (?:cuarto|casa|piso|departamento))?)\b")
-_DORM_TRUE = _rx(r"\b(?:live|living) in (?:the )?(?:dorms?|residence halls?)\b|\bin the dorms\b|"
+_ROOMMATE_NOUN = _rx(r"\s+(?:other\s+)?(?:roommates|roomies|housemates|compa\w+(?: de (?:cuarto|casa|piso|"
+                     r"departamento))?)\b")
+# Who else lives there, said to a question that asks lives_with_parent ("20, two roommates", "live in an apartment
+# with friends", "I rent a room with two other students", "on my own"): with no parent named, not with a parent.
+# Roommates, a dorm, a couch or living alone say it by themselves; friends, other students, a partner or a spouse
+# need "with" ("con") and a word about the home (or the answer starting with "with": "20, with friends").
+_HOME_FAMILY = _rx(_PARENT_WORDS.pattern + r"|\b(?:family|familia|guardians?|tutor(?:a|es)? legal(?:es)?)\b|"
+                   r"\b(?:back home|moved (?:back )?home|(?:live|lives|living) home)\b")
+_CO_LIVING = _rx(r"\b(?:roommates?|roomies?|housemates?|flatmates?|dorms?|residence halls?|"
+                 r"campus housing|couch(?:es)?|couch[- ]?surf\w*|sofa)\b|"
+                 r"\bcompa(?:ner[oa]s?|s)\b(?!\s+de\s+(?:la\s+)?(?:clase|trabajo|escuela|universidad|equipo|estudio|"
+                 r"curso|carrera))|"
+                 r"\b(?:los|las) (?:dormitorios|residencias)\b|\bresidencias? (?:estudiantil(?:es)?|del campus|"
+                 r"universitarias?|de estudiantes)\b|"
+                 r"\b(?:live|lives|living|stay|staying)\s+(?:all\s+)?(?:alone|by myself|on my own)\b|"
+                 r"\b(?:i'?m|i am)\s+(?:all\s+)?(?:alone|on my own|by myself)\b|"
+                 r"(?:^|[,.;]\s*)(?:and\s+|just\s+|only\s+)?(?:alone|by myself|on my own|just me|only me|sol[oa]|"
+                 r"solo yo|por mi cuenta)\W*$|"
+                 r"\bvivo\s+(?:sol[oa]|por mi cuenta|independiente)\b")
+_CO_LIVING_WITH = _rx(r"\b(?:with|con)\s+(?:[a-z0-9'-]+\s+){0,3}(?:friends?|buddies|students?|people|others|guys|girls|"
+                      r"classmates|partner|boyfriend|girlfriend|fiancee?|wife|husband|spouse|amig[oa]s?|estudiantes|"
+                      r"chic[oa]s|muchach[oa]s|personas|otr[oa]s|novi[oa]|pareja|espos[oa]|marido)\b")
+_HOME_WORDS = _rx(r"\b(?:live|lives|living|stay|staying|rent|rents|renting|share|sharing|apartment|apt|place|house|"
+                  r"room|flat|studio|unit|vivo|vivimos|vive|comparto|compartimos|rento|rentamos|alquilo|departamento|"
+                  r"apartamento|depa|casa|cuarto|piso)\b")
+# Where the student lives NOW. Before a living phrase, in its own part of the sentence (after the last comma, "and" or
+# "but"): words of negation, the past, the future or a wish, or of work, school or a visit ("I don't live alone", "I
+# used to live in the dorms", "I'm looking for roommates", "I work at the dorms", "trabajo con compañeros"); after it,
+# "anymore" or "next month". Such a phrase says nothing about the home today.
+_LIVING_PART_BREAK = _rx(r"[.,;:!?\u2013\u2014]|\s-\s|\b(?:and|but|so|because|y|pero|porque)\b")
+_NOT_NOW_BEFORE = _rx(
+    r"\b(?:don'?t|doesn'?t|didn'?t|do not|does not|did not|not|never|no longer|no|nunca|ya no|sin|without|"
+    r"used to|moved out|move out|moving out|moved away|left|leaving|before|"
+    r"looking for|look for|find|finding|need|needs|want|wants|wanted|wish|hate|hated|will|i'?ll|we'?ll|gonna|"
+    r"going to|plan to|planning to|moving (?:in|out|to|back)|move (?:in|out)|"
+    r"work|works|working|worked|job|study|studies|studying|studied|hang|hanging|talk|talking|eat|eating|"
+    r"go|goes|went|visit|visits|visiting|meet|meeting|play\w*|came|come|travel\w*|"
+    r"trabajo|trabaja|trabajamos|(?<!un )(?<!el )estudio|estudia|estudiamos|salgo|hablo|vivia|vivi|antes|busco|"
+    r"buscando|necesito|quiero|me mude|me fui|deje)\b")
+_NOW_WINDOW = 60  # characters looked at before and after a living phrase
+_NOT_NOW_AFTER = _rx(r"^[^.,;!?]{0,24}?\b(?:anymore|any more|no more|next (?:week|month|semester|year|fall|spring|"
+                     r"term)|soon|later on|el (?:proximo|otro) (?:mes|semestre|ano))\b")
+# A parent (or the family, or a guardian) named as someone the student may live with. Not one: a mention that is not
+# now (above), someone else's parent ("her parents", "my boyfriend's mom", "sus papás", an in-law), and a parent who
+# pays, helps or lives somewhere else ("money from my parents", "my parents pay my rent", "my parents live in Fresno").
+_OWN_PARENT = _rx(r"\b(?:mom|mother|mommy|mum|dad|father|daddy|parents?|step-?(?:dad|mom|father|mother|parents?)|"
+                  r"folks|family|guardians?|mama|papa|papas|padres|madre|padre|padrastro|madrastra|familia|"
+                  r"tutor(?:a|es)? legal(?:es)?)\b(?!-in-law)")
+_OTHERS_PARENT_BEFORE = _rx(r"(?:\b(?:her|his|their|your|its|su|sus|tu|tus|from|miss|call|text)|"
+                            r"\b(?!(?:it|that|he|she|there|here|what|who|let)'s\b)\w+'s|\ws')\s+(?:\w+\s+)?$")
+_PARENT_ELSEWHERE_AFTER = _rx(
+    r"^(?:-in-law|\s+de\s+(?:mi|su|tu)\s+\w+)|^(?:'s|s')?\s+(?:\w+\s+)?(?:pay|pays|paid|help|helps|helped|send|sends|"
+    r"sent|give|gives|gave|cover|covers|covered|chip|chips|visit|visits|come over|comes over|stay over|stays over|"
+    r"passed|died|kicked|threw|(?:live|lives|lived|are|is|was|were|stay|stays)\s+(?:\w+\s+)?(?:in|back|out|far|"
+    r"abroad|overseas|near|nearby|close|across|outside|away)|pagan?|me\s+(?:ayuda|ayudan|manda|mandan|da|dan|paga|"
+    r"pagan)|viven?\s+(?:en|lejos|fuera)|esta[n]?\s+en|murio|fallecio|me\s+(?:corrio|corrieron|echo|echaron))\b")
+# Said plainly to a question that asks it, a parent at home is "with a parent": "20, my parents", "me and my mom",
+# "my mom and I", "20 with my mom", "I share an apartment with my dad", "I live with my boyfriend and my mom".
+_PARENT_NOUN = r"(?:mom|mother|dad|father|parents|folks|step-?(?:dad|mom|father|mother|parents))"
+_PARENT_NOUN_ES = r"(?:mama|papa|papas|padres|madre|padre|padrastro|madrastra)"
+_LWP_TRUE_ASKED = _rx(
+    r"(?:^|[,.;:]\s*)(?:it'?s\s+|just\s+|only\s+|still\s+)?(?:with\s+)?(?:me\s+(?:and|&)\s+)?(?:my\s+)?" + _PARENT_NOUN
+    + r"(?:\s+and\s+(?:i|me|my\s+\w+))?\W*$|"
+    r"(?:^|[,.;:]\s*)(?:solo\s+)?(?:con\s+)?(?:yo\s+y\s+)?(?:mi|mis)\s+" + _PARENT_NOUN_ES
+    + r"(?:\s+y\s+(?:yo|mi\s+\w+|mis\s+\w+))?\W*$|"
+    r"\b(?:with|con)\s+(?:my|mi|mis)\s+(?:" + _PARENT_NOUN + "|" + _PARENT_NOUN_ES + r")\W*$|"
+    r"\b(?:share|sharing|comparto)\s+(?:an?|the|my|our|un|el|la)\s+(?:apartment|place|house|flat|unit|room|home|"
+    r"departamento|apartamento|casa|cuarto)\s+(?:with|con)\s+(?:my\s+|mi\s+|mis\s+)?(?:" + _PARENT_NOUN + "|"
+    + _PARENT_NOUN_ES + r")\b|"
+    r"\b(?:live|living|lives|stay|staying|vivo|vivimos)\s+(?:with|con)\s+[^.;!?]{1,40}?\s(?:and|&|plus|y)\s+"
+    r"(?:also\s+|tambien\s+)?(?:with\s+|con\s+)?(?:my|mi|mis)\s+(?:" + _PARENT_NOUN + "|" + _PARENT_NOUN_ES + r")\b")
+_DORM_TRUE = _rx(r"\b(?:live|living) in (?:the |a )?(?:dorms?|residence halls?)\b|\bin the dorms\b|"
                  r"\bresidencias del campus\b|\b(?:los )?dormitorios\b|\bvivo en el campus\b|\bon[- ]campus housing\b|"
                  r"\bresidencias? (?:estudiantil(?:es)?|del campus|universitarias?|de estudiantes)\b|"
                  r"\bvivo (?:sol[oa] )?en (?:la|las) residencias?\b")
@@ -848,6 +944,8 @@ class Parser:
                 src = None
             if src in ("aid", "ssi"):
                 continue
+            if src == "rent" and default != S.rent_share and _rent_is_place(f, m):
+                continue  # "I rent a room with two other students": where the student lives, not a rent amount
             if src == "rbo" and m.clause < len(clauses) and (
                     _SELF_PAYS.search(f[slice(*_part_span(f, m, clauses[m.clause]))])
                     or _OWN_LANDLORD.search(f[slice(*_part_span(f, m, clauses[m.clause]))])):
@@ -1149,21 +1247,23 @@ class Parser:
                     start = pre.start()
                 out.append(_obs(S.age, str(int(n.value)), t[start:end]))
                 break
-        # where and with whom the student lives: a stated parent wins over a phrase that only suggests others
-        m_true = _LWP_TRUE.search(f)
-        if m_true and re.search(r"\b(?:don'?t|do not|no)\b", f[max(0, m_true.start() - 10):m_true.start()]):
-            m_true = None
-        m = _LWP_FALSE.search(f)
+        # where and with whom the student lives now: a stated parent wins over a phrase that only suggests others; a
+        # negated, past or future phrase ("I'm not living with my parents", "I don't live alone", "I used to live in
+        # the dorms", "I'm looking for roommates") says nothing about the home today
+        m_true = _find_now(_LWP_TRUE, f)
+        m = _find_now(_LWP_FALSE, f)
         if m_true:
             add(S.lives_with_parent, "true", m_true)
         elif m:
             add(S.lives_with_parent, "false", m)
-        m = _ROOMMATES.search(f)
+        no_mates = _find_now(_NO_ROOMMATES, f)  # "I live with my parents, no roommates": none
+        m = None if no_mates else _find_now(_ROOMMATES, f)
         if m:
             add(S.roommates, "true", m)
         for n in nums:
             noun = _ROOMMATE_NOUN.match(f, n.end)
-            if noun and n.value == n.value.to_integral_value() and 0 <= n.value <= 10:
+            if noun and n.value == n.value.to_integral_value() and 0 <= n.value <= 10 and not no_mates \
+                    and _now(f, n.start, noun.end()):
                 out.append(_obs(S.roommates_count, str(int(n.value)), t[n.start:noun.end()]))
                 if not any(o.slot == S.roommates for o in out):
                     out.append(_obs(S.roommates, "true", t[n.start:noun.end()]))
@@ -1173,11 +1273,32 @@ class Parser:
             mate = next((o for o in out if o.slot == S.roommates and o.value == "true"), None)
             if mate is not None:
                 out.append(_obs(S.lives_with_parent, "false", mate.quote))
+        # Asked who the student lives with: friends, other students, a partner, a dorm or living alone, and no parent
+        # named ("I'm 20 and live in an apartment with friends") -> not with a parent.
+        if S.lives_with_parent in pslots and not any(o.slot == S.lives_with_parent for o in out):
+            span = _co_living(f)
+            if span is not None:
+                out.append(_obs(S.lives_with_parent, "false", t[span[0]:span[1]]))
+        # A parent named at home beside the others ("I live with my wife and my parents", "two roommates and my mom",
+        # "vivo con mi novio y mi mamá") is never "not with a parent" (docs/SPEC.md §4.3 item 3.5: no exceptions);
+        # asked, a parent said plainly ("20, my parents", "me and my mom") is "with a parent".
+        if _parent_at_home(f):
+            out[:] = [o for o in out if not (o.slot == S.lives_with_parent and o.value == "false")]
+            if S.lives_with_parent in pslots and not any(o.slot == S.lives_with_parent for o in out):
+                mt = next((x for x in _LWP_TRUE_ASKED.finditer(f) if _now(f, x.start(), x.end())
+                           and not _PARENT_ELSEWHERE_AFTER.search(f[x.end():x.end() + _NOW_WINDOW])), None)
+                if mt is not None:
+                    start, end = mt.span()
+                    while start < end and f[start] in " ,.;:!?":
+                        start += 1
+                    while end > start and f[end - 1] in " ,.;:!?":
+                        end -= 1
+                    out.append(_obs(S.lives_with_parent, "true", t[start:end]))
         m = _DORM_FALSE.search(f)
         if m:
             add(S.dorm_on_campus, "false", m)
         else:
-            m = _DORM_TRUE.search(f)
+            m = _find_now(_DORM_TRUE, f)
             if m:
                 add(S.dorm_on_campus, "true", m)
         m = _HOMELESS.search(f)
@@ -1191,7 +1312,7 @@ class Parser:
                 out.append(hf)
         # "I live alone", "I don't have roommates": no roommates
         if not any(o.slot == S.roommates for o in out):
-            m = _NO_ROOMMATES.search(f) or _HF_LIVE_ALONE.search(f)
+            m = no_mates or _find_now(_HF_LIVE_ALONE, f)
             if m:
                 add(S.roommates, "false", m)
         # spouse, children, boarder, meals
@@ -1421,6 +1542,15 @@ def _mention_source(f: str, m: _Mention, cues: list[tuple[str, int, int]], claus
     return min(after, key=lambda c: c[1])[0] if after else None
 
 
+def _rent_is_place(f: str, m: _Mention) -> bool:
+    """True when every rent word of the utterance is the verb of renting a place ("I rent a room") and the amount is
+    not said as money: no "$" or "dollars", no period, no "for" or "it's" before it."""
+    places = [(p.start(), p.end()) for p in _RENT_VERB.finditer(f)]
+    if not places or not all(any(a <= r.start() < b for a, b in places) for r in _RENT.finditer(f)):
+        return False
+    return not (m.num.dollar or m.period is not None or _RENT_LINK_BEFORE.search(f[max(0, m.start - 30):m.start]))
+
+
 def _flip_amount_slot(value: Decimal, seg: str, known: dict[SlotName, str], answer: Answer | None,
                       correcting: bool) -> SlotName | None:
     """Where an amount said to the rent-paid-by-others question goes when no payer is named: the question's own slot,
@@ -1483,6 +1613,57 @@ def _spoken_band(slot: SlotName, t: str, f: str, edges: tuple[Decimal, Decimal],
     return _obs(slot, fmt(nums[0].value), quote, period=period)
 
 
+def _now(f: str, start: int, end: int) -> bool:
+    """True when the phrase f[start:end] says where the student lives now: no word of negation, the past, the future,
+    work or school before it in its own part of the sentence, and no "anymore" or "next month" after it. A phrase that
+    starts with a comma (", my parents") is a part of its own."""
+    while start < end and f[start] in " ,.;:!?":
+        start += 1
+    prefix = f[max(0, start - _NOW_WINDOW):start]  # a few words are enough, and a long line stays linear
+    cut = max((m.end() for m in _LIVING_PART_BREAK.finditer(prefix)), default=0)
+    return not _NOT_NOW_BEFORE.search(prefix[cut:]) and not _NOT_NOW_AFTER.search(f[end:end + _NOW_WINDOW])
+
+
+def _find_now(rx: re.Pattern[str], f: str) -> re.Match[str] | None:
+    """The first match of rx that says where the student lives now (see _now)."""
+    return next((m for m in rx.finditer(f) if _now(f, m.start(), m.end())), None)
+
+
+def _parent_at_home(f: str) -> bool:
+    """A parent, the family or a guardian is named as someone the student may live with now: not negated, not past or
+    future, not someone else's parent, and not a parent who only pays, helps or lives somewhere else."""
+    for m in _OWN_PARENT.finditer(f):
+        if not _now(f, m.start(), m.end()) or _OTHERS_PARENT_BEFORE.search(f[max(0, m.start() - 30):m.start()]):
+            continue
+        if _PARENT_ELSEWHERE_AFTER.search(f[m.end():m.end() + _NOW_WINDOW]):
+            continue
+        return True
+    return False
+
+
+def _co_living(f: str) -> tuple[int, int] | None:
+    """The span of the phrase that says who else lives there now when no parent (or family, or guardian) is named."""
+    if any(_now(f, m.start(), m.end()) for m in _HOME_FAMILY.finditer(f)):
+        return None
+    found = _find_now(_CO_LIVING, f)
+    if found is None:
+        for m in _CO_LIVING_WITH.finditer(f):
+            before = f[:m.start()]
+            if not _now(f, m.start(), m.end()):
+                continue
+            if _HOME_WORDS.search(f) or re.search(r"(?:^|[,.;]\s*|\b(?:and|y)\s+)$", before):
+                found = m
+                break
+    if found is None:
+        return None
+    start, end = found.span()
+    while start < end and f[start] in " ,.;!?":
+        start += 1
+    while end > start and f[end - 1] in " ,.;!?":
+        end -= 1
+    return start, end
+
+
 def _others_at_home(f: str) -> bool:
     """Someone other than a spouse or the student's children is mentioned ("roommates", "my parents"), not negated
     ("I don't have roommates", "sin compañeros")."""
@@ -1497,11 +1678,12 @@ def _household_food(t: str, f: str, *, allow_alone: bool) -> SlotObservation | N
     others = _others_at_home(f)
     # "I live alone" (or only with a spouse and the student's own children) is the answer whatever the question's
     # choices: buying and cooking "separately" or "my own food" then only repeats it.
-    alone = _HF_ALONE.search(f) or (_SPOUSE_ONLY.search(f) if not others else None) or (
+    alone = _find_now(_HF_ALONE, f) or (_SPOUSE_ONLY.search(f) if not others else None) or (
         _TWO_OF_US.search(f) if not others and _SPOUSE.search(f) else None)
     if alone and not shared and not others:
         return _obs(S.household_food, "alone", t[alone.start():alone.end()])
-    live_alone = _HF_LIVE_ALONE.search(f)  # "I live alone, my parents help with rent": still alone
+    # "I live alone, my parents help with rent": still alone; "I don't live alone", "I used to live alone": not
+    live_alone = _find_now(_HF_LIVE_ALONE, f)
     if allow_alone and live_alone and not sep and not shared:
         return _obs(S.household_food, "alone", t[live_alone.start():live_alone.end()])
     if sep and not shared:

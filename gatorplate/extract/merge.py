@@ -17,11 +17,15 @@ Combination:
   same amount reported twice from the same words counts once;
 - model and parser agree (amounts within 1 % as monthly values) -> the model's observation; they disagree -> the
   model's value, state unclear (the dialogue may confirm a critical amount once);
-- a parser-only observation is kept when it answers one of the pending question's slots, whatever the question's
-  kind (unless the model said the question was not answered, or already put the same spoken amount into another money
-  slot), when it is routing-only, when it is the never-asked roommate count, when it is "lives alone" (household_food
-  alone, which the model often leaves out of an answer about age) and the model said nothing that contradicts it, or
-  when the model gave no result (timeout, error, closed mode, fast path);
+- a parser-only observation is kept when it answers one of the pending question's slots that the model left out,
+  whatever the question's kind, open included ("I'm 20, and I live with two roommates": the model often returns the
+  age and the roommates but not lives_with_parent) — unless the model said the question was not answered, or already
+  put the same spoken amount into another money slot; a slot the model reported (clear, unclear or with another
+  value) is never replaced. It is also kept when it is routing-only, when it is the never-asked roommate count, when it
+  is "lives alone" (household_food alone, which the model often leaves out of an answer about age) and the model said
+  nothing that contradicts it, or when the model gave no result (timeout, error, closed mode, fast path);
+- answered_pending: the model's, except that "partial" becomes "yes" once every slot the pending question asks is in
+  hand (a slot the model left out may come from the parser); without a model result it is computed from the slots;
 - intents = model intents + keyword intents (+ the parser's when the model gave no result).
 """
 
@@ -305,7 +309,7 @@ class Merger:
         model_spans = [(SlotName(o.slot), _where(o.quote, utterance)) for o in model_obs if SlotName(o.slot) in MONEY]
         for slot, ob in from_parser.items():
             if slot in final:
-                continue
+                continue  # the model reported this slot (clear, unclear or another value): its reading stands
             # Any kind of question: "I'm 20, and I live with two roommates" to the open age question answers
             # lives_with_parent even when the model returns only the age and the roommates.
             answers_pending = pending is not None and slot in pending.slots and not model_says_unanswered
@@ -340,6 +344,8 @@ class Merger:
                 code = result.requested_language.strip().lower()
                 requested = code if re.fullmatch(r"[a-z]{2}", code) else None
         answered = result.answered_pending if result is not None else _answered(final, pending, parsed)
+        if answered == "partial" and pending is not None and pending.slots and set(pending.slots) <= set(final):
+            answered = "yes"  # every slot the question asks is in hand (one the model left out came from the parser)
 
         teen: list[SlotName] = []
         for slot, ob in final.items():

@@ -3,11 +3,19 @@
 Two providers sit behind it: `anthropic` (production) and `fake` (deterministic, no network; tests and the emergency
 switch). A third fits behind the same protocol without touching callers. Metrics count calls and tokens since
 process start; they never hold a prompt, an utterance or an output.
+
+The request note: the request log opens one `LLMNote` per HTTP request (`llm_note()`), and the understanding writes
+that request's model outcome into it (`note_llm()`): its status and milliseconds, nothing else. The note travels in a
+context variable, so concurrent turns never see each other's note, and work awaited inside the request (tasks it
+starts included, since they copy the context and so share the same note object) fills the right one.
 """
 
 from __future__ import annotations
 
 import threading
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime
 from typing import Any, Literal, Protocol
@@ -15,6 +23,39 @@ from typing import Any, Literal, Protocol
 from gatorplate.contracts.extraction import ExtractOutcome
 
 LLMStatus = Literal["no_key", "ready", "ok", "error"]
+
+
+@dataclass
+class LLMNote:
+    """The language model's part of one HTTP request, for its log line: `ms` (the model step's milliseconds; None when
+    the step was skipped) and `status` (an ExtractOutcome status; None when the request had no understanding step).
+    Content-free."""
+
+    ms: int | None = None
+    status: str | None = None
+
+
+_REQUEST_NOTE: ContextVar[LLMNote | None] = ContextVar("gatorplate_llm_note", default=None)
+
+
+@contextmanager
+def llm_note() -> Iterator[LLMNote]:
+    """Open the note of the current request; the understanding fills it while the request runs."""
+    note = LLMNote()
+    token = _REQUEST_NOTE.set(note)
+    try:
+        yield note
+    finally:
+        _REQUEST_NOTE.reset(token)
+
+
+def note_llm(result: ExtractOutcome) -> None:
+    """Write one understanding outcome into the current request's note (nothing happens outside a request)."""
+    note = _REQUEST_NOTE.get()
+    if note is None:
+        return
+    note.status = result.status
+    note.ms = None if result.status == "skipped" else max(0, int(result.latency_ms))
 
 
 class LLMClient(Protocol):

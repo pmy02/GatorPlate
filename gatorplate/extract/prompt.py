@@ -65,9 +65,10 @@ side_question; otherwise side_question is null.
 request to talk to a person ("can I talk to a real person?", "quiero hablar con una persona").
 18. answered_pending: "yes" if the utterance answers the pending question, "partial" if it answers part of it or \
 gives other facts, "no" otherwise. Nothing extractable -> observations [] and answered_pending "no".
-19. Who the student lives with answers lives_with_parent, whatever was asked: roommates, housemates, friends, a \
-partner, a spouse, a dorm, a couch or a shelter -> "false"; a parent or step-parent -> "true". "20, two roommates" \
--> age 20, roommates "true", roommates_count 2 and lives_with_parent "false".
+19. Who the student lives with answers lives_with_parent, whatever was asked; always report it, also beside \
+roommates: alone, roommates, housemates, friends, other students, a partner, a spouse, a dorm, a couch or a shelter \
+-> "false"; a parent, step-parent or guardian, even with others -> "true". "20, two roommates" -> age 20, \
+roommates "true", roommates_count 2 and lives_with_parent "false".
 20. household_food "alone" when the student lives alone ("by myself", "on my own", "it's just me", "vivo solo", \
 "vivo por mi cuenta") or only with a spouse and their own children; report it with lives_with_parent "false" and \
 roommates "false" even when the pending question asks something else (the age question). "I live alone, so I buy \
@@ -76,7 +77,7 @@ my own food" is "alone", never "separate".
 myself" -> "0". The student's own rent said again is not this slot; a changed rent ("wait, it's twelve hundred") -> \
 rent_share with intent correction, and the pending yes/no question stays unanswered.
 22. Not money: clock times ("at five", "from nine to five", "a las tres"), years ("since 2024"), room or unit \
-numbers and counts ("two accounts", "three shifts"). Never add them to an amount.
+numbers and counts ("two accounts", "three shifts", "two other students"). Never add them to an amount.
 23. A plain zero is an answer: "I don't have any income", "I'm not working", "no tengo ingresos" -> earned_monthly \
 "0"; "nobody gives me money", "nadie me da dinero" -> other_cash_monthly "0". "Nobody" or "nadie" about something \
 else ("nobody pays my landlord", "nadie me cobra la luz") is not other_cash_monthly.

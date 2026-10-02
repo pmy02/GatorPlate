@@ -1,6 +1,7 @@
 // GatorPlate coordinator console (docs/UI_SPEC.md A3). Boot: load meta and the case list, subscribe to live events
-// (SSE with the polling fallback of web/shared/api.js), render on every state change, keyboard shortcuts (A2.7).
-import { fetchJSON, subscribeEvents, FIXTURES } from "../shared/api.js";
+// (SSE with the polling fallback of ./events.js), render on every state change, keyboard shortcuts (A2.7).
+import { fetchJSON, FIXTURES } from "../shared/api.js";
+import { subscribeEvents } from "./events.js";
 import { createController, replayFrames, diffDetail, liveCaseId, elapsedMs, openYellow, callIsOver } from "./store.js";
 import { encodeEdit, resetResult, minSec } from "./text.js";
 import { reducedMotion } from "./views/dom.js";

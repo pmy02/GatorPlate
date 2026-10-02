@@ -10,7 +10,12 @@ phrase followed by more ("That's all. Oh, I forgot, I'm a grad student.") still 
 
 The deadline is an absolute value on the injected clock's monotonic scale (the dialogue computes it from the turn
 budget); the model gets min(GP_LLM_TIMEOUT_S, deadline - now - 0.15 s), and the turn returns within the deadline
-plus a few milliseconds even when the provider hangs. Nothing here is persisted or logged with content.
+plus a few milliseconds even when the provider hangs. Nothing here is persisted or logged with content; each turn's
+model outcome (status and milliseconds only) goes into the current request's log note.
+
+`prewarm_llm()` lets the platform open the model client's pooled connection when a call starts, so the first model
+turn of a call does not pay for a new TLS handshake. It never makes a model call, and it does nothing with the fake
+provider or without a key.
 """
 
 from __future__ import annotations
@@ -32,7 +37,7 @@ from gatorplate.extract.conversion import Conversion
 from gatorplate.extract.guards import load_guards
 from gatorplate.extract.keywords import KeywordMatcher
 from gatorplate.extract.llm.anthropic_client import AnthropicClient
-from gatorplate.extract.llm.base import DailyCounter, LLMClient, MemoryCounter, UsageMetrics
+from gatorplate.extract.llm.base import DailyCounter, LLMClient, MemoryCounter, UsageMetrics, note_llm
 from gatorplate.extract.llm.fake import FakeLLM
 from gatorplate.extract.merge import Merger
 from gatorplate.extract.parser import Parsed, Parser
@@ -128,6 +133,17 @@ class Understander:
             snap["status"] = "no_key"
         return snap
 
+    async def prewarm_llm(self) -> bool:
+        """Open or refresh the model client's pooled connection (no model call). False, and nothing sent, with the
+        fake provider, without a key or over today's turn cap; never raises."""
+        prewarm = getattr(self.llm, "prewarm", None)
+        if not callable(prewarm):
+            return False
+        try:
+            return bool(await prewarm())
+        except Exception:  # noqa: BLE001 - a failed pre-connect only means the first turn connects on its own
+            return False
+
     # ------------------------------------------------------------------------------------------ port
     async def understand(self, *, text: str, masked: bool, confidence: float | None, dtmf: str | None,
                          pending: PendingQuestion | None, known: dict[SlotName, str], recent: list[str],
@@ -135,7 +151,9 @@ class Understander:
         session_lang = Lang(lang).value if lang else "en"
         known = {SlotName(k): str(v) for k, v in (known or {}).items() if k in _SLOT_NAMES and v is not None}
         if dtmf is not None and not (text or "").strip():
-            return self._keypad(dtmf, pending, known, session_lang)
+            keyed = self._keypad(dtmf, pending, known, session_lang)
+            note_llm(keyed.llm)
+            return keyed
 
         redaction = self.redactor.redact(normalize(text), masked=masked)
         utterance = redaction.text
@@ -152,7 +170,13 @@ class Understander:
             memory = [self.redactor.redact(normalize(r)).text for r in (recent or [])[-2:]]
             prompt = user_message(utterance=utterance, pending=pending, known=known, recent=memory,
                                   last_prompt=last_prompt)
-            result = await self._call(self._timeout(deadline), prompt)
+            started = time.monotonic()
+            try:
+                result = await self._call(self._timeout(deadline), prompt)
+            except asyncio.CancelledError:  # the caller gave up on the turn: the log still shows the model's part
+                note_llm(ExtractOutcome(status="timeout", latency_ms=int((time.monotonic() - started) * 1000)))
+                raise
+        note_llm(result)
         merged = self.merger.merge(utterance=utterance, llm=result, parsed=parsed, keyword_intents=keyword_intents,
                                    pending=pending, known=known, session_lang=session_lang)
         return Understanding(

@@ -29,6 +29,7 @@ def test_env_values() -> None:
         "GP_PUBLIC_BASE_URL": "https://gatorplate.fly.dev",
         "GP_DB_PATH": "/data/gatorplate.db",
         "GP_LLM_PROVIDER": "anthropic",
+        "GP_LLM_HEDGE_MS": "1250",
         "GP_DEBUG_KEYS": "0",
         "GP_DEMO_MODE": "1",
         "GP_LIVE_TRANSCRIPT": "1",
