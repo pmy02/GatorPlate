@@ -149,7 +149,8 @@ button.pill--rules { min-height: var(--gp-tap-console); }
 .badge-yl { display: inline-flex; align-items: center; gap: var(--gp-s1); min-height: 24px; padding: 0 var(--gp-s2); border-radius: var(--gp-r-xs);
   background: var(--gp-yl-bg); color: var(--gp-yl-ink); font-weight: var(--gp-fw-medium); }
 .badge-yl .icon { width: 16px; height: 16px; }
-.list .badge-yl { background: transparent; box-shadow: inset 0 0 0 1px var(--gp-accent); color: var(--gp-accent); }
+/* "N to check" is the one yellow in the ink list: a highlighter fill with ink text. */
+.list .badge-yl { background: var(--gp-yl-bg); color: var(--gp-yl-ink); font-weight: var(--gp-fw-semibold); }
 
 .deadline { display: inline-flex; align-items: center; gap: var(--gp-s1); min-height: 24px; padding: 0 var(--gp-s2); border-radius: var(--gp-r-xs);
   background: var(--gp-sunken); color: var(--gp-text-2); font-size: var(--gp-fs-small); font-weight: var(--gp-fw-medium);
@@ -172,11 +173,11 @@ button.pill--rules { min-height: var(--gp-tap-console); }
 /* A long chip wraps inside its card instead of running past the edge (narrow screens). */
 .chip--not-asked, .chip--never { max-width: 100%; padding-block: 2px; white-space: normal; text-align: left; }
 .chip--not-asked { background: transparent; border-color: var(--gp-border-strong); color: var(--gp-text-2); }
-.chip--not-asked.has-dot::before { content: ""; width: var(--gp-s2); height: var(--gp-s2); flex: none; border-radius: 50%;
-  background: var(--gp-yl-line); }
+.chip--not-asked.has-dot::before { content: ""; width: 10px; height: 10px; flex: none; border-radius: 50%;
+  background: var(--gp-yl-bg); box-shadow: inset 0 0 0 1px var(--gp-yl-line); }
 .chip--button { border: 0; cursor: pointer; border-radius: var(--gp-r-pill); min-height: var(--gp-tap-console); padding: 0 var(--gp-s4); }
 .state--assumed { background: var(--gp-sunken); color: var(--gp-text-2); }
-.state--unclear { background: var(--gp-yl-bg); border-color: var(--gp-yl-line); color: var(--gp-yl-ink); }
+.state--unclear { background: var(--gp-yl-bg); border-color: var(--gp-yl-bg); color: var(--gp-yl-ink); font-weight: var(--gp-fw-semibold); }
 
 .live-dot { display: inline-block; flex: none; width: var(--gp-live-dot); height: var(--gp-live-dot); border-radius: 50%;
   background: var(--gp-live); animation: gp-pulse var(--gp-d-pulse) infinite; }
@@ -247,6 +248,9 @@ button.pill--rules { min-height: var(--gp-tap-console); }
 .section--check { margin: var(--gp-s6) 0 var(--gp-s4); padding: var(--gp-s6); border-top: 0; border-radius: var(--gp-r-md);
   background: var(--gp-surface); box-shadow: var(--gp-sh-1); }
 .section--check > h2 { font-size: var(--gp-fs-h2); }
+/* While a line is open, the heading is highlighted like the lines under it. */
+.section--check:has(.ycard) > h2 { justify-self: start; padding: 0 var(--gp-s1); margin-inline: calc(-1 * var(--gp-s1));
+  background: linear-gradient(transparent 55%, var(--gp-yl-bg) 55%); }
 .section--check + .section { border-top: 0; }
 .section--fold { display: block; padding-block: var(--gp-s6); }
 .section--fold > summary { list-style: none; min-height: var(--gp-tap); border-radius: var(--gp-r-sm); }

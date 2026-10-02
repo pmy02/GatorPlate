@@ -891,8 +891,8 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
   #FAFAF8, sunken #E6E6E2; the action color is ink (`primary` = ink, `on-primary` = on-ink); **one accent**, periwinkle
   `accent` #C3C6F4 (with `accent-2` #DCDEF9), used only as a fill (Do this today, Likely, the circle in the primary
   button) or on ink (the `$` sign, focus ring and selected state in dark areas) — never as a line on paper and never
-  with text-3 on it. Tiers are fills of periwinkle and grey with ink text (Likely = accent, yellow line = accent-2,
-  Coordinator check = grey, Other help = light grey); red only for system errors (never for a student's result,
+  with text-3 on it. Tiers are fills of periwinkle and grey with ink text (Likely = accent, Coordinator check = grey, Other help =
+  light grey); items to check are the one yellow (`yl-bg` #F9E56A, a highlighter fill with ink text, console only); red only for system errors (never for a student's result,
   never for a deadline). Inside `.dark` (base.css) the role tokens re-point to their dark pairs (`--gp-text` →
   on-ink, `--gp-text-2` → on-ink-2, `--gp-text-3` → on-ink-3, `--gp-primary` → on-ink, `--gp-on-primary` → ink,
   `--gp-surface` → ink-2, `--gp-sunken` → ink-3, `--gp-border-strong` → ink-line, `--gp-focus` → accent), so shared
@@ -912,7 +912,7 @@ Speech recognition is detected at runtime on the Start tap: no start event withi
 | text-2 on surface · text-3 on surface · text-3 on page · text-3 on sunken-2 | 8.96 · 6.34 · 5.75 · 4.82 | 4.5 |
 | on-primary on primary (ink) · on hover · text on on-ink (light primary in a dark area) | 17.69 · 12.85 · 17.69 | 4.5 |
 | on accent: text · text-2 (text-3 is not allowed, 4.01) | 11.90 · 5.66 | 4.5 |
-| on accent-2 (yellow line, wash): text · text-2 · text-3 | 14.85 · 7.07 · 5.00 | 4.5 |
+| on accent-2 (wash): text · text-2 · text-3 | 14.85 · 7.07 · 5.00 | 4.5 |
 | dark areas on ink-3 (the lightest stop): on-ink · on-ink-2 · on-ink-3 · accent | 14.27 · 6.95 · 4.87 · 9.59 | 4.5 |
 | err-ink on err-bg · on surface · on sunken-2 | 5.87 · 7.04 · 5.35 | 4.5 |
 | border-strong on surface · page · sunken · sunken-2 · accent-2 | 4.25 · 3.85 · 3.55 · 3.23 · 3.35 | 3 |
